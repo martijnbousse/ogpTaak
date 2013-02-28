@@ -1,4 +1,5 @@
 package asteroids;
+
 import be.kuleuven.cs.som.annotate.*;
 
 /**

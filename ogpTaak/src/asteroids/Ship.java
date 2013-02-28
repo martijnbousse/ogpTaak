@@ -13,40 +13,6 @@ import be.kuleuven.cs.som.annotate.*;
  */
 public class Ship implements IShip{
 	
-	/**
-	 * Variable registering the position of this ship.
-	 * \\TODO: initialisatie?
-	 */
-	private Vector position = null;
-	
-	/**
-	 * Variable registering the velocity of this ship.
-	 */
-	private Vector velocity = null;
-	
-	/**
-	 * Variable registering the direction of this ship.
-	 */
-	private double direction = 0.0;
-	
-	
-	
-	
-	
-	
-	
-	
-	/**
-	 * Variable registering the speed limit of 
-	 */
-	private final double speedLimit = 300000;
-	
-	
-	/**
-	 * Symbolic constant registering the speed of light.
-	 */
-	public static double SPEED_OF_LIGHT = 300000; 
-	
 	
 	/**
 	 * Initialize this new ship with given position, given velocity, given direction and given radius.
@@ -85,8 +51,8 @@ public class Ship implements IShip{
 	 * 
 	 * 
 	 */
-	public Ship(Vector position, Vector velocity, double direction, double radius){
-		
+	public Ship(Vector position, Vector velocity, double radius, double angle){
+		setSpeedLimit(SPEED_OF_LIGHT);
 	}
 	
 	public Ship(){
@@ -121,6 +87,7 @@ public class Ship implements IShip{
 		this.position = position;
 	}
 	
+	
 	/**
 	 * Check whether the given position is a valid position for any ship.
 	 * 
@@ -132,6 +99,12 @@ public class Ship implements IShip{
 	public static boolean isValidPosition(Vector position){
 			return ( position != null );
 	}
+	
+	/**
+	 * Variable registering the position of this ship.
+	 * \\TODO: initialisatie?
+	 */
+	private Vector position = null;
 	
 	/**
 	 * Return the velocity of this ship.
@@ -157,6 +130,34 @@ public class Ship implements IShip{
 		if (canHaveAsVelocity(velocity))
 			this.velocity = velocity;
 	}
+	
+	/**
+	 * Variable registering the velocity of this ship.
+	 */
+	private Vector velocity = null;
+	
+	private void setSpeedLimit(double newLimit){
+		if(isValidSpeedLimit(newLimit)){
+			this.speedLimit=newLimit;
+		}
+		else {
+			this.speedLimit = SPEED_OF_LIGHT;
+		}
+	}
+	
+	private boolean isValidSpeedLimit(double newLimit){
+		return newLimit <= SPEED_OF_LIGHT;
+	}
+	
+	/**
+	 * Variable registering the speed limit of 
+	 */
+	private double speedLimit;
+	
+	/**
+	 * Symbolic constant registering the speed of light.
+	 */
+	public static double SPEED_OF_LIGHT = 300000; 
 	
 	/**
 	 * Check whether this ship can have the given velocity as its velocity.
@@ -208,6 +209,11 @@ public class Ship implements IShip{
 	public static boolean isValidDirection(double direction){
 		return ( (direction >= 0.0) && (direction <= 2*Math.PI) );
 	}
+	
+	/**
+	 * Variable registering the direction of this ship.
+	 */
+	private double direction = 0.0;
 	
 	/**
 	 * 

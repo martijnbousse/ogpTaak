@@ -24,7 +24,7 @@ public class Facade implements IFacade {
 	@Override
 	public IShip createShip(double x, double y, double xVelocity,double yVelocity, double radius, double angle) {
 		
-		return new Ship(new Position(x,y),0,0,0, 0);
+		return new Ship(new Vector(x,y), new Vector(xVelocity, yVelocity), radius, angle);
 	}
 
 	/* (non-Javadoc)

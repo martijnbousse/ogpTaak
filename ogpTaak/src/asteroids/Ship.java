@@ -29,20 +29,7 @@ public class Ship implements IShip{
 	 */
 	private double direction = 0.0;
 	
-	/**
-	 * Variable registering the radius of this ship.
-	 */
-	private final double radius = 0.0;
 	
-	
-	
-	
-	
-	
-	/**
-	 * Variable registering the radius limit that applies to all ships.
-	 */
-	private static double radiusLimit = 10.0;
 	
 	
 	
@@ -223,42 +210,54 @@ public class Ship implements IShip{
 	}
 	
 	/**
+	 * 
+	 * @param 	newMinRadius
+	 * 			The new value for the minRadius
+	 * @post	The minRadius for all ships is set to the given value.
+	 * 			| (new Ship).minRadius == newMinRadius
+	 * @throws 	IllegalArgumentException
+	 * 			The given value for minRadius is invalid for this parameter.
+	 * 			| ! isValidMinRadius(newMinRadius)
+	 */
+	public void setMinRadius(double newMinRadius) throws IllegalArgumentException	{
+		if(!isValidMinRadius(newMinRadius)){
+			throw new IllegalArgumentException();
+		}
+		minRadius = newMinRadius;
+	}
+	
+	/**
+	 * Check whether the given minimum radius is a valid minimum radius for the ship.
+	 * @param 	minRadius
+	 * 			the minRadius to check
+	 * @return	True if and only if the given minimum radius is greater than 0
+	 * 			| result == minRadius > 0
+	 */
+	public boolean isValidMinRadius(double minRadius){
+		return minRadius > 0;
+	}
+	
+	private static double minRadius;
+	
+	/**
+	 * Check whether the given radius is a valid radius for the ship.
+	 * @param 	radius
+	 * 			the radius to check
+	 * @return	True if and only if the given radius is greater than the mininum radius.
+	 * 			| result == radius >= minRadius
+	 */
+	public boolean isValidRadius(double radius){
+		return (radius >= minRadius);
+	}
+	
+	/**
 	 * Return the radius of this ship.
 	 */
-	@Basic @Immutable
+	@Basic @Raw @Immutable
 	public double getRadius(){
-		return this.radius;
+		return radius;
 	}
 	
-	/**
-	 * Return the radius limit that applies to all ships.
-	 */
-	@Basic
-	public static double getRadiusLimit(){
-		return radiusLimit;
-	}
-	
-	
-	/**
-	 * Set the radius limit that applies to all ships to the given radius limit. 
-	 */
-	public static void setRadiusLimit(double radiusLimit) throws IllegalArgumentException{
-		if ( !isValidRadiusLimit(radiusLimit) )
-			throw new IllegalArgumentException();
-		Ship.radiusLimit = radiusLimit;
-	}
-	
-	/**
-	 * Check whether the given radius limit is a valid radius limit for any ship.
-	 * 
-	 * @param 	radiusLimit
-	 * 			The radius limit to check.
-	 * @return	True if and only if the given radius limit is at least zero.
-	 * 			| result == (radiusLimit >= 0)
-	 */
-	public static boolean isValidRadiusLimit(double radiusLimit){
-		return ( radiusLimit >= 0 );
-	}
-	
+	private final double radius;
 
 }

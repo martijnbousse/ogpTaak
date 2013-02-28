@@ -30,9 +30,6 @@ public class Ship implements IShip{
 	 * @throws	IllegalArgumentException
 	 * 			This new ship cannot have the given position as its position.
 	 * 			| !isValidPosition(position)
-	 * 
-	 * 
-	 * 
 	 * @post	//TODO: velocity totaal
 	 * 
 	 * 
@@ -83,8 +80,8 @@ public class Ship implements IShip{
 	 * 			| position == null
 	 */
 	// TODO: @raw ?
-	// private want enkel in move zal de positie veranderd kunnen worden?
-	public void setPosition(Vector position) throws IllegalArgumentException{
+	// ik denk best private idd
+	private void setPosition(Vector position) throws IllegalArgumentException{
 		if ( !isValidPosition(position) ) 
 			throw new IllegalArgumentException();	
 		this.position = position;
@@ -153,7 +150,7 @@ public class Ship implements IShip{
 	/**
 	 * Variable registering the velocity of this ship.
 	 */
-	private Vector velocity = null;
+	private Vector velocity;
 	
 	private void setSpeedLimit(double newLimit){
 		if(isValidSpeedLimit(newLimit)){

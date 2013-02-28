@@ -25,8 +25,6 @@ public class Ship implements IShip{
 	 * 			The direction for this new ship.
 	 * @param 	radius
 	 * 			The radius for this new ship.
-	 * 
-	 * 
 	 * @post	The new position of this new ship is equal to the given position.
 	 * 			| (new this).getPosition().equals(position)
 	 * @throws	IllegalArgumentException
@@ -51,13 +49,18 @@ public class Ship implements IShip{
 	 * 
 	 * 
 	 */
-	public Ship(Vector position, Vector velocity, double radius, double angle){
+	public Ship(Vector position, Vector velocity, double radius, double angle) throws IllegalArgumentException{
+		setPosition(position);
+		setVelocity(velocity);
+		if(!isValidRadius(radius)){
+			throw new IllegalArgumentException();	
+		}
+		this.radius=radius;
 		setSpeedLimit(SPEED_OF_LIGHT);
 	}
 	
 	public Ship(){
-		// default
-		//this(new Position(0,0),0,0,0,0);
+		this(new Vector(0, 0), new Vector(0, 0), minRadius, 0);
 	}
 	
 	/**
@@ -102,9 +105,8 @@ public class Ship implements IShip{
 	
 	/**
 	 * Variable registering the position of this ship.
-	 * \\TODO: initialisatie?
 	 */
-	private Vector position = null;
+	private Vector position;
 	
 	/**
 	 * Return the velocity of this ship.
@@ -129,6 +131,23 @@ public class Ship implements IShip{
 	public void setVelocity(Vector velocity){
 		if (canHaveAsVelocity(velocity))
 			this.velocity = velocity;
+	}
+	
+	/**
+	 * Check whether this ship can have the given velocity as its velocity.
+	 * 
+	 * @param 	velocity
+	 * 			The velocity to check.
+	 * @return	True if and only if the speed of the given velocity is bigger then or equal to zero
+	 * 			and smaller then or equal to the speed limit.
+	 * 			| result == (velocity.getMagnitude() <= 0)
+	 * 						&& (velocity.getMagnitude() >= this.speedLimit)
+	 */
+	//TODO: dit als instance method aangezien afhankelijk van speedlimit, dat verschillend kan zijn voor elk ship
+	//       cf isvalidposition ??
+	public boolean canHaveAsVelocity(Vector velocity){
+		return (velocity.getMagnitude() <= 0)
+				&& (velocity.getMagnitude() >= this.speedLimit);
 	}
 	
 	/**
@@ -158,23 +177,6 @@ public class Ship implements IShip{
 	 * Symbolic constant registering the speed of light.
 	 */
 	public static double SPEED_OF_LIGHT = 300000; 
-	
-	/**
-	 * Check whether this ship can have the given velocity as its velocity.
-	 * 
-	 * @param 	velocity
-	 * 			The velocity to check.
-	 * @return	True if and only if the speed of the given velocity is bigger then or equal to zero
-	 * 			and smaller then or equal to the speed limit.
-	 * 			| result == (velocity.getMagnitude() <= 0)
-	 * 						&& (velocity.getMagnitude() >= this.speedLimit)
-	 */
-	//TODO: dit als instance method aangezien afhankelijk van speedlimit, dat verschillend kan zijn voor elk ship
-	//       cf isvalidposition ??
-	public boolean canHaveAsVelocity(Vector velocity){
-		return (velocity.getMagnitude() <= 0)
-				&& (velocity.getMagnitude() >= this.speedLimit);
-	}
 	
 	/**
 	 * Return the direction of this ship.

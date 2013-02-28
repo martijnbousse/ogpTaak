@@ -14,7 +14,6 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public IShip createShip() {
-		// TODO Auto-generated method stub
 		return new Ship();
 	}
 
@@ -32,7 +31,7 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public double getX(IShip ship) {
-		return ship.getPosition().getXComponent();
+		return ((Ship) ship).getPosition().getXComponent();
 	}
 
 	/* (non-Javadoc)
@@ -40,7 +39,7 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public double getY(IShip ship) {
-		return ship.getPosition().getYComponent();
+		return ((Ship) ship).getPosition().getYComponent();
 	}
 
 	/* (non-Javadoc)

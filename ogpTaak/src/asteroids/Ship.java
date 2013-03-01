@@ -5,7 +5,10 @@ import be.kuleuven.cs.som.annotate.*;
  * A class of ships involving a position, a velocity, a direction and a radius.
  * 
  * //TODO: invarianten
- * @invar	
+ * @invar	The speed limit applying to a specific ship must be less then lightspeed
+ * 			| isValidSpeedLimit(speedLimit)
+ * @invar	The radius of a specific ship should be a valid radius
+ * 			| isValidRadius(radius)
  * 
  * @version 1.0
  * @author Martijn Boussé, Wout Vekemans
@@ -25,34 +28,31 @@ public class Ship implements IShip{
 	 * 			The direction for this new ship.
 	 * @param 	radius
 	 * 			The radius for this new ship.
+	 * @pre		The given direction must be a valid direction for any ship.
+	 * 			| isValidDirection(direction)
 	 * @post	The new position of this new ship is equal to the given position.
 	 * 			| (new this).getPosition().equals(position)
+	 * @effect	| this.setVelocity(velocity)
+	 * @post	The new direction of this new ship is equal to the given direction.
+	 * 			| new.getDirection() == angle
+	 * @post	The new radius of this new ship is equal to the given radius.
+	 * 			| (new this).getRadius() == radius
 	 * @throws	IllegalArgumentException
 	 * 			This new ship cannot have the given position as its position.
 	 * 			| !isValidPosition(position)
-	 * @post	//TODO: velocity totaal
-	 * 
-	 * 
-	 * 
-	 * @Pre		The given direction must be a valid direction for any ship.
-	 * 			| isValidDirection(direction)
-	 * @post	The new direction of this new ship is equal to the given direction.
-	 * 
-	 * 
-	 * 
-	 * @post	The new radius of this new ship is equal to the given radius.
-	 * 			| (new this).getRadius() == radius
-	 * 
-	 * 
-	 * 
+	 * @throws	IllegalArgumentException
+	 * 			This ship cannot have the given radius as its radius
+	 * 			| !isValidRadius(radius)
 	 */
-	public Ship(Vector position, Vector velocity, double radius, double angle) throws IllegalArgumentException{
+	@Raw
+	public Ship(Vector position, Vector velocity, double radius, double direction) throws IllegalArgumentException{
 		setPosition(position);
 		setVelocity(velocity);
 		if(!isValidRadius(radius)){
 			throw new IllegalArgumentException();	
 		}
 		this.radius=radius;
+		setDirection(direction);
 		setSpeedLimit(SPEED_OF_LIGHT);
 	}
 	
@@ -128,6 +128,7 @@ public class Ship implements IShip{
 	public void setVelocity(Vector velocity){
 		if (canHaveAsVelocity(velocity))
 			this.velocity = velocity;
+		//else // vector in dezelfde richting met grootte speedoflight??
 	}
 	
 	/**
@@ -143,8 +144,8 @@ public class Ship implements IShip{
 	//TODO: dit als instance method aangezien afhankelijk van speedlimit, dat verschillend kan zijn voor elk ship
 	//       cf isvalidposition ??
 	public boolean canHaveAsVelocity(Vector velocity){
-		return (velocity.getMagnitude() <= 0)
-				&& (velocity.getMagnitude() >= this.speedLimit);
+		return !((velocity.getMagnitude() <= 0)
+				&& (velocity.getMagnitude() >= this.speedLimit));		// heb ontkenning toegevoegd .. anders returnde het totaal het omgekeerde
 	}
 	
 	/**

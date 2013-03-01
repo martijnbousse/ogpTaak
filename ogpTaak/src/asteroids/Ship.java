@@ -4,11 +4,18 @@ import be.kuleuven.cs.som.annotate.*;
 /**
  * A class of ships involving a position, a velocity, a direction and a radius.
  * 
- * //TODO: invarianten
- * @invar	The speed limit applying to a specific ship must be less then lightspeed
- * 			| isValidSpeedLimit(speedLimit)
- * @invar	The radius of a specific ship should be a valid radius
- * 			| isValidRadius(radius)
+ * @Invar	Each ship can have its speed limit as its speed limit.
+ * 			| canHaveAsSpeedLimit(speedLimit)
+ * @Invar	Each ship can have its radius as its radius
+ * 			| canHaveAsRadius(radius)
+ * @Invar	The minimum radius that applies to all ships must be a valid minimum radius.
+ * 			| isValidMinRadius(minRadius)
+ * @Invar	Each ship can have its velocity as its velocity
+ * 			| canHaveAsVelocity(velocity)
+ * @Invar 	The position that applies to all ships must be a valid position.
+ * 			| isValidPosition(position)
+ * @Invar 	The direction that applies to all ships must be a valid direction.
+ * 			| isValidDirection(direction)
  * 
  * @version 1.0
  * @author Martijn Boussé, Wout Vekemans
@@ -28,13 +35,13 @@ public class Ship implements IShip{
 	 * 			The direction for this new ship.
 	 * @param 	radius
 	 * 			The radius for this new ship.
-	 * @pre		The given direction must be a valid direction for any ship.
+	 * @Pre		The given direction must be a valid direction for any ship.
 	 * 			| isValidDirection(direction)
 	 * @post	The new position of this new ship is equal to the given position.
 	 * 			| (new this).getPosition().equals(position)
 	 * @effect	| this.setVelocity(velocity)
 	 * @post	The new direction of this new ship is equal to the given direction.
-	 * 			| new.getDirection() == angle
+	 * 			| new.getDirection() == direction
 	 * @post	The new radius of this new ship is equal to the given radius.
 	 * 			| (new this).getRadius() == radius
 	 * @throws	IllegalArgumentException
@@ -48,7 +55,7 @@ public class Ship implements IShip{
 	public Ship(Vector position, Vector velocity, double radius, double direction) throws IllegalArgumentException{
 		setPosition(position);
 		setVelocity(velocity);
-		if(!isValidRadius(radius)){
+		if(!canHaveAsRadius(radius)){
 			throw new IllegalArgumentException();	
 		}
 		this.radius=radius;
@@ -56,6 +63,12 @@ public class Ship implements IShip{
 		setSpeedLimit(SPEED_OF_LIGHT);
 	}
 	
+	/**
+	 * Initialize this new ship with all default values.
+	 * @effect 	This new ship is initialized with position and velocity (0,0), 
+	 * 			the minimal radius as its radius and zero as its direction
+	 * 			|this(new Vector(0,0), new Vector(0,0), minRadius, 0)
+	 */
 	public Ship(){
 		this(new Vector(0, 0), new Vector(0, 0), minRadius, 0);
 	}
@@ -77,11 +90,10 @@ public class Ship implements IShip{
 	 * 			| (new this).getPosition().equals(position)
 	 * @throws	IllegalArgumentException
 	 * 			The given position is not effective.
-	 * 			| position == null
+	 * 			| !isValidPosition(position)
 	 */
 	// TODO: @raw ?
-	// ik denk best private idd
-	private void setPosition(Vector position) throws IllegalArgumentException{
+	public void setPosition(Vector position) throws IllegalArgumentException{
 		if ( !isValidPosition(position) ) 
 			throw new IllegalArgumentException();	
 		this.position = position;
@@ -94,7 +106,7 @@ public class Ship implements IShip{
 	 * @param 	position
 	 * 			The position to check.
 	 * @return 	True if and only if the given position is effective.
-	 * 			| result == (other != null)
+	 * 			| result == (position != null)
 	 */
 	public static boolean isValidPosition(Vector position){
 			return ( position != null );
@@ -119,16 +131,13 @@ public class Ship implements IShip{
 	 * @param	velocity 
 	 * 	      	The new velocity for this ship.
 	 * @post 	If the given velocity is a valid velocity then the new velocity of this ship is equal to the given velocity.
-	 * 			| if isValidVelocity
-	 * 			| then (new this).getVelocity().equals(velocity)
+	 * 			| if isValidVelocity(velocity)
+	 * 			| 	then (new this).getVelocity().equals(velocity)
 	 */
 	// TODO: @raw ?
-	// private want enkel in move zal de snelheid veranderd kunnen worden?
-	@Raw //bv in thrust can die werken op een velocity object dat niet voldoet aan zijn invariant
 	public void setVelocity(Vector velocity){
 		if (canHaveAsVelocity(velocity))
 			this.velocity = velocity;
-		//else // vector in dezelfde richting met grootte speedoflight??
 	}
 	
 	/**
@@ -138,14 +147,12 @@ public class Ship implements IShip{
 	 * 			The velocity to check.
 	 * @return	True if and only if the speed of the given velocity is bigger then or equal to zero
 	 * 			and smaller then or equal to the speed limit.
-	 * 			| result == (velocity.getMagnitude() <= 0)
-	 * 						&& (velocity.getMagnitude() >= this.speedLimit)
+	 * 			| result == !((velocity.getMagnitude() <= 0)
+	 * 						&& (velocity.getMagnitude() >= this.speedLimit))
 	 */
-	//TODO: dit als instance method aangezien afhankelijk van speedlimit, dat verschillend kan zijn voor elk ship
-	//       cf isvalidposition ??
 	public boolean canHaveAsVelocity(Vector velocity){
-		return !((velocity.getMagnitude() <= 0)
-				&& (velocity.getMagnitude() >= this.speedLimit));		// heb ontkenning toegevoegd .. anders returnde het totaal het omgekeerde
+		return !(velocity==null) && !( (velocity.getMagnitude() <= 0)
+				&& (velocity.getMagnitude() >= this.speedLimit));
 	}
 	
 	/**
@@ -153,8 +160,8 @@ public class Ship implements IShip{
 	 */
 	private Vector velocity;
 	
-	private void setSpeedLimit(double newLimit){
-		if(isValidSpeedLimit(newLimit)){
+	public void setSpeedLimit(double newLimit){
+		if(canHaveAsSpeedLimit(newLimit)){
 			this.speedLimit=newLimit;
 		}
 		else {
@@ -162,7 +169,22 @@ public class Ship implements IShip{
 		}
 	}
 	
-	private boolean isValidSpeedLimit(double newLimit){
+	/**
+	 * Returns the speed limit of this ship.
+	 */
+	@Basic
+	public double getSpeedLimit() {
+		return this.speedLimit;
+	}
+	
+	/**
+	 * Checks whether the given speedlimit is valid
+	 * @param 	newLimit
+	 * 			The limit to check
+	 * @return	True if and only if the given limit is less than lightspeed.
+	 * 			| result == newLimit <= SPEED_OF_LIGHT
+	 */
+	public boolean canHaveAsSpeedLimit(double newLimit){
 		return newLimit <= SPEED_OF_LIGHT;
 	}
 	
@@ -195,6 +217,7 @@ public class Ship implements IShip{
 	 * 			| (new this).getDirection() == direction
 	 */
 	public void setDirection(double direction){
+		assert isValidDirection(direction);
 		this.direction = direction;
 	}
 	
@@ -225,7 +248,7 @@ public class Ship implements IShip{
 	 * 			The given value for minRadius is invalid for this parameter.
 	 * 			| ! isValidMinRadius(newMinRadius)
 	 */
-	public void setMinRadius(double newMinRadius) throws IllegalArgumentException	{
+	public static void setMinRadius(double newMinRadius) throws IllegalArgumentException	{
 		if(!isValidMinRadius(newMinRadius)){
 			throw new IllegalArgumentException();
 		}
@@ -239,11 +262,19 @@ public class Ship implements IShip{
 	 * @return	True if and only if the given minimum radius is greater than 0
 	 * 			| result == minRadius > 0
 	 */
-	public boolean isValidMinRadius(double minRadius){
+	public static boolean isValidMinRadius(double minRadius){
 		return minRadius > 0;
 	}
 	
-	private static double minRadius;
+	/**
+	 * Returns the minimum radius for all ships.
+	 */
+	@Basic
+	public static double getMinRadius(){
+		return minRadius;
+	}
+	
+	private static double minRadius = 10.0;
 	
 	/**
 	 * Check whether the given radius is a valid radius for the ship.
@@ -252,7 +283,7 @@ public class Ship implements IShip{
 	 * @return	True if and only if the given radius is greater than the mininum radius.
 	 * 			| result == radius >= minRadius
 	 */
-	public boolean isValidRadius(double radius){
+	public boolean canHaveAsRadius(double radius){	//TODO raw?
 		return (radius >= minRadius);
 	}
 	

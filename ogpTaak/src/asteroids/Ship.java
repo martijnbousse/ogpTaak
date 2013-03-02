@@ -53,6 +53,7 @@ public class Ship implements IShip{
 	 */
 	@Raw
 	public Ship(Vector position, Vector velocity, double radius, double direction) throws IllegalArgumentException{
+		setSpeedLimit(SPEED_OF_LIGHT);
 		setPosition(position);
 		setVelocity(velocity);
 		if(!canHaveAsRadius(radius)){
@@ -60,7 +61,6 @@ public class Ship implements IShip{
 		}
 		this.radius=radius;
 		setDirection(direction);
-		setSpeedLimit(SPEED_OF_LIGHT);
 	}
 	
 	/**
@@ -152,7 +152,7 @@ public class Ship implements IShip{
 	 * 						&& (velocity.getMagnitude() >= this.speedLimit))
 	 */
 	public boolean canHaveAsVelocity(Vector velocity){
-		return velocity!=null &&  velocity.getMagnitude() > 0
+		return velocity!=null &&  velocity.getMagnitude() >= 0
 				&& velocity.getMagnitude() <= this.speedLimit;
 	}
 	

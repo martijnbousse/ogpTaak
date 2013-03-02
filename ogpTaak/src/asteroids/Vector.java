@@ -97,7 +97,7 @@ public class Vector {
 	 *  //TODO: bereking?
 	 */
 	public double getMagnitude(){
-		return Math.sqrt( Math.pow(this.getXComponent(), 2) + Math.pow(this.getYComponent(), 2) );
+		return Math.sqrt(this.getXComponent()*this.getXComponent()+ this.getYComponent()*this.getYComponent() );
 	}
 	
 }

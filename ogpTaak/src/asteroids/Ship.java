@@ -336,7 +336,7 @@ public class Ship implements IShip{
 		return Util.fuzzyLessThanOrEqualTo(0,dt);
 				//TODO: ook nul wordt niet toegelaten!
 				//TODO: time moet altijd groter zijn dan nul, zie ook thrust, misschien kan dit gezet worden als invariant + isValidTime() (static)
-			 	//      canAcceptForMove gebruikt dan isValidTime() + een specifieke voorwaarde (zie dependent properties in hb)
+			 	// canAcceptForMove gebruikt dan isValidTime() + een specifieke voorwaarde (zie dependent properties in hb)
 	}
 	
 	/**

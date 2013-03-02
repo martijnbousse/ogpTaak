@@ -75,7 +75,7 @@ public class ShipTest {
 		assert(mutableShip.getVelocity().equals(new Vector(25,20)));
 	}
 	
-	@Test
+	@Test(expected=NullPointerException.class)
 	public void testSetVelocity_NullCase() {
 		mutableShip.setVelocity(null);
 		assert(mutableShip.getVelocity().equals(new Vector(0,0)));
@@ -158,7 +158,7 @@ public class ShipTest {
 
 	@Test
 	public void testGetRadius() {
-		fail("Not yet implemented");
+		assert(ship.getRadius()==15);
 	}
 
 }

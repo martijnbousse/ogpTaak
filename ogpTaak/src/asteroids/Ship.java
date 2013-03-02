@@ -136,8 +136,9 @@ public class Ship implements IShip{
 	 */
 	// TODO: @raw ?
 	public void setVelocity(Vector velocity){
-		if (canHaveAsVelocity(velocity))
+		if (canHaveAsVelocity(velocity)) {
 			this.velocity = velocity;
+		}
 	}
 	
 	/**
@@ -151,8 +152,8 @@ public class Ship implements IShip{
 	 * 						&& (velocity.getMagnitude() >= this.speedLimit))
 	 */
 	public boolean canHaveAsVelocity(Vector velocity){
-		return !(velocity==null) && !( (velocity.getMagnitude() <= 0)
-				&& (velocity.getMagnitude() >= this.speedLimit));
+		return velocity!=null &&  velocity.getMagnitude() > 0
+				&& velocity.getMagnitude() <= this.speedLimit;
 	}
 	
 	/**

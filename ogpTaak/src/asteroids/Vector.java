@@ -35,9 +35,10 @@ public class Vector {
 	 * 			| (new this).getXComponent() == xcomponent
 	 * @post	The y-component of this new vector is equal to the given y-component.
 	 * 			| (new this).getYComponent() == ycomponent
-	 * @throws 	IllegalArgumentException
 	 */
-	public Vector(double xcomponent, double ycomponent) throws IllegalArgumentException{
+	//TODO: Moet in de documentatie ook fuzzyEquals gebruikt worden?
+	//TODO: totaal, nominaal of defensief?
+	public Vector(double xcomponent, double ycomponent){
 		
 		//TODO: exceptions? and @raw ?
 		
@@ -76,26 +77,24 @@ public class Vector {
 	 * 			|  && (this.getYComponent() == ((Vector) other).getYComponent())
 	 */
 	@Override
+	//TODO: documentatie ook fuzzyEquals ipv == ?
 	public boolean equals(Object other){
 		if (other == null)
 			return false;
 		if (this.getClass() != other.getClass())
 			return false;
 		Vector otherVector = (Vector) other;
-		return (this.getXComponent() == otherVector.getXComponent()) 
-				&& (this.getYComponent() == otherVector.getYComponent());
+		return Util.fuzzyEquals(this.getXComponent(),otherVector.getXComponent())
+				&& Util.fuzzyEquals(this.getYComponent(),otherVector.getYComponent());
 	}
-	
-	//TODO: grootte van de vector
 	
 	/**
 	 * Returns the magnitude of this vector.
 	 * 
 	 * @return	Returns the magnitude of this vector.
 	 * 			| result == Math.sqrt( this.getXComponent()^2 + this.getYComponent()^2 )
-	 *  //TODO: excepties?
-	 *  //TODO: bereking?
 	 */
+	//TODO: exceptions?
 	public double getMagnitude(){
 		return Math.sqrt(this.getXComponent()*this.getXComponent()+ this.getYComponent()*this.getYComponent() );
 	}

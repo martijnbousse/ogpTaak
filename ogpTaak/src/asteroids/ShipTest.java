@@ -36,8 +36,7 @@ public class ShipTest {
 
 	@Test
 	public void testGetPosition() {
-		assert(ship.getPosition().getXComponent()==10);
-		assert(ship.getPosition().getYComponent()==5);
+		assert(ship.getPosition().equals(new Vector(10,5)));
 	}
 
 	@Test
@@ -65,8 +64,7 @@ public class ShipTest {
 
 	@Test
 	public void testGetVelocity() {
-		assert(ship.getVelocity().getXComponent()==5);
-		assert(ship.getVelocity().getYComponent()==10);
+		assert(ship.getVelocity().equals(new Vector(5,10)));
 	}
 
 	@Test
@@ -95,14 +93,14 @@ public class ShipTest {
 	@Test
 	public void testSetSpeedLimit_LegalCase() {
 		mutableShip.setSpeedLimit(150);
-		assert(mutableShip.getSpeedLimit()==150);
+		assert(Util.fuzzyEquals(mutableShip.getSpeedLimit(),150));
 	}
 	
 	@Test
 	public void testSetSpeedLimit_IllegalCase() {
 		mutableShip.setSpeedLimit(150);
 		mutableShip.setSpeedLimit(400000);
-		assert(mutableShip.getSpeedLimit()==150);
+		assert(Util.fuzzyEquals(mutableShip.getSpeedLimit(),150));
 	}
 
 
@@ -119,13 +117,13 @@ public class ShipTest {
 	@Test
 	public void testSetDirection_LegalCase() {
 		mutableShip.setDirection(Math.PI);
-		assert(mutableShip.getDirection()==Math.PI);
+		assert(Util.fuzzyEquals(mutableShip.getDirection(),Math.PI));
 	}
 	
 	@Test
 	public void testSetDirection_IllegalCase() {
 		mutableShip.setDirection(Math.PI*3);
-		assert(mutableShip.getDirection()==Math.PI/2);
+		assert(Util.fuzzyEquals(mutableShip.getDirection(),Math.PI/2));
 	}
 
 	@Test
@@ -158,7 +156,19 @@ public class ShipTest {
 
 	@Test
 	public void testGetRadius() {
-		assert(ship.getRadius()==15);
+		assert(Util.fuzzyEquals(ship.getRadius(),15));
+	}
+	
+	@Test
+	public void testTurn_LegalCase() {
+		mutableShip.turn(Math.PI);
+		assert(Util.fuzzyEquals(mutableShip.getDirection(),Math.PI ));
+	}
+	
+	@Test
+	public void testTurn_IllegalCase() {
+		mutableShip.turn(Math.PI*3);
+		assert(Util.fuzzyEquals(mutableShip.getDirection(),0.0));
 	}
 
 }

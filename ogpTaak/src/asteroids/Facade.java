@@ -4,7 +4,10 @@
 package asteroids;
 
 /**
- * @author Martijn
+ * ...
+ * 
+ * @version	1.0
+ * @author 	Martijn Boussé, Wout Vekemans
  *
  */
 public class Facade implements IFacade {
@@ -47,8 +50,7 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public double getXVelocity(IShip ship) {
-		// TODO Auto-generated method stub
-		return 0;
+		return ((Ship) ship).getVelocity().getXComponent();
 	}
 
 	/* (non-Javadoc)
@@ -56,8 +58,7 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public double getYVelocity(IShip ship) {
-		// TODO Auto-generated method stub
-		return 0;
+		return ((Ship) ship).getVelocity().getYComponent();
 	}
 
 	/* (non-Javadoc)
@@ -65,8 +66,7 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public double getRadius(IShip ship) {
-		// TODO Auto-generated method stub
-		return 0;
+		return ((Ship) ship).getRadius();
 	}
 
 	/* (non-Javadoc)
@@ -74,8 +74,7 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public double getDirection(IShip ship) {
-		// TODO Auto-generated method stub
-		return 0;
+		return ((Ship) ship).getDirection();
 	}
 
 	/* (non-Javadoc)
@@ -84,7 +83,7 @@ public class Facade implements IFacade {
 	@Override
 	public void move(IShip ship, double dt) {
 		// TODO Auto-generated method stub
-
+		((Ship) ship).move(dt);
 	}
 
 	/* (non-Javadoc)
@@ -102,7 +101,7 @@ public class Facade implements IFacade {
 	@Override
 	public void turn(IShip ship, double angle) {
 		// TODO Auto-generated method stub
-
+		((Ship) ship).turn(angle);
 	}
 
 	/* (non-Javadoc)

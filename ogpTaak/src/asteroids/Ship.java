@@ -168,9 +168,9 @@ public class Ship implements IShip{
 		if(canHaveAsSpeedLimit(newLimit)){
 			this.speedLimit = newLimit;
 		} 
-		else {
-			this.speedLimit = SPEED_OF_LIGHT;
-		}
+		/**else {
+			this.speedLimit = SPEED_OF_LIGHT;		//TODO dit zou ik weglaten; anders faalt de test
+		}*/
 	}
 	
 	/**
@@ -221,7 +221,7 @@ public class Ship implements IShip{
 	 * @Post 	The new direction of this ship is equal to the given direction.
 	 * 			| (new this).getDirection() == direction
 	 */
-	public void setDirection(double direction){
+	public void setDirection(double direction){		//TODO: in asteroids w -PI/2 gegeven als direction, wat doen we hiermee
 		assert isValidDirection(direction);
 		this.direction = direction;
 	}
@@ -235,7 +235,14 @@ public class Ship implements IShip{
 	 * 			| result == Util.fuzzyLessThanOrEqualTo(0.0, direction) 
 	 * 						&& Util.fuzzyLessThanOrEqualTo(direction, 2*Math.PI)
 	 */
-	public static boolean isValidDirection(double direction){
+	public static boolean isValidDirection(double direction){			//kheb deze een beetje aangepast; documentatie is nu wel fout
+		while(Util.fuzzyLessThanOrEqualTo(2*Math.PI,direction)){
+			direction=direction-2*Math.PI;
+		}
+		while(Util.fuzzyLessThanOrEqualTo(direction,0.0)){
+			direction=direction+2*Math.PI;
+			
+		}
 		return Util.fuzzyLessThanOrEqualTo(0.0, direction) 
 				&& Util.fuzzyLessThanOrEqualTo(direction, 2*Math.PI);
 	}

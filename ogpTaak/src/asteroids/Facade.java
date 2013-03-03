@@ -92,6 +92,7 @@ public class Facade implements IFacade {
 	@Override
 	public void thrust(IShip ship, double amount) {
 		// TODO Auto-generated method stub
+		((Ship) ship).thrust(amount);
 
 	}
 

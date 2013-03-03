@@ -374,8 +374,9 @@ public class Ship implements IShip{
 	}
 	
 	
-	public void thrust(){
-	
+	public void thrust(double amount){
+		//TODO implement
+		this.velocity=new Vector(velocity.getXComponent()+amount*Math.cos(direction),velocity.getYComponent()+amount*Math.sin(direction));
 	}
 	
 	
@@ -394,7 +395,7 @@ public class Ship implements IShip{
 	public double getDistanceBetween(Ship other) throws IllegalArgumentException{
 		if (other == null)
 			throw new IllegalArgumentException("Non effective ship!");
-		try{
+		try{			//TODO ik zie niet hoe dit arithmetic kan opleveren 
 			return Math.sqrt(Math.pow(this.getPosition().getXComponent()-other.getPosition().getXComponent(),2) 
 							+ Math.pow(this.getPosition().getYComponent()-other.getPosition().getYComponent(),2))
 							- this.getRadius() - other.getRadius();

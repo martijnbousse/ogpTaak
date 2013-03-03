@@ -374,9 +374,24 @@ public class Ship implements IShip{
 	}
 	
 	
+	/**
+	 * Change the velocity of this ship with a given amount. 
+	 * @param 	amount
+	 * 			The amount to add.
+	 * @post	The given amount was added to the velocity of the ship, in the direction the ship is heading.
+	 * 			| new.getVelocity().getXcomponent() == 
+	 * 			|	this.getVelocity().getXComponent()+amount*Math.cos(this.getDirection())
+	 * 			| new.getVelocity().getYcomponent() == 
+	 * 			|	this.getVelocity().getYComponent()+amount*Math.sin(this.getDirection())
+	 */
 	public void thrust(double amount){
-		//TODO implement
-		this.velocity=new Vector(velocity.getXComponent()+amount*Math.cos(direction),velocity.getYComponent()+amount*Math.sin(direction));
+		if(isValidThrustAmount(amount)){
+			this.velocity=new Vector(velocity.getXComponent()+amount*Math.cos(direction),velocity.getYComponent()+amount*Math.sin(direction));
+		}
+	}
+	
+	public boolean isValidThrustAmount(double amount){
+		return amount > 0;
 	}
 	
 	

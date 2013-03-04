@@ -4,17 +4,17 @@ import be.kuleuven.cs.som.annotate.*;
 /**
  * A class of ships involving a position, a velocity, a direction and a radius.
  * 
- * @Invar	Each ship can have its speed limit as its speed limit.
+ * @invar	Each ship can have its speed limit as its speed limit.
  * 			| canHaveAsSpeedLimit(speedLimit)
- * @Invar	Each ship can have its radius as its radius
+ * @invar	Each ship can have its radius as its radius
  * 			| canHaveAsRadius(radius)
- * @Invar	The minimum radius that applies to all ships must be a valid minimum radius.
+ * @invar	The minimum radius that applies to all ships must be a valid minimum radius.
  * 			| isValidMinRadius(minRadius)
- * @Invar	Each ship can have its velocity as its velocity
+ * @invar	Each ship can have its velocity as its velocity
  * 			| canHaveAsVelocity(velocity)
- * @Invar 	The position that applies to all ships must be a valid position.
+ * @invar 	The position that applies to all ships must be a valid position.
  * 			| isValidPosition(position)
- * @Invar 	The direction that applies to all ships must be a valid direction.
+ * @invar 	The direction that applies to all ships must be a valid direction.
  * 			| isValidDirection(direction)
  * 
  * @version 1.0
@@ -24,6 +24,7 @@ import be.kuleuven.cs.som.annotate.*;
 public class Ship implements IShip{
 	
 	//TODO: nieuwe excepties aanmaken!
+	//TODO: 
 	
 	/**
 	 * Initialize this new ship with given position, given velocity, given direction and given radius.
@@ -36,7 +37,7 @@ public class Ship implements IShip{
 	 * 			The direction for this new ship.
 	 * @param 	radius
 	 * 			The radius for this new ship.
-	 * @Pre		The given direction must be a valid direction for any ship.
+	 * @pre		The given direction must be a valid direction for any ship.
 	 * 			| isValidDirection(direction)
 	 * @post	The new position of this new ship is equal to the given position.
 	 * 			| (new this).getPosition().equals(position)
@@ -236,7 +237,7 @@ public class Ship implements IShip{
 	 * 						&& Util.fuzzyLessThanOrEqualTo(direction, 2*Math.PI)
 	 */
 	public static boolean isValidDirection(double direction){			//kheb deze een beetje aangepast; documentatie is nu wel fout
-		while(Util.fuzzyLessThanOrEqualTo(2*Math.PI,direction)){
+		while(Util.fuzzyLessThanOrEqualTo(2*Math.PI,direction)){		//wat gebeurt er als je een volledig rondje hebt gemaakt in de gui
 			direction=direction-2*Math.PI;
 		}
 		while(Util.fuzzyLessThanOrEqualTo(direction,0.0)){
@@ -363,7 +364,7 @@ public class Ship implements IShip{
 	 * 
 	 * @param 	angle
 	 * 			The angle to be added.
-	 * @Pre		This ship can accept the given angle for turning.
+	 * @pre		This ship can accept the given angle for turning.
 	 * 			| canAcceptForTurn(angle)
 	 * @effect	The new direction of this ship is set to the direction of this ship incremented with the given angle.
 	 * 			| setDirection(getDirection()+angle)
@@ -372,6 +373,7 @@ public class Ship implements IShip{
 		assert canAcceptForTurn(angle);
 		setDirection(getDirection() + angle);
 	}
+	// in praktijk wordt iets wat constant wordt aangepast eerder totaal geimplementeerd. in het geval van direction kan een totale implementatie met modulo gemaakt worden.
 	
 	
 	/**

@@ -237,13 +237,14 @@ public class Ship implements IShip{
 	 * 						&& Util.fuzzyLessThanOrEqualTo(direction, 2*Math.PI)
 	 */
 	public static boolean isValidDirection(double direction){			//kheb deze een beetje aangepast; documentatie is nu wel fout
-		while(Util.fuzzyLessThanOrEqualTo(2*Math.PI,direction)){		//wat gebeurt er als je een volledig rondje hebt gemaakt in de gui
+		/**while(Util.fuzzyLessThanOrEqualTo(2*Math.PI,direction)){		//wat gebeurt er als je een volledig rondje hebt gemaakt in de gui
 			direction=direction-2*Math.PI;
 		}
 		while(Util.fuzzyLessThanOrEqualTo(direction,0.0)){
 			direction=direction+2*Math.PI;
 			
 		}
+		*/
 		return Util.fuzzyLessThanOrEqualTo(0.0, direction) 
 				&& Util.fuzzyLessThanOrEqualTo(direction, 2*Math.PI);
 	}
@@ -336,7 +337,7 @@ public class Ship implements IShip{
 			setPosition(new Vector(getPosition().getXComponent()+getVelocity().getXComponent()*dt,
 										getPosition().getYComponent()+getVelocity().getYComponent()*dt));
 		} catch(ArithmeticException exc){
-			//TODO: implmentatie
+			//TODO: implementatie
 		}
 	}
 	
@@ -370,10 +371,15 @@ public class Ship implements IShip{
 	 * 			| setDirection(getDirection()+angle)
 	 */
 	public void turn(double angle){
-		assert canAcceptForTurn(angle);
+		//assert canAcceptForTurn(angle);
+		if(!canAcceptForTurn(angle)){
+			angle = angle%(Math.PI*2);
+		}
 		setDirection(getDirection() + angle);
 	}
-	// in praktijk wordt iets wat constant wordt aangepast eerder totaal geimplementeerd. in het geval van direction kan een totale implementatie met modulo gemaakt worden.
+	// in praktijk wordt iets wat constant wordt aangepast eerder totaal geimplementeerd. 
+		//in het geval van direction kan een totale implementatie met modulo gemaakt worden.
+	//TODO het is toch gevraagd om het nominaal te doen ?
 	
 	
 	/**

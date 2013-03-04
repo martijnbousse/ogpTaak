@@ -95,6 +95,7 @@ public class Vector {
 	 * 			| result == Math.sqrt( this.getXComponent()^2 + this.getYComponent()^2 )
 	 */
 	//TODO: exceptions?
+	@Immutable	//TODO want alle componenten zijn ook immutable
 	public double getMagnitude(){
 		return Math.sqrt(this.getXComponent()*this.getXComponent()+ this.getYComponent()*this.getYComponent() );
 	}

@@ -25,7 +25,6 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public IShip createShip(double x, double y, double xVelocity,double yVelocity, double radius, double angle) {
-		
 		return new Ship(new Vector(x,y), new Vector(xVelocity, yVelocity), radius, angle);
 	}
 
@@ -82,7 +81,6 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public void move(IShip ship, double dt) {
-		// TODO Auto-generated method stub
 		((Ship) ship).move(dt);
 	}
 
@@ -91,7 +89,6 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public void thrust(IShip ship, double amount) {
-		// TODO Auto-generated method stub
 		((Ship) ship).thrust(amount);
 
 	}
@@ -101,7 +98,6 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public void turn(IShip ship, double angle) {
-		// TODO Auto-generated method stub
 		((Ship) ship).turn(angle);
 	}
 
@@ -110,8 +106,7 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public double getDistanceBetween(IShip ship1, IShip ship2) {
-		// TODO Auto-generated method stub
-		return 0;
+		return((Ship) ship1).getDistanceBetween((Ship) ship2);
 	}
 
 	/* (non-Javadoc)
@@ -119,8 +114,7 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public boolean overlap(IShip ship1, IShip ship2) {
-		// TODO Auto-generated method stub
-		return false;
+		return((Ship) ship1).overlap((Ship) ship2);
 	}
 
 	/* (non-Javadoc)

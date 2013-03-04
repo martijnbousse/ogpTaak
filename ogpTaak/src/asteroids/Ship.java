@@ -385,9 +385,10 @@ public class Ship implements IShip{
 	 * 			|	this.getVelocity().getYComponent()+amount*Math.sin(this.getDirection())
 	 */
 	public void thrust(double amount){
-		if(canAcceptAsThrustAmount(amount)){
-			this.velocity=new Vector(velocity.getXComponent()+amount*Math.cos(direction),velocity.getYComponent()+amount*Math.sin(direction));
+		if(!canAcceptAsThrustAmount(amount)){
+			amount = 0;
 		}
+		this.velocity=new Vector(velocity.getXComponent()+amount*Math.cos(direction),velocity.getYComponent()+amount*Math.sin(direction));
 	}
 	
 	/**

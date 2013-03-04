@@ -15,7 +15,7 @@ public class ShipTest {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		ship = new Ship(new Vector(10,5), new Vector(5,10), 15, Math.PI/2);
-		defaultShip = new Ship();
+		setDefaultShip(new Ship());
 		
 	}
 
@@ -170,6 +170,14 @@ public class ShipTest {
 		mutableShip.turn(Math.PI*3);
 		//assert(Util.fuzzyEquals(mutableShip.getDirection(),0.0));
 		assert(Util.fuzzyEquals(mutableShip.getDirection(),Math.PI*3));		//TODO moet nog gefixt worden
+	}
+
+	public static Ship getDefaultShip() {
+		return defaultShip;
+	}
+
+	public static void setDefaultShip(Ship defaultShip) {
+		ShipTest.defaultShip = defaultShip;
 	}
 
 }

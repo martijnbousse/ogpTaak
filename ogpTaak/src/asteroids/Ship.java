@@ -17,14 +17,17 @@ import be.kuleuven.cs.som.annotate.*;
  * @invar 	The direction that applies to all ships must be a valid direction.
  * 			| isValidDirection(direction)
  * 
+ *  //TODO: invarianten nakijken
+ * 
  * @version 1.0
  * @author Martijn Boussé, Wout Vekemans
  *
  */
 public class Ship implements IShip{
 	
-	//TODO: nieuwe excepties aanmaken!
-	//TODO: 
+	//TODO: nieuwe excepties aanmaken? Of enkel illegalArgument gebruiken?
+	//TODO: reasoning about floating point numbers -> util fuzzy's 
+	//TODO: opgave p.3 laatste paragraaf van 1.1 in orde?
 	
 	/**
 	 * Initialize this new ship with given position, given velocity, given direction and given radius.
@@ -372,6 +375,7 @@ public class Ship implements IShip{
 	 */
 	public void turn(double angle){
 		//assert canAcceptForTurn(angle);
+		// TODO: enable assertions + if test niet nodig voor nominaal?
 		if(!canAcceptForTurn(angle)){
 			angle = angle%(Math.PI*2);
 		}
@@ -442,7 +446,7 @@ public class Ship implements IShip{
 	 * @param 	other
 	 * 			The other ship.
 	 * @return	True if and only if the distance between this ship and the given ship is negative.
-	 * 			| result == (getDistanceBetween(ship) < 0)        of via fuzzy?
+	 * 			| result == (getDistanceBetween(ship) < 0)        //TODO: of via fuzzy?
 	 * @throws 	IllegalArgumentException         moet dat hier nog vermeld worden aangezien die exceptie reeds wordt opgegooid in getDistanceBetween en in de implementatie?
 	 * 			The given ship is not effective.
 	 * 			| (ship == null)
@@ -450,8 +454,81 @@ public class Ship implements IShip{
 	//TODO: Vergelijken met 0 of via fuzzy uit Util?
 	public boolean overlap(Ship other) throws IllegalArgumentException{
 		return getDistanceBetween(other) < 0;
-		//return Util.fuzzyLessThanOrEqualTo(getDistanceBetween(other),0);
+		//return Util.fuzzyLessThanOrEqualTo(getDistanceBetween(other),0); 
 	}
+	
+	/**
+	 * Returns when this ship, if ever, will collide with the given ship.
+	 * 
+	 * @param 	other
+	 * 			The other ship.
+	 * @return	Returns the time until this and the given ship will collide.
+	 * 			| ...
+	 * 			//TODO: return Double.POSITIVE_INFINITY if the ships never collide.
+	 * @throws 	IllegalArgumentException
+	 * 			The given ship is not effective.
+	 * 			| (ship == null)
+	 * @throws	...
+	 * 			|
+	 */
+	public double getTimeToCollision(Ship other) throws IllegalArgumentException{ //TODO: arithmetic exceptions?
+		if (other == null)
+				throw new IllegalArgumentException("Non effective ship!");
+		
+		//TODO: implementatie, merk op substract! 
+		
+		Vector deltaR = getPosition().subtract(other.getPosition());
+		Vector deltaV = getVelocity().subtract(other.getVelocity());
+
+		double sigma = this.getRadius() + other.getRadius();
+		
+		double a = deltaR.times(deltaR);
+		double b = deltaV.times(deltaV);
+		double c = deltaV.times(deltaR);
+		
+		double d = c*c - (b)*(a-sigma*sigma);
+		
+		//double a = deltaR.getMagnitude();
+		//double b = deltaV.getMagnitude();
+		
+		
+		//TODO: try-catch structuur voor laatste else?
+		
+		if (Util.fuzzyLessThanOrEqualTo(0,c))
+			return Double.POSITIVE_INFINITY;
+		else if (Util.fuzzyLessThanOrEqualTo(d,0))
+			return Double.POSITIVE_INFINITY;
+		else
+			return -(c+Math.sqrt(d))/b;
+	}
+	
+	/**
+	 * 
+	 * @param 	other
+	 * 			The other ship.
+	 * @return	...
+	 * 			|
+	 * @throws	IllegalArgumentException
+	 * 			The given ship is not effective.
+	 * 			| (ship == null)
+	 * @throws	...
+	 * 			|
+	 */
+	public Position getCollisionPosition(Ship other) throws IllegalArgumentException{ //TODO: arithmetic exceptions?
+		if (other == null)
+			throw new IllegalArgumentException("Non effective ship!");
+		//TODO: implementatie
+		
+		double deltaT = getTimeToCollision(other); //is dit beter dan telkens methode aanroepen?
+		
+		Vector a = new Vector(this.getPosition().getXComponent()+deltaT*this.getVelocity().getXComponent(),
+								this.getPosition().getYComponent()+deltaT*this.getVelocity().getYComponent());
+		Vector b = new Vector(other.getPosition().getXComponent()+deltaT*other.getVelocity().getXComponent(),
+								other.getPosition().getYComponent()+deltaT*other.getVelocity().getYComponent());
+		
+		return null; //TODO: contactpunt?
+	}
+	
 	
 	
 	

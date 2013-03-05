@@ -134,5 +134,29 @@ public class Vector {
 			throw new IllegalArgumentException("Non effective vector!");
 		return new Vector(this.getXComponent()-other.getXComponent(),this.getYComponent()-other.getYComponent());
 	}
-	
+
+	public static double getAngle(Vector vector1,Vector vector2) {
+		double xDiff = vector1.getXComponent()-vector1.getXComponent();
+		double yDiff = vector1.getYComponent()-vector2.getYComponent();
+		if(xDiff > 0){
+			if(yDiff > 0){
+				return Math.atan(yDiff/xDiff)+Math.PI;
+			}
+			if(yDiff < 0){
+				return Math.atan(-yDiff/xDiff)+Math.PI;
+			}
+		}
+		else if(xDiff < 0){
+			if(yDiff > 0){
+				return Math.atan(-yDiff/xDiff);
+			}
+			if(yDiff < 0){
+				return Math.atan(yDiff/xDiff);
+			}
+		}
+		else if(xDiff == 0){
+			return Math.PI/2;
+		}
+		return 0;
+	}	
 }

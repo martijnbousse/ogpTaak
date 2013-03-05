@@ -528,10 +528,10 @@ public class Ship implements IShip{
 		
 		Vector newPositionThis = new Vector(this.getPosition().getXComponent()+deltaT*this.getVelocity().getXComponent(),
 								this.getPosition().getYComponent()+deltaT*this.getVelocity().getYComponent());
-//		Vector newPositionOther = new Vector(other.getPosition().getXComponent()+deltaT*other.getVelocity().getXComponent(),
-//								other.getPosition().getYComponent()+deltaT*other.getVelocity().getYComponent());
+		Vector newPositionOther = new Vector(other.getPosition().getXComponent()+deltaT*other.getVelocity().getXComponent(),
+												other.getPosition().getYComponent()+deltaT*other.getVelocity().getYComponent());
 		
-		double theta = this.getCollisionAngle(other);
+		double theta = Vector.getAngle(newPositionThis,newPositionOther);
 		
 //		try {
 			return new Vector(newPositionThis.getXComponent()+this.getRadius()*Math.cos(theta),newPositionThis.getYComponent()+this.getRadius()*Math.sin(theta));
@@ -539,35 +539,4 @@ public class Ship implements IShip{
 //			return new Vector(newPositionThis.getXComponent(),newPositionThis.getYComponent()+this.getRadius());
 //		}
 	}
-	
-	//TODO werkt niet
-	public double getCollisionAngle(Ship other){
-		double xDiff = this.getPosition().getXComponent()-other.getPosition().getXComponent();
-		double yDiff = this.getPosition().getYComponent()-other.getPosition().getYComponent();
-		if(xDiff > 0){
-			if(yDiff > 0){
-				return Math.atan(yDiff/xDiff)+Math.PI;
-			}
-			if(yDiff < 0){
-				return Math.atan(-yDiff/xDiff)+Math.PI;
-			}
-		}
-		else if(xDiff < 0){
-			if(yDiff > 0){
-				return Math.atan(-yDiff/xDiff);
-			}
-			if(yDiff < 0){
-				return Math.atan(yDiff/xDiff);
-			}
-		}
-		else if(xDiff == 0){
-			return Math.PI/2;
-		}
-		return 0;
-	}
-	
-	
-	
-	
-
 }

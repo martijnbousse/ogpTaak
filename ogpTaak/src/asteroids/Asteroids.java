@@ -131,6 +131,7 @@ public class Asteroids extends JFrame {
       } else {
         asteroids = new Asteroids(facade, false);
       }
+      
       asteroids.start();
     }
   }

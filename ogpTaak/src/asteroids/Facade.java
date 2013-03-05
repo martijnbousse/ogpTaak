@@ -106,7 +106,7 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public double getDistanceBetween(IShip ship1, IShip ship2) {
-		return((Ship) ship1).getDistanceBetween((Ship) ship2);
+		return ((Ship) ship1).getDistanceBetween((Ship) ship2);
 	}
 
 	/* (non-Javadoc)
@@ -114,7 +114,7 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public boolean overlap(IShip ship1, IShip ship2) {
-		return((Ship) ship1).overlap((Ship) ship2);
+		return ((Ship) ship1).overlap((Ship) ship2);
 	}
 
 	/* (non-Javadoc)
@@ -122,8 +122,7 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public double getTimeToCollision(IShip ship1, IShip ship2) {
-		// TODO Auto-generated method stub
-		return 0;
+		return ((Ship) ship1).getTimeToCollision((Ship) ship2);
 	}
 
 	/* (non-Javadoc)
@@ -131,8 +130,15 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public double[] getCollisionPosition(IShip ship1, IShip ship2) {
-		// TODO Auto-generated method stub
-		return null;
+		Vector collisionPosition = ((Ship) ship1).getCollisionPosition( (Ship) ship2);
+		if(collisionPosition==null)
+			return null;
+		else {
+			double collisionPositionList[] = new double[2];
+			collisionPositionList[0] = collisionPosition.getXComponent();
+			collisionPositionList[1] = collisionPosition.getYComponent();
+			return collisionPositionList;
+		}
 	}
 
 }

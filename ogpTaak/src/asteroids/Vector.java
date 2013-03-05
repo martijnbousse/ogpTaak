@@ -78,7 +78,7 @@ public class Vector {
 	 * 			|  && (this.getYComponent() == ((Vector) other).getYComponent())
 	 */
 	@Override
-	//TODO: documentatie ook fuzzyEquals ipv == ?
+	//TODO: documentatie ook fuzzyEquals ipv == ja
 	public boolean equals(Object other){
 		if (other == null)
 			return false;
@@ -88,21 +88,7 @@ public class Vector {
 		return Util.fuzzyEquals(this.getXComponent(),otherVector.getXComponent())
 				&& Util.fuzzyEquals(this.getYComponent(),otherVector.getYComponent());
 	}
-	
-	/**
-	 * Returns the magnitude of this vector.
-	 * 
-	 * @return	Returns the magnitude of this vector.
-	 * 			| result == Math.sqrt(this.getXComponent()*this.getXComponent()+this.getYComponent()*this.getYComponent())
-	 */
-	//TODO: exceptions?
-	@Immutable	
-	//TODO: immutable want alle componenten zijn ook immutable
-	//TODO: arithmetic exceptions?
-	public double getMagnitude(){
-		return Math.sqrt(this.getXComponent()*this.getXComponent()+this.getYComponent()*this.getYComponent() );
-	}
-	
+		
 	/**
 	 * Returns the product of the other vector and this vector.
 	 *
@@ -113,14 +99,18 @@ public class Vector {
 	 * @throws 	IllegalArgumentException
 	 * 			The other vector is not effective.
 	 * 			| (other == null) 
-	 * @throws	...
-	 * 			|
+	 * @throws	TimesOverflowException
+	 * 			The multiplication overflows.
+	 * 			| Util.fuzzyLessThanOrEqualTo(this.getXComponent(),Double.POSITIVE_INFINITY/other.getXComponent()) ||  
+	 *				Util.fuzzyLessThanOrEqualTo(this.getYComponent(),Double.POSITIVE_INFINITY/other.getYComponent())
 	 */
-	//TODO: times van dezelfde vector is hetzelfde als getMagnitude -> redundantie! getMagnitude weglaten? Of beide houden, maar dan return in magnitude aanpassen, ifv times.
-	//TODO: arithmetic exceptions? overflows -> hier of in ship oplossen? best hier veronderstel ik
-	public double times(Vector other) throws IllegalArgumentException {
+	@Immutable
+	public double times(Vector other) throws IllegalArgumentException, TimesOverflowException {
 		if (other == null)
 			throw new IllegalArgumentException("Non effective vector!");
+		else if (! (Util.fuzzyLessThanOrEqualTo(this.getXComponent(),Double.POSITIVE_INFINITY/(other.getXComponent()+Util.EPSILON)) ||  
+				 	Util.fuzzyLessThanOrEqualTo(this.getYComponent(),Double.POSITIVE_INFINITY/(other.getYComponent()+Util.EPSILON))))
+			throw new TimesOverflowException();
 		return (this.getXComponent()*other.getXComponent() + this.getYComponent()*other.getYComponent());
 	}
 	
@@ -130,10 +120,7 @@ public class Vector {
 	 * @param 	other
 	 * 			The other vector to subtract.
 	 * @return	The resulting vector is equal to the subtraction of this vector and the other vector.
-	 * 			| result.equals(this.getXComponent()-other.getXComponent(),this.getYComponent()-other.getYComponent());
-	 * 
-	 *  //TODO: onthoud dat hier equals en niet == gebruikt moet worden! checken of dat steeds het geval is!
-	 *  
+	 * 			| result.equals(this.getXComponent()-other.getXComponent(),this.getYComponent()-other.getYComponent()); 
 	 * @throws 	IllegalArgumentException
 	 * 			The other vector is not effective.
 	 * 			| (other == null)

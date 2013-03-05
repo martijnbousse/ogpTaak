@@ -27,7 +27,7 @@ public class Ship implements IShip{
 	
 	//TODO: nieuwe excepties aanmaken? Of enkel illegalArgument gebruiken?
 	//TODO: reasoning about floating point numbers -> util fuzzy's 
-	//TODO: opgave p.3 laatste paragraaf van 1.1 in orde?
+	//TODO: opgave p.3 laatste paragraaf van 1.1 in orde? mail sturen/forum
 	
 	/**
 	 * Initialize this new ship with given position, given velocity, given direction and given radius.
@@ -159,8 +159,8 @@ public class Ship implements IShip{
 	 */
 	public boolean canHaveAsVelocity(Vector velocity){
 		return (velocity != null)
-				&& Util.fuzzyLessThanOrEqualTo(0.0,velocity.getMagnitude())
-				&& Util.fuzzyLessThanOrEqualTo(velocity.getMagnitude(),this.speedLimit);
+				&& Util.fuzzyLessThanOrEqualTo(0.0,velocity.times(velocity))
+				&& Util.fuzzyLessThanOrEqualTo(velocity.times(velocity),this.speedLimit);
 	}
 	
 	/**
@@ -374,11 +374,7 @@ public class Ship implements IShip{
 	 * 			| setDirection(getDirection()+angle)
 	 */
 	public void turn(double angle){
-		//assert canAcceptForTurn(angle);
-		// TODO: enable assertions + if test niet nodig voor nominaal?
-		if(!canAcceptForTurn(angle)){
-			angle = angle%(Math.PI*2);
-		}
+		assert canAcceptForTurn(angle);
 		setDirection(getDirection() + angle);
 	}
 	// in praktijk wordt iets wat constant wordt aangepast eerder totaal geimplementeerd. 
@@ -446,15 +442,13 @@ public class Ship implements IShip{
 	 * @param 	other
 	 * 			The other ship.
 	 * @return	True if and only if the distance between this ship and the given ship is negative.
-	 * 			| result == (getDistanceBetween(ship) < 0)        //TODO: of via fuzzy?
+	 * 			| result == (getDistanceBetween(ship) < 0)   
 	 * @throws 	IllegalArgumentException         moet dat hier nog vermeld worden aangezien die exceptie reeds wordt opgegooid in getDistanceBetween en in de implementatie?
 	 * 			The given ship is not effective.
 	 * 			| (ship == null)
 	 */
-	//TODO: Vergelijken met 0 of via fuzzy uit Util?
 	public boolean overlap(Ship other) throws IllegalArgumentException{
 		return getDistanceBetween(other) < 0;
-		//return Util.fuzzyLessThanOrEqualTo(getDistanceBetween(other),0); 
 	}
 	
 	/**
@@ -462,71 +456,88 @@ public class Ship implements IShip{
 	 * 
 	 * @param 	other
 	 * 			The other ship.
-	 * @return	Returns the time until this and the given ship will collide.
-	 * 			| ...
-	 * 			//TODO: return Double.POSITIVE_INFINITY if the ships never collide.
+	 * @return	Returns the time until this ship and the given ship will collide.
+	 * 			| let 
+	 * 			| 	deltaR = getPosition().subtract(other.getPosition())
+	 *			| 	deltaV = getVelocity().subtract(other.getVelocity())
+	 *			| 	a = deltaR.times(deltaR)
+	 *			|	b = deltaV.times(deltaV)
+	 *			|	c = deltaV.times(deltaR)
+	 *			|	d = c*c - (b)*(a-sigma*sigma)
+	 *			| in
+	 *			|	if (Util.fuzzyLessThanOrEqualTo(0,c))
+	 *			|		result == Double.POSITIVE_INFINITY
+	 *			|	else if (Util.fuzzyLessThanOrEqualTo(d,0))
+	 *			| 		result == Double.POSITIVE_INFINITY
+	 *			|	else
+	 *			|		result == -(c+Math.sqrt(d))/b
 	 * @throws 	IllegalArgumentException
 	 * 			The given ship is not effective.
 	 * 			| (ship == null)
-	 * @throws	...
-	 * 			|
 	 */
-	public double getTimeToCollision(Ship other) throws IllegalArgumentException{ //TODO: arithmetic exceptions?
+	public double getTimeToCollision(Ship other) throws IllegalArgumentException{
 		if (other == null)
 				throw new IllegalArgumentException("Non effective ship!");
-		
-		//TODO: implementatie, merk op substract! 
-		
 		Vector deltaR = getPosition().subtract(other.getPosition());
 		Vector deltaV = getVelocity().subtract(other.getVelocity());
-
-		double sigma = this.getRadius() + other.getRadius();
-		
-		double a = deltaR.times(deltaR);
-		double b = deltaV.times(deltaV);
-		double c = deltaV.times(deltaR);
-		
-		double d = c*c - (b)*(a-sigma*sigma);
-		
-		//double a = deltaR.getMagnitude();
-		//double b = deltaV.getMagnitude();
-		
-		
-		//TODO: try-catch structuur voor laatste else?
-		
-		if (Util.fuzzyLessThanOrEqualTo(0,c))
+		try {
+			double sigma = this.getRadius() + other.getRadius();
+			double a = deltaR.times(deltaR);
+			double b = deltaV.times(deltaV);
+			double c = deltaV.times(deltaR); //TODO: betere namen zoeken
+			double d = c*c - (b)*(a-sigma*sigma);
+			if (Util.fuzzyLessThanOrEqualTo(0,c))
+				return Double.POSITIVE_INFINITY;
+			else if (Util.fuzzyLessThanOrEqualTo(d,0))
+				return Double.POSITIVE_INFINITY;
+			else
+				try {
+					return -(c+Math.sqrt(d))/b;
+				} catch (ArithmeticException exc) {
+					return Double.POSITIVE_INFINITY;
+				}	
+		} catch (TimesOverflowException exc) {
 			return Double.POSITIVE_INFINITY;
-		else if (Util.fuzzyLessThanOrEqualTo(d,0))
-			return Double.POSITIVE_INFINITY;
-		else
-			return -(c+Math.sqrt(d))/b;
+		}
 	}
 	
 	/**
 	 * 
 	 * @param 	other
 	 * 			The other ship.
-	 * @return	...
-	 * 			|
+	 * @return	Returns the position where this ship and the given ship will collide.
+	 * 			| let
+	 * 			| 	deltaT = getTimeToCollision(other)
+	 *			|	newPositionThis = new Vector(this.getPosition().getXComponent()+deltaT*this.getVelocity().getXComponent(),
+	 *			| 											this.getPosition().getYComponent()+deltaT*this.getVelocity().getYComponent())
+	 *			|	newPositionOther = new Vector(other.getPosition().getXComponent()+deltaT*other.getVelocity().getXComponent(),
+	 *			|											other.getPosition().getYComponent()+deltaT*other.getVelocity().getYComponent())
+	 *			|	theta = Math.atan((newPositionOther.getYComponent()-newPositionThis.getYComponent())/(newPositionOther.getXComponent()-newPositionThis.getXComponent()))
+	 *			| in
+	 *			|	result == new Vector(newPositionThis.getXComponent()+this.getRadius()*Math.cos(theta),newPositionThis.getYComponent()+this.getRadius()*Math.sin(theta))
 	 * @throws	IllegalArgumentException
 	 * 			The given ship is not effective.
 	 * 			| (ship == null)
-	 * @throws	...
-	 * 			|
 	 */
-	public Position getCollisionPosition(Ship other) throws IllegalArgumentException{ //TODO: arithmetic exceptions?
+	public Vector getCollisionPosition(Ship other) throws IllegalArgumentException{ //TODO: arithmetic exceptions?
 		if (other == null)
-			throw new IllegalArgumentException("Non effective ship!");
-		//TODO: implementatie
+			throw new IllegalArgumentException("Non effective ship!");	
+		double deltaT = getTimeToCollision(other); 
+		if (deltaT == Double.POSITIVE_INFINITY)
+			return null;
 		
-		double deltaT = getTimeToCollision(other); //is dit beter dan telkens methode aanroepen?
-		
-		Vector a = new Vector(this.getPosition().getXComponent()+deltaT*this.getVelocity().getXComponent(),
+		Vector newPositionThis = new Vector(this.getPosition().getXComponent()+deltaT*this.getVelocity().getXComponent(),
 								this.getPosition().getYComponent()+deltaT*this.getVelocity().getYComponent());
-		Vector b = new Vector(other.getPosition().getXComponent()+deltaT*other.getVelocity().getXComponent(),
+		Vector newPositionOther = new Vector(other.getPosition().getXComponent()+deltaT*other.getVelocity().getXComponent(),
 								other.getPosition().getYComponent()+deltaT*other.getVelocity().getYComponent());
 		
-		return null; //TODO: contactpunt?
+		double theta = Math.atan((newPositionOther.getYComponent()-newPositionThis.getYComponent())/(newPositionOther.getXComponent()-newPositionThis.getXComponent()));
+		
+		try {
+			return new Vector(newPositionThis.getXComponent()+this.getRadius()*Math.cos(theta),newPositionThis.getYComponent()+this.getRadius()*Math.sin(theta));
+		} catch (ArithmeticException exc) {
+			return new Vector(newPositionThis.getXComponent(),newPositionThis.getYComponent()+this.getRadius());
+		}
 	}
 	
 	

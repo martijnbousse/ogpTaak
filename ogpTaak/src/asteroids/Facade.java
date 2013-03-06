@@ -25,6 +25,13 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public IShip createShip(double x, double y, double xVelocity,double yVelocity, double radius, double angle) {
+		if(!Util.fuzzyLessThanOrEqualTo(0.0, angle)){
+			angle = angle%Math.PI*2 + Math.PI*2;
+		}
+		else if(!Util.fuzzyLessThanOrEqualTo(angle, Math.PI*2)){
+			angle = angle%Math.PI*2;
+		}
+		
 		return new Ship(new Vector(x,y), new Vector(xVelocity, yVelocity), radius, angle);
 	}
 
@@ -98,6 +105,13 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public void turn(IShip ship, double angle) {
+		if(!Util.fuzzyLessThanOrEqualTo(0.0, angle)){
+			angle = angle%Math.PI*2 + Math.PI*2;
+		}
+		else if(!Util.fuzzyLessThanOrEqualTo(angle, Math.PI*2)){
+			angle = angle%Math.PI*2;
+		}
+		
 		((Ship) ship).turn(angle);
 	}
 

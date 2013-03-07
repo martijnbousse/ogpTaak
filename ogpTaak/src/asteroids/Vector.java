@@ -51,7 +51,7 @@ public class Vector {
 	/**
 	 * Return the x-component of this vector.
 	 */
-	@Basic @Immutable
+	@Basic @Immutable @Raw
 	public double getXComponent(){
 		return this.xcomponent;
 	}
@@ -59,7 +59,7 @@ public class Vector {
 	/**
 	 * Return the y-component of this vector.
 	 */
-	@Basic @Immutable
+	@Basic @Immutable @Raw
 	public double getYComponent(){
 		return this.ycomponent;
 	}
@@ -88,6 +88,9 @@ public class Vector {
 		return Util.fuzzyEquals(this.getXComponent(),otherVector.getXComponent())
 				&& Util.fuzzyEquals(this.getYComponent(),otherVector.getYComponent());
 	}
+	
+	//TODO: hashcode
+	//TODO: toString
 		
 	/**
 	 * Returns the product of the other vector and this vector.
@@ -105,14 +108,39 @@ public class Vector {
 	 *				Util.fuzzyLessThanOrEqualTo(this.getYComponent(),Double.POSITIVE_INFINITY/other.getYComponent())
 	 */
 	@Immutable
-	public double times(Vector other) throws IllegalArgumentException, TimesOverflowException {
+	//TODO: nieuwe methode scale(vector, scaling factor)
+	//TODO: dotProduct static maken, maar veel problemen
+	public double dotProduct(Vector other) throws IllegalArgumentException, TimesOverflowException {
 		if (other == null)
 			throw new IllegalArgumentException("Non effective vector!");
-		else if (! (Util.fuzzyLessThanOrEqualTo(this.getXComponent(),Double.POSITIVE_INFINITY/(other.getXComponent()+Util.EPSILON)) ||  
-				 	Util.fuzzyLessThanOrEqualTo(this.getYComponent(),Double.POSITIVE_INFINITY/(other.getYComponent()+Util.EPSILON))))
+			else if (! (Util.fuzzyLessThanOrEqualTo(this.getXComponent(),Double.POSITIVE_INFINITY/(other.getXComponent())) ||
+			Util.fuzzyLessThanOrEqualTo(this.getYComponent(),Double.POSITIVE_INFINITY/(other.getYComponent()))))
 			throw new TimesOverflowException();
-		return (this.getXComponent()*other.getXComponent() + this.getYComponent()*other.getYComponent());
+			return (this.getXComponent()*other.getXComponent() + this.getYComponent()*other.getYComponent());
+		
+		
+//		if (other == null){
+//			throw new IllegalArgumentException("Non effective vector!");
+//		}
+//		double xResult = this.getXComponent()*other.getXComponent();
+//		double yResult = this.getYComponent()*other.getYComponent();
+//		try{
+//			if( !(Util.fuzzyLessThanOrEqualTo(this.getXComponent(),Double.POSITIVE_INFINITY/other.getXComponent())))
+//				throw new TimesOverflowException();
+//		} catch(ArithmeticException exc){
+//			xResult = 0;
+//		}
+//		try{
+//			if( !(Util.fuzzyLessThanOrEqualTo(this.getYComponent(),Double.POSITIVE_INFINITY/other.getYComponent())))
+//				throw new TimesOverflowException();
+//		} catch(ArithmeticException exc){
+//			yResult = 0;
+//		}
+//		return xResult + yResult;
 	}
+	
+	
+	//TODO: sum + overflow
 	
 	/**
 	 * Returns the subtraction of the other vector from this vector.
@@ -128,15 +156,19 @@ public class Vector {
 	 * 			|
 	 */
 	//TODO: arithmetic exceptions? overflows
-	//TODO: zie p. 296, ifv negate ??
 	public Vector subtract(Vector other) throws IllegalArgumentException {
 		if (other == null)
 			throw new IllegalArgumentException("Non effective vector!");
 		return new Vector(this.getXComponent()-other.getXComponent(),this.getYComponent()-other.getYComponent());
 	}
+	
+	
+	
+	
+	
 
 	public static double getAngle(Vector vector1,Vector vector2) {
-		double xDiff = vector1.getXComponent()-vector1.getXComponent();
+		double xDiff = vector1.getXComponent()-vector2.getXComponent();
 		double yDiff = vector1.getYComponent()-vector2.getYComponent();
 		if(xDiff > 0){
 			if(yDiff > 0){
@@ -145,6 +177,7 @@ public class Vector {
 			if(yDiff < 0){
 				return Math.atan(-yDiff/xDiff)+Math.PI;
 			}
+			return Math.PI;
 		}
 		else if(xDiff < 0){
 			if(yDiff > 0){
@@ -153,9 +186,14 @@ public class Vector {
 			if(yDiff < 0){
 				return Math.atan(yDiff/xDiff);
 			}
+			return 0;
 		}
 		else if(xDiff == 0){
-			return Math.PI/2;
+			if(yDiff > 0)
+				return 3*Math.PI/2;
+			else{
+				return Math.PI/2;
+			}
 		}
 		return 0;
 	}	

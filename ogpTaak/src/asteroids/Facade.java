@@ -31,8 +31,11 @@ public class Facade implements IFacade {
 		else if(!Util.fuzzyLessThanOrEqualTo(angle, Math.PI*2)){
 			angle = angle%Math.PI*2;
 		}
-		
-		return new Ship(new Vector(x,y), new Vector(xVelocity, yVelocity), radius, angle);
+		try{
+			return new Ship(new Vector(x,y), new Vector(xVelocity, yVelocity), radius, angle);
+		} catch (IllegalArgumentException exc){
+			throw new ModelException(exc);
+		}
 	}
 
 	/* (non-Javadoc)
@@ -88,7 +91,11 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public void move(IShip ship, double dt) {
-		((Ship) ship).move(dt);
+		try {
+			((Ship) ship).move(dt);
+		} catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	/* (non-Javadoc)
@@ -123,7 +130,7 @@ public class Facade implements IFacade {
 		try{
 			return ((Ship) ship1).getDistanceBetween((Ship) ship2);
 		} catch(IllegalArgumentException exc) {
-			return 0;
+			throw new ModelException(exc);
 		}
 	}
 
@@ -135,7 +142,7 @@ public class Facade implements IFacade {
 		try{
 			return ((Ship) ship1).overlap((Ship) ship2);
 		} catch(IllegalArgumentException exc) {
-			return true;
+			throw new ModelException(exc);
 		}
 	}
 
@@ -144,7 +151,11 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public double getTimeToCollision(IShip ship1, IShip ship2) {
-		return ((Ship) ship1).getTimeToCollision((Ship) ship2);
+		try{
+			return ((Ship) ship1).getTimeToCollision((Ship) ship2);
+		} catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	/* (non-Javadoc)
@@ -152,14 +163,18 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public double[] getCollisionPosition(IShip ship1, IShip ship2) {
-		Vector collisionPosition = ((Ship) ship1).getCollisionPosition( (Ship) ship2);
-		if(collisionPosition==null)
-			return null;
-		else {
-			double collisionPositionList[] = new double[2];
-			collisionPositionList[0] = collisionPosition.getXComponent();
-			collisionPositionList[1] = collisionPosition.getYComponent();
-			return collisionPositionList;
+		try{
+			Vector collisionPosition = ((Ship) ship1).getCollisionPosition( (Ship) ship2);
+			if(collisionPosition==null)
+				return null;
+			else {
+				double collisionPositionList[] = new double[2];
+				collisionPositionList[0] = collisionPosition.getXComponent();
+				collisionPositionList[1] = collisionPosition.getYComponent();
+				return collisionPositionList;
+			}
+		} catch(IllegalArgumentException exc){
+			throw new ModelException(exc);
 		}
 	}
 

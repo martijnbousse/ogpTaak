@@ -114,7 +114,9 @@ public class Ship implements IShip{
 	 * 			| result == (position != null)
 	 */
 	public static boolean isValidPosition(Vector position){
-			return ( position != null );
+		return ( !Double.isNaN(position.getXComponent()) 
+				 && !Double.isNaN(position.getYComponent()) 
+				 && position != null );
 	}
 	
 	/**
@@ -158,9 +160,12 @@ public class Ship implements IShip{
 	 * 						&& Util.fuzzyLessThanOrEqualTo(velocity.getMagnitude(),this.speedLimit) )
 	 */
 	public boolean canHaveAsVelocity(Vector velocity){
-		return (velocity != null)
-				&& Util.fuzzyLessThanOrEqualTo(0.0,velocity.times(velocity))
-				&& Util.fuzzyLessThanOrEqualTo(velocity.times(velocity),this.speedLimit);
+		return 	!Double.isNaN(velocity.getXComponent())
+				&& !Double.isNaN(velocity.getYComponent())
+				&& (velocity != null)
+				&& Util.fuzzyLessThanOrEqualTo(0.0,velocity.dotProduct(velocity))
+				&& Util.fuzzyLessThanOrEqualTo(velocity.dotProduct(velocity),this.speedLimit);
+				
 	}
 	
 	/**
@@ -194,7 +199,8 @@ public class Ship implements IShip{
 	 */
 	//TODO: fuzzy in doc?
 	public boolean canHaveAsSpeedLimit(double newLimit){
-		return Util.fuzzyLessThanOrEqualTo(newLimit,SPEED_OF_LIGHT);
+		return 	!Double.isNaN(newLimit) 
+				&& Util.fuzzyLessThanOrEqualTo(newLimit,SPEED_OF_LIGHT);
 	}
 	
 	/**
@@ -239,16 +245,9 @@ public class Ship implements IShip{
 	 * 			| result == Util.fuzzyLessThanOrEqualTo(0.0, direction) 
 	 * 						&& Util.fuzzyLessThanOrEqualTo(direction, 2*Math.PI)
 	 */
-	public static boolean isValidDirection(double direction){			//kheb deze een beetje aangepast; documentatie is nu wel fout
-		/**while(Util.fuzzyLessThanOrEqualTo(2*Math.PI,direction)){		//wat gebeurt er als je een volledig rondje hebt gemaakt in de gui
-			direction=direction-2*Math.PI;
-		}
-		while(Util.fuzzyLessThanOrEqualTo(direction,0.0)){
-			direction=direction+2*Math.PI;
-			
-		}
-		*/
-		return Util.fuzzyLessThanOrEqualTo(0.0, direction) 
+	public static boolean isValidDirection(double direction){
+		return 	!Double.isNaN(direction)
+				&& Util.fuzzyLessThanOrEqualTo(0.0, direction) 
 				&& Util.fuzzyLessThanOrEqualTo(direction, 2*Math.PI);
 	}
 	
@@ -282,7 +281,8 @@ public class Ship implements IShip{
 	 */
 	//TODO: hoe gebruiken we hier Util?
 	public static boolean isValidMinRadius(double minRadius){
-		return minRadius > 0;
+		return 	!Double.isNaN(minRadius)
+				&& minRadius > 0;
 	}
 	
 	/**
@@ -307,7 +307,8 @@ public class Ship implements IShip{
 	 */
 	public boolean canHaveAsRadius(double radius){	
 		//TODO raw?
-		return (radius >= minRadius);
+		return 	!Double.isNaN(radius)
+				&& (Util.fuzzyLessThanOrEqualTo(minRadius,radius));
 	}
 	
 	/**
@@ -339,8 +340,9 @@ public class Ship implements IShip{
 		try{
 			setPosition(new Vector(getPosition().getXComponent()+getVelocity().getXComponent()*dt,
 										getPosition().getYComponent()+getVelocity().getYComponent()*dt));
+			//add(getPosition()+timesFactor(getVelocity,dt))
 		} catch(ArithmeticException exc){
-			//TODO: implementatie
+			//TODO: implementatie + sumOverflowException -> geen arithmetic
 		}
 	}
 	
@@ -410,46 +412,49 @@ public class Ship implements IShip{
 		return amount > 0;
 	}
 	
-	
 	/**
 	 * Returns the distance between this ship and the given ship.
 	 * @param  	other
 	 * 			The other ship.
-	 * @return	Returns the distance between this ship and the given ship.
-	 * 			| result == ...
+	 * @return	Returns the distance between this ship and the given ship. If this ship is equal to the given ship the result is always zero.
+	 * 			| let 
+	 * 			|	delta = this.getPosition().subtract(other.getPosition())
+	 * 			| in
+	 * 			| 	if(other.equals(this))
+	 * 			|		result == 0
+	 * 			| 	else 	
+	 * 			|		result == Math.sqrt(delta.times(delta)) - this.getRadius() - other.getRadius()
 	 * @throws 	IllegalArgumentException
 	 * 			The given ship is not effective.
 	 * 			| (ship == null)
 	 */
-	//TODO: arithmeticException of overflowException (zelf definieren)? try-catch aangezien arithmetic exc beter hier kan worden opgelost?
-	//TODO: method unfinished! doc + arithmeticExc
 	public double getDistanceBetween(Ship other) throws IllegalArgumentException{
 		if (other == null)
 			throw new IllegalArgumentException("Non effective ship!");
 		if(other.equals(this))
-			throw new IllegalArgumentException("same ship");
-		try{			//TODO ik zie niet hoe dit arithmetic kan opleveren 
-			return Math.sqrt(Math.pow(this.getPosition().getXComponent()-other.getPosition().getXComponent(),2) 
-							+ Math.pow(this.getPosition().getYComponent()-other.getPosition().getYComponent(),2))
-							- this.getRadius() - other.getRadius();
-		} catch(ArithmeticException exc){
+			return 0;
+		try{
+			Vector delta = this.getPosition().subtract(other.getPosition());
+			return Math.sqrt(delta.dotProduct(delta)) - this.getRadius() - other.getRadius();
+		} catch(TimesOverflowException exc){
 			return 0;
 		}
 	}
-	
 	
 	/**
 	 * Returns a boolean reflecting whether this ship and the given ship overlap.
 	 * 
 	 * @param 	other
 	 * 			The other ship.
-	 * @return	True if and only if the distance between this ship and the given ship is negative.
-	 * 			| result == (getDistanceBetween(ship) < 0)   
-	 * @throws 	IllegalArgumentException         moet dat hier nog vermeld worden aangezien die exceptie reeds wordt opgegooid in getDistanceBetween en in de implementatie?
+	 * @return	True if and only if the distance between this ship and the given ship is negative or if the given ship is equal to this ship.
+	 * 			| result == (getDistanceBetween(ship) < 0) || (other.equals(this))  
+	 * @throws 	IllegalArgumentException 
 	 * 			The given ship is not effective.
 	 * 			| (ship == null)
 	 */
 	public boolean overlap(Ship other) throws IllegalArgumentException{
+		if (other.equals(this))
+			return true;
 		return getDistanceBetween(other) < 0;
 	}
 	
@@ -479,22 +484,25 @@ public class Ship implements IShip{
 	 */
 	public double getTimeToCollision(Ship other) throws IllegalArgumentException{
 		if (other == null)
-				throw new IllegalArgumentException("Non effective ship!");
-		Vector deltaR = getPosition().subtract(other.getPosition());
-		Vector deltaV = getVelocity().subtract(other.getVelocity());
+			throw new IllegalArgumentException("Non effective ship!");
+		
+		Vector deltaR = other.getPosition().subtract(this.getPosition());
+		Vector deltaV = other.getVelocity().subtract(this.getVelocity());
+		
 		try {
 			double sigma = this.getRadius() + other.getRadius();
-			double a = deltaR.times(deltaR);
-			double b = deltaV.times(deltaV);
-			double c = deltaV.times(deltaR); //TODO: betere namen zoeken
-			double d = c*c - (b)*(a-sigma*sigma);
-			if (Util.fuzzyLessThanOrEqualTo(0,c))
+			double dotProductR = deltaR.dotProduct(deltaR);
+			double dotProductV = deltaV.dotProduct(deltaV);
+			double dotProductVR = deltaV.dotProduct(deltaR);
+			double d = (dotProductVR*dotProductVR) - dotProductV*(dotProductR-(sigma*sigma));
+			
+			if (Util.fuzzyLessThanOrEqualTo(0,dotProductVR))
 				return Double.POSITIVE_INFINITY;
 			else if (Util.fuzzyLessThanOrEqualTo(d,0))
 				return Double.POSITIVE_INFINITY;
 			else
 				try {
-					return -(c+Math.sqrt(d))/b;
+					return (-(dotProductVR+Math.sqrt(d))/dotProductV);
 				} catch (ArithmeticException exc) {
 					return Double.POSITIVE_INFINITY;
 				}	
@@ -504,7 +512,6 @@ public class Ship implements IShip{
 	}
 	
 	/**
-	 * 
 	 * @param 	other
 	 * 			The other ship.
 	 * @return	Returns the position where this ship and the given ship will collide.
@@ -533,7 +540,9 @@ public class Ship implements IShip{
 		Vector newPositionOther = new Vector(other.getPosition().getXComponent()+deltaT*other.getVelocity().getXComponent(),
 												other.getPosition().getYComponent()+deltaT*other.getVelocity().getYComponent());
 		
-		double theta = Vector.getAngle(newPositionThis,newPositionOther);
+		
+		//double theta = Vector.getAngle(newPositionThis,newPositionOther);
+		double theta = Math.atan2(newPositionOther.getXComponent()-newPositionThis.getXComponent(),newPositionOther.getYComponent()-newPositionThis.getYComponent()) + Math.PI;
 		
 //		try {
 			return new Vector(newPositionThis.getXComponent()+this.getRadius()*Math.cos(theta),newPositionThis.getYComponent()+this.getRadius()*Math.sin(theta));
@@ -541,4 +550,7 @@ public class Ship implements IShip{
 //			return new Vector(newPositionThis.getXComponent(),newPositionThis.getYComponent()+this.getRadius());
 //		}
 	}
+	
+	
+	//TODO: toString
 }

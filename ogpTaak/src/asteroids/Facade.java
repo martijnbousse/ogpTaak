@@ -120,7 +120,11 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public double getDistanceBetween(IShip ship1, IShip ship2) {
-		return ((Ship) ship1).getDistanceBetween((Ship) ship2);
+		try{
+			return ((Ship) ship1).getDistanceBetween((Ship) ship2);
+		} catch(IllegalArgumentException exc) {
+			return 0;
+		}
 	}
 
 	/* (non-Javadoc)
@@ -128,7 +132,11 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public boolean overlap(IShip ship1, IShip ship2) {
-		return ((Ship) ship1).overlap((Ship) ship2);
+		try{
+			return ((Ship) ship1).overlap((Ship) ship2);
+		} catch(IllegalArgumentException exc) {
+			return true;
+		}
 	}
 
 	/* (non-Javadoc)

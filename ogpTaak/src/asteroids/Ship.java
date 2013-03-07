@@ -426,6 +426,8 @@ public class Ship implements IShip{
 	public double getDistanceBetween(Ship other) throws IllegalArgumentException{
 		if (other == null)
 			throw new IllegalArgumentException("Non effective ship!");
+		if(other.equals(this))
+			throw new IllegalArgumentException("same ship");
 		try{			//TODO ik zie niet hoe dit arithmetic kan opleveren 
 			return Math.sqrt(Math.pow(this.getPosition().getXComponent()-other.getPosition().getXComponent(),2) 
 							+ Math.pow(this.getPosition().getYComponent()-other.getPosition().getYComponent(),2))

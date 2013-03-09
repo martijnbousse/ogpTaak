@@ -522,8 +522,9 @@ public class Ship implements IShip{
 	 *			|	newPositionOther = new Vector(other.getPosition().getXComponent()+deltaT*other.getVelocity().getXComponent(),
 	 *			|											other.getPosition().getYComponent()+deltaT*other.getVelocity().getYComponent())
 	 *			|	theta = Math.atan((newPositionOther.getYComponent()-newPositionThis.getYComponent())/(newPositionOther.getXComponent()-newPositionThis.getXComponent()))
+	 *			|   directionRadius = new Vector(Math.cos(theta),Math.sin(theta));
 	 *			| in
-	 *			|	result == new Vector(newPositionThis.getXComponent()+this.getRadius()*Math.cos(theta),newPositionThis.getYComponent()+this.getRadius()*Math.sin(theta))
+	 *			|	result == newPositionThis.add(directionRadius.scale(this.getRadius()))
 	 * @throws	IllegalArgumentException
 	 * 			The given ship is not effective.
 	 * 			| (ship == null)
@@ -542,10 +543,11 @@ public class Ship implements IShip{
 		
 		
 		//double theta = Vector.getAngle(newPositionThis,newPositionOther);
-		double theta = Math.atan2(newPositionOther.getXComponent()-newPositionThis.getXComponent(),newPositionOther.getYComponent()-newPositionThis.getYComponent()) + Math.PI;
+		double theta = Math.atan2(newPositionOther.getXComponent()-newPositionThis.getXComponent(),newPositionOther.getYComponent()-newPositionThis.getYComponent());
 		
 //		try {
-			return new Vector(newPositionThis.getXComponent()+this.getRadius()*Math.cos(theta),newPositionThis.getYComponent()+this.getRadius()*Math.sin(theta));
+			Vector directionRadius = new Vector(Math.cos(theta),Math.sin(theta));
+			return newPositionThis.add(directionRadius.scale(this.getRadius()));
 //		} catch (ArithmeticException exc) {
 //			return new Vector(newPositionThis.getXComponent(),newPositionThis.getYComponent()+this.getRadius());
 //		}

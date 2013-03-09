@@ -40,10 +40,8 @@ public class Vector {
 	//TODO: @raw ?
 	//TODO: totaal, nominaal of defensief?
 	//TODO: nadenken over referentie lekken ! zie laatste les
+	//TODO: volgens mij is dit niet raw ; aangezien Vector(0,0) valid input is
 	public Vector(double xcomponent, double ycomponent){
-		
-		//TODO: exceptions? and @raw ?
-		
 		this.xcomponent = xcomponent;
 		this.ycomponent = ycomponent;
 	}
@@ -74,11 +72,10 @@ public class Vector {
 	 * 			| result == 
 	 * 			|	( (other != null)
 	 * 			|  && (this.getClass() == other.getClass())
-	 * 			|  && (this.getXComponent() == ((Vector) other).getXComponent())
-	 * 			|  && (this.getYComponent() == ((Vector) other).getYComponent())
+	 * 			|  && (Util.fuzzyEquals(this.getXComponent(),((Vector) other).getXComponent())
+	 * 			|  && (Util.fuzzyEquals(this.getYComponent(),((Vector) other).getYComponent())
 	 */
 	@Override
-	//TODO: documentatie ook fuzzyEquals ipv == ja
 	public boolean equals(Object other){
 		if (other == null)
 			return false;
@@ -113,10 +110,18 @@ public class Vector {
 	public double dotProduct(Vector other) throws IllegalArgumentException, TimesOverflowException {
 		if (other == null)
 			throw new IllegalArgumentException("Non effective vector!");
-			else if (! (Util.fuzzyLessThanOrEqualTo(this.getXComponent(),Double.POSITIVE_INFINITY/(other.getXComponent())) ||
-			Util.fuzzyLessThanOrEqualTo(this.getYComponent(),Double.POSITIVE_INFINITY/(other.getYComponent()))))
+		
+		double x=this.getXComponent()*other.getXComponent();
+		double y=this.getYComponent()*other.getYComponent();
+		
+		if(this.getXComponent()==0 || other.getXComponent()==0)
+			x = 0;
+		if(this.getYComponent()==0 || other.getYComponent()==0)
+			y = 0;
+		else if (! (Util.fuzzyLessThanOrEqualTo(this.getXComponent(),Double.POSITIVE_INFINITY/(other.getXComponent())) ||
+					Util.fuzzyLessThanOrEqualTo(this.getYComponent(),Double.POSITIVE_INFINITY/(other.getYComponent()))))
 			throw new TimesOverflowException();
-			return (this.getXComponent()*other.getXComponent() + this.getYComponent()*other.getYComponent());
+		return x+y;
 		
 		
 //		if (other == null){
@@ -137,6 +142,39 @@ public class Vector {
 //			yResult = 0;
 //		}
 //		return xResult + yResult;
+	}
+	
+	/**
+	 * Multiply this vector with a given factor
+	 * @param 	scaleFactor
+	 * 			The given factor
+	 * @pre 	The scalefactor is a valid scalefactor
+	 * 			| isValidScaleFactor(scaleFactor)
+	 * @return	The resulting vector is equal to this vector scaled with the given factor
+	 * 			| result == new Vector(vector.getXComponent()*scaleFactor,vector.getYComponent()*scaleFactor)
+	 * @throws	TimesOverflowException
+	 * 			The multiplication overflows.
+	 * 			| Util.fuzzyLessThanOrEqualTo(this.getXComponent(), Double.POSITIVE_INFINITY/scaleFactor) || 
+	 *			|	Util.fuzzyLessThanOrEqualTo(this.getYComponent(), Double.POSITIVE_INFINITY/scaleFactor)					
+	 */
+	public Vector scale(double scaleFactor){
+		assert isValidScaleFactor(scaleFactor);
+		if(!Util.fuzzyLessThanOrEqualTo(this.getXComponent(), Double.POSITIVE_INFINITY/scaleFactor) || 
+				!Util.fuzzyLessThanOrEqualTo(this.getYComponent(), Double.POSITIVE_INFINITY/scaleFactor))
+			throw new TimesOverflowException();
+		return new Vector(this.getXComponent()*scaleFactor,
+							this.getYComponent()*scaleFactor);
+	}
+	
+	/**
+	 * Return a boolean reflecting whether this scalefactor is a valid scalefactor
+	 * @param 	scaleFactor
+	 * 			The scalefactor to be checked.
+	 * @return	True if and only if the scalefactor is a valid scalefactor
+	 * 			| result == !Double.isNaN(scaleFactor) && Util.fuzzyEquals(scaleFactor,0)
+	 */
+	public boolean isValidScaleFactor(double scaleFactor){
+		return !Double.isNaN(scaleFactor) && Util.fuzzyEquals(scaleFactor,0);
 	}
 	
 	

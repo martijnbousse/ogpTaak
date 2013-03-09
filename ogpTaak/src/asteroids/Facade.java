@@ -112,6 +112,7 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public void turn(IShip ship, double angle) {
+		
 		if(!Util.fuzzyLessThanOrEqualTo(0.0, angle)){
 			angle = angle%Math.PI*2 + Math.PI*2;
 		}

@@ -139,11 +139,15 @@ public class Vector {
 	 * 			| result == new Vector(vector.getXComponent()*scaleFactor,vector.getYComponent()*scaleFactor)
 	 * @throws	TimesOverflowException
 	 * 			The multiplication overflows.
-	 * 			| Util.fuzzyLessThanOrEqualTo(this.getXComponent(), Double.POSITIVE_INFINITY/scaleFactor) || 
-	 *			|	Util.fuzzyLessThanOrEqualTo(this.getYComponent(), Double.POSITIVE_INFINITY/scaleFactor)					
+	 * 			| scaleFactor!=0 && !Util.fuzzyLessThanOrEqualTo(this.getXComponent(), Double.POSITIVE_INFINITY/scaleFactor) || 
+	 *			|	!Util.fuzzyLessThanOrEqualTo(this.getYComponent(), Double.POSITIVE_INFINITY/scaleFactor)
+	 * @throws	IllegalArgumentException
+	 * 			The scalefactor is invalid
+	 * 			| !isValidScaleFactor(scaleFactor)				
 	 */
 	public Vector scale(double scaleFactor){
-		assert isValidScaleFactor(scaleFactor);
+		if(!isValidScaleFactor(scaleFactor))
+			throw new IllegalArgumentException();
 		if(scaleFactor!=0 && !Util.fuzzyLessThanOrEqualTo(this.getXComponent(), Double.POSITIVE_INFINITY/scaleFactor) || 
 				!Util.fuzzyLessThanOrEqualTo(this.getYComponent(), Double.POSITIVE_INFINITY/scaleFactor))
 			throw new TimesOverflowException();

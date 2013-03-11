@@ -365,7 +365,7 @@ public class Ship implements IShip{
 	 * 			which is scaled with the given amount of time.
 	 * 			| setPosition(getPosition().add(getVelocity.scale(dt)))
 	 * @throws 	IllegalArgumentException
-	 * 			This ship cannot accept the given amount of time to move. //TODO: change
+	 * 			This ship cannot accept the given amount of time to move.    //TODO: change
 	 * 			| !isValidTime(time)
 	 */
 	public void move(double dt) throws IllegalArgumentException{
@@ -376,7 +376,7 @@ public class Ship implements IShip{
 			//TODO: add(getPosition()+timesFactor(getVelocity,dt))
 		} catch(ArithmeticException exc){
 			//TODO: implementatie + sumOverflowException -> geen arithmetic
-		}
+		} 
 	}
 	
 	/**

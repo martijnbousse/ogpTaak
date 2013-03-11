@@ -24,7 +24,7 @@ public class ShipTest {
 	@Before
 	public void setUp() throws Exception {
 		mutableShip = new Ship();
-		mutableShip2 = new Ship(new Vector(0,0), new Vector(1,1), 15, Math.PI/2);
+		mutableShip2 = new Ship(new Vector(0,0), new Vector(1,1), 30, Math.PI/2);
 	}
 
 	@Test
@@ -49,7 +49,7 @@ public class ShipTest {
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testIsValidPosition_IllegalCase() {
-		Ship invalidShip = new Ship(null,null,5,150);
+		Ship invalidShip = new Ship(null,null,5,150);	//TODO nullpointer
 		assertFalse(Ship.isValidPosition(invalidShip.getPosition()));
 	}
 	//TODO: klopt dit wel? kijk naar p.269-270 en ook testMove_IllegalCase() + meot checker wel getest worden?
@@ -62,7 +62,7 @@ public class ShipTest {
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testSetPosition_IllegalCase() {
-		mutableShip.setPosition(null);
+		mutableShip.setPosition(null);		//TODO nullpointer
 		assert(mutableShip.getPosition().equals(new Vector(0,0)));
 	}
 
@@ -77,9 +77,9 @@ public class ShipTest {
 		assert(mutableShip.getVelocity().equals(new Vector(25,20)));
 	}
 	
-	@Test		//TODO nullpointer verwijderd; gaf een error omdat er geen exception was;
+	@Test		//TODO nullpointer 
 	public void testSetVelocity_NullCase() {
-		mutableShip.setVelocity(null);
+		mutableShip.setVelocity(null);  
 		assert(mutableShip.getVelocity().equals(new Vector(0,0)));
 	}
 	
@@ -145,7 +145,7 @@ public class ShipTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void testSetMinRadius_IllegalCase() {
 		Ship.setMinRadius(-25);
-		assert(Util.fuzzyEquals(Ship.getMinRadius(),25));
+		assert(Util.fuzzyEquals(Ship.getMinRadius(),15));
 	}
 
 	@Test

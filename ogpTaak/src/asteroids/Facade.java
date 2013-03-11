@@ -104,7 +104,6 @@ public class Facade implements IFacade {
 	@Override
 	public void thrust(IShip ship, double amount) {
 		((Ship) ship).thrust(amount);
-
 	}
 
 	/* (non-Javadoc)
@@ -113,12 +112,11 @@ public class Facade implements IFacade {
 	@Override
 	public void turn(IShip ship, double angle) {
 		if(!Util.fuzzyLessThanOrEqualTo(0.0, angle)){
-			angle = angle%Math.PI*2 + Math.PI*2;
+			angle+=Math.PI*2;
 		}
 		else if(!Util.fuzzyLessThanOrEqualTo(angle, Math.PI*2)){
 			angle = angle%Math.PI*2;
 		}
-		
 		((Ship) ship).turn(angle);
 	}
 

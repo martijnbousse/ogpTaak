@@ -248,7 +248,7 @@ public class Ship implements IShip{
 	 */
 	public static boolean isValidDirection(double direction){
 		return 	!Double.isNaN(direction)
-				&& Util.fuzzyLessThanOrEqualTo(0.0, direction) 
+				&& Util.fuzzyLessThanOrEqualTo(0.0, direction)
 				&& Util.fuzzyLessThanOrEqualTo(direction, 2*Math.PI);
 	}
 	

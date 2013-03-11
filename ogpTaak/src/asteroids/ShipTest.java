@@ -195,8 +195,10 @@ public class ShipTest {
 	@Test
 	public void testTurn_IllegalCase() {
 		mutableShip.turn(Math.PI*3);
+		System.out.println(mutableShip.getDirection());
 		//assert(Util.fuzzyEquals(mutableShip.getDirection(),0.0));
-		assert(Util.fuzzyEquals(mutableShip.getDirection(),Math.PI*3));		//TODO moet nog gefixt worden
+		assert(Util.fuzzyEquals(mutableShip.getDirection(),5.0));		//TODO moet nog gefixt worden, test faalt nooit
+		//TODO zeer vreemd, sysout geeft false , assert geeft true --
 	}
 	
 	// getDistanceBetween

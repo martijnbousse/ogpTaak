@@ -10,18 +10,21 @@ public class ShipTest {
 	
 	private static Ship ship;
 	private static Ship defaultShip;
+	private static Ship shipFarAway;
 	private Ship mutableShip;
+	private Ship mutableShip2;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		ship = new Ship(new Vector(10,5), new Vector(5,10), 15, Math.PI/2);
-		setDefaultShip(new Ship());
-		
+		shipFarAway = new Ship(new Vector(Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY), new Vector(0,0), 15, Math.PI/2);
+		setDefaultShip(new Ship()); //TODO: ?
 	}
 
 	@Before
 	public void setUp() throws Exception {
 		mutableShip = new Ship();
+		mutableShip2 = new Ship(new Vector(0,0), new Vector(1,1), 15, Math.PI/2);
 	}
 
 	@Test
@@ -49,6 +52,7 @@ public class ShipTest {
 		Ship invalidShip = new Ship(null,null,5,150);
 		assertFalse(Ship.isValidPosition(invalidShip.getPosition()));
 	}
+	//TODO: klopt dit wel? kijk naar p.269-270 en ook testMove_IllegalCase() + meot checker wel getest worden?
 	
 	@Test
 	public void testSetPosition_LegalCase() {
@@ -159,6 +163,29 @@ public class ShipTest {
 		assert(Util.fuzzyEquals(ship.getRadius(),15));
 	}
 	
+	// move
+	
+	@Test 
+	public void testMove_LegalCaseZero() {
+		Vector oldPosition = mutableShip2.getPosition();
+		mutableShip2.move(0);
+		assertEquals(mutableShip2.getPosition(),oldPosition);
+	}
+	
+	@Test 
+	public void testMove_LegalCaseOne() {
+		Vector oldPosition = mutableShip2.getPosition();
+		mutableShip2.move(1);
+		assert(mutableShip2.getPosition().equals(oldPosition.add(mutableShip2.getVelocity()).scale(1)));
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testMove_IllegalCase() {
+		mutableShip2.move(-1);
+	}
+	
+	// turn
+	
 	@Test
 	public void testTurn_LegalCase() {
 		mutableShip.turn(Math.PI);
@@ -171,7 +198,38 @@ public class ShipTest {
 		//assert(Util.fuzzyEquals(mutableShip.getDirection(),0.0));
 		assert(Util.fuzzyEquals(mutableShip.getDirection(),Math.PI*3));		//TODO moet nog gefixt worden
 	}
-
+	
+	// getDistanceBetween
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testGetDistanceBetween_NullCase() {
+		defaultShip.getDistanceBetween(null);
+	}
+	
+	@Test
+	public void testGetDistanceBetween_ThisCase() {
+		assert(Util.fuzzyEquals(defaultShip.getDistanceBetween(defaultShip),0.0));
+	}
+	
+	@Test
+	public void testGetDistanceBetween_LegalCase() {
+		assert(Util.fuzzyEquals(defaultShip.getDistanceBetween(ship),Math.sqrt(10.0*10.0+5.0*5.0)-15.0-10.0));
+	}
+	
+	@Test
+	public void testGetDistanceBetween_OverflowCase() {
+		assert(Util.fuzzyEquals(defaultShip.getDistanceBetween(shipFarAway),0.0));
+	}
+	
+	// overlap
+	
+	@Test
+	public void testOverlap_ThisCase() {
+		assertEquals(true,defaultShip.overlap(defaultShip));
+	}
+	
+	// ...
+	
 	public static Ship getDefaultShip() {
 		return defaultShip;
 	}

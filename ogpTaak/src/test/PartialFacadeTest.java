@@ -33,7 +33,7 @@ public class PartialFacadeTest {
     facade.createShip(Double.NaN, 200, 10, -10, 20, -Math.PI);
   }
   
-  @Test
+  @Test(expected=ModelException.class)
   public void testCreateShipVXIsNan() {
 	IShip ship = facade.createShip(100, 200, Double.NaN, -10, 20, -Math.PI);
 	assert(facade.getXVelocity(ship) == 0);

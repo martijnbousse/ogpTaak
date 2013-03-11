@@ -57,6 +57,8 @@ public class Ship implements IShip{
 	 * @throws	IllegalArgumentException
 	 * 			This ship cannot have the given radius as its radius
 	 * 			| !isValidRadius(radius)
+	 * @throws	IllegalArgumentException
+	 * 			exception van constructor vector
 	 */
 	@Raw
 	public Ship(Vector position, Vector velocity, double radius, double direction) throws IllegalArgumentException{
@@ -116,9 +118,7 @@ public class Ship implements IShip{
 	 * 			| result == (position != null)
 	 */
 	public static boolean isValidPosition(Vector position){
-		return ( !Double.isNaN(position.getXComponent()) 
-				 && !Double.isNaN(position.getYComponent()) 
-				 && position != null );
+		return (position != null );
 	}
 	
 	/**
@@ -162,11 +162,9 @@ public class Ship implements IShip{
 	 * 						&& Util.fuzzyLessThanOrEqualTo(velocity.getMagnitude(),this.speedLimit) )
 	 */
 	public boolean canHaveAsVelocity(Vector velocity){
-		return 	!Double.isNaN(velocity.getXComponent())
-				&& !Double.isNaN(velocity.getYComponent())
-				&& (velocity != null)
-				&& Util.fuzzyLessThanOrEqualTo(0.0,velocity.dotProduct(velocity))
-				&& Util.fuzzyLessThanOrEqualTo(velocity.dotProduct(velocity),this.speedLimit);
+		return 	(velocity != null)
+					&& Util.fuzzyLessThanOrEqualTo(0.0,velocity.dotProduct(velocity))
+					&& Util.fuzzyLessThanOrEqualTo(velocity.dotProduct(velocity),this.speedLimit);
 				
 	}
 	
@@ -328,21 +326,6 @@ public class Ship implements IShip{
 	 * Variable registering the radius of this ship.
 	 */
 	private final double radius;
-	
-	//TODO: replaced canAcceptForMove by a static checker isValidTime.
-//	/**
-//	 * Return a boolean reflecting whether this ship can accept the given time for moving.
-//	 * 
-//	 * @param 	dt
-//	 * 			The time to be checked.
-//	 * @return	True if and only if the 
-//	 */
-//	public boolean canAcceptForMove(double dt){
-//		return Util.fuzzyLessThanOrEqualTo(0,dt);
-//				//TODO: ook nul wordt niet toegelaten!
-//				//TODO: time moet altijd groter zijn dan nul, zie ook thrust, misschien kan dit gezet worden als invariant + isValidTime() (static)
-//			 	// canAcceptForMove gebruikt dan isValidTime() + een specifieke voorwaarde (zie dependent properties in hb)
-//	}
 		
 	/**
 	 * Check whether the given time is a valid time for any ship.
@@ -373,10 +356,9 @@ public class Ship implements IShip{
 			throw new IllegalArgumentException();
 		try{
 			setPosition(getPosition().add(getVelocity().scale(dt)));
-			//TODO: add(getPosition()+timesFactor(getVelocity,dt))
-		} catch(ArithmeticException exc){
-			//TODO: implementatie + sumOverflowException -> geen arithmetic
-		} 
+		} catch(SumOverflowException exc){} 
+		catch(TimesOverflowException exc2){}
+		//TODO test deze gevallen, mss doorgeven aan facade
 	}
 	
 	/**
@@ -422,6 +404,7 @@ public class Ship implements IShip{
 			amount = 0;
 		}
 		this.velocity=new Vector(velocity.getXComponent()+amount*Math.cos(direction),velocity.getYComponent()+amount*Math.sin(direction));
+		//TODO velocity w groter dan limit, vector scalen zodat lengte is lightspeed
 	}
 	
 	/**

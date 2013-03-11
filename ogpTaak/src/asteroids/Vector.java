@@ -35,15 +35,22 @@ public class Vector {
 	 * 			| (new this).getXComponent() == xcomponent
 	 * @post	The y-component of this new vector is equal to the given y-component.
 	 * 			| (new this).getYComponent() == ycomponent
+	 * @throws 	IllegalArgumentException
+	 * 			The given x or y component is invalid.
+	 * 			| !isValidComponent(xcomponent) || !isValidComponent(ycomponent)
 	 */
 	//TODO: Moet in de documentatie ook fuzzyEquals gebruikt worden?
-	//TODO: @raw ?
-	//TODO: totaal, nominaal of defensief?
 	//TODO: nadenken over referentie lekken ! zie laatste les
-	//TODO: volgens mij is dit niet raw ; aangezien Vector(0,0) valid input is
-	public Vector(double xcomponent, double ycomponent){
+	@Raw
+	public Vector(double xcomponent, double ycomponent) throws IllegalArgumentException{
+		if(!isValidComponent(xcomponent) || !isValidComponent(ycomponent))
+			throw new IllegalArgumentException();
 		this.xcomponent = xcomponent;
 		this.ycomponent = ycomponent;
+	}
+	
+	public static boolean isValidComponent(double component){
+		return !Double.isNaN(component);
 	}
 	
 	/**

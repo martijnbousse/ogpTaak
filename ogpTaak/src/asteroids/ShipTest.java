@@ -18,7 +18,7 @@ public class ShipTest {
 	public static void setUpBeforeClass() throws Exception {
 		ship = new Ship(new Vector(10,5), new Vector(5,10), 15, Math.PI/2);
 		shipFarAway = new Ship(new Vector(Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY), new Vector(0,0), 15, Math.PI/2);
-		setDefaultShip(new Ship()); //TODO: ?
+		defaultShip= new Ship(); //TODO: ?
 	}
 
 	@Before
@@ -229,13 +229,4 @@ public class ShipTest {
 	}
 	
 	// ...
-	
-	public static Ship getDefaultShip() {
-		return defaultShip;
-	}
-
-	public static void setDefaultShip(Ship defaultShip) {
-		ShipTest.defaultShip = defaultShip;
-	}
-
 }

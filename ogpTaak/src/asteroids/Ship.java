@@ -233,6 +233,8 @@ public class Ship implements IShip{
 	 */
 	public void setDirection(double direction){		//TODO: in asteroids w -PI/2 gegeven als direction, wat doen we hiermee
 		assert isValidDirection(direction);
+//		if(direction == Math.PI*2)
+//			this.direction = 0;
 		this.direction = direction;
 	}
 	
@@ -565,8 +567,12 @@ public class Ship implements IShip{
 		
 		
 		//double theta = Vector.getAngle(newPositionThis,newPositionOther);
-		double theta = Math.atan2(newPositionOther.getXComponent()-newPositionThis.getXComponent(),newPositionOther.getYComponent()-newPositionThis.getYComponent());
+//		double theta = Math.atan2(newPositionOther.getXComponent()-newPositionThis.getXComponent(),newPositionOther.getYComponent()-newPositionThis.getYComponent());
 		
+		double theta = Math.atan(newPositionOther.getXComponent()-newPositionThis.getXComponent()/newPositionOther.getYComponent()-newPositionThis.getYComponent());
+		
+		if(newPositionOther.getXComponent()-newPositionThis.getXComponent()<0)
+			theta+= Math.PI*2;
 //		try {
 			Vector directionRadius = new Vector(Math.cos(theta),Math.sin(theta));
 			return newPositionThis.add(directionRadius.scale(this.getRadius()));

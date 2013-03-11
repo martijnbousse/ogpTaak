@@ -176,10 +176,7 @@ public class Ship implements IShip{
 	public void setSpeedLimit(double newLimit){
 		if(canHaveAsSpeedLimit(newLimit)){
 			this.speedLimit = newLimit;
-		} 
-		/**else {
-			this.speedLimit = SPEED_OF_LIGHT;		//TODO dit zou ik weglaten; anders faalt de test
-		}*/
+		}
 	}
 	
 	/**
@@ -232,7 +229,7 @@ public class Ship implements IShip{
 	 * 			| (new this).getDirection() == direction
 	 */
 	public void setDirection(double direction){		//TODO: in asteroids w -PI/2 gegeven als direction, wat doen we hiermee
-		assert isValidDirection(direction);
+		//assert isValidDirection(direction);
 		this.direction = direction;
 	}
 	
@@ -338,8 +335,10 @@ public class Ship implements IShip{
 		if (!canAcceptForMove(dt))
 			throw new IllegalArgumentException();
 		try{
-			setPosition(new Vector(getPosition().getXComponent()+getVelocity().getXComponent()*dt,
-										getPosition().getYComponent()+getVelocity().getYComponent()*dt));
+//			setPosition(new Vector(getPosition().getXComponent()+getVelocity().getXComponent()*dt,
+//										getPosition().getYComponent()+getVelocity().getYComponent()*dt));
+			
+			setPosition(this.getPosition().add(this.getVelocity().scale(dt)));
 			//add(getPosition()+timesFactor(getVelocity,dt))
 		} catch(ArithmeticException exc){
 			//TODO: implementatie + sumOverflowException -> geen arithmetic
@@ -352,6 +351,7 @@ public class Ship implements IShip{
 				//TODO: time moet altijd groter zijn dan nul, zie ook thrust, misschien kan dit gezet worden als invariant + isValidTime() (static)
 			 	// canAcceptForMove gebruikt dan isValidTime() + een specifieke voorwaarde (zie dependent properties in hb)
 	}
+	
 	
 	/**
 	 * Return a boolean reflecting whether this ship can accept the given angle for turning.
@@ -376,7 +376,7 @@ public class Ship implements IShip{
 	 * 			| setDirection(getDirection()+angle)
 	 */
 	public void turn(double angle){
-		assert canAcceptForTurn(angle);
+		//assert canAcceptForTurn(angle);
 		setDirection(getDirection() + angle);
 	}
 	// in praktijk wordt iets wat constant wordt aangepast eerder totaal geimplementeerd. 
@@ -522,8 +522,9 @@ public class Ship implements IShip{
 	 *			|	newPositionOther = new Vector(other.getPosition().getXComponent()+deltaT*other.getVelocity().getXComponent(),
 	 *			|											other.getPosition().getYComponent()+deltaT*other.getVelocity().getYComponent())
 	 *			|	theta = Math.atan((newPositionOther.getYComponent()-newPositionThis.getYComponent())/(newPositionOther.getXComponent()-newPositionThis.getXComponent()))
+	 *			|   directionRadius = new Vector(Math.cos(theta),Math.sin(theta));
 	 *			| in
-	 *			|	result == new Vector(newPositionThis.getXComponent()+this.getRadius()*Math.cos(theta),newPositionThis.getYComponent()+this.getRadius()*Math.sin(theta))
+	 *			|	result == newPositionThis.add(directionRadius.scale(this.getRadius()))
 	 * @throws	IllegalArgumentException
 	 * 			The given ship is not effective.
 	 * 			| (ship == null)
@@ -542,10 +543,11 @@ public class Ship implements IShip{
 		
 		
 		//double theta = Vector.getAngle(newPositionThis,newPositionOther);
-		double theta = Math.atan2(newPositionOther.getXComponent()-newPositionThis.getXComponent(),newPositionOther.getYComponent()-newPositionThis.getYComponent()) + Math.PI;
+		double theta = Math.atan2(newPositionOther.getXComponent()-newPositionThis.getXComponent(),newPositionOther.getYComponent()-newPositionThis.getYComponent());
 		
 //		try {
-			return new Vector(newPositionThis.getXComponent()+this.getRadius()*Math.cos(theta),newPositionThis.getYComponent()+this.getRadius()*Math.sin(theta));
+			Vector directionRadius = new Vector(Math.cos(theta),Math.sin(theta));
+			return newPositionThis.add(directionRadius.scale(this.getRadius()));
 //		} catch (ArithmeticException exc) {
 //			return new Vector(newPositionThis.getXComponent(),newPositionThis.getYComponent()+this.getRadius());
 //		}

@@ -40,10 +40,8 @@ public class Vector {
 	//TODO: @raw ?
 	//TODO: totaal, nominaal of defensief?
 	//TODO: nadenken over referentie lekken ! zie laatste les
+	//TODO: volgens mij is dit niet raw ; aangezien Vector(0,0) valid input is
 	public Vector(double xcomponent, double ycomponent){
-		
-		//TODO: exceptions? and @raw ?
-		
 		this.xcomponent = xcomponent;
 		this.ycomponent = ycomponent;
 	}
@@ -74,11 +72,10 @@ public class Vector {
 	 * 			| result == 
 	 * 			|	( (other != null)
 	 * 			|  && (this.getClass() == other.getClass())
-	 * 			|  && (this.getXComponent() == ((Vector) other).getXComponent())
-	 * 			|  && (this.getYComponent() == ((Vector) other).getYComponent())
+	 * 			|  && (Util.fuzzyEquals(this.getXComponent(),((Vector) other).getXComponent())
+	 * 			|  && (Util.fuzzyEquals(this.getYComponent(),((Vector) other).getYComponent())
 	 */
 	@Override
-	//TODO: documentatie ook fuzzyEquals ipv == ja
 	public boolean equals(Object other){
 		if (other == null)
 			return false;
@@ -89,8 +86,15 @@ public class Vector {
 				&& Util.fuzzyEquals(this.getYComponent(),otherVector.getYComponent());
 	}
 	
+	/**
+	 * @return	The representation of this vector by means of a string.
+	 * 			| "xComponent: "+xcomponent+" yComponent: "+ycomponent
+	 */
+	public String toString() {
+        return "xComponent: "+xcomponent+" yComponent: "+ycomponent;
+    }
+	
 	//TODO: hashcode
-	//TODO: toString
 		
 	/**
 	 * Returns the product of the other vector and this vector.
@@ -108,39 +112,79 @@ public class Vector {
 	 *				Util.fuzzyLessThanOrEqualTo(this.getYComponent(),Double.POSITIVE_INFINITY/other.getYComponent())
 	 */
 	@Immutable
-	//TODO: nieuwe methode scale(vector, scaling factor)
-	//TODO: dotProduct static maken, maar veel problemen
 	public double dotProduct(Vector other) throws IllegalArgumentException, TimesOverflowException {
 		if (other == null)
 			throw new IllegalArgumentException("Non effective vector!");
-			else if (! (Util.fuzzyLessThanOrEqualTo(this.getXComponent(),Double.POSITIVE_INFINITY/(other.getXComponent())) ||
-			Util.fuzzyLessThanOrEqualTo(this.getYComponent(),Double.POSITIVE_INFINITY/(other.getYComponent()))))
+		
+		double x=this.getXComponent()*other.getXComponent();
+		double y=this.getYComponent()*other.getYComponent();
+		
+		if(this.getXComponent()==0 || other.getXComponent()==0)
+			x = 0;
+		if(this.getYComponent()==0 || other.getYComponent()==0)
+			y = 0;
+		else if (! (Util.fuzzyLessThanOrEqualTo(this.getXComponent(),Double.POSITIVE_INFINITY/(other.getXComponent())) ||
+					Util.fuzzyLessThanOrEqualTo(this.getYComponent(),Double.POSITIVE_INFINITY/(other.getYComponent()))))
 			throw new TimesOverflowException();
-			return (this.getXComponent()*other.getXComponent() + this.getYComponent()*other.getYComponent());
-		
-		
-//		if (other == null){
-//			throw new IllegalArgumentException("Non effective vector!");
-//		}
-//		double xResult = this.getXComponent()*other.getXComponent();
-//		double yResult = this.getYComponent()*other.getYComponent();
-//		try{
-//			if( !(Util.fuzzyLessThanOrEqualTo(this.getXComponent(),Double.POSITIVE_INFINITY/other.getXComponent())))
-//				throw new TimesOverflowException();
-//		} catch(ArithmeticException exc){
-//			xResult = 0;
-//		}
-//		try{
-//			if( !(Util.fuzzyLessThanOrEqualTo(this.getYComponent(),Double.POSITIVE_INFINITY/other.getYComponent())))
-//				throw new TimesOverflowException();
-//		} catch(ArithmeticException exc){
-//			yResult = 0;
-//		}
-//		return xResult + yResult;
+		return x+y;
+	}
+	
+	/**
+	 * Multiply this vector with a given factor
+	 * @param 	scaleFactor
+	 * 			The given factor
+	 * @pre 	The scalefactor is a valid scalefactor
+	 * 			| isValidScaleFactor(scaleFactor)
+	 * @return	The resulting vector is equal to this vector scaled with the given factor
+	 * 			| result == new Vector(vector.getXComponent()*scaleFactor,vector.getYComponent()*scaleFactor)
+	 * @throws	TimesOverflowException
+	 * 			The multiplication overflows.
+	 * 			| Util.fuzzyLessThanOrEqualTo(this.getXComponent(), Double.POSITIVE_INFINITY/scaleFactor) || 
+	 *			|	Util.fuzzyLessThanOrEqualTo(this.getYComponent(), Double.POSITIVE_INFINITY/scaleFactor)					
+	 */
+	public Vector scale(double scaleFactor){
+		assert isValidScaleFactor(scaleFactor);
+		if(scaleFactor!=0 && !Util.fuzzyLessThanOrEqualTo(this.getXComponent(), Double.POSITIVE_INFINITY/scaleFactor) || 
+				!Util.fuzzyLessThanOrEqualTo(this.getYComponent(), Double.POSITIVE_INFINITY/scaleFactor))
+			throw new TimesOverflowException();
+		return new Vector(this.getXComponent()*scaleFactor,
+							this.getYComponent()*scaleFactor);
+	}
+	
+	/**
+	 * Return a boolean reflecting whether this scalefactor is a valid scalefactor
+	 * @param 	scaleFactor
+	 * 			The scalefactor to be checked.
+	 * @return	True if and only if the scalefactor is a valid scalefactor
+	 * 			| result == !Double.isNaN(scaleFactor) && Util.fuzzyEquals(scaleFactor,0)
+	 */
+	public boolean isValidScaleFactor(double scaleFactor){
+		return !Double.isNaN(scaleFactor);
 	}
 	
 	
-	//TODO: sum + overflow
+	/**
+	 * Returns the sum of the other vector and this vector.
+	 * 	
+	 * @param 	other
+	 * 			The other vector to add.
+	 * @return	The resulting vector is equal to the sum of this vector and the other vector.
+	 * 			| result.equals(this.getXComponent()+other.getXComponent(),this.getYComponent()+other.getYComponent()); 
+	 * @throws 	IllegalArgumentException
+	 * 			The other vector is not effective.
+	 * 			| (other == null)
+	 * @throws	SumOverflowException
+	 * 			One of the sums overflows.
+	 * 			| this.getXComponent() > Double.POSITIVE_INFINITY-other.getXComponent() || this.getYComponent() > Double.POSITIVE_INFINITY-other.getYComponent()
+	 */
+	public Vector add(Vector other){
+		if (other == null)
+			throw new IllegalArgumentException("Non effective vector!");
+		if(! Util.fuzzyLessThanOrEqualTo(this.getXComponent(),Double.POSITIVE_INFINITY-other.getXComponent()) || 
+				! Util.fuzzyLessThanOrEqualTo(this.getYComponent(),Double.POSITIVE_INFINITY-other.getYComponent()))
+			throw new SumOverflowException();
+		return new Vector(this.getXComponent()+other.getXComponent(),this.getYComponent()+other.getYComponent());
+	}
 	
 	/**
 	 * Returns the subtraction of the other vector from this vector.
@@ -152,13 +196,17 @@ public class Vector {
 	 * @throws 	IllegalArgumentException
 	 * 			The other vector is not effective.
 	 * 			| (other == null)
-	 * @throws	...
-	 * 			|
+	 * @throws	SumOverflowException
+	 * 			The substraction overflows
+	 * 			| !Util.fuzzyLessThanOrEqualTo(Double.NEGATIVE_INFINITY-other.getXComponent(),this.getXComponent()) || 
+	 *			|	!Util.fuzzyLessThanOrEqualTo(Double.NEGATIVE_INFINITY-other.getYComponent(),this.getYComponent())
 	 */
-	//TODO: arithmetic exceptions? overflows
 	public Vector subtract(Vector other) throws IllegalArgumentException {
 		if (other == null)
 			throw new IllegalArgumentException("Non effective vector!");
+		if(!Util.fuzzyLessThanOrEqualTo(Double.NEGATIVE_INFINITY-other.getXComponent(),this.getXComponent()) || 
+			!Util.fuzzyLessThanOrEqualTo(Double.NEGATIVE_INFINITY-other.getYComponent(),this.getYComponent()))
+			throw new SumOverflowException();
 		return new Vector(this.getXComponent()-other.getXComponent(),this.getYComponent()-other.getYComponent());
 	}
 	

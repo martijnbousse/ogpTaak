@@ -30,6 +30,7 @@ public class Ship implements IShip{
 	//TODO: nieuwe excepties aanmaken? Of enkel illegalArgument gebruiken?
 	//TODO: reasoning about floating point numbers -> util fuzzy's 
 	//TODO: opgave p.3 laatste paragraaf van 1.1 in orde? mail sturen/forum
+	//TODO: javadoc ziet er niet fatsoenlijk uit bij formele documentatie
 	
 	/**
 	 * Initialize this new ship with given position, given velocity, given direction and given radius.
@@ -498,6 +499,7 @@ public class Ship implements IShip{
 	 * 			The given ship is not effective.
 	 * 			| (ship == null)
 	 */
+	//TODO: documentatie klopt niet meer
 	public double getTimeToCollision(Ship other) throws IllegalArgumentException{
 		if (other == null)
 			throw new IllegalArgumentException("Non effective ship!");

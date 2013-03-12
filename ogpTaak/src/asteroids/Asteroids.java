@@ -13,6 +13,7 @@ import java.util.Set;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
+
 import model.Facade;
 import model.IFacade;
 
@@ -122,8 +123,10 @@ public class Asteroids extends JFrame {
       System.out.println("no screen detected");
       return;
     } else {
+    	
       // <begin>
       IFacade facade = new Facade();
+      MediaPlayer.playSound("src/starwars.wav");
       // <end>
       GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
       GraphicsDevice device = env.getDefaultScreenDevice();
@@ -138,4 +141,6 @@ public class Asteroids extends JFrame {
       asteroids.start();
     }
   }
+  
+  
 }

@@ -50,7 +50,7 @@ public class AsteroidsView extends JPanel {
   }
 
   public void setShowCollisions(boolean show) {
-    this.showCollisions = show;
+	  this.showCollisions = show;
   }
 
   public boolean getShowCollisions() {

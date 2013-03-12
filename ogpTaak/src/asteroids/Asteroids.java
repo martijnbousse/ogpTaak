@@ -13,6 +13,8 @@ import java.util.Set;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
+import model.Facade;
+
 @SuppressWarnings("serial")
 public class Asteroids extends JFrame {
   private Timer timer;

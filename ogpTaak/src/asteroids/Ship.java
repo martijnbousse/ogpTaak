@@ -206,7 +206,6 @@ public class Ship implements IShip{
 	 * 			| result == !Double.isNaN(newLimit)
 	 * 						&& Util.fuzzyLessThanOrEqualTo(newLimit,SPEED_OF_LIGHT)
 	 */
-	//TODO: fuzzy in doc?
 	public boolean canHaveAsSpeedLimit(double newLimit){
 		return 	!Double.isNaN(newLimit) 
 				&& Util.fuzzyLessThanOrEqualTo(newLimit,SPEED_OF_LIGHT);
@@ -240,10 +239,8 @@ public class Ship implements IShip{
 	 * @Post 	The new direction of this ship is equal to the given direction.
 	 * 			| (new this).getDirection() == direction
 	 */
-	public void setDirection(double direction){		//TODO: in asteroids w -PI/2 gegeven als direction, wat doen we hiermee
+	public void setDirection(double direction){
 		assert isValidDirection(direction);
-//		if(direction == Math.PI*2)
-//			this.direction = 0;
 		this.direction = direction;
 	}
 	

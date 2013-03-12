@@ -1,10 +1,14 @@
-package asteroids;
+package test;
 
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import asteroids.Ship;
+import asteroids.Util;
+import asteroids.Vector;
 
 public class ShipTest {
 	

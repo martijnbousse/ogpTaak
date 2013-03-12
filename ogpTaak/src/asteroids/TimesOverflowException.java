@@ -11,6 +11,7 @@ package asteroids;
  * 
  *
  */
+@SuppressWarnings("serial")
 public class TimesOverflowException extends RuntimeException {
 	/**
 	 * Initialize this new times overflow exception.

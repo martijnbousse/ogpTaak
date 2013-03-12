@@ -11,6 +11,7 @@ package asteroids;
  * 
  *
  */
+@SuppressWarnings("serial")
 public class SumOverflowException extends RuntimeException {
 	/**
 	 * Initialize this new sum overflow exception.

@@ -3,11 +3,11 @@ package test;
 import static org.junit.Assert.*;
 
 import model.Facade;
+import model.IFacade;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import asteroids.IFacade;
 import asteroids.IShip;
 import asteroids.ModelException;
 import asteroids.Util;

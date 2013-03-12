@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.Timer;
 
 import model.Facade;
+import model.IFacade;
 
 @SuppressWarnings("serial")
 public class Asteroids extends JFrame {

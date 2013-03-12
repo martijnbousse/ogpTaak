@@ -3,7 +3,6 @@
  */
 package model;
 
-import asteroids.IFacade;
 import asteroids.IShip;
 import asteroids.ModelException;
 import asteroids.Ship;

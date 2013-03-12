@@ -1,4 +1,6 @@
-package asteroids;
+package model;
+
+import asteroids.IShip;
 
 /**
  * Implement this interface to connect your code to the user interface.

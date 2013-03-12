@@ -561,7 +561,7 @@ public class Ship implements IShip{
 		//double theta = Vector.getAngle(newPositionThis,newPositionOther);
 //		double theta = Math.atan2(newPositionOther.getXComponent()-newPositionThis.getXComponent(),newPositionOther.getYComponent()-newPositionThis.getYComponent());
 		
-		double theta = Math.atan(newPositionOther.getXComponent()-newPositionThis.getXComponent()/newPositionOther.getYComponent()-newPositionThis.getYComponent());
+		double theta = Math.atan2(newPositionOther.getYComponent()-newPositionThis.getYComponent(),newPositionOther.getXComponent()-newPositionThis.getXComponent());
 		
 		if(newPositionOther.getXComponent()-newPositionThis.getXComponent()<0)
 			theta+= Math.PI*2;

@@ -58,8 +58,19 @@ public class Ship implements IShip{
 	 * 			This ship cannot have the given radius as its radius
 	 * 			| !isValidRadius(radius)
 	 * @throws	IllegalArgumentException
-	 * 			exception van constructor vector
+	 * 			The x- or y-component of the vector position is not a valid component.
+	 * 			| !Vector.isValidComponent(position.getXComponent())
+	 * 			| || !Vector.isValidComponent(position.getYComponent())
+	 * @throws	IllegalArgumentException
+	 * 			The x- or y-component of the vector velocity is not a valid component.
+	 * 			| !Vector.isValidComponent(velocity.getXComponent())
+	 * 			| || !Vector.isValidComponent(velocity.getYComponent())
 	 */
+	//TODO: is dit zo in orde? Het vreemde is dat we nu eigenlijk 
+	
+	//TODO: ook radius en direction gebruiken isNaN.. anders moeten we een aparte checker definieren in ship "isValidNumber" die test op isNaN en die gebruiken in 
+	// de checkers voor radius en direction. <-> We hebben ook al zo'n methode (isValidComponent) in Vector staan.
+	
 	@Raw
 	public Ship(Vector position, Vector velocity, double radius, double direction) throws IllegalArgumentException{
 		setSpeedLimit(SPEED_OF_LIGHT);

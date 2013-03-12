@@ -22,7 +22,7 @@ public class ShipTest {
 	public static void setUpBeforeClass() throws Exception {
 		ship = new Ship(new Vector(10,5), new Vector(5,10), 15, Math.PI/2);
 		shipFarAway = new Ship(new Vector(Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY), new Vector(0,0), 15, Math.PI/2);
-		defaultShip= new Ship(); //TODO: ?
+		defaultShip= new Ship();
 	}
 
 	@Before
@@ -127,12 +127,6 @@ public class ShipTest {
 		mutableShip.setDirection(Math.PI);
 		assert(Util.fuzzyEquals(mutableShip.getDirection(),Math.PI));
 	}
-	
-	@Test
-	public void testSetDirection_IllegalCase() {
-		mutableShip.setDirection(Math.PI*3);
-		assert(Util.fuzzyEquals(mutableShip.getDirection(),Math.PI/2));
-	}
 
 	@Test
 	public void testIsValidDirection() {
@@ -196,14 +190,16 @@ public class ShipTest {
 		assert(Util.fuzzyEquals(mutableShip.getDirection(),Math.PI ));
 	}
 	
-	@Test
-	public void testTurn_IllegalCase() {
-		mutableShip.turn(Math.PI*3);
-		System.out.println(mutableShip.getDirection());
-		//assert(Util.fuzzyEquals(mutableShip.getDirection(),0.0));
-		assert(Util.fuzzyEquals(mutableShip.getDirection(),5.0));		//TODO moet nog gefixt worden, test faalt nooit
-		//TODO zeer vreemd, sysout geeft false , assert geeft true --
-	}
+	//TODO mag weg volgens mij
+	
+//	@Test
+//	public void testTurn_IllegalCase() {
+//		mutableShip.turn(Math.PI*3);
+//		System.out.println(mutableShip.getDirection());
+//		//assert(Util.fuzzyEquals(mutableShip.getDirection(),0.0));
+//		assert(Util.fuzzyEquals(mutableShip.getDirection(),5.0));		//TODO moet nog gefixt worden, test faalt nooit
+//		//TODO zeer vreemd, sysout geeft false , assert geeft true --
+//	}
 	
 	// getDistanceBetween
 	
@@ -224,8 +220,11 @@ public class ShipTest {
 	
 	@Test
 	public void testGetDistanceBetween_OverflowCase() {
-		assert(Util.fuzzyEquals(defaultShip.getDistanceBetween(shipFarAway),0.0));
+		System.out.println(defaultShip.getDistanceBetween(shipFarAway));
+		assert(Util.fuzzyEquals(defaultShip.getDistanceBetween(shipFarAway),Double.POSITIVE_INFINITY));
 	}
+	
+	//TODO distance is infinite bij ship faraway, toch? heb ook methode getDistance aangepast, als er overflow is , return infinity
 	
 	// overlap
 	

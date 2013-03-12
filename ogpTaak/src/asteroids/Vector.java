@@ -130,8 +130,8 @@ public class Vector {
 			x = 0;
 		if(this.getYComponent()==0 || other.getYComponent()==0)
 			y = 0;
-		else if (! (Util.fuzzyLessThanOrEqualTo(this.getXComponent(),Double.POSITIVE_INFINITY/(other.getXComponent())) ||
-					Util.fuzzyLessThanOrEqualTo(this.getYComponent(),Double.POSITIVE_INFINITY/(other.getYComponent()))))
+		else if ( !Util.fuzzyLessThanOrEqualTo(this.getXComponent(),Math.abs(Double.POSITIVE_INFINITY/(other.getXComponent()))) ||
+					!Util.fuzzyLessThanOrEqualTo(this.getYComponent(),Math.abs(Double.POSITIVE_INFINITY/(other.getYComponent()))))
 			throw new TimesOverflowException();
 		return x+y;
 	}

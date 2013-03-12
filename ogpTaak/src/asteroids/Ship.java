@@ -452,7 +452,7 @@ public class Ship implements IShip{
 			Vector delta = this.getPosition().subtract(other.getPosition());
 			return Math.sqrt(delta.dotProduct(delta)) - this.getRadius() - other.getRadius();
 		} catch(TimesOverflowException exc){
-			return 0; //TODO: waarom nul? eerder inf?
+			return Double.POSITIVE_INFINITY; //TODO: waarom nul? eerder inf?
 		}
 	}
 	

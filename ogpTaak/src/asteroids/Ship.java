@@ -471,6 +471,7 @@ public class Ship implements IShip{
 		if (other.equals(this))
 			return true;
 		return getDistanceBetween(other) < 0;
+		
 	}
 	
 	/**

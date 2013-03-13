@@ -12,6 +12,9 @@ import asteroids.Vector;
 
 public class ShipTest {
 	
+	//TODO: checkers testen?
+	//TODO: laatste testen nog implementeren
+	
 	private static Ship ship;
 	private static Ship defaultShip;
 	private static Ship shipFarAway;
@@ -30,7 +33,9 @@ public class ShipTest {
 		mutableShip = new Ship();
 		mutableShip2 = new Ship(new Vector(0,0), new Vector(1,1), 30, Math.PI/2);
 	}
-
+	
+	// TODO: wa zijn deez twee?
+	
 	@Test
 	public void testShipVectorVectorDoubleDouble() {
 		fail("Not yet implemented");
@@ -41,6 +46,8 @@ public class ShipTest {
 		fail("Not yet implemented");
 	}
 
+	// position
+	
 	@Test
 	public void testGetPosition() {
 		assert(ship.getPosition().equals(new Vector(10,5)));
@@ -69,6 +76,8 @@ public class ShipTest {
 		mutableShip.setPosition(null);		//TODO nullpointer
 		assert(mutableShip.getPosition().equals(new Vector(0,0)));
 	}
+	
+	// velocity
 
 	@Test
 	public void testGetVelocity() {
@@ -81,7 +90,7 @@ public class ShipTest {
 		assert(mutableShip.getVelocity().equals(new Vector(25,20)));
 	}
 	
-	@Test		//TODO nullpointer 
+	@Test		//TODO: nullpointer 
 	public void testSetVelocity_NullCase() {
 		mutableShip.setVelocity(null);  
 		assert(mutableShip.getVelocity().equals(new Vector(0,0)));
@@ -117,6 +126,8 @@ public class ShipTest {
 		
 	}
 
+	// direction
+	
 	@Test
 	public void testGetDirection() {
 		assert(ship.getDirection()==Math.PI/2);
@@ -133,6 +144,8 @@ public class ShipTest {
 		
 	}
 
+	// radius
+	
 	@Test
 	public void testSetMinRadius_LegalCase() {
 		Ship.setMinRadius(25);
@@ -190,6 +203,8 @@ public class ShipTest {
 		assert(Util.fuzzyEquals(mutableShip.getDirection(),Math.PI ));
 	}
 	
+	// thrust
+	
 	//TODO mag weg volgens mij
 	
 //	@Test
@@ -224,7 +239,7 @@ public class ShipTest {
 		assert(Util.fuzzyEquals(defaultShip.getDistanceBetween(shipFarAway),Double.POSITIVE_INFINITY));
 	}
 	
-	//TODO distance is infinite bij ship faraway, toch? heb ook methode getDistance aangepast, als er overflow is , return infinity
+	//TODO: distance is infinite bij ship faraway, toch? heb ook methode getDistance aangepast, als er overflow is , return infinity
 	
 	// overlap
 	
@@ -233,5 +248,7 @@ public class ShipTest {
 		assertEquals(true,defaultShip.overlap(defaultShip));
 	}
 	
-	// ...
+	// getTimeToCollision
+	
+	// getCollisionPosition
 }

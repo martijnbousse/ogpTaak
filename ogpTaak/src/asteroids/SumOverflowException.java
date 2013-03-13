@@ -9,7 +9,6 @@ package asteroids;
  * @version	1.0
  * @author 	Martijn Boussé, Wout Vekemans
  * 
- *
  */
 @SuppressWarnings("serial")
 public class SumOverflowException extends RuntimeException {

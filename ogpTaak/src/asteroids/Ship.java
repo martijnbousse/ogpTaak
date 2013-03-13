@@ -18,19 +18,19 @@ import be.kuleuven.cs.som.annotate.*;
  * 			| isValidDirection(direction)
  * @invar	The time to move that applies to all ships must be a valid time.
  * 			| isValidTime(dt) //TODO: correct?
- * 
- *  //TODO: invarianten nakijken
- * 
+ *
  * @version 1.0
  * @author Martijn Boussé, Wout Vekemans
  *
  */
 public class Ship implements IShip{
 	
+	//TODO: invarianten nakijken
 	//TODO: nieuwe excepties aanmaken? Of enkel illegalArgument gebruiken?
 	//TODO: reasoning about floating point numbers -> util fuzzy's 
 	//TODO: opgave p.3 laatste paragraaf van 1.1 in orde? mail sturen/forum
-	//TODO: javadoc ziet er niet fatsoenlijk uit bij formele documentatie
+	//TODO: @raw annotatie ??
+	//TODO: isNaN by direction, radius, minRadius, ... cf een checker: isValidNumber? cfc isValidComponent bij Vector
 	
 	/**
 	 * Initialize this new ship with given position, given velocity, given direction and given radius.
@@ -47,9 +47,9 @@ public class Ship implements IShip{
 	 * 			| isValidDirection(direction)
 	 * @post	The new position of this new ship is equal to the given position.
 	 * 			| (new this).getPosition().equals(position)
-	 * @effect	| this.setVelocity(velocity)
+	 * @effect	| this.setVelocity(velocity) //TODO: ?
 	 * @post	The new direction of this new ship is equal to the given direction.
-	 * 			| new.getDirection() == direction
+	 * 			| (new this).getDirection() == direction
 	 * @post	The new radius of this new ship is equal to the given radius.
 	 * 			| (new this).getRadius() == radius
 	 * @throws	IllegalArgumentException
@@ -113,7 +113,6 @@ public class Ship implements IShip{
 	 * 			The given position is not a valid position.
 	 * 			| !isValidPosition(position)
 	 */
-	// TODO: @raw ?
 	public void setPosition(Vector position) throws IllegalArgumentException{
 		if ( !isValidPosition(position) ) 
 			throw new IllegalArgumentException();	
@@ -155,7 +154,6 @@ public class Ship implements IShip{
 	 * 			| if isValidVelocity(velocity)
 	 * 			| 	then (new this).getVelocity().equals(velocity)
 	 */
-	// TODO: @raw ?
 	public void setVelocity(Vector velocity){
 		if (canHaveAsVelocity(velocity)) {
 			this.velocity = velocity;
@@ -170,8 +168,8 @@ public class Ship implements IShip{
 	 * @return	True if and only if velocity is effective and if the speed of the given velocity is bigger then or equal to zero
 	 * 			and smaller then or equal to the speed limit.
 	 * 			| result == !( velocity == null
-	 * 						&& Util.fuzzyLessThanOrEqualTo(0.0,velocity.getMagnitude())
-	 * 						&& Util.fuzzyLessThanOrEqualTo(velocity.getMagnitude(),this.speedLimit) )
+	 * 			|			&& Util.fuzzyLessThanOrEqualTo(0.0,velocity.getMagnitude())
+	 * 			|			&& Util.fuzzyLessThanOrEqualTo(velocity.getMagnitude(),this.speedLimit) )
 	 */
 	public boolean canHaveAsVelocity(Vector velocity){
 		return 	(velocity != null)
@@ -185,12 +183,6 @@ public class Ship implements IShip{
 	 */
 	private Vector velocity;
 	
-	public void setSpeedLimit(double newLimit){
-		if(canHaveAsSpeedLimit(newLimit)){
-			this.speedLimit = newLimit;
-		}
-	}
-	
 	/**
 	 * Returns the speed limit of this ship.
 	 */
@@ -200,20 +192,37 @@ public class Ship implements IShip{
 	}
 	
 	/**
-	 * Check whether this ship can have the given speed limit as its speed limit.
+	 * Set the speed limit of this ship to the given limit.
+	 * 
 	 * @param 	newLimit
-	 * 			The limit to check;
-	 * @return	True if and only if the given speed limit is a number and if it is less than the speed of light.
-	 * 			| result == !Double.isNaN(newLimit)
-	 * 						&& Util.fuzzyLessThanOrEqualTo(newLimit,SPEED_OF_LIGHT)
+	 * 			The new speed limit for this ship.
+	 * @post	If the given speed limit is a valid speed limit then the new speed limit of this ship is equal to the given speed limit.
+	 * 			| if canHaveAsSpeedLimit(speedLimit)
+	 * 			|	then (new this).getSpeedLimit() == speedLimit
 	 */
-	public boolean canHaveAsSpeedLimit(double newLimit){
-		return 	!Double.isNaN(newLimit) 
-				&& Util.fuzzyLessThanOrEqualTo(newLimit,SPEED_OF_LIGHT);
+	public void setSpeedLimit(double speedLimit){
+		if(canHaveAsSpeedLimit(speedLimit)){
+			this.speedLimit = speedLimit;
+		}
 	}
 	
 	/**
-	 * Variable registering the speed limit of 
+	 * Check whether this ship can have the given speed limit as its speed limit.
+	 * 
+	 * @param 	speedLimit
+	 * 			The speed limit to check.
+	 * @return	True if and only if the given speed limit is a number and if it is less than the speed of light.
+	 * 			| result == !Double.isNaN(speedLimit)
+	 * 			|			&& Util.fuzzyLessThanOrEqualTo(speedLimit,SPEED_OF_LIGHT)
+	 */
+	//TODO: kleiner dan nul?
+	public boolean canHaveAsSpeedLimit(double speedLimit){
+		return 	!Double.isNaN(speedLimit) 
+				&& Util.fuzzyLessThanOrEqualTo(speedLimit,SPEED_OF_LIGHT);
+	}
+	
+	/**
+	 * Variable registering the speed limit of this ship.
 	 */
 	private double speedLimit;
 	
@@ -240,6 +249,7 @@ public class Ship implements IShip{
 	 * @Post 	The new direction of this ship is equal to the given direction.
 	 * 			| (new this).getDirection() == direction
 	 */
+	//TODO: moet hierbij "==" ook vervangen worden door fuzzyEquals?
 	public void setDirection(double direction){
 		assert isValidDirection(direction);
 		this.direction = direction;
@@ -252,8 +262,8 @@ public class Ship implements IShip{
 	 * 			The direction to check.
 	 * @return	True if and only if the given direction is a number and if it is in between zero and two times pi.
 	 * 			| result == !Double.isNaN(direction)
-	 * 						&& Util.fuzzyLessThanOrEqualTo(0.0, direction) 
-	 * 						&& Util.fuzzyLessThanOrEqualTo(direction, 2*Math.PI)
+	 * 			|			&& Util.fuzzyLessThanOrEqualTo(0.0,direction) 
+	 * 			|			&& Util.fuzzyLessThanOrEqualTo(direction,2*Math.PI)
 	 */
 	public static boolean isValidDirection(double direction){
 		return 	!Double.isNaN(direction)
@@ -267,36 +277,6 @@ public class Ship implements IShip{
 	private double direction = 0.0;
 	
 	/**
-	 * 
-	 * @param 	newMinRadius
-	 * 			The new value for the minRadius
-	 * @post	The minimum radius for all ships is set to the given value.
-	 * 			| (new Ship).minRadius == newMinRadius
-	 * @throws 	IllegalArgumentException
-	 * 			The given value for minRadius is invalid for this parameter.
-	 * 			| ! isValidMinRadius(newMinRadius)
-	 */
-	public static void setMinRadius(double newMinRadius) throws IllegalArgumentException{
-		if(!isValidMinRadius(newMinRadius))
-			throw new IllegalArgumentException();
-		minRadius = newMinRadius;
-	}
-	
-	/**
-	 * Check whether the given minimum radius is a valid minimum radius for any ship.
-	 * @param 	minRadius
-	 * 			The minimum radius to check.
-	 * @return	True if and only if the given minimum radius is a number and if it is greater than zero.
-	 * 			| result == !Doulbe.isNan(minRadius)
-	 * 						&& minRadius > 0
-	 */
-	//TODO: hoe gebruiken we hier Util?
-	public static boolean isValidMinRadius(double minRadius){
-		return 	!Double.isNaN(minRadius)
-				&& minRadius > 0;
-	}
-	
-	/**
 	 * Returns the minimum radius for all ships.
 	 */
 	@Basic
@@ -305,23 +285,41 @@ public class Ship implements IShip{
 	}
 	
 	/**
-	 * Variable registering the minimum radius of all ships.
+	 * Set the minimum radius that applies to all ships to the given minimum radius.
+	 * 
+	 * @param 	minRadius
+	 * 			The new minimum radius for all ships.
+	 * @post	The new minimum radius that applies to all ships is set to the given minimum radius.
+	 * 			| (new Ship).minRadius == minRadius
+	 * @throws 	IllegalArgumentException
+	 * 			The given minimum radius is not a valid minimum radius.
+	 * 			| !isValidMinRadius(minRadius)
 	 */
-	private static double minRadius = 10.0;
+	public static void setMinRadius(double minRadius) throws IllegalArgumentException{
+		if(!isValidMinRadius(minRadius))
+			throw new IllegalArgumentException();
+		Ship.minRadius = minRadius;
+	}
 	
 	/**
-	 * Check whether the given radius is a valid radius for the ship.
-	 * @param 	radius
-	 * 			the radius to check
-	 * @return	True if and only if the given radius is a number and if it is greater than the mininum radius.
+	 * Check whether the given minimum radius is a valid minimum radius for any ship.
+	 * 
+	 * @param 	minRadius
+	 * 			The minimum radius to check.
+	 * @return	True if and only if the given minimum radius is a number and if it is greater than zero.
 	 * 			| result == !Doulbe.isNaN(minRadius)
-	 * 						&& (radius >= minRadius)
+	 * 			|			&& minRadius > 0
 	 */
-	public boolean canHaveAsRadius(double radius){	
-		//TODO raw?
-		return 	!Double.isNaN(radius)
-				&& (Util.fuzzyLessThanOrEqualTo(minRadius,radius));
+	//TODO: hoe gebruiken we hier Util?
+	public static boolean isValidMinRadius(double minRadius){
+		return 	!Double.isNaN(minRadius)
+				&& minRadius > 0;
 	}
+	
+	/**
+	 * Variable registering the minimum radius that applies to all ships.
+	 */
+	private static double minRadius = 10.0;
 	
 	/**
 	 * Return the radius of this ship.
@@ -329,6 +327,20 @@ public class Ship implements IShip{
 	@Basic @Raw @Immutable
 	public double getRadius(){
 		return radius;
+	}
+	
+	/**
+	 * Check whether the given radius is a valid radius for this ship.
+	 * 
+	 * @param 	radius
+	 * 			The radius to check.
+	 * @return	True if and only if the given radius is a number and if it is greater than the mininum radius.
+	 * 			| result == !Doulbe.isNaN(minRadius)
+	 * 			|			&& (radius >= minRadius)
+	 */
+	public boolean canHaveAsRadius(double radius){	
+		return 	!Double.isNaN(radius)
+				&& (Util.fuzzyLessThanOrEqualTo(minRadius,radius));
 	}
 	
 	/**
@@ -344,6 +356,7 @@ public class Ship implements IShip{
 	 * @return	True if and only if the given time is greater then or equal to zero.
 	 * 			| result == (Util.fuzzyLessThanOrEqualTo(0,dt))
 	 */
+	//TODO: isNaN? of enkel voor de attributen van ship.
 	public static boolean isValidTime(double dt) {
 		return Util.fuzzyLessThanOrEqualTo(0,dt);
 	}
@@ -375,7 +388,7 @@ public class Ship implements IShip{
 	 * 
 	 * @param 	angle
 	 * 			The angle to be checked.
-	 * @return	True if and only if the direction of this ship incremented with the given angle is a valid direction for any ship.
+	 * @return	True if and only if the direction of this ship incremented with the given angle is a valid direction for any ship. //TODO: any ship of this ship? want canAccept is niet static!
 	 * 			| isValidDirection(getDirection()+angle)
 	 */
 	public boolean canAcceptForTurn(double angle){
@@ -394,42 +407,45 @@ public class Ship implements IShip{
 	 */
 	public void turn(double angle){
 		assert canAcceptForTurn(angle);
-		setDirection(getDirection() + angle);
+		setDirection(getDirection()+angle);
 	}
-	// In de praktijk wordt iets wat constant wordt aangepast in de gui eerder totaal geïmplementeerd. Daarentegen wordt hier gevraagd om het nominaal te doen.
 	
 	/**
 	 * Change the velocity of this ship with a given amount. 
+	 * 
 	 * @param 	amount
 	 * 			The amount to add.
 	 * @post	The given amount was added to the velocity of the ship, in the direction the ship is heading.
-	 * 			| new.getVelocity().getXcomponent() == 
+	 * 			| (new this).getVelocity().getXcomponent() == 
 	 * 			|	this.getVelocity().getXComponent()+amount*Math.cos(this.getDirection())
-	 * 			| new.getVelocity().getYcomponent() == 
+	 * 			| (new this).getVelocity().getYcomponent() == 
 	 * 			|	this.getVelocity().getYComponent()+amount*Math.sin(this.getDirection())
 	 */
 	public void thrust(double amount){
 		if(!canAcceptAsThrustAmount(amount)){
-			amount = 0;
+			amount = 0.0;
 		}
 		this.velocity=new Vector(velocity.getXComponent()+amount*Math.cos(direction),velocity.getYComponent()+amount*Math.sin(direction));
-		//TODO velocity w groter dan limit, vector scalen zodat lengte is lightspeed
+		//TODO: velocity w groter dan limit, vector scalen zodat lengte is lightspeed
+		//TODO: herschrijven met add en scale + @effect ipv @post gebruiken.
 	}
 	
 	/**
 	 * Returns a boolean whether this ship can accept the given amount to thrust.
+	 * 
 	 * @param 	amount
-	 * 			The amount to check
+	 * 			The amount to check.
 	 * @return	True if and only if the given amount is greater than zero.	
 	 * 			| result == amount > 0
 	 */
 	public boolean canAcceptAsThrustAmount(double amount){
 		return amount > 0;
 	}
-	//TODO: static? isValidThrustAmount
+	//TODO: static? isValidThrustAmount, volgens mij static aangezien dit niet afhankelijk is van object-afhankelijke variabelen. 
 	
 	/**
 	 * Returns the distance between this ship and the given ship.
+	 * 
 	 * @param  	other
 	 * 			The other ship.
 	 * @return	Returns the distance between this ship and the given ship. If this ship is equal to the given ship the result is always zero.
@@ -448,7 +464,7 @@ public class Ship implements IShip{
 		if (other == null)
 			throw new IllegalArgumentException("Non effective ship!");
 		if(other.equals(this))
-			return 0;
+			return 0.0;
 		try{
 			Vector delta = this.getPosition().subtract(other.getPosition());
 			return Math.sqrt(delta.dotProduct(delta)) - this.getRadius() - other.getRadius();
@@ -472,7 +488,6 @@ public class Ship implements IShip{
 		if (other.equals(this))
 			return true;
 		return getDistanceBetween(other) < 0;
-		
 	}
 	
 	/**
@@ -482,24 +497,24 @@ public class Ship implements IShip{
 	 * 			The other ship.
 	 * @return	Returns the time until this ship and the given ship will collide.
 	 * 			| let 
-	 * 			| 	deltaR = getPosition().subtract(other.getPosition())
-	 *			| 	deltaV = getVelocity().subtract(other.getVelocity())
-	 *			| 	a = deltaR.times(deltaR)
-	 *			|	b = deltaV.times(deltaV)
-	 *			|	c = deltaV.times(deltaR)
-	 *			|	d = c*c - (b)*(a-sigma*sigma)
+	 * 			|	sigma 	= this.getRadius() + other.getRadius()
+	 * 			| 	deltaR 	= getPosition().subtract(other.getPosition())
+	 *			| 	deltaV 	= getVelocity().subtract(other.getVelocity())
+	 *			| 	dotProductR 	= deltaR.times(deltaR)
+	 *			|	dotProductV 	= deltaV.times(deltaV)
+	 *			|	dotProductVR 	= deltaV.times(deltaR)
+	 *			|	d = (dotProductVR*dotProductVR) - dotProductV*(dotProductR-(sigma*sigma))
 	 *			| in
-	 *			|	if (Util.fuzzyLessThanOrEqualTo(0,c))
+	 *			|	if (Util.fuzzyLessThanOrEqualTo(0.0,dotProductVR))
 	 *			|		result == Double.POSITIVE_INFINITY
-	 *			|	else if (Util.fuzzyLessThanOrEqualTo(d,0))
+	 *			|	else if (Util.fuzzyLessThanOrEqualTo(d,0.0))
 	 *			| 		result == Double.POSITIVE_INFINITY
 	 *			|	else
-	 *			|		result == -(c+Math.sqrt(d))/b
+	 *			|		result == -(dotProductVR+Math.sqrt(d))/dotProductV)
 	 * @throws 	IllegalArgumentException
 	 * 			The given ship is not effective.
 	 * 			| (ship == null)
 	 */
-	//TODO: documentatie klopt niet meer
 	public double getTimeToCollision(Ship other) throws IllegalArgumentException{
 		if (other == null)
 			throw new IllegalArgumentException("Non effective ship!");
@@ -547,6 +562,7 @@ public class Ship implements IShip{
 	 * 			The given ship is not effective.
 	 * 			| (ship == null)
 	 */
+	//TODO: opruimen + schrijven ifv add, scale, ... + documentatie 
 	public Vector getCollisionPosition(Ship other) throws IllegalArgumentException{ //TODO: arithmetic exceptions?
 		if (other == null)
 			throw new IllegalArgumentException("Non effective ship!");	

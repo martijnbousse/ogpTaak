@@ -5,7 +5,7 @@ import be.kuleuven.cs.som.annotate.*;
 /**
  * A class of vectors involving an x- and y-component.
  * 
- * @Invar	\\TODO: invarianten?
+ * @Invar	
  * 
  * @author	Martijn Boussé, Wout Vekemans
  * @version	1.0
@@ -14,15 +14,11 @@ import be.kuleuven.cs.som.annotate.*;
 @Value
 public class Vector {
 	
-	/**
-	 * Variable referencing the x-component of this vector.
-	 */
-	private final double xcomponent;
-	
-	/**
-	 * Variable referencing the y-component of this vector.
-	 */
-	private final double ycomponent;
+	//TODO: documentatie nakijken
+	//TODO: invarianten
+	//TODO: isNaN
+	//TODO: @raw
+	//TODO: VectorTest klasse schrijven
 	
 	/**
 	 * Initialize this new vector with given x- and y-component.
@@ -40,17 +36,12 @@ public class Vector {
 	 * 			| !isValidComponent(xcomponent) || !isValidComponent(ycomponent)
 	 */
 	//TODO: Moet in de documentatie ook fuzzyEquals gebruikt worden?
-	//TODO: nadenken over referentie lekken ! zie laatste les
 	@Raw
 	public Vector(double xcomponent, double ycomponent) throws IllegalArgumentException{
 		if(!isValidComponent(xcomponent) || !isValidComponent(ycomponent))
 			throw new IllegalArgumentException();
 		this.xcomponent = xcomponent;
 		this.ycomponent = ycomponent;
-	}
-	
-	public static boolean isValidComponent(double component){
-		return !Double.isNaN(component);
 	}
 	
 	/**
@@ -62,11 +53,33 @@ public class Vector {
 	}
 	
 	/**
+	 * Variable referencing the x-component of this vector.
+	 */
+	private final double xcomponent;
+	
+	/**
 	 * Return the y-component of this vector.
 	 */
 	@Basic @Immutable @Raw
 	public double getYComponent(){
 		return this.ycomponent;
+	}
+	
+	/**
+	 * Variable referencing the y-component of this vector.
+	 */
+	private final double ycomponent;
+	
+	/**
+	 * Checks whether the given component is a valid component.
+	 * 
+	 * @param 	component
+	 * 			The component to check.
+	 * @return	True if and only if the given component is a number.
+	 * 			| !Double.isNaN(component)
+	 */
+	public static boolean isValidComponent(double component){
+		return !Double.isNaN(component);
 	}
 	
 	/**
@@ -77,10 +90,10 @@ public class Vector {
 	 * 			and if this vector and the other object interpreted as a vector 
 	 * 			have equal x- and y-components.
 	 * 			| result == 
-	 * 			|	( (other != null)
+	 * 			|  	( (other != null)
 	 * 			|  && (this.getClass() == other.getClass())
 	 * 			|  && (Util.fuzzyEquals(this.getXComponent(),((Vector) other).getXComponent())
-	 * 			|  && (Util.fuzzyEquals(this.getYComponent(),((Vector) other).getYComponent())
+	 * 			|  && (Util.fuzzyEquals(this.getYComponent(),((Vector) other).getYComponent()) )
 	 */
 	@Override
 	public boolean equals(Object other){
@@ -97,6 +110,7 @@ public class Vector {
 	 * @return	The representation of this vector by means of a string.
 	 * 			| "xComponent: "+xcomponent+" yComponent: "+ycomponent
 	 */
+	@Override
 	public String toString() {
         return "xComponent: "+xcomponent+" yComponent: "+ycomponent;
     }
@@ -137,19 +151,18 @@ public class Vector {
 	}
 	
 	/**
-	 * Multiply this vector with a given factor
+	 * Multiply this vector with the given scale factor.
+	 * 
 	 * @param 	scaleFactor
-	 * 			The given factor
-	 * @pre 	The scalefactor is a valid scalefactor
-	 * 			| isValidScaleFactor(scaleFactor)
-	 * @return	The resulting vector is equal to this vector scaled with the given factor
+	 * 			The given factor.
+	 * @return	The resulting vector is equal to this vector scaled with the given factor.
 	 * 			| result == new Vector(vector.getXComponent()*scaleFactor,vector.getYComponent()*scaleFactor)
 	 * @throws	TimesOverflowException
 	 * 			The multiplication overflows.
 	 * 			| scaleFactor!=0 && !Util.fuzzyLessThanOrEqualTo(this.getXComponent(), Double.POSITIVE_INFINITY/scaleFactor) || 
 	 *			|	!Util.fuzzyLessThanOrEqualTo(this.getYComponent(), Double.POSITIVE_INFINITY/scaleFactor)
 	 * @throws	IllegalArgumentException
-	 * 			The scalefactor is invalid
+	 * 			The scalefactor is invalid.
 	 * 			| !isValidScaleFactor(scaleFactor)				
 	 */
 	public Vector scale(double scaleFactor){
@@ -166,13 +179,13 @@ public class Vector {
 	 * Return a boolean reflecting whether this scalefactor is a valid scalefactor
 	 * @param 	scaleFactor
 	 * 			The scalefactor to be checked.
-	 * @return	True if and only if the scalefactor is a valid scalefactor
+	 * @return	True if and only if the scalefactor is a valid scalefactor.
 	 * 			| result == !Double.isNaN(scaleFactor) && Util.fuzzyEquals(scaleFactor,0)
 	 */
+	//TODO: we hebben reeds een methode isValidComponent die net hetzelfde doet. cf een zelfde methode in ship?
 	public boolean isValidScaleFactor(double scaleFactor){
 		return !Double.isNaN(scaleFactor);
 	}
-	
 	
 	/**
 	 * Returns the sum of the other vector and this vector.
@@ -208,7 +221,7 @@ public class Vector {
 	 * 			The other vector is not effective.
 	 * 			| (other == null)
 	 * @throws	SumOverflowException
-	 * 			The substraction overflows
+	 * 			The subtraction overflows
 	 * 			| !Util.fuzzyLessThanOrEqualTo(Double.NEGATIVE_INFINITY-other.getXComponent(),this.getXComponent()) || 
 	 *			|	!Util.fuzzyLessThanOrEqualTo(Double.NEGATIVE_INFINITY-other.getYComponent(),this.getYComponent())
 	 */
@@ -225,7 +238,7 @@ public class Vector {
 	
 	
 	
-
+//TODO: wat mag hiermee?
 	public static double getAngle(Vector vector1,Vector vector2) {
 		double xDiff = vector1.getXComponent()-vector2.getXComponent();
 		double yDiff = vector1.getYComponent()-vector2.getYComponent();

@@ -34,36 +34,12 @@ public class ShipTest {
 		mutableShip2 = new Ship(new Vector(0,0), new Vector(1,1), 30, Math.PI/2);
 	}
 	
-	// TODO: wa zijn deez twee?
-	
-	@Test
-	public void testShipVectorVectorDoubleDouble() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testShip() {
-		fail("Not yet implemented");
-	}
-
 	// position
 	
 	@Test
 	public void testGetPosition() {
 		assert(ship.getPosition().equals(new Vector(10,5)));
 	}
-
-	@Test
-	public void testIsValidPosition_LegalCase() {
-		assert(Ship.isValidPosition(ship.getPosition()));
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void testIsValidPosition_IllegalCase() {
-		Ship invalidShip = new Ship(null,null,5,150);	//TODO nullpointer
-		assertFalse(Ship.isValidPosition(invalidShip.getPosition()));
-	}
-	//TODO: klopt dit wel? kijk naar p.269-270 en ook testMove_IllegalCase() + meot checker wel getest worden?
 	
 	@Test
 	public void testSetPosition_LegalCase() {
@@ -73,7 +49,7 @@ public class ShipTest {
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testSetPosition_IllegalCase() {
-		mutableShip.setPosition(null);		//TODO nullpointer
+		mutableShip.setPosition(null);
 		assert(mutableShip.getPosition().equals(new Vector(0,0)));
 	}
 	
@@ -90,7 +66,7 @@ public class ShipTest {
 		assert(mutableShip.getVelocity().equals(new Vector(25,20)));
 	}
 	
-	@Test		//TODO: nullpointer 
+	@Test	
 	public void testSetVelocity_NullCase() {
 		mutableShip.setVelocity(null);  
 		assert(mutableShip.getVelocity().equals(new Vector(0,0)));
@@ -100,11 +76,6 @@ public class ShipTest {
 	public void testSetVelocity_IllegalCase() {
 		mutableShip.setVelocity(new Vector(300000,300000));
 		assert(mutableShip.getVelocity().equals(new Vector(0,0)));
-	}
-	
-	@Test
-	public void testCanHaveAsVelocity() {
-		
 	}
 
 	@Test
@@ -120,12 +91,6 @@ public class ShipTest {
 		assert(Util.fuzzyEquals(mutableShip.getSpeedLimit(),150));
 	}
 
-
-	@Test
-	public void testCanHaveAsSpeedLimit() {
-		
-	}
-
 	// direction
 	
 	@Test
@@ -137,11 +102,6 @@ public class ShipTest {
 	public void testSetDirection_LegalCase() {
 		mutableShip.setDirection(Math.PI);
 		assert(Util.fuzzyEquals(mutableShip.getDirection(),Math.PI));
-	}
-
-	@Test
-	public void testIsValidDirection() {
-		
 	}
 
 	// radius
@@ -157,16 +117,6 @@ public class ShipTest {
 	public void testSetMinRadius_IllegalCase() {
 		Ship.setMinRadius(-25);
 		assert(Util.fuzzyEquals(Ship.getMinRadius(),15));
-	}
-
-	@Test
-	public void testIsValidMinRadius() {
-		
-	}
-
-	@Test
-	public void testCanHaveAsRadius() {
-		
 	}
 
 	@Test
@@ -195,6 +145,18 @@ public class ShipTest {
 		mutableShip2.move(-1);
 	}
 	
+	@Test
+	public void testMove_InfinityCase() {
+		Vector oldPosition = mutableShip2.getPosition();
+		mutableShip2.move(Double.POSITIVE_INFINITY);
+		assert(mutableShip2.getPosition().equals(oldPosition));
+	}
+	
+	@Test
+	public void testMove_InfinityCase2() {
+		
+	}
+	
 	// turn
 	
 	@Test
@@ -205,16 +167,7 @@ public class ShipTest {
 	
 	// thrust
 	
-	//TODO mag weg volgens mij
 	
-//	@Test
-//	public void testTurn_IllegalCase() {
-//		mutableShip.turn(Math.PI*3);
-//		System.out.println(mutableShip.getDirection());
-//		//assert(Util.fuzzyEquals(mutableShip.getDirection(),0.0));
-//		assert(Util.fuzzyEquals(mutableShip.getDirection(),5.0));		//TODO moet nog gefixt worden, test faalt nooit
-//		//TODO zeer vreemd, sysout geeft false , assert geeft true --
-//	}
 	
 	// getDistanceBetween
 	
@@ -238,8 +191,6 @@ public class ShipTest {
 		System.out.println(defaultShip.getDistanceBetween(shipFarAway));
 		assert(Util.fuzzyEquals(defaultShip.getDistanceBetween(shipFarAway),Double.POSITIVE_INFINITY));
 	}
-	
-	//TODO: distance is infinite bij ship faraway, toch? heb ook methode getDistance aangepast, als er overflow is , return infinity
 	
 	// overlap
 	

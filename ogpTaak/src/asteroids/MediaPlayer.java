@@ -8,6 +8,14 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
+/**
+ * A class of mediaplayers.	
+ * 
+ * @author	...
+ * @version	1.0
+ *
+ */
+
 public class MediaPlayer {
 	public static void playSound(String path){
 	    try{

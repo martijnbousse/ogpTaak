@@ -40,8 +40,6 @@ public class PartialFacadeTest {
 	assert(facade.getXVelocity(ship) == 0);
   }
   
-  //TODO: de rest van attributen testen op modelexceptions
-  
   @Test(expected=ModelException.class)
   public void testCreateShipRadiusNegative() {
     facade.createShip(100, 200, 10, -10, -20, -Math.PI);

@@ -38,7 +38,7 @@ public class Vector {
 	//TODO: Moet in de documentatie ook fuzzyEquals gebruikt worden?
 	@Raw
 	public Vector(double xcomponent, double ycomponent) throws IllegalArgumentException{
-		if(!isValidComponent(xcomponent) || !isValidComponent(ycomponent))
+		if(!isValidNumber(xcomponent) || !isValidNumber(ycomponent))
 			throw new IllegalArgumentException();
 		this.xcomponent = xcomponent;
 		this.ycomponent = ycomponent;
@@ -73,13 +73,13 @@ public class Vector {
 	/**
 	 * Checks whether the given component is a valid component.
 	 * 
-	 * @param 	component
-	 * 			The component to check.
-	 * @return	True if and only if the given component is a number.
-	 * 			| !Double.isNaN(component)
+	 * @param 	number
+	 * 			The number to check.
+	 * @return	True if and only if the given number is a number.
+	 * 			| !Double.isNaN(number)
 	 */
-	public static boolean isValidComponent(double component){
-		return !Double.isNaN(component);
+	public static boolean isValidNumber(double number){
+		return !Double.isNaN(number);
 	}
 	
 	/**
@@ -107,8 +107,11 @@ public class Vector {
 	}
 	
 	/**
-	 * @return	The representation of this vector by means of a string.
-	 * 			| "xComponent: "+xcomponent+" yComponent: "+ycomponent
+	 * Return a textual representation of this vector.
+	 * 
+	 * @return	A string consisting of the textual representation of the position, the velocity, the radius and the direction of this ship.
+	 * 			| result.equals(
+	 * 			| 			"xComponent: "+xcomponent+" yComponent: "+ycomponent)
 	 */
 	@Override
 	public String toString() {
@@ -166,7 +169,7 @@ public class Vector {
 	 * 			| !isValidScaleFactor(scaleFactor)				
 	 */
 	//TODO iets met negatieve getallen en min oneindig
-	public Vector scale(double scaleFactor){
+	public Vector scale(double scaleFactor) throws IllegalArgumentException, TimesOverflowException {
 		if(!isValidScaleFactor(scaleFactor))
 			throw new IllegalArgumentException();
 		if(scaleFactor!=0 && !Util.fuzzyLessThanOrEqualTo(this.getXComponent(), Double.POSITIVE_INFINITY/scaleFactor) || 
@@ -183,9 +186,8 @@ public class Vector {
 	 * @return	True if and only if the scalefactor is a valid scalefactor.
 	 * 			| result == !Double.isNaN(scaleFactor) && Util.fuzzyEquals(scaleFactor,0)
 	 */
-	//TODO: we hebben reeds een methode isValidComponent die net hetzelfde doet. cf een zelfde methode in ship?
 	public boolean isValidScaleFactor(double scaleFactor){
-		return !Double.isNaN(scaleFactor);
+		return (isValidNumber(scaleFactor) && Util.fuzzyLessThanOrEqualTo(0.0,scaleFactor));
 	}
 	
 	/**
@@ -200,13 +202,14 @@ public class Vector {
 	 * 			| (other == null)
 	 * @throws	SumOverflowException
 	 * 			One of the sums overflows.
-	 * 			| this.getXComponent() > Double.POSITIVE_INFINITY-other.getXComponent() || this.getYComponent() > Double.POSITIVE_INFINITY-other.getYComponent()
+	 * 			| this.getXComponent() > Double.POSITIVE_INFINITY-other.getXComponent() 
+	 * 			| || this.getYComponent() > Double.POSITIVE_INFINITY-other.getYComponent()
 	 */
-	public Vector add(Vector other){
+	public Vector add(Vector other) throws IllegalArgumentException, SumOverflowException {
 		if (other == null)
 			throw new IllegalArgumentException("Non effective vector!");
-		if(! Util.fuzzyLessThanOrEqualTo(this.getXComponent(),Double.POSITIVE_INFINITY-other.getXComponent()) || 
-				! Util.fuzzyLessThanOrEqualTo(this.getYComponent(),Double.POSITIVE_INFINITY-other.getYComponent()))
+		if( !Util.fuzzyLessThanOrEqualTo(this.getXComponent(),Double.POSITIVE_INFINITY-other.getXComponent()) 
+			|| ! Util.fuzzyLessThanOrEqualTo(this.getYComponent(),Double.POSITIVE_INFINITY-other.getYComponent()))
 			throw new SumOverflowException();
 		return new Vector(this.getXComponent()+other.getXComponent(),this.getYComponent()+other.getYComponent());
 	}
@@ -223,52 +226,15 @@ public class Vector {
 	 * 			| (other == null)
 	 * @throws	SumOverflowException
 	 * 			The subtraction overflows
-	 * 			| !Util.fuzzyLessThanOrEqualTo(Double.NEGATIVE_INFINITY-other.getXComponent(),this.getXComponent()) || 
-	 *			|	!Util.fuzzyLessThanOrEqualTo(Double.NEGATIVE_INFINITY-other.getYComponent(),this.getYComponent())
+	 * 			| !Util.fuzzyLessThanOrEqualTo(Double.NEGATIVE_INFINITY-other.getXComponent(),this.getXComponent()) 
+	 *			| || !Util.fuzzyLessThanOrEqualTo(Double.NEGATIVE_INFINITY-other.getYComponent(),this.getYComponent())
 	 */
-	public Vector subtract(Vector other) throws IllegalArgumentException {
+	public Vector subtract(Vector other) throws IllegalArgumentException, SumOverflowException {
 		if (other == null)
 			throw new IllegalArgumentException("Non effective vector!");
-		if(!Util.fuzzyLessThanOrEqualTo(Double.NEGATIVE_INFINITY-other.getXComponent(),this.getXComponent()) || 
-			!Util.fuzzyLessThanOrEqualTo(Double.NEGATIVE_INFINITY-other.getYComponent(),this.getYComponent()))
+		if( !Util.fuzzyLessThanOrEqualTo(Double.NEGATIVE_INFINITY-other.getXComponent(),this.getXComponent())
+			|| !Util.fuzzyLessThanOrEqualTo(Double.NEGATIVE_INFINITY-other.getYComponent(),this.getYComponent()))
 			throw new SumOverflowException();
 		return new Vector(this.getXComponent()-other.getXComponent(),this.getYComponent()-other.getYComponent());
 	}
-	
-	
-	
-	
-	
-//TODO: wat mag hiermee?
-	//TODO weg denk ik
-	public static double getAngle(Vector vector1,Vector vector2) {
-		double xDiff = vector1.getXComponent()-vector2.getXComponent();
-		double yDiff = vector1.getYComponent()-vector2.getYComponent();
-		if(xDiff > 0){
-			if(yDiff > 0){
-				return Math.atan(yDiff/xDiff)+Math.PI;
-			}
-			if(yDiff < 0){
-				return Math.atan(-yDiff/xDiff)+Math.PI;
-			}
-			return Math.PI;
-		}
-		else if(xDiff < 0){
-			if(yDiff > 0){
-				return Math.atan(-yDiff/xDiff);
-			}
-			if(yDiff < 0){
-				return Math.atan(yDiff/xDiff);
-			}
-			return 0;
-		}
-		else if(xDiff == 0){
-			if(yDiff > 0)
-				return 3*Math.PI/2;
-			else{
-				return Math.PI/2;
-			}
-		}
-		return 0;
-	}	
 }

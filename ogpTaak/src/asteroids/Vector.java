@@ -165,6 +165,7 @@ public class Vector {
 	 * 			The scalefactor is invalid.
 	 * 			| !isValidScaleFactor(scaleFactor)				
 	 */
+	//TODO iets met negatieve getallen en min oneindig
 	public Vector scale(double scaleFactor){
 		if(!isValidScaleFactor(scaleFactor))
 			throw new IllegalArgumentException();
@@ -239,6 +240,7 @@ public class Vector {
 	
 	
 //TODO: wat mag hiermee?
+	//TODO weg denk ik
 	public static double getAngle(Vector vector1,Vector vector2) {
 		double xDiff = vector1.getXComponent()-vector2.getXComponent();
 		double yDiff = vector1.getYComponent()-vector2.getYComponent();

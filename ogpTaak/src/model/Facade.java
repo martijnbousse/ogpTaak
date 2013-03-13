@@ -34,8 +34,8 @@ public class Facade implements IFacade {
 		while(!Util.fuzzyLessThanOrEqualTo(0.0, angle)){
 			angle = angle+ Math.PI*2;
 		}
-		if(!Util.fuzzyLessThanOrEqualTo(angle, Math.PI*2)){
-			angle = angle%Math.PI*2;
+		while(!Util.fuzzyLessThanOrEqualTo(angle, Math.PI*2)){
+			angle = angle-Math.PI*2;
 		}
 		
 		try{

@@ -31,10 +31,10 @@ public class Facade implements IFacade {
 	 */
 	@Override
 	public IShip createShip(double x, double y, double xVelocity,double yVelocity, double radius, double angle) {
-		if(!Util.fuzzyLessThanOrEqualTo(0.0, angle)){
-			angle = angle%Math.PI*2 + Math.PI*2;
+		while(!Util.fuzzyLessThanOrEqualTo(0.0, angle)){
+			angle = angle+ Math.PI*2;
 		}
-		else if(!Util.fuzzyLessThanOrEqualTo(angle, Math.PI*2)){
+		if(!Util.fuzzyLessThanOrEqualTo(angle, Math.PI*2)){
 			angle = angle%Math.PI*2;
 		}
 		

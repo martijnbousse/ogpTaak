@@ -171,6 +171,8 @@ public class Ship implements IShip{
 	 * 			|			&& Util.fuzzyLessThanOrEqualTo(0.0,velocity.getMagnitude())
 	 * 			|			&& Util.fuzzyLessThanOrEqualTo(velocity.getMagnitude(),this.speedLimit) )
 	 */
+	
+	// TODO getmagnitude bestaat niet meer. doc aanpassen
 	public boolean canHaveAsVelocity(Vector velocity){
 		return 	(velocity != null)
 					&& Util.fuzzyLessThanOrEqualTo(0.0,velocity.dotProduct(velocity))

@@ -123,7 +123,6 @@ public class Asteroids extends JFrame {
       System.out.println("no screen detected");
       return;
     } else {
-    	
       // <begin>
       IFacade facade = new Facade();
       MediaPlayer.playSound("src/starwars.wav");

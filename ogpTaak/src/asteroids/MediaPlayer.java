@@ -1,3 +1,5 @@
+//TODO we moeten hier nog op een of andere manier iets voor copyright infringement doen. of telt da nie als ge uw code op internet gooit?
+
 package asteroids;
 
 import java.io.File;

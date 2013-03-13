@@ -37,6 +37,7 @@ public class Facade implements IFacade {
 		else if(!Util.fuzzyLessThanOrEqualTo(angle, Math.PI*2)){
 			angle = angle%Math.PI*2;
 		}
+		
 		try{
 			return new Ship(new Vector(x,y), new Vector(xVelocity, yVelocity), radius, angle);
 		} catch (IllegalArgumentException exc){
@@ -119,9 +120,11 @@ public class Facade implements IFacade {
 	public void turn(IShip ship, double angle) {
 		if(!Util.fuzzyLessThanOrEqualTo(0.0, ((Ship) ship).getDirection()+angle)){
 			angle+=Math.PI*2;
+			//angle = angle%Math.PI*2 + Math.PI*2;
 		}
 		else if(!Util.fuzzyLessThanOrEqualTo(((Ship) ship).getDirection()+angle, Math.PI*2)){
 			angle = angle-Math.PI*2;
+			//angle = angle%Math.PI*2;
 		}
 		((Ship) ship).turn(angle);
 	}

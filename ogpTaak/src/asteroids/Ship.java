@@ -421,7 +421,7 @@ public class Ship implements IShip{
 		if(!isValidThrustAmount(amount))
 			amount = 0.0;
 		Vector newVelocity = velocity.add((new Vector(Math.cos(direction),Math.sin(direction)).scale(amount)));
-		if(newVelocity.dotProduct(newVelocity)>this.speedLimit)
+		if(Math.sqrt(newVelocity.dotProduct(newVelocity))>this.speedLimit)
 			setVelocity(newVelocity.scale(newVelocity.dotProduct(newVelocity)/speedLimit));
 		else{
 			setVelocity(newVelocity);

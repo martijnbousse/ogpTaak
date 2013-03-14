@@ -5,17 +5,17 @@ import be.kuleuven.cs.som.annotate.*;
  * A class of ships involving a position, a velocity, a direction and a radius.
  * 
  * @invar	Each ship can have its radius as its radius.
- * 			| canHaveAsRadius(radius)
+ * 			| canHaveAsRadius(getRadius())
  * @invar	The minimum radius that applies to all ships must be a valid minimum radius.
- * 			| isValidMinRadius(minRadius)
+ * 			| isValidMinRadius(getMinRadius())
  * @invar 	The position that applies to all ships must be a valid position.
- * 			| isValidPosition(position)
+ * 			| isValidPosition(getPosition())
  * @invar	Each ship can have its velocity as its velocity.
- * 			| canHaveAsVelocity(velocity)
+ * 			| canHaveAsVelocity(getVelocity())
  * @invar	Each ship can have its speed limit as its speed limit.
- * 			| canHaveAsSpeedLimit(speedLimit)
+ * 			| canHaveAsSpeedLimit(getSpeedLimit())
  * @invar 	The direction that applies to all ships must be a valid direction.
- * 			| isValidDirection(direction)
+ * 			| isValidDirection(getDirection())
  *
  * @version 1.0
  * @author Martijn Boussé, Wout Vekemans
@@ -69,7 +69,7 @@ public class Ship implements IShip{
 		if(!canHaveAsRadius(radius)){
 			throw new IllegalArgumentException();	
 		}
-		this.radius=radius;
+		this.radius=radius;		
 		setDirection(direction);
 	}
 	
@@ -483,10 +483,13 @@ public class Ship implements IShip{
 	 * 			| (ship == null)
 	 */
 	public boolean overlap(Ship other) throws IllegalArgumentException{
+		if (other == null)
+			throw new IllegalArgumentException("Non effective ship!");
 		if (other.equals(this))
 			return true;
 		return getDistanceBetween(other) < 0;
 	}
+	//TODO: Ik heb toch die eerste if-test toegevoegd omdat je anders een nullpoint krijgt via .equals toe te passen!
 	
 	/**
 	 * Returns when this ship, if ever, will collide with the given ship.

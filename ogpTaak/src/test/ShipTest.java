@@ -10,22 +10,48 @@ import asteroids.Ship;
 import asteroids.Util;
 import asteroids.Vector;
 
+/**
+ * A class collecting tests for the class of ships.
+ * 
+ * @author 	Martijn Boussé, Wout Vekemans
+ * @version	1.0
+ *
+ */
 public class ShipTest {
 	
-	//TODO: checkers testen?
 	//TODO: laatste testen nog implementeren
+	//TODO: assert -> assertTrue of assertFalse worden en ipv Util.fuzzy kan je ook assertEquals gebruiken met een derde argument = epsilon
 	
+	/**
+	 * Variable referencing a ship with position (10,5) km, velocity (5,10) km/s, radius 15 km and direction pi/2 rad.
+	 */
 	private static Ship ship;
-	private static Ship defaultShip;
+	
+	/**
+	 * Variable referencing a ship with position (inf,inf) km, velocity (0,0) km/s, radius 15 km and direction pi/2 rad.
+	 */
 	private static Ship shipFarAway;
+	
+	/**
+	 * Variable referencing a ship with default settings.
+	 */
+	private static Ship shipDefault;
+	
+	/**
+	 * Variable referencing a ship with default settings.
+	 */
 	private Ship mutableShip;
+	
+	/**
+	 * Variable referencing a ship with position (0,0) km, velocity (1,1) km/s, radius 30 km and direction pi/2 rad.
+	 */
 	private Ship mutableShip2;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		ship = new Ship(new Vector(10,5), new Vector(5,10), 15, Math.PI/2);
 		shipFarAway = new Ship(new Vector(Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY), new Vector(0,0), 15, Math.PI/2);
-		defaultShip= new Ship();
+		shipDefault= new Ship();
 	}
 
 	@Before
@@ -38,70 +64,70 @@ public class ShipTest {
 	
 	@Test
 	public void testGetPosition() {
-		assert(ship.getPosition().equals(new Vector(10,5)));
+		assertTrue(ship.getPosition().equals(new Vector(10,5)));
 	}
 	
 	@Test
 	public void testSetPosition_LegalCase() {
 		mutableShip.setPosition(new Vector(15,10));
-		assert(mutableShip.getPosition().equals(new Vector(15,10)));
+		assertTrue(mutableShip.getPosition().equals(new Vector(15,10))); 
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testSetPosition_IllegalCase() {
 		mutableShip.setPosition(null);
-		assert(mutableShip.getPosition().equals(new Vector(0,0)));
 	}
 	
 	// velocity
 
 	@Test
 	public void testGetVelocity() {
-		assert(ship.getVelocity().equals(new Vector(5,10)));
+		assertTrue(ship.getVelocity().equals(new Vector(5,10)));
 	}
+	//TODO: gebruiken we nu assertEquals of .equals() -> wordt getest in vectorTest?
 
 	@Test
 	public void testSetVelocity_LegalCase() {
 		mutableShip.setVelocity(new Vector(25,20));
-		assert(mutableShip.getVelocity().equals(new Vector(25,20)));
+		assertTrue(mutableShip.getVelocity().equals(new Vector(25,20)));
 	}
 	
 	@Test	
 	public void testSetVelocity_NullCase() {
 		mutableShip.setVelocity(null);  
-		assert(mutableShip.getVelocity().equals(new Vector(0,0)));
+		assertTrue(mutableShip.getVelocity().equals(new Vector(0,0)));
 	}
 	
 	@Test
 	public void testSetVelocity_IllegalCase() {
 		mutableShip.setVelocity(new Vector(300000,300000));
-		assert(mutableShip.getVelocity().equals(new Vector(0,0)));
+		assertTrue(mutableShip.getVelocity().equals(new Vector(0,0)));
 	}
 
 	@Test
 	public void testSetSpeedLimit_LegalCase() {
 		mutableShip.setSpeedLimit(150);
-		assert(Util.fuzzyEquals(mutableShip.getSpeedLimit(),150));
+		assertTrue(Util.fuzzyEquals(mutableShip.getSpeedLimit(),150));
 	}
 	
 	@Test
 	public void testSetSpeedLimit_IllegalCase() {
 		mutableShip.setSpeedLimit(150);
 		mutableShip.setSpeedLimit(400000);
-		assert(Util.fuzzyEquals(mutableShip.getSpeedLimit(),150));
+		assertTrue(Util.fuzzyEquals(mutableShip.getSpeedLimit(),150));
 	}
 
 	// direction
 	
 	@Test
 	public void testGetDirection() {
-		assert(ship.getDirection()==Math.PI/2);
+		assertTrue(Util.fuzzyEquals(ship.getDirection(),Math.PI/2));
 	}
 
 	@Test
 	public void testSetDirection_LegalCase() {
 		mutableShip.setDirection(Math.PI);
-		assert(Util.fuzzyEquals(mutableShip.getDirection(),Math.PI));
+		assertTrue(Util.fuzzyEquals(mutableShip.getDirection(),Math.PI));
 	}
 
 	// radius
@@ -109,19 +135,18 @@ public class ShipTest {
 	@Test
 	public void testSetMinRadius_LegalCase() {
 		Ship.setMinRadius(25);
-		assert(Util.fuzzyEquals(Ship.getMinRadius(),25));
+		assertTrue(Util.fuzzyEquals(Ship.getMinRadius(),25));
 	}
 	
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testSetMinRadius_IllegalCase() {
 		Ship.setMinRadius(-25);
-		assert(Util.fuzzyEquals(Ship.getMinRadius(),15));
 	}
 
 	@Test
 	public void testGetRadius() {
-		assert(Util.fuzzyEquals(ship.getRadius(),15));
+		assertTrue(Util.fuzzyEquals(ship.getRadius(),15));
 	}
 	
 	// move
@@ -149,7 +174,7 @@ public class ShipTest {
 	public void testMove_InfinityCase() {
 		Vector oldPosition = mutableShip2.getPosition();
 		mutableShip2.move(Double.POSITIVE_INFINITY);
-		assert(mutableShip2.getPosition().equals(oldPosition));
+		assertTrue(mutableShip2.getPosition().equals(oldPosition));
 	}
 	
 	@Test
@@ -162,7 +187,7 @@ public class ShipTest {
 	@Test
 	public void testTurn_LegalCase() {
 		mutableShip.turn(Math.PI);
-		assert(Util.fuzzyEquals(mutableShip.getDirection(),Math.PI ));
+		assertTrue(Util.fuzzyEquals(mutableShip.getDirection(),Math.PI ));
 	}
 	
 	// thrust
@@ -173,33 +198,49 @@ public class ShipTest {
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testGetDistanceBetween_NullCase() {
-		defaultShip.getDistanceBetween(null);
+		shipDefault.getDistanceBetween(null);
 	}
 	
 	@Test
 	public void testGetDistanceBetween_ThisCase() {
-		assert(Util.fuzzyEquals(defaultShip.getDistanceBetween(defaultShip),0.0));
+		assertTrue(Util.fuzzyEquals(shipDefault.getDistanceBetween(shipDefault),0.0));
 	}
 	
 	@Test
 	public void testGetDistanceBetween_LegalCase() {
-		assert(Util.fuzzyEquals(defaultShip.getDistanceBetween(ship),Math.sqrt(10.0*10.0+5.0*5.0)-15.0-10.0));
+		assertTrue(Util.fuzzyEquals(shipDefault.getDistanceBetween(ship),Math.sqrt(10.0*10.0+5.0*5.0)-15.0-10.0));
 	}
 	
 	@Test
 	public void testGetDistanceBetween_OverflowCase() {
-		System.out.println(defaultShip.getDistanceBetween(shipFarAway));
-		assert(Util.fuzzyEquals(defaultShip.getDistanceBetween(shipFarAway),Double.POSITIVE_INFINITY));
+		assertTrue(Util.fuzzyEquals(shipDefault.getDistanceBetween(shipFarAway),Double.POSITIVE_INFINITY));
 	}
 	
 	// overlap
 	
 	@Test
+	public void testOverlap_TrueCase() {
+		assertEquals(true,shipDefault.overlap(ship));
+	}
+	
+	@Test
+	public void testOverlap_FalseCase() {
+		assertEquals(false,shipDefault.overlap(shipFarAway));
+	}
+	
+	@Test
 	public void testOverlap_ThisCase() {
-		assertEquals(true,defaultShip.overlap(defaultShip));
+		assertEquals(true,shipDefault.overlap(shipDefault));
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testOverlap_IllegalCase() {
+		shipDefault.overlap(null);
 	}
 	
 	// getTimeToCollision
+	
+	
 	
 	// getCollisionPosition
 }

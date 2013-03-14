@@ -24,6 +24,7 @@ import be.kuleuven.cs.som.annotate.*;
 public class Ship implements IShip{
 	
 	//TODO: @raw annotatie ??
+	//TODO: documentatie nog eens nalezen!
 	
 	/**
 	 * Initialize this new ship with given position, given velocity, given direction and given radius.
@@ -420,9 +421,9 @@ public class Ship implements IShip{
 	public void thrust(double amount){
 		if(!isValidThrustAmount(amount))
 			amount = 0.0;
-		Vector newVelocity = velocity.add((new Vector(Math.cos(direction),Math.sin(direction)).scale(amount)));
+		Vector newVelocity = this.velocity.add((new Vector(Math.cos(direction),Math.sin(direction)).scale(amount)));
 		if(Math.sqrt(newVelocity.dotProduct(newVelocity))>this.speedLimit)
-			setVelocity(newVelocity.scale(newVelocity.dotProduct(newVelocity)/speedLimit));
+			setVelocity(newVelocity.scale((Double) (this.speedLimit/Math.sqrt(newVelocity.dotProduct(newVelocity)))));
 		else{
 			setVelocity(newVelocity);
 		}
@@ -489,7 +490,6 @@ public class Ship implements IShip{
 			return true;
 		return getDistanceBetween(other) < 0;
 	}
-	//TODO: Ik heb toch die eerste if-test toegevoegd omdat je anders een nullpoint krijgt via .equals toe te passen!
 	
 	/**
 	 * Returns when this ship, if ever, will collide with the given ship.

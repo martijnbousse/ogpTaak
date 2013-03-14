@@ -106,6 +106,13 @@ public class Asteroids extends JFrame {
     ships.add(facade.createShip(200, 400, 0, 0, 50, 0));
     ships.add(facade.createShip(700, 400, 0, 0, 50, Math.PI));
     ships.add(facade.createShip(450, 600, 0, 0, 75, -Math.PI / 2));
+    ships.add(facade.createShip(450, 1000, 0, 0, 75, -Math.PI / 2));
+    ships.add(facade.createShip(50, 200, 0, 0, 15, -Math.PI / 2));
+    ships.add(facade.createShip(1000, 1000, 0, 0, 10, -Math.PI / 2));
+
+    
+ 
+    
     return ships;
   }
 

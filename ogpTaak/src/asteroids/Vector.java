@@ -17,7 +17,7 @@ import be.kuleuven.cs.som.annotate.*;
 @Value
 public class Vector {
 	
-	//TODO: documentatie nakijken
+	//TODO: documentatie nalezen!
 	//TODO: @raw
 	
 	/**
@@ -105,18 +105,14 @@ public class Vector {
 	 * 			| (other == null)
 	 * @throws	SumOverflowException
 	 * 			The subtraction overflows
-	 * 			| !Util.fuzzyLessThanOrEqualTo(Double.NEGATIVE_INFINITY-other.getXComponent(),this.getXComponent()) 
-	 *			| || !Util.fuzzyLessThanOrEqualTo(Double.NEGATIVE_INFINITY-other.getYComponent(),this.getYComponent())
+	 * 			| Util.fuzzyLessThanOrEqualTo(this.getXComponent(),-Double.MAX_VALUE+other.getXComponent()) 
+	 *			| || Util.fuzzyLessThanOrEqualTo(this.getXComponent(),-Double.MAX_VALUE+other.getXComponent())
 	 */
-	//TODO: - inf - eender wat is altijd = - inf, ? via max value -> maar klopt niet
-	//TODO: overflow via de maximale waarde Double.MAX_VALUE
 	public Vector subtract(Vector other) throws IllegalArgumentException, SumOverflowException {
 		if (other == null)
 			throw new IllegalArgumentException("Non effective vector!");
-//		if( !Util.fuzzyLessThanOrEqualTo(Double.NEGATIVE_INFINITY-other.getXComponent(),this.getXComponent())
-//			|| !Util.fuzzyLessThanOrEqualTo(Double.NEGATIVE_INFINITY-other.getYComponent(),this.getYComponent()))
-		if( !Util.fuzzyLessThanOrEqualTo(this.getXComponent(),Double.MAX_VALUE+other.getXComponent())
-				|| !Util.fuzzyLessThanOrEqualTo(this.getXComponent(),Double.MAX_VALUE+other.getXComponent()))
+		if( Util.fuzzyLessThanOrEqualTo(this.getXComponent(),-Double.MAX_VALUE+other.getXComponent())
+				|| Util.fuzzyLessThanOrEqualTo(this.getXComponent(),-Double.MAX_VALUE+other.getXComponent()))
 			throw new SumOverflowException();
 		return new Vector(this.getXComponent()-other.getXComponent(),this.getYComponent()-other.getYComponent());
 	}
@@ -238,13 +234,12 @@ public class Vector {
         return "xComponent: "+xcomponent+" yComponent: "+ycomponent;
     }
 	
-	//TODO: hashcode?
-//	/**
-//	 * Return the hash code for this vector.
-//	 */
-//	@Override
-//	public int hashCode() {
-//		return getXComponent().hashCode() + getYComponent().hashCode(); // .hashCode() werkt niet op double
-//	}
+	/**
+	 * Return the hash code for this vector.
+	 */
+	@Override
+	public int hashCode() {
+		return ((Double) getXComponent()).hashCode() + ((Double) getYComponent()).hashCode(); 
+	}
 	
 }

@@ -7,6 +7,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import asteroids.Ship;
+import asteroids.SumOverflowException;
 import asteroids.Util;
 import asteroids.Vector;
 
@@ -18,8 +19,6 @@ import asteroids.Vector;
  *
  */
 public class ShipTest {
-	
-	//TODO: assert -> assertTrue of assertFalse worden en ipv Util.fuzzy kan je ook assertEquals gebruiken met een derde argument = epsilon
 	
 	/**
 	 * Variable referencing a ship with position (10,5) km, velocity (5,10) km/s, radius 15 km and direction pi/2 rad.
@@ -37,7 +36,7 @@ public class ShipTest {
 	private static Ship ship3;
 	
 	/**
-	 * Variable referencing a ship with position (inf,inf) km, velocity (0,0) km/s, radius 15 km and direction pi/2 rad.
+	 * Variable referencing a ship with position (max,max) km, velocity (0,0) km/s, radius 15 km and direction pi/2 rad.
 	 */
 	private static Ship shipFarAway;
 	
@@ -55,13 +54,19 @@ public class ShipTest {
 	 * Variable referencing a ship with position (0,0) km, velocity (1,1) km/s, radius 30 km and direction pi/2 rad.
 	 */
 	private Ship mutableShip2;
+	
+	/**
+	 * Variable referencing a ship with position (max,max) km, velocity (1,1) km/s, radius 30 km and direction pi/2 rad.
+	 */
+	private Ship mutableShip3;
+	
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		ship = new Ship(new Vector(10,5), new Vector(5,10), 15, Math.PI/2);
 		ship2 = new Ship(new Vector(40,30), new Vector(-10,-10), 10, Math.PI);
 		ship3 = new Ship(new Vector(0,0), new Vector(-10,-10), 10, Math.PI);
-		shipFarAway = new Ship(new Vector(Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY), new Vector(0,0), 15, Math.PI/2);
+		shipFarAway = new Ship(new Vector(Double.MAX_VALUE,Double.MAX_VALUE), new Vector(0,0), 15, Math.PI/2);
 		shipDefault= new Ship();
 	}
 
@@ -69,6 +74,7 @@ public class ShipTest {
 	public void setUp() throws Exception {
 		mutableShip = new Ship();
 		mutableShip2 = new Ship(new Vector(0,0), new Vector(1,1), 30, Math.PI/2);
+		mutableShip3 = new Ship(new Vector(Double.MAX_VALUE,Double.MAX_VALUE), new Vector(1,1), 30, Math.PI/2);
 	}
 	
 	// position
@@ -95,7 +101,6 @@ public class ShipTest {
 	public void testGetVelocity() {
 		assertTrue(ship.getVelocity().equals(new Vector(5,10)));
 	}
-	//TODO: gebruiken we nu assertEquals of .equals() -> wordt getest in vectorTest?
 
 	@Test
 	public void testSetVelocity_LegalCase() {
@@ -182,7 +187,7 @@ public class ShipTest {
 	}
 	
 	@Test
-	public void testMove_InfinityCase() {
+	public void testMove_InfinityCase1() {
 		Vector oldPosition = mutableShip2.getPosition();
 		mutableShip2.move(Double.POSITIVE_INFINITY);
 		assertTrue(mutableShip2.getPosition().equals(oldPosition));
@@ -190,7 +195,9 @@ public class ShipTest {
 	
 	@Test
 	public void testMove_InfinityCase2() {
-		
+		Vector oldPosition = mutableShip3.getPosition();
+		mutableShip3.move(10);
+		assertTrue(mutableShip3.getPosition().equals(oldPosition));
 	}
 	
 	// turn
@@ -203,7 +210,33 @@ public class ShipTest {
 	
 	// thrust
 	
-	//TODO: thrust
+	@Test
+	public void testThrust_LegalCase() {
+		mutableShip.thrust(1.0);
+		assertTrue(mutableShip.getVelocity().equals(new Vector(1.0,0.0)));
+	}
+	
+	@Test
+	public void testThrust_NaNCase() {
+		mutableShip.thrust(Double.NaN);
+		assertTrue(mutableShip.getVelocity().equals(new Vector(0.0,0.0)));
+	}
+	
+	@Test
+	public void testThrust_NegativeAmountCase() {
+		mutableShip.thrust(400000.0);
+		assertTrue(mutableShip.getVelocity().equals(new Vector(0.0,0.0)));
+	}
+	
+	@Test
+	public void testThrust_TooHighAmountCase() {
+//		double amount = Math.sqrt(300000)+0.01;
+//		double amount = 300000.0;
+		mutableShip.thrust(400000.0);
+		//assertTrue(mutableShip.getVelocity().equals(new Vector(300000.0,0.0)));
+		System.out.println(mutableShip.getVelocity().toString());
+		//TODO: ?
+	}
 	
 	// getDistanceBetween
 	
@@ -222,7 +255,7 @@ public class ShipTest {
 		assertTrue(Util.fuzzyEquals(shipDefault.getDistanceBetween(ship),Math.sqrt(10.0*10.0+5.0*5.0)-15.0-10.0));
 	}
 	
-	@Test
+	@Test(expected=SumOverflowException.class)
 	public void testGetDistanceBetween_OverflowCase() {
 		assertTrue(Util.fuzzyEquals(shipDefault.getDistanceBetween(shipFarAway),Double.POSITIVE_INFINITY));
 	}
@@ -234,7 +267,7 @@ public class ShipTest {
 		assertEquals(true,shipDefault.overlap(ship));
 	}
 	
-	@Test
+	@Test(expected=SumOverflowException.class)
 	public void testOverlap_FalseCase() {
 		assertEquals(false,shipDefault.overlap(shipFarAway));
 	}
@@ -250,8 +283,6 @@ public class ShipTest {
 	}
 	
 	// getTimeToCollision
-	
-	//TODO: in orde zo? zijn dat alle gevallen?
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testGetTimeToCollision_NullCase() {
@@ -280,5 +311,21 @@ public class ShipTest {
 	
 	// getCollisionPosition
 	
-	//TODO: getCollisionPosition
+	@Test(expected=IllegalArgumentException.class)
+	public void testGetCollisionPosition_NullCase() {
+		shipDefault.getCollisionPosition(null);
+	}
+	
+	@Test
+	public void testGetCollisionPosition_CollisionCase() {
+		assertTrue((new Vector(25.6518,18.8259).equals(ship.getCollisionPosition(ship2))));
+	}
+	
+	@Test
+	public void testGetCollisionPosition_NoCollisionCase() {
+		assertEquals(null,ship.getCollisionPosition(ship3));
+	}
+	
+	
+	
 }

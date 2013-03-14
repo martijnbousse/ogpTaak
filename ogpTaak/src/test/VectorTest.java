@@ -1,13 +1,18 @@
 /**
  * 
  */
-package asteroids;
+package test;
 
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import asteroids.SumOverflowException;
+import asteroids.TimesOverflowException;
+import asteroids.Util;
+import asteroids.Vector;
 
 /**
  * A class collecting tests for the class of vectors.

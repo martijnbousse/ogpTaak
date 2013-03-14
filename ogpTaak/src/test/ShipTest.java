@@ -19,13 +19,22 @@ import asteroids.Vector;
  */
 public class ShipTest {
 	
-	//TODO: laatste testen nog implementeren
 	//TODO: assert -> assertTrue of assertFalse worden en ipv Util.fuzzy kan je ook assertEquals gebruiken met een derde argument = epsilon
 	
 	/**
 	 * Variable referencing a ship with position (10,5) km, velocity (5,10) km/s, radius 15 km and direction pi/2 rad.
 	 */
 	private static Ship ship;
+	
+	/**
+	 * Variable referencing a ship with position (40,30) km, velocity (-10,-10) km/s, radius 10 km and direction pi rad.
+	 */
+	private static Ship ship2;
+	
+	/**
+	 * Variable referencing a ship with position (-40,-30) km, velocity (-10,-10) km/s, radius 10 km and direction pi rad.
+	 */
+	private static Ship ship3;
 	
 	/**
 	 * Variable referencing a ship with position (inf,inf) km, velocity (0,0) km/s, radius 15 km and direction pi/2 rad.
@@ -50,6 +59,8 @@ public class ShipTest {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		ship = new Ship(new Vector(10,5), new Vector(5,10), 15, Math.PI/2);
+		ship2 = new Ship(new Vector(40,30), new Vector(-10,-10), 10, Math.PI);
+		ship3 = new Ship(new Vector(0,0), new Vector(-10,-10), 10, Math.PI);
 		shipFarAway = new Ship(new Vector(Double.POSITIVE_INFINITY,Double.POSITIVE_INFINITY), new Vector(0,0), 15, Math.PI/2);
 		shipDefault= new Ship();
 	}
@@ -192,7 +203,7 @@ public class ShipTest {
 	
 	// thrust
 	
-	
+	//TODO: thrust
 	
 	// getDistanceBetween
 	
@@ -240,7 +251,34 @@ public class ShipTest {
 	
 	// getTimeToCollision
 	
+	//TODO: in orde zo? zijn dat alle gevallen?
 	
+	@Test(expected=IllegalArgumentException.class)
+	public void testGetTimeToCollision_NullCase() {
+		shipDefault.getTimeToCollision(null);
+	}
+	
+	@Test
+	public void testGetTimeToCollision_CollisionCase() {
+		assertTrue(Util.fuzzyEquals(0.5870,ship.getTimeToCollision(ship2)));
+	}
+	
+	@Test
+	public void testGetTimeToCollision_NoCollisionCase1() { // standard no collision case
+		assertTrue(Util.fuzzyEquals(Double.POSITIVE_INFINITY,ship.getTimeToCollision(ship3)));
+	}
+	
+	@Test
+	public void testGetTimeToCollision_NoCollisionCase2() { // ships overlap
+		assertTrue(Util.fuzzyEquals(Double.POSITIVE_INFINITY,ship.getTimeToCollision(shipDefault)));
+	}
+	
+	@Test
+	public void testGetTimeToCollision_NoCollisionCase3() { // ships travel the same speed in the same direction without overlapping:
+		assertTrue(Util.fuzzyEquals(Double.POSITIVE_INFINITY,ship2.getTimeToCollision(ship3)));
+	}
 	
 	// getCollisionPosition
+	
+	//TODO: getCollisionPosition
 }

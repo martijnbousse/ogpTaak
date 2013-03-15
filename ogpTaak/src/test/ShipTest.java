@@ -232,7 +232,6 @@ public class ShipTest {
 	public void testThrust_TooHighAmountCase() {
 		mutableShip.thrust(400000.0);
 		assertTrue(mutableShip.getVelocity().equals(new Vector(300000.0,0.0)));
-		System.out.println(mutableShip.getVelocity().toString());
 	}
 	
 	// getDistanceBetween

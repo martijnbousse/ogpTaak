@@ -78,7 +78,7 @@ public class Ship implements IShip{
 	 * Initialize this new ship with all default values.
 	 * @effect 	This new ship is initialized with position and velocity (0,0), 
 	 * 			the minimal radius as its radius and zero as its direction
-	 * 			|this(new Vector(0,0), new Vector(0,0), minRadius, 0)
+	 * 			| this(new Vector(0,0), new Vector(0,0), minRadius, 0)
 	 */
 	public Ship(){
 		this(new Vector(0, 0), new Vector(0, 0), minRadius, 0);

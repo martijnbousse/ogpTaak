@@ -224,18 +224,15 @@ public class ShipTest {
 	
 	@Test
 	public void testThrust_NegativeAmountCase() {
-		mutableShip.thrust(400000.0);
+		mutableShip.thrust(-1.0);
 		assertTrue(mutableShip.getVelocity().equals(new Vector(0.0,0.0)));
 	}
 	
 	@Test
 	public void testThrust_TooHighAmountCase() {
-//		double amount = Math.sqrt(300000)+0.01;
-//		double amount = 300000.0;
 		mutableShip.thrust(400000.0);
-		//assertTrue(mutableShip.getVelocity().equals(new Vector(300000.0,0.0)));
+		assertTrue(mutableShip.getVelocity().equals(new Vector(300000.0,0.0)));
 		System.out.println(mutableShip.getVelocity().toString());
-		//TODO: ?
 	}
 	
 	// getDistanceBetween

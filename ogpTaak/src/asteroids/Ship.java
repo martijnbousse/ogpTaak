@@ -163,8 +163,8 @@ public class Ship implements IShip{
 	 */
 	public boolean canHaveAsVelocity(Vector velocity){
 		return 	(velocity != null)
-					&& Util.fuzzyLessThanOrEqualTo(0.0,velocity.dotProduct(velocity))
-					&& Util.fuzzyLessThanOrEqualTo(velocity.dotProduct(velocity),this.speedLimit);	
+					&& Util.fuzzyLessThanOrEqualTo(0.0,Math.sqrt(velocity.dotProduct(velocity)))
+					&& Util.fuzzyLessThanOrEqualTo(Math.sqrt(velocity.dotProduct(velocity)),this.speedLimit);	
 	}
 	
 	/**

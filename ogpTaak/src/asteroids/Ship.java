@@ -183,7 +183,7 @@ public class Ship implements IShip{
 	/**
 	 * Set the speed limit of this ship to the given limit.
 	 * 
-	 * @param 	newLimit
+	 * @param 	speedLimit
 	 * 			The new speed limit for this ship.
 	 * @post	If the given speed limit is a valid speed limit then the new speed limit of this ship is equal to the given speed limit.
 	 * 			| if canHaveAsSpeedLimit(speedLimit)
@@ -235,9 +235,9 @@ public class Ship implements IShip{
 	 * 
 	 * @param 	direction
 	 * 			The new direction for this ship.
-	 * @Pre		The given direction must be a valid direction for any ship.
+	 * @pre		The given direction must be a valid direction for any ship.
 	 * 			| isValidDirection(direction)
-	 * @Post 	The new direction of this ship is equal to the given direction.
+	 * @post 	The new direction of this ship is equal to the given direction.
 	 * 			| (new this).getDirection() == direction
 	 */
 	@Raw

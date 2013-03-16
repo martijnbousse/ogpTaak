@@ -145,14 +145,17 @@ public class Vector {
 	 * @param 	other
 	 * 			The other vector for the product.
 	 * @return	Returns the product of this vector and the given vector.
-	 * 			| result.equals(new Vector(this.getXComponent()*other.getXComponent() + this.getYComponent()*other.getYComponent()))
+	 * 			| result.equals(new Vector(this.getXComponent()*other.getXComponent()
+	 * 			|							+this.getYComponent()*other.getYComponent()))
 	 * @throws 	IllegalArgumentException
 	 * 			The other vector is not effective.
 	 * 			| (other == null) 
 	 * @throws	TimesOverflowException
 	 * 			The multiplication overflows.
-	 * 			| (Util.fuzzyLessThanOrEqualTo(this.getXComponent(),Math.abs(Double.MAX_VALUE/other.getXComponent())))
-	 *			| || (Util.fuzzyLessThanOrEqualTo(this.getYComponent(),Math.abs(Double.MAX_VALUE/other.getYComponent())))
+	 * 			| (Util.fuzzyLessThanOrEqualTo(this.getXComponent(),
+	 * 			|	Math.abs(Double.MAX_VALUE/other.getXComponent())))
+	 *			| || (Util.fuzzyLessThanOrEqualTo(this.getYComponent(),
+	 *			|		Math.abs(Double.MAX_VALUE/other.getYComponent())))
 	 */
 	public double dotProduct(Vector other) throws IllegalArgumentException, TimesOverflowException {
 		if (other == null)

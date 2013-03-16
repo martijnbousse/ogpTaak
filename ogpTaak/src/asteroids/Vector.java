@@ -5,9 +5,9 @@ import be.kuleuven.cs.som.annotate.*;
 /**
  * A class of vectors involving an x- and y-component.
  * 
- * @Invar	The x-component of each vector must be a valid number.
+ * @invar	The x-component of each vector must be a valid number.
  * 			| isValidNumber(getXComponent())
- * @Invar	The y-component of each vector must be a valid number.
+ * @invar	The y-component of each vector must be a valid number.
  * 			| isValidNumber(getYComponent())
  * 
  * @author	Martijn Boussé, Wout Vekemans

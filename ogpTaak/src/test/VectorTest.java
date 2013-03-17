@@ -90,8 +90,7 @@ public class VectorTest {
 	
 	@Test(expected=SumOverflowException.class)
 	public void testSubtract_SumOverflowCase() {
-		vector22.subtract(vectorMaxMax);
-		//TODO: implementatie -> foutje in Vector zelf?
+		vector1min4.subtract(vectorMaxMax);
 	}
 	
 	// scale

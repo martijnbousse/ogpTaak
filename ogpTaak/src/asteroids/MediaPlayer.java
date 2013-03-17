@@ -1,5 +1,6 @@
-//TODO we moeten hier nog op een of andere manier iets voor copyright infringement doen. of telt da nie als ge uw code op internet gooit?
-
+/**
+ * This is not our code. We found it somewhere on the Internet, and thought it was a nice extra to the game.
+ */
 package asteroids;
 
 import java.io.File;

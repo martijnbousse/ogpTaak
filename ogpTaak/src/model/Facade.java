@@ -4,7 +4,6 @@
 package model;
 
 import asteroids.IShip;
-import asteroids.ModelException;
 import asteroids.Ship;
 import asteroids.Util;
 import asteroids.Vector;

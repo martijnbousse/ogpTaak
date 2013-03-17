@@ -1,3 +1,10 @@
+/**
+ * Martijn Boussé, 1st master WIT
+ * Wout Vekemans, 2nd bach ingenieurswetenschappen cws-elt
+ * 
+ * repository: https://github.com/martijnbousse/ogpTaak
+ */
+
 package asteroids;
 import be.kuleuven.cs.som.annotate.*;
 

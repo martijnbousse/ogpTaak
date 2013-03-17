@@ -4,12 +4,12 @@ import static org.junit.Assert.*;
 
 import model.Facade;
 import model.IFacade;
+import model.ModelException;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import asteroids.IShip;
-import asteroids.ModelException;
 import asteroids.Util;
 
 public class PartialFacadeTest {

@@ -108,8 +108,8 @@ public class Vector {
 	public Vector subtract(Vector other) throws IllegalArgumentException, SumOverflowException {
 		if (other == null)
 			throw new IllegalArgumentException("Non effective vector!");
-		if(Util.fuzzyLessThanOrEqualTo(this.getXComponent(),-Double.MAX_VALUE+other.getXComponent())
-			|| Util.fuzzyLessThanOrEqualTo(this.getXComponent(),-Double.MAX_VALUE+other.getXComponent()))
+		if(!Util.fuzzyLessThanOrEqualTo(-Double.MAX_VALUE+other.getXComponent(),this.getXComponent())
+			|| !Util.fuzzyLessThanOrEqualTo(-Double.MAX_VALUE+other.getYComponent(),this.getYComponent()))
 			throw new SumOverflowException();
 		return new Vector(this.getXComponent()-other.getXComponent(),this.getYComponent()-other.getYComponent());
 	}

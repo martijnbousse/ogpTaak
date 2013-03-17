@@ -151,12 +151,4 @@ public class VectorTest {
 	public void testEquals_FalseCase() {
 		assertFalse(vector22.equals(vector1min4));
 	}
-	
-	
-	
-
-	
-	
-
-
 }

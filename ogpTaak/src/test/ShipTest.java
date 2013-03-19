@@ -251,9 +251,10 @@ public class ShipTest {
 		assertTrue(Util.fuzzyEquals(shipDefault.getDistanceBetween(ship),Math.sqrt(10.0*10.0+5.0*5.0)-15.0-10.0));
 	}
 	
-	@Test(expected=SumOverflowException.class)
+	@Test
 	public void testGetDistanceBetween_OverflowCase() {
-		assertTrue(Util.fuzzyEquals(shipDefault.getDistanceBetween(shipFarAway),Double.POSITIVE_INFINITY));
+		System.out.println(shipDefault.getDistanceBetween(shipFarAway));
+		assertEquals(shipDefault.getDistanceBetween(shipFarAway),Double.POSITIVE_INFINITY,0);
 	}
 	
 	// overlap
@@ -263,7 +264,7 @@ public class ShipTest {
 		assertEquals(true,shipDefault.overlap(ship));
 	}
 	
-	@Test(expected=SumOverflowException.class)
+	@Test
 	public void testOverlap_FalseCase() {
 		assertEquals(false,shipDefault.overlap(shipFarAway));
 	}

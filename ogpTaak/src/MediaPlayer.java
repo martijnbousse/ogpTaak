@@ -1,7 +1,7 @@
 /**
  * This is not our code. We found it somewhere on the Internet, and thought it was a nice extra to the game.
  */
-package asteroids;
+
 
 import java.io.File;
 

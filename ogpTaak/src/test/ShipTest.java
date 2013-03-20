@@ -263,7 +263,6 @@ public class ShipTest {
 	public void testOverlap_TrueCase() {
 		assertEquals(true,shipDefault.overlap(ship));
 	}
-	
 	@Test
 	public void testOverlap_FalseCase() {
 		assertEquals(false,shipDefault.overlap(shipFarAway));

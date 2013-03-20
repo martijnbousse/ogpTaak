@@ -16,4 +16,12 @@ public class Util {
       return Double.compare(x, y) < 0;
     }
   }
+  
+  public static double absoluteError(double expected, double actual) {
+    return Math.abs(expected - actual);
+  }
+
+  public static double relativeError(double expected, double actual) {
+    return absoluteError(expected, actual) / Math.abs(expected);
+  }
 }

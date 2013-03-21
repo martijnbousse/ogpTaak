@@ -1,5 +1,5 @@
 package asteroids;
 
-public class Asteroid {
+public class Asteroid extends DFO{
 
 }

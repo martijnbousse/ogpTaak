@@ -28,7 +28,7 @@ import be.kuleuven.cs.som.annotate.*;
  * @author Martijn Boussé, Wout Vekemans
  *
  */
-public class Ship implements IShip{
+public class Ship extends DFO implements IShip{
 	
 	/**
 	 * Initialize this new ship with given position, given velocity, given direction and given radius.

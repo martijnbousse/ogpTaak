@@ -1,6 +1,6 @@
 package asteroids;
 
-import java.util.List;
+import java.util.*;
 
 import be.kuleuven.cs.som.annotate.*;
 
@@ -154,22 +154,42 @@ public class World {
 	
 	@Basic
 	public List<Ship> getShips() {
+		List<Ship> ships = new ArrayList<Ship>();
+		for(DFO flying : flyingObjects)
+			if(flying instanceof Ship)
+				ships.add((Ship) flying);
 		return ships;
 	}
 	
-	private List<Ship> ships;
+	public int getNbOfShips() {
+		return getShips().size();
+	}
 	
 	@Basic
 	public List<Asteroid> getAsteroids() {
+		List<Asteroid> asteroids = new ArrayList<Asteroid>();
+		for(DFO flying : flyingObjects)
+			if(flying instanceof Asteroid)
+				asteroids.add((Asteroid) flying);
 		return asteroids;
 	}
 	
-	private List<Asteroid> asteroids;
+	public int getNbOfAsteroids() {
+		return getAsteroids().size();
+	}
 	
 	@Basic
 	public List<Bullet> getBullets() {
+		List<Bullet> bullets = new ArrayList<Bullet>();
+		for(DFO flying : flyingObjects)
+			if(flying instanceof Bullet)
+				bullets.add((Bullet) flying);
 		return bullets;
 	}
 	
-	private List<Bullet> bullets;
+	public int getNbOfBullets() {
+		return getBullets().size();
+	}
+	
+	private List<DFO> flyingObjects;
 }

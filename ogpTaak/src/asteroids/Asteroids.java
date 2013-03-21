@@ -139,7 +139,7 @@ public class Asteroids<World, Ship, Asteroid, Bullet> extends JFrame {
     GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
     GraphicsDevice screen = env.getDefaultScreenDevice();
     Asteroids<asteroids.World, asteroids.Ship, asteroids.Asteroid, asteroids.Bullet> asteroids;
-    Sound sound = enableSound ? new FileSoundManager("asteroids/resources/sounds.txt") : new NullSound();
+    Sound sound = enableSound ? new FileSoundManager("src/resources/sounds.txt") : new NullSound();
     if (tryFullscreen && screen.isFullScreenSupported()) {
       Rectangle dimensions = screen.getDefaultConfiguration().getBounds();
       asteroids = new Asteroids<asteroids.World, asteroids.Ship, asteroids.Asteroid, asteroids.Bullet>(facade, dimensions.width, dimensions.height, true, sound);

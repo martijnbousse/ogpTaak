@@ -13,6 +13,7 @@ import java.util.Set;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
+import asteroids.IShip;
 
 import model.Facade;
 import model.IFacade;
@@ -28,8 +29,8 @@ public class Asteroids extends JFrame {
 
   public Asteroids(final IFacade facade, boolean undecorated) {
     super("Asteroids");
-    final Set<IShip> ships = initModel(facade);
-    final AsteroidsView view = new AsteroidsView(ships, facade);
+    final Set<asteroids.IShip> ships = initModel(facade);
+    final asteroids.AsteroidsView view = new asteroids.AsteroidsView(ships, facade);
     if (!undecorated) {
       view.setPreferredSize(new Dimension(1024, 768));
     }

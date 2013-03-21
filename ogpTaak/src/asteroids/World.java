@@ -152,6 +152,9 @@ public class World {
 	 */
 	private static double maxHeight = Double.MAX_VALUE;
 	
+	/**
+	 * Returns a list of all ships in this world.
+	 */
 	@Basic
 	public List<Ship> getShips() {
 		List<Ship> ships = new ArrayList<Ship>();
@@ -161,10 +164,17 @@ public class World {
 		return ships;
 	}
 	
+	/**
+	 * Return the number of ships in this world.
+	 * @return	result == getShips().size()
+	 */
 	public int getNbOfShips() {
 		return getShips().size();
 	}
 	
+	/**
+	 * Returns a list of all asteroids in this world.
+	 */
 	@Basic
 	public List<Asteroid> getAsteroids() {
 		List<Asteroid> asteroids = new ArrayList<Asteroid>();
@@ -174,10 +184,17 @@ public class World {
 		return asteroids;
 	}
 	
+	/**
+	 * Return the number of asteroids in this world.
+	 * @return	result == getAsteroids().size()
+	 */
 	public int getNbOfAsteroids() {
 		return getAsteroids().size();
 	}
 	
+	/**
+	 * Returns a list of all bullets in this world.
+	 */
 	@Basic
 	public List<Bullet> getBullets() {
 		List<Bullet> bullets = new ArrayList<Bullet>();
@@ -187,9 +204,27 @@ public class World {
 		return bullets;
 	}
 	
+	/**
+	 * Return the number of bullets in this world.
+	 * @return	result == getBullets().size()
+	 */
 	public int getNbOfBullets() {
 		return getBullets().size();
 	}
+	
+	/**
+	 * Checks whether this world can have a given bullet as one of its bullets.
+	 * @param 	bullet
+	 * 			the bullet to check
+	 * @return	| result == bullet != null
+	 * 			| 	&& bullet.getWorld() != null
+	 */
+	public boolean canHaveAsBullet(Bullet bullet) {
+		return 	bullet != null 
+				&& bullet.getWorld() == null;
+	}
+	
+	//TODO: 1 of 3 methodes om DFOs toe te voegen en te checken?
 	
 	private List<DFO> flyingObjects;
 }

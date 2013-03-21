@@ -67,8 +67,8 @@ public class Ship extends DFO implements IShip{
 	 * 			| || !Vector.isValidNumber(velocity.getYComponent())
 	 */
 	@Raw
-	public Ship(Vector position, Vector velocity, double radius, double direction) throws IllegalArgumentException {
-		super(position,velocity);
+	public Ship(Vector position, Vector velocity, double radius, double direction, double mass) throws IllegalArgumentException {
+		super(position,velocity, mass);
 		if(!canHaveAsRadius(radius)){
 			throw new IllegalArgumentException();	
 		}
@@ -84,7 +84,7 @@ public class Ship extends DFO implements IShip{
 	 */
 	@Raw
 	public Ship() {
-		this(new Vector(0, 0), new Vector(0, 0), minRadius, 0);
+		this(new Vector(0, 0), new Vector(0, 0), minRadius, 0, 1);
 	}
 	
 	/**
@@ -203,6 +203,37 @@ public class Ship extends DFO implements IShip{
 	 * Variable registering the radius of this ship.
 	 */
 	private final double radius;
+	
+	public double getAcceleration() {
+		return getThrusterAmount()/getMass();
+	}
+	
+	public double getThrusterAmount() {
+		return this.thrusterAmount;
+	}
+	
+	public void setThrusterAmount(double thrusterAmount) {
+		if(isValidThrusterAmount(thrusterAmount)) {
+			this.thrusterAmount = thrusterAmount;
+		}
+	}
+	
+	public boolean isValidThrusterAmount(double thrusterAmount) {
+		return !Double.isNaN(thrusterAmount)
+				&& 0 < thrusterAmount;
+	}
+	
+	private double thrusterAmount = 1.1*Math.pow(10,18);
+	
+	public void setThrusterEnabled(boolean isEnabled) {
+		this.isThrusterEnabled = isEnabled;
+	}
+	
+	public boolean getThrusterEnabled() {
+		return this.isThrusterEnabled;
+	}
+	
+	private boolean isThrusterEnabled;
 		
 	/**
 	 * Check whether the given time is a valid time for any ship.

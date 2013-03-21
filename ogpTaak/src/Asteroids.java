@@ -104,7 +104,7 @@ public class Asteroids extends JFrame {
 
   private Set<IShip> initModel(IFacade facade) {
     Set<IShip> ships = new HashSet<IShip>();
-    ships.add(facade.createShip(200, 400, 0, 0, 50, 0));
+    ships.add(facade.createShip(0,0, 0, 0, 50, 0));
     ships.add(facade.createShip(700, 400, 0, 0, 50, Math.PI));
     ships.add(facade.createShip(450, 600, 0, 0, 75, -Math.PI / 2));
     return ships;

@@ -4,10 +4,11 @@ import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 
 public abstract class DFO {
-	public DFO(Vector position, Vector velocity){
+	public DFO(Vector position, Vector velocity, double mass){
 		setSpeedLimit(SPEED_OF_LIGHT);
 		setPosition(position);
 		setVelocity(velocity);
+		this.mass = mass;
 	}
 	
 	/**
@@ -150,6 +151,11 @@ public abstract class DFO {
 	 */
 	public static double SPEED_OF_LIGHT = 300000.0; 
 	
+	public double getMass() {
+		return this.mass;
+	}
+	
+	public double mass;
 	
 	public boolean canHaveAsWorld(World world) {
 		return world != null;

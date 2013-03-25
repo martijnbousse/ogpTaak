@@ -3,8 +3,8 @@ package asteroids;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 
-public abstract class DFO {
-	public DFO(Vector position, Vector velocity, double mass){
+public abstract class Collidable {
+	public Collidable(Vector position, Vector velocity, double mass){
 		setSpeedLimit(SPEED_OF_LIGHT);
 		setPosition(position);
 		setVelocity(velocity);

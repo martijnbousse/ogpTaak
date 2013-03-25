@@ -158,7 +158,7 @@ public class World {
 	@Basic
 	public List<Ship> getShips() {
 		List<Ship> ships = new ArrayList<Ship>();
-		for(DFO flying : flyingObjects)
+		for(Collidable flying : flyingObjects)
 			if(flying instanceof Ship)
 				ships.add((Ship) flying);
 		return ships;
@@ -178,7 +178,7 @@ public class World {
 	@Basic
 	public List<Asteroid> getAsteroids() {
 		List<Asteroid> asteroids = new ArrayList<Asteroid>();
-		for(DFO flying : flyingObjects)
+		for(Collidable flying : flyingObjects)
 			if(flying instanceof Asteroid)
 				asteroids.add((Asteroid) flying);
 		return asteroids;
@@ -198,7 +198,7 @@ public class World {
 	@Basic
 	public List<Bullet> getBullets() {
 		List<Bullet> bullets = new ArrayList<Bullet>();
-		for(DFO flying : flyingObjects)
+		for(Collidable flying : flyingObjects)
 			if(flying instanceof Bullet)
 				bullets.add((Bullet) flying);
 		return bullets;
@@ -226,5 +226,5 @@ public class World {
 	
 	//TODO: 1 of 3 methodes om DFOs toe te voegen en te checken?
 	
-	private List<DFO> flyingObjects;
+	private List<Collidable> flyingObjects;
 }

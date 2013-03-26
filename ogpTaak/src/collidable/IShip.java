@@ -1,4 +1,4 @@
-package asteroids;
+package collidable;
 
 /**
  * Classes for representing ships should implement <code>IShip</code>. Do not

@@ -1,6 +1,6 @@
 package model;
 
-import asteroids.IShip;
+import collidable.IShip;
 
 /**
  * Implement this interface to connect your code to the user interface.

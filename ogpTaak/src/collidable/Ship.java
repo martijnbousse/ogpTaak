@@ -5,12 +5,16 @@
  * repository: https://github.com/martijnbousse/ogpTaak
  */
 
-package asteroids;
+package collidable;
 
+import asteroids.SumOverflowException;
+import asteroids.TimesOverflowException;
+import asteroids.Util;
+import asteroids.Vector;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
- * A class of ships involving a position, a velocity, a direction and a radius.
+ * A class of ships involving a position, a velocity, a radius, a mass and a direction.
  * 
  * @invar 	The position of each ship must be a valid position.
  * 			| isValidPosition(getPosition())
@@ -29,27 +33,38 @@ import be.kuleuven.cs.som.annotate.*;
  * @author Martijn Boussé, Wout Vekemans
  *
  */
+//TODO: deze invarianten zijn nu overbodig? buiten direction.
 public class Ship extends Collidable implements IShip{
 	
 	/**
-	 * Initialize this new ship with given position, given velocity, given direction and given radius.
+	 * Initialize this new ship with given position, given velocity, given radius, given mass and given direction.
 	 * 
 	 * @param 	position
 	 * 			The position for this new ship.
 	 * @param	velocity
 	 * 			The velocity for this new ship.
-	 * @param 	direction
-	 * 			The direction for this new ship.
 	 * @param 	radius
 	 * 			The radius for this new ship.
+	 * @param	mass
+	 * 			The mass for this new ship.
+	 * @param 	direction
+	 * 			The direction for this new ship.
+	 * @effect	This new ship is initialized as a collidable with the given position, 
+	 * 			the given velocity, the given radius and the given mass.
+	 * 			| super(position, velocity, radius, mass)
 	 * @pre		The given direction must be a valid direction for any ship.
 	 * 			| isValidDirection(direction)
+	 * @post	The new direction of this new ship is equal to the given direction.
+	 * 			| (new this).getDirection() == direction
+	 * 
+	 * 
+	 * 
+	 * 
+	 * //TODO: dit mag allemaal weg?
 	 * @post	The new position of this new ship is equal to the given position.
 	 * 			| (new this).getPosition().equals(position)
 	 * @post	The new velocity of this new ship is equal to the given velocity.
 	 * 			| (new this).getVelocity().equals(velocity) 
-	 * @post	The new direction of this new ship is equal to the given direction.
-	 * 			| (new this).getDirection() == direction
 	 * @post	The new radius of this new ship is equal to the given radius.
 	 * 			| (new this).getRadius() == radius
 	 * @throws	IllegalArgumentException
@@ -58,6 +73,8 @@ public class Ship extends Collidable implements IShip{
 	 * @throws	IllegalArgumentException
 	 * 			This ship cannot have the given radius as its radius
 	 * 			| !isValidRadius(radius)
+	 * 
+	 * //TODO: dit was niet nodig?
 	 * @throws	IllegalArgumentException
 	 * 			The x- or y-component of the vector position is not a valid number.
 	 * 			| !Vector.isValidNumber(position.getXComponent())
@@ -68,12 +85,11 @@ public class Ship extends Collidable implements IShip{
 	 * 			| || !Vector.isValidNumber(velocity.getYComponent())
 	 */
 	@Raw
-	public Ship(Vector position, Vector velocity, double radius, double direction, double mass) throws IllegalArgumentException {
-		super(position,velocity, mass);
+	public Ship(Vector position, Vector velocity, double radius, double mass, double direction) throws IllegalArgumentException {
+		super(position,velocity, radius, mass);
 		if(!canHaveAsRadius(radius)){
 			throw new IllegalArgumentException();	
 		}
-		this.radius=radius;
 		setDirection(direction);
 	}
 	
@@ -85,7 +101,7 @@ public class Ship extends Collidable implements IShip{
 	 */
 	@Raw
 	public Ship() {
-		this(new Vector(0, 0), new Vector(0, 0), minRadius, 0, 1);
+		this(new Vector(0, 0), new Vector(0, 0), 10, 10, 1);
 	}
 	
 	/**
@@ -133,78 +149,7 @@ public class Ship extends Collidable implements IShip{
 	 */
 	private double direction = 0.0;
 	
-	/**
-	 * Returns the minimum radius for all ships.
-	 */
-	@Basic @Immutable @Raw
-	public static double getMinRadius() {
-		return minRadius;
-	}
-	//TODO: minimal radius moet ook naar collidable, misschien niet meer static? zie sectie 8.2.3 p 524
 	
-	/**
-	 * Set the minimum radius that applies to all ships to the given minimum radius.
-	 * 
-	 * @param 	minRadius
-	 * 			The new minimum radius for all ships.
-	 * @post	The new minimum radius that applies to all ships is set to the given minimum radius.
-	 * 			| (new Ship).minRadius == minRadius
-	 * @throws 	IllegalArgumentException
-	 * 			The given minimum radius is not a valid minimum radius.
-	 * 			| !isValidMinRadius(minRadius)
-	 */
-	public static void setMinRadius(double minRadius) throws IllegalArgumentException {
-		if(!isValidMinRadius(minRadius))
-			throw new IllegalArgumentException();
-		Ship.minRadius = minRadius;
-	}
-	
-	/**
-	 * Check whether the given minimum radius is a valid minimum radius for any ship.
-	 * 
-	 * @param 	minRadius
-	 * 			The minimum radius to check.
-	 * @return	True if and only if the given minimum radius is a number and if it is greater than zero.
-	 * 			| result == !Doulbe.isNaN(minRadius)
-	 * 			|			&& (minRadius > 0)
-	 */
-	public static boolean isValidMinRadius(double minRadius) {
-		return 	!Double.isNaN(minRadius)
-				&& (minRadius > 0);
-	}
-	
-	/**
-	 * Variable registering the minimum radius that applies to all ships.
-	 */
-	private static double minRadius = 10.0;
-	
-	/**
-	 * Return the radius of this ship.
-	 */
-	@Basic @Immutable
-	public double getRadius() {
-		return radius;
-	}
-	
-	/**
-	 * Check whether the given radius is a valid radius for this ship.
-	 * 
-	 * @param 	radius
-	 * 			The radius to check.
-	 * @return	True if and only if the given radius is a number and if it is greater than the mininum radius.
-	 * 			| result == !Doulbe.isNaN(minRadius)
-	 * 			|			&& (radius >= minRadius)
-	 */
-	@Raw
-	public boolean canHaveAsRadius(double radius) {	
-		return 	!Double.isNaN(radius)
-				&& (Util.fuzzyLessThanOrEqualTo(getMinRadius(),radius));
-	}
-	
-	/**
-	 * Variable registering the radius of this ship.
-	 */
-	private final double radius;
 	
 	public double getAcceleration() {
 		return getThrusterAmount()/getMass();
@@ -342,152 +287,6 @@ public class Ship extends Collidable implements IShip{
 	public static boolean isValidThrustAmount(double amount) {
 		return	!Double.isNaN(amount)
 				&& (amount > 0);
-	}
-	
-	/**
-	 * Returns the distance between this ship and the given ship.
-	 * 
-	 * @param  	other
-	 * 			The other ship.
-	 * @return	Returns the distance between this ship and the given ship. If this ship is equal to the given ship the result is always zero.
-	 * 			| let 
-	 * 			|	delta = this.getPosition().subtract(other.getPosition())
-	 * 			| in
-	 * 			| 	if(other.equals(this))
-	 * 			|		result == 0.0
-	 * 			| 	else 	
-	 * 			|		result == Math.sqrt(delta.times(delta)) - this.getRadius() - other.getRadius()
-	 * @throws 	IllegalArgumentException
-	 * 			The given ship is not effective.
-	 * 			| (ship == null)
-	 */
-	public double getDistanceBetween(Ship other) throws IllegalArgumentException {
-		if (other == null)
-			throw new IllegalArgumentException("Non effective ship!");
-		if(other.equals(this))
-			return 0.0;
-		try{
-			Vector delta = this.getPosition().subtract(other.getPosition());
-			return Math.sqrt(delta.dotProduct(delta)) - this.getRadius() - other.getRadius();
-		} catch(TimesOverflowException exc){
-			return Double.POSITIVE_INFINITY;
-		}
-	}
-	
-	/**
-	 * Returns a boolean reflecting whether this ship and the given ship overlap.
-	 * 
-	 * @param 	other
-	 * 			The other ship.
-	 * @return	True if and only if the distance between this ship and the given ship is negative or if the given ship is equal to this ship.
-	 * 			| result == (getDistanceBetween(ship) < 0) || (other.equals(this))  
-	 * @throws 	IllegalArgumentException 
-	 * 			The given ship is not effective.
-	 * 			| (ship == null)
-	 */
-	public boolean overlap(Ship other) throws IllegalArgumentException {
-		if (other == null)
-			throw new IllegalArgumentException("Non effective ship!");
-		if (other.equals(this))
-			return true;
-		return (getDistanceBetween(other) < 0);
-	}
-	
-	/**
-	 * Returns when this ship, if ever, will collide with the given ship.
-	 * 
-	 * @param 	other
-	 * 			The other ship.
-	 * @return	Returns the time until this ship and the given ship will collide.
-	 * 			| let 
-	 * 			|	sigma 	= this.getRadius() + other.getRadius()
-	 * 			| 	deltaR 	= getPosition().subtract(other.getPosition())
-	 *			| 	deltaV 	= getVelocity().subtract(other.getVelocity())
-	 *			| 	dotProductR 	= deltaR.times(deltaR)
-	 *			|	dotProductV 	= deltaV.times(deltaV)
-	 *			|	dotProductVR 	= deltaV.times(deltaR)
-	 *			|	d = (dotProductVR*dotProductVR) - dotProductV*(dotProductR-(sigma*sigma))
-	 *			| in
-	 *			|	if (Util.fuzzyLessThanOrEqualTo(0.0,dotProductVR))
-	 *			|		result == Double.POSITIVE_INFINITY
-	 *			|	else if (Util.fuzzyLessThanOrEqualTo(d,0.0))
-	 *			| 		result == Double.POSITIVE_INFINITY
-	 *			|	else
-	 *			|		result == -(dotProductVR+Math.sqrt(d))/dotProductV)
-	 * @throws 	IllegalArgumentException
-	 * 			The given ship is not effective.
-	 * 			| (ship == null)
-	 */
-	public double getTimeToCollision(Ship other) throws IllegalArgumentException{
-		if (other == null)
-			throw new IllegalArgumentException("Non effective ship!");
-		
-		Vector deltaR = other.getPosition().subtract(this.getPosition());
-		Vector deltaV = other.getVelocity().subtract(this.getVelocity());
-		
-		try {
-			double sigma = this.getRadius() + other.getRadius();
-			double dotProductR = deltaR.dotProduct(deltaR);
-			double dotProductV = deltaV.dotProduct(deltaV);
-			double dotProductVR = deltaV.dotProduct(deltaR);
-			double d = (dotProductVR*dotProductVR) - dotProductV*(dotProductR-(sigma*sigma));
-			
-			if (Util.fuzzyLessThanOrEqualTo(0,dotProductVR))
-				return Double.POSITIVE_INFINITY;
-			else if (Util.fuzzyLessThanOrEqualTo(d,0))
-				return Double.POSITIVE_INFINITY;
-			else
-				try {
-					return (-(dotProductVR+Math.sqrt(d))/dotProductV);
-				} catch (ArithmeticException exc) {
-					return Double.POSITIVE_INFINITY;
-				}	
-		} catch (TimesOverflowException exc) {
-			return Double.POSITIVE_INFINITY;
-		}
-	}
-	
-	/**
-	 * Returns the position where this ship and the given ship will collide.
-	 * 
-	 * @param 	other
-	 * 			The other ship.
-	 * @return	Returns the position where this ship and the given ship will collide.
-	 * 			| let
-	 * 			| 	dt = getTimeToCollision(other)
-	 *			|	newPositionThis = this.getPosition().add(this.getVelocity().scale(dt))
-	 *			|	newPositionOther = other.getPosition().add(other.getVelocity().scale(dt))
-	 *			|	theta = Math.atan2(newPositionOther.getYComponent()-newPositionThis.getYComponent(),
-	 *			|						newPositionOther.getXComponent()-newPositionThis.getXComponent())
-	 *			|   directionRadius = new Vector(Math.cos(theta),Math.sin(theta));
-	 *			| in
-	 *			|	if dt == Double.POSITIVE_INFINITY
-	 *			|		then result == null
-	 *			|   if newPositionOther.getXComponent()-newPositionThis.getXComponent()<0
-	 *			|		then theta+= Math.PI*2
-	 *			|	result == newPositionThis.add(directionRadius.scale(this.getRadius()))
-	 * @throws	IllegalArgumentException
-	 * 			The given ship is not effective.
-	 * 			| (ship == null)
-	 */
-	public Vector getCollisionPosition(Ship other) throws IllegalArgumentException{
-		if (other == null)
-			throw new IllegalArgumentException("Non effective ship!");	
-		double dt = getTimeToCollision(other); 
-		if (dt == Double.POSITIVE_INFINITY)
-			return null;
-		
-		Vector newPositionThis = this.getPosition().add(this.getVelocity().scale(dt));
-		Vector newPositionOther = other.getPosition().add(other.getVelocity().scale(dt));
-		
-		double theta = Math.atan2(newPositionOther.getYComponent()-newPositionThis.getYComponent(),
-									newPositionOther.getXComponent()-newPositionThis.getXComponent());
-		
-		if(newPositionOther.getXComponent()-newPositionThis.getXComponent()<0)
-			theta+= Math.PI*2;
-
-		Vector directionRadius = new Vector(Math.cos(theta),Math.sin(theta));
-		return newPositionThis.add(directionRadius.scale(this.getRadius()));	
 	}
 	
 	/**

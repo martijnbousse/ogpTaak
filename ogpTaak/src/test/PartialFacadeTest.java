@@ -9,7 +9,8 @@ import model.ModelException;
 import org.junit.Before;
 import org.junit.Test;
 
-import asteroids.IShip;
+import collidable.IShip;
+
 import asteroids.Util;
 
 public class PartialFacadeTest {

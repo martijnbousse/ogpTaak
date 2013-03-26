@@ -6,7 +6,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import asteroids.Ship;
+import collidable.Ship;
+
 import asteroids.SumOverflowException;
 import asteroids.Util;
 import asteroids.Vector;

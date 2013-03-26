@@ -3,8 +3,8 @@
  */
 package model;
 
-import asteroids.IShip;
-import asteroids.Ship;
+import collidable.IShip;
+import collidable.Ship;
 import asteroids.Util;
 import asteroids.Vector;
 

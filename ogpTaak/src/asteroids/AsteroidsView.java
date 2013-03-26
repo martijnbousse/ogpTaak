@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.Set;
 import javax.swing.JPanel;
 
+import collidable.IShip;
+
 import model.IFacade;
 
 import static java.lang.Math.*;

@@ -3,6 +3,12 @@ package asteroids;
 import be.kuleuven.cs.som.annotate.*;
 import java.util.*;
 
+import collidable.Asteroid;
+import collidable.Bullet;
+import collidable.Collidable;
+import collidable.Ship;
+
+
 /**
  * A class of virtual worlds, containing asteroids, ships and bullets.
  * 

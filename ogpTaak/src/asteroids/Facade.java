@@ -3,6 +3,10 @@ package asteroids;
 import java.util.Random;
 import java.util.Set;
 
+import collidable.Asteroid;
+import collidable.Bullet;
+import collidable.Ship;
+
 public class Facade implements IFacade<World, Ship, Asteroid, Bullet> {
 
 	@Override

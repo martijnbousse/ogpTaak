@@ -1,8 +1,7 @@
 package asteroids;
 
-import java.util.*;
-
 import be.kuleuven.cs.som.annotate.*;
+import java.util.*;
 
 /**
  * A class of virtual worlds, containing asteroids, ships and bullets.
@@ -13,8 +12,8 @@ import be.kuleuven.cs.som.annotate.*;
  * @invar	|isValidMaxDimension(getMaxHeight())
  * 
  * 
- * 
- * @author Wout
+ * @version	1.0
+ * @author Wout Vekemans, Martijn Boussé
  *
  */
 public class World {
@@ -155,7 +154,7 @@ public class World {
 	/**
 	 * Returns a list of all ships in this world.
 	 */
-	@Basic
+	//TODO: set + 7.5.1 p489
 	public List<Ship> getShips() {
 		List<Ship> ships = new ArrayList<Ship>();
 		for(Collidable flying : flyingObjects)

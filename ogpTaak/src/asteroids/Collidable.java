@@ -1,10 +1,28 @@
 package asteroids;
 
-import be.kuleuven.cs.som.annotate.Basic;
-import be.kuleuven.cs.som.annotate.Raw;
+import be.kuleuven.cs.som.annotate.*;
 
+/**
+ * 
+ * @version	1.0
+ * @author Martijn Boussé, Wout Vekemans
+ * 
+ */
 public abstract class Collidable {
-	public Collidable(Vector position, Vector velocity, double mass){
+	
+	/**
+	 * Initialize this new collidable with given position, given velocity, given mass (and given world). //kan ook bestaan zonder wereld! 
+	 * 
+	 * @param 	position
+	 * @param 	velocity
+	 * @param 	mass
+	 * @param 	world
+	 * @pre		...
+	 * @post	...
+	 * @throws	...
+	 */
+	@Raw @Model //TODO: abstract classes worden protected gequalified. zie coding rule 96 p. 480
+	protected Collidable(Vector position, Vector velocity, double mass){
 		setSpeedLimit(SPEED_OF_LIGHT);
 		setPosition(position);
 		setVelocity(velocity);
@@ -31,6 +49,7 @@ public abstract class Collidable {
 	 * 			| !isValidPosition(position)
 	 */
 	@Raw
+	//TODO: zie coding rule 95
 	public void setPosition(Vector position) throws IllegalArgumentException {
 		if (!isValidPosition(position)) 
 			throw new IllegalArgumentException();	
@@ -73,6 +92,7 @@ public abstract class Collidable {
 	 * 			| 	then (new this).getVelocity().equals(velocity)
 	 */
 	@Raw
+	//TODO: zie coding rule 95
 	public void setVelocity(Vector velocity) {
 		if (canHaveAsVelocity(velocity))
 			this.velocity = velocity;
@@ -155,6 +175,9 @@ public abstract class Collidable {
 		return this.mass;
 	}
 	
+	/**
+	 * Variable registering the mass of this ship.
+	 */
 	public double mass;
 	
 	public boolean canHaveAsWorld(World world) {
@@ -165,5 +188,8 @@ public abstract class Collidable {
 		return this.world;
 	}
 	
+	/**
+	 * Variable registering the world of this ship.
+	 */
 	private World world;
 }

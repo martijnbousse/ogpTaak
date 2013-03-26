@@ -230,6 +230,7 @@ public class Vector {
 	 * 			| 			"xComponent: "+xcomponent+" yComponent: "+ycomponent)
 	 */
 	@Override
+	//TODO: in alle klasses
 	public String toString() {
         return "xComponent: "+xcomponent+" yComponent: "+ycomponent;
     }

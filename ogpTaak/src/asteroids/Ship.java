@@ -6,6 +6,7 @@
  */
 
 package asteroids;
+
 import be.kuleuven.cs.som.annotate.*;
 
 /**
@@ -24,7 +25,7 @@ import be.kuleuven.cs.som.annotate.*;
  * @invar	The minimum radius that applies to all ships must be a valid minimum radius.
  * 			| isValidMinRadius(getMinRadius())
  *
- * @version 1.0
+ * @version 2.0
  * @author Martijn Boussé, Wout Vekemans
  *
  */
@@ -139,6 +140,7 @@ public class Ship extends Collidable implements IShip{
 	public static double getMinRadius() {
 		return minRadius;
 	}
+	//TODO: minimal radius moet ook naar collidable, misschien niet meer static? zie sectie 8.2.3 p 524
 	
 	/**
 	 * Set the minimum radius that applies to all ships to the given minimum radius.
@@ -228,6 +230,7 @@ public class Ship extends Collidable implements IShip{
 	public void setThrusterEnabled(boolean isEnabled) {
 		this.isThrusterEnabled = isEnabled;
 	}
+	// todo: p 472, methodes enableThruster, disableThruster?
 	
 	public boolean getThrusterEnabled() {
 		return this.isThrusterEnabled;

@@ -30,6 +30,7 @@ import be.kuleuven.cs.som.annotate.*;
 //TODO: alle annotaties nazien
 //TODO: invarianten toevoegen
 //TODO: mass + inspector? moet mass wel in de constructor van collidable? niet gewoon een variable lijk world
+//TODO: er scheelt van alles met de verschillende packages.
 public abstract class Collidable {
 	
 	/**
@@ -58,7 +59,7 @@ public abstract class Collidable {
 	 * 			This new collidable cannot have the given radius as its radius
 	 * 			| !isValidRadius(radius)
 	 */
-	@Raw @Model //TODO: zie coding rule 96 p. 480
+	@Raw @Model
 	protected Collidable(Vector position, Vector velocity, double radius, double mass) throws IllegalArgumentException {
 		setSpeedLimit(SPEED_OF_LIGHT);
 		setPosition(position);
@@ -66,6 +67,8 @@ public abstract class Collidable {
 		this.radius = radius;
 		this.mass = mass;
 	}
+	
+	// TODO: TERMINATE en isTerminated ! in superklasse?
 	
 	/**
 	 * Returns the position of this collidable.
@@ -285,7 +288,6 @@ public abstract class Collidable {
 	
 	/**
 	 * Returns the mass of this collidable.
-	 * @return
 	 */
 	public double getMass() {
 		return this.mass;

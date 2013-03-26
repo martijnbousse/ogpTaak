@@ -14,26 +14,15 @@ import asteroids.Vector;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
- * A class of ships involving a position, a velocity, a radius, a mass and a direction.
+ * A class of ships as special kinds of collidables involving as additional property a direction.
  * 
- * @invar 	The position of each ship must be a valid position.
- * 			| isValidPosition(getPosition())
- * @invar	Each ship can have its velocity as its velocity.
- * 			| canHaveAsVelocity(getVelocity())
- * @invar	Each ship can have its speed limit as its speed limit.
- * 			| canHaveAsSpeedLimit(getSpeedLimit())
  * @invar 	The direction of each ship must be a valid direction.
  * 			| isValidDirection(getDirection())
- * @invar	Each ship can have its radius as its radius.
- * 			| canHaveAsRadius(getRadius())
- * @invar	The minimum radius that applies to all ships must be a valid minimum radius.
- * 			| isValidMinRadius(getMinRadius())
- *
+ * 
  * @version 2.0
  * @author Martijn Boussé, Wout Vekemans
  *
  */
-//TODO: deze invarianten zijn nu overbodig? buiten direction.
 public class Ship extends Collidable implements IShip{
 	
 	/**

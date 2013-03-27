@@ -48,8 +48,9 @@ public class Bullet extends Collidable {
 	
 	// TODO: oppassen met de implementatie van setSource()! Beschouwen we dit nu als uni of bidirectionele assocatie? 
 	//			indien bidirectioneel, dan moet setSource afgeschermd worden.
+	// TODO: RE: ik denk gewoon unidirectioneel
 	// TODO: is bidirectioneel nodig? moet je aan een ship kunnen vragen wat/waar al zijn bullets zijn?
-	// TODO: eender welke associatie, we kunnen best bullet de controllerende klasse maken.
+	// TODO: eender welke associatie, we kunnen best bullet de controllerende klasse maken. 		//TODO : yep
 	// TODO: je hebt een setSource nodig denk ik aangezien je ook een terminate moet hebben die de associatie afbreekt? source = null
 	
 	// TODO: gemaakt op basis van p 338, buiten geen exceptions
@@ -70,6 +71,6 @@ public class Bullet extends Collidable {
 	/**
 	 * Variable registering the source of this bullet.
 	 */
-	private Ship source; //TODO: final? want source mag nooit veranderen, buiten als je terminate.
+	private Ship source; //TODO: final? want source mag nooit veranderen, buiten als je terminate. 		// TODO : ik denk final.
 
 }

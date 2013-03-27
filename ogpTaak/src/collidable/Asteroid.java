@@ -27,6 +27,7 @@ public class Asteroid extends Collidable{
 	 * 			| super(position, velocity, radius, mass)
 	 */
 	//TODO: geen speciale properties?
+	//TODO: volgens mij heeft asteroid idd geen 'eigen' dingen
 	public Asteroid(Vector position, Vector velocity, double radius, double mass) {
 		super(position, velocity,radius, mass);
 	}

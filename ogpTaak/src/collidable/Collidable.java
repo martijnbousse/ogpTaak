@@ -29,7 +29,7 @@ import be.kuleuven.cs.som.annotate.*;
 //TODO: collidable hoeft geen wereld te hebben, gewoon een variable met een getter en setter, maar niet in de constructor?
 //TODO: alle annotaties nazien
 //TODO: invarianten toevoegen
-//TODO: mass + inspector? moet mass wel in de constructor van collidable? niet gewoon een variable lijk world
+//TODO: mass + inspector? moet mass wel in de constructor van collidable? niet gewoon een variable lijk world	mass moet idd niet in constructor. 
 //TODO: er scheelt van alles met de verschillende packages.
 public abstract class Collidable {
 	
@@ -68,7 +68,7 @@ public abstract class Collidable {
 		this.mass = mass;
 	}
 	
-	// TODO: TERMINATE en isTerminated ! in superklasse?
+	// TODO: TERMINATE en isTerminated ! in superklasse?		 lijkt mij logisch.. elke subklasse heeft dezelfde functionaliteit nodig . desnoods nog overriden
 	
 	/**
 	 * Returns the position of this collidable.

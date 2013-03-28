@@ -1,187 +1,284 @@
-/**
- * 
- */
 package model;
 
-import collidable.IShip;
+import java.util.Random;
+import java.util.Set;
+
+import asteroids.CollisionListener;
+import asteroids.World;
+
+
+import collidable.Asteroid;
+import collidable.Bullet;
 import collidable.Ship;
-import asteroids.Util;
-import asteroids.Vector;
 
-/**
- * ...
- * 
- * @version	1.0
- * @author 	Martijn Boussé, Wout Vekemans
- *
- */
-public class Facade implements IFacade {
+public class Facade implements IFacade<World, Ship, Asteroid, Bullet> {
 
-	/* (non-Javadoc)
-	 * @see asteroids.IFacade#createShip()
-	 */
 	@Override
-	public IShip createShip() {
-		return new Ship();
+	public World createWorld(double width, double height) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see asteroids.IFacade#createShip(double, double, double, double, double, double)
-	 */
 	@Override
-	public IShip createShip(double x, double y, double xVelocity,double yVelocity, double radius, double angle) {
-		while(!Util.fuzzyLessThanOrEqualTo(0.0, angle)){
-			angle = angle+ Math.PI*2;
-		}
-		while(!Util.fuzzyLessThanOrEqualTo(angle, Math.PI*2)){
-			angle = angle-Math.PI*2;
-		}
-		
-		try{
-			return new Ship(new Vector(x,y), new Vector(xVelocity, yVelocity), radius, angle);
-		} catch (IllegalArgumentException exc){
-			throw new ModelException(exc);
-		}
+	public double getWorldWidth(World world) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
-	/* (non-Javadoc)
-	 * @see asteroids.IFacade#getX(asteroids.IShip)
-	 */
 	@Override
-	public double getX(IShip ship) {
-		return ((Ship) ship).getPosition().getXComponent();
+	public double getWorldHeight(World world) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
-	/* (non-Javadoc)
-	 * @see asteroids.IFacade#getY(asteroids.IShip)
-	 */
 	@Override
-	public double getY(IShip ship) {
-		return ((Ship) ship).getPosition().getYComponent();
+	public Set<Ship> getShips(World world) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see asteroids.IFacade#getXVelocity(asteroids.IShip)
-	 */
 	@Override
-	public double getXVelocity(IShip ship) {
-		return ((Ship) ship).getVelocity().getXComponent();
+	public Set<Asteroid> getAsteroids(World world) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see asteroids.IFacade#getYVelocity(asteroids.IShip)
-	 */
 	@Override
-	public double getYVelocity(IShip ship) {
-		return ((Ship) ship).getVelocity().getYComponent();
+	public Set<Bullet> getBullets(World world) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see asteroids.IFacade#getRadius(asteroids.IShip)
-	 */
 	@Override
-	public double getRadius(IShip ship) {
-		return ((Ship) ship).getRadius();
+	public void addShip(World world, Ship ship) {
+		// TODO Auto-generated method stub
+
 	}
 
-	/* (non-Javadoc)
-	 * @see asteroids.IFacade#getDirection(asteroids.IShip)
-	 */
 	@Override
-	public double getDirection(IShip ship) {
-		return ((Ship) ship).getDirection();
+	public void addAsteroid(World world, Asteroid asteroid) {
+		// TODO Auto-generated method stub
+
 	}
 
-	/* (non-Javadoc)
-	 * @see asteroids.IFacade#move(asteroids.IShip, double)
-	 */
 	@Override
-	public void move(IShip ship, double dt) {
-		try {
-			((Ship) ship).move(dt);
-		} catch (IllegalArgumentException exc) {
-			throw new ModelException(exc);
-		}
+	public void removeShip(World world, Ship ship) {
+		// TODO Auto-generated method stub
+
 	}
 
-	/* (non-Javadoc)
-	 * @see asteroids.IFacade#thrust(asteroids.IShip, double)
-	 */
 	@Override
-	public void thrust(IShip ship, double amount) {
-		((Ship) ship).thrust(amount);
+	public void removeAsteroid(World world, Asteroid asteroid) {
+		// TODO Auto-generated method stub
+
 	}
 
-	/* (non-Javadoc)
-	 * @see asteroids.IFacade#turn(asteroids.IShip, double)
-	 */
 	@Override
-	public void turn(IShip ship, double angle) {
-		if(!Util.fuzzyLessThanOrEqualTo(0.0, ((Ship) ship).getDirection()+angle)){
-			angle+=Math.PI*2;
-			//angle = angle%Math.PI*2 + Math.PI*2;
-		}
-		else if(!Util.fuzzyLessThanOrEqualTo(((Ship) ship).getDirection()+angle, Math.PI*2)){
-			angle = angle-Math.PI*2;
-			//angle = angle%Math.PI*2;
-		}
-		((Ship) ship).turn(angle);
+	public void evolve(World world, double dt,
+			CollisionListener collisionListener) {
+		// TODO Auto-generated method stub
+
 	}
 
-	/* (non-Javadoc)
-	 * @see asteroids.IFacade#getDistanceBetween(asteroids.IShip, asteroids.IShip)
-	 */
 	@Override
-	public double getDistanceBetween(IShip ship1, IShip ship2) {
-		try{
-			return ((Ship) ship1).getDistanceBetween((Ship) ship2);
-		} catch(IllegalArgumentException exc) {
-			throw new ModelException(exc);
-		}
+	public Ship createShip(double x, double y, double xVelocity,
+			double yVelocity, double radius, double direction, double mass) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see asteroids.IFacade#overlap(asteroids.IShip, asteroids.IShip)
-	 */
 	@Override
-	public boolean overlap(IShip ship1, IShip ship2) {
-		try{
-			return ((Ship) ship1).overlap((Ship) ship2);
-		} catch(IllegalArgumentException exc) {
-			throw new ModelException(exc);
-		}
+	public boolean isShip(Object o) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
-	/* (non-Javadoc)
-	 * @see asteroids.IFacade#getTimeToCollision(asteroids.IShip, asteroids.IShip)
-	 */
 	@Override
-	public double getTimeToCollision(IShip ship1, IShip ship2) {
-		try{
-			return ((Ship) ship1).getTimeToCollision((Ship) ship2);
-		} catch (IllegalArgumentException exc) {
-			throw new ModelException(exc);
-		}
+	public double getShipX(Ship ship) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
-	/* (non-Javadoc)
-	 * @see asteroids.IFacade#getCollisionPosition(asteroids.IShip, asteroids.IShip)
-	 */
 	@Override
-	public double[] getCollisionPosition(IShip ship1, IShip ship2) {
-		try{
-			Vector collisionPosition = ((Ship) ship1).getCollisionPosition( (Ship) ship2);
-			if(collisionPosition==null)
-				return null;
-			else {
-				double collisionPositionList[] = new double[2];
-				collisionPositionList[0] = collisionPosition.getXComponent();
-				collisionPositionList[1] = collisionPosition.getYComponent();
-				return collisionPositionList;
-			}
-		} catch(IllegalArgumentException exc){
-			throw new ModelException(exc);
-		}
+	public double getShipY(Ship ship) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getShipXVelocity(Ship ship) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getShipYVelocity(Ship ship) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getShipRadius(Ship ship) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getShipDirection(Ship ship) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getShipMass(Ship ship) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public World getShipWorld(Ship ship) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isShipThrusterActive(Ship ship) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setThrusterActive(Ship ship, boolean active) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void turn(Ship ship, double angle) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void fireBullet(Ship ship) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Asteroid createAsteroid(double x, double y, double xVelocity,
+			double yVelocity, double radius) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Asteroid createAsteroid(double x, double y, double xVelocity,
+			double yVelocity, double radius, Random random) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isAsteroid(Object o) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public double getAsteroidX(Asteroid asteroid) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getAsteroidY(Asteroid asteroid) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getAsteroidXVelocity(Asteroid asteroid) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getAsteroidYVelocity(Asteroid asteroid) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getAsteroidRadius(Asteroid asteroid) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getAsteroidMass(Asteroid asteroid) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public World getAsteroidWorld(Asteroid asteroid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isBullets(Object o) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public double getBulletX(Bullet bullet) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getBulletY(Bullet bullet) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getBulletXVelocity(Bullet bullet) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getBulletYVelocity(Bullet bullet) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getBulletRadius(Bullet bullet) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getBulletMass(Bullet bullet) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public World getBulletWorld(Bullet bullet) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Ship getBulletSource(Bullet bullet) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

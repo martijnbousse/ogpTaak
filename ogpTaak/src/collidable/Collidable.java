@@ -10,7 +10,7 @@ import be.kuleuven.cs.som.annotate.*;
  * A class of collidables involving a position, a velocity, a radius and a mass.
  * 
  * @invar 	The position of each collidable must be a valid position.
- * 			| isValidPosition(getPosition())
+ * 			| canHaveAsPosition(getPosition())
  * @invar	Each collidable can have its velocity as its velocity.
  * 			| canHaveAsVelocity(getVelocity())
  * @invar	Each collidable can have its speed limit as its speed limit.
@@ -26,13 +26,9 @@ import be.kuleuven.cs.som.annotate.*;
  * @author Martijn Boussé, Wout Vekemans
  * 
  */
-//TODO: collidable hoeft geen wereld te hebben, gewoon een variable met een getter en setter, maar niet in de constructor?
 //TODO: alle annotaties nazien
 //TODO: invarianten toevoegen
-//TODO: mass + inspector? moet mass wel in de constructor van collidable? niet gewoon een variable lijk world	mass moet idd niet in constructor. 
-//TODO: er scheelt van alles met de verschillende packages.
 public abstract class Collidable {
-	
 	/**
 	 * Initialize this new collidable with given position, given velocity, given radius and given mass.
 	 * 
@@ -60,16 +56,32 @@ public abstract class Collidable {
 	 * 			| !isValidRadius(radius)
 	 */
 	@Raw @Model
-	protected Collidable(Vector position, Vector velocity, double radius, double mass) throws IllegalArgumentException {
+	protected Collidable(Vector position, Vector velocity, double radius) throws IllegalArgumentException {
 		setSpeedLimit(SPEED_OF_LIGHT);
 		setPosition(position);
 		setVelocity(velocity);
 		this.radius = radius;
-		this.mass = mass;
 	}
 	
-	// TODO: TERMINATE en isTerminated ! in superklasse?		 lijkt mij logisch.. elke subklasse heeft dezelfde functionaliteit nodig . desnoods nog overriden
 	
+	/**
+	 * Check whether this collidable is terminated.
+	 */
+	@Basic @Raw
+	public boolean isTerminated() {
+		return this.isTerminated;
+	}
+	
+	public void terminate() {
+		//TODO : break relation
+		this.isTerminated = true;
+	}
+	
+	/**
+	 * Variable registering whether or not this collidable is terminated.
+	 */
+	private boolean isTerminated = false;
+		
 	/**
 	 * Returns the position of this collidable.
 	 */
@@ -90,9 +102,8 @@ public abstract class Collidable {
 	 * 			| !isValidPosition(position)
 	 */
 	@Raw
-	//TODO: zie coding rule 95 p. 476, dit mag protected?
-	public void setPosition(Vector position) throws IllegalArgumentException {
-		if (!isValidPosition(position)) 
+	protected void setPosition(Vector position) throws IllegalArgumentException {
+		if (!canHaveAsPosition(position)) 
 			throw new IllegalArgumentException();	
 		this.position = position;
 	}
@@ -105,9 +116,14 @@ public abstract class Collidable {
 	 * @return 	True if and only if the given position is effective.
 	 * 			| result == (position != null)
 	 */
-	//TODO: gelegen binnen World
-	public static boolean isValidPosition(Vector position) {
-		return (position != null);
+	//TODO: FUZZZAAAAAY
+	
+	public boolean canHaveAsPosition(Vector position) {
+		return (position != null)
+				&& getPosition().getXComponent() + getRadius() < getWorld().getWidth()
+				&& getPosition().getYComponent() + getRadius() < getWorld().getHeight()
+				&& getPosition().getXComponent() - getRadius() > 0
+				&& getPosition().getYComponent() - getRadius() > 0;
 	}
 	
 	/**
@@ -133,8 +149,7 @@ public abstract class Collidable {
 	 * 			| 	then (new this).getVelocity().equals(velocity)
 	 */
 	@Raw
-	//TODO: zie coding rule 95 p. 476, dit mag protected?
-	public void setVelocity(Vector velocity) {
+	protected void setVelocity(Vector velocity) {
 		if (canHaveAsVelocity(velocity))
 			this.velocity = velocity;
 	}
@@ -233,7 +248,7 @@ public abstract class Collidable {
 	 * 			The given minimum radius is not a valid minimum radius.
 	 * 			| !isValidMinRadius(minRadius)
 	 */
-	public static void setMinRadius(double minRadius) throws IllegalArgumentException {
+	public void setMinRadius(double minRadius) throws IllegalArgumentException {
 		if(!isValidMinRadius(minRadius))
 			throw new IllegalArgumentException();
 		Collidable.minRadius = minRadius;
@@ -256,7 +271,7 @@ public abstract class Collidable {
 	/**
 	 * Variable registering the minimum radius that applies to all collidables.
 	 */
-	private static double minRadius = 10.0;
+	private static double minRadius = 0;
 	
 	/**
 	 * Return the radius of this collidable.
@@ -289,9 +304,7 @@ public abstract class Collidable {
 	/**
 	 * Returns the mass of this collidable.
 	 */
-	public double getMass() {
-		return this.mass;
-	}
+	public abstract double getMass();
 	
 	/**
 	 * Variable registering the mass of this collidable.
@@ -324,6 +337,14 @@ public abstract class Collidable {
 	}
 	
 	/**
+	 * Check whether this collidable has a proper world associated with it.
+	 * @return
+	 */
+	public boolean hasProperWorld() {
+		return false;
+	}
+	
+	/**
 	 * Check whether the given world is a valid world for any collidable.
 	 * 
 	 * @param 	world
@@ -331,10 +352,7 @@ public abstract class Collidable {
 	 * @return	True if and only if the given world is effective.
 	 * 			| result == (world != null)
 	 */
-	//TODO: static checker?
-	//TODO: ik heb world voorlopig defensief geimplementeerd.
-	//TODO: @raw annotaties
-	public boolean isValidWorld(World world) { 
+	public static boolean isValidWorld(World world) { 
 		return world != null;
 	}
 		
@@ -491,4 +509,14 @@ public abstract class Collidable {
 		Vector directionRadius = new Vector(Math.cos(theta),Math.sin(theta));
 		return newPositionThis.add(directionRadius.scale(this.getRadius()));	
 	}
+	
+	public void invertSpeed() {
+		//TODO check of x of y is
+	}
+	
+	public void bounce(Collidable other) {
+		// TODO implement
+	}
+	
+	//TODO gettimetocollisionwithboundary
 }

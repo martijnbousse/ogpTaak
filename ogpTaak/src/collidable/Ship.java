@@ -75,13 +75,18 @@ public class Ship extends Collidable implements IShip{
 	 */
 	@Raw
 	public Ship(Vector position, Vector velocity, double radius, double mass, double direction) throws IllegalArgumentException {
-		super(position,velocity, radius, mass);
+		super(position,velocity, radius);
 		if(!canHaveAsRadius(radius)){
 			throw new IllegalArgumentException();	
 		}
 		setDirection(direction);
+		setMass(mass);
 	}
 	
+	private void setMass(double mass) {
+		
+	}
+
 	/**
 	 * Initialize this new ship with all default values.
 	 * @effect 	This new ship is initialized with position and velocity (0,0), 
@@ -295,5 +300,11 @@ public class Ship extends Collidable implements IShip{
 				   + " Velocity: " + getVelocity().toString()
 				   + " Radius: " + getRadius() 
 				   + " Direction: " + getDirection() + "]";
+	}
+
+	@Override
+	public double getMass() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

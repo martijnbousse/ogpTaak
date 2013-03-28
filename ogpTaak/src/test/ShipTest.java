@@ -21,7 +21,7 @@ import asteroids.Vector;
  */
 public class ShipTest {
 	
-	//TODO: fukked up + moeten geen fuzzyequals gebruiken maar equals met een derde argument epsilon
+	//TODO: fukked up + moeten geen fuzzyequals gebruiken maar equals met een derde argument epsilon.
 	
 	/**
 	 * Variable referencing a ship with position (10,5) km, velocity (5,10) km/s, radius 15 km and direction pi/2 rad.

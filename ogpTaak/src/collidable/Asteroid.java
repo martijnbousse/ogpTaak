@@ -26,9 +26,22 @@ public class Asteroid extends Collidable{
 	 * 			the given velocity, the given radius and the given mass.
 	 * 			| super(position, velocity, radius, mass)
 	 */
-	//TODO: geen speciale properties?
-	//TODO: volgens mij heeft asteroid idd geen 'eigen' dingen
-	public Asteroid(Vector position, Vector velocity, double radius, double mass) {
-		super(position, velocity,radius, mass);
+	public Asteroid(Vector position, Vector velocity, double radius) {
+		super(position, velocity,radius);
+	}
+	
+	/**
+	 * Symbolic constant registering the density of all asteroids.
+	 */
+	public static double DENSITY = 2.65e-12;
+
+	/**
+	 * Return the mass of this asteroid.
+	 * 
+	 */
+	// TODO overflow
+	@Override
+	public double getMass() {
+		return (4/3)*Math.PI*Math.pow(getRadius(),3)*DENSITY;
 	}
 }

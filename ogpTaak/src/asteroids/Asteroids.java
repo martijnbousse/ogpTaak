@@ -7,6 +7,8 @@ import java.awt.Rectangle;
 
 import javax.swing.JFrame;
 
+import model.IFacade;
+
 
 @SuppressWarnings("serial")
 public class Asteroids<World, Ship, Asteroid, Bullet> extends JFrame {
@@ -134,7 +136,7 @@ public class Asteroids<World, Ship, Asteroid, Bullet> extends JFrame {
       return;
     }
     // <begin>
-    IFacade<asteroids.World, collidable.Ship, collidable.Asteroid, collidable.Bullet> facade = new asteroids.Facade();
+    IFacade<asteroids.World, collidable.Ship, collidable.Asteroid, collidable.Bullet> facade = new model.Facade();
     // <end>
     GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
     GraphicsDevice screen = env.getDefaultScreenDevice();

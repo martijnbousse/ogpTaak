@@ -157,6 +157,8 @@ public class World {
 	 */
 	private static double maxHeight = Double.MAX_VALUE;
 	
+	
+	
 	/**
 	 * Returns a list of all ships in this world.
 	 */
@@ -218,18 +220,73 @@ public class World {
 	}
 	
 	/**
-	 * Checks whether this world can have a given bullet as one of its bullets.
-	 * @param 	bullet
-	 * 			the bullet to check
-	 * @return	| result == bullet != null
-	 * 			| 	&& bullet.getWorld() != null
+	 * Checks whether this world can have the given collidable as one of its collidables.
+	 * @param 	collidable
+	 * 			The collidable to check.  
+	 * @return  ...
+	 * 			| 
 	 */
-	public boolean canHaveAsBullet(Bullet bullet) {
-		return 	bullet != null 
-				&& bullet.getWorld() == null;
+	public boolean canHaveAsCollidable(Collidable collidable) {
+		return false;
 	}
 	
-	//TODO: 1 of 3 methodes om DFOs toe te voegen en te checken?
+	/**
+	 * Check whether this world has the given collidable as one of the collidables attached to it.
+	 * @param collidable
+	 */
+	@Basic
+	public boolean hasAsCollidable(Collidable collidable) {
+		return false;
+	}
+	
+	/**
+	 * Check whether this world has proper collidables attached to it.
+	 * @return	...
+	 * 			| 
+	 */
+	public boolean hasProperCollidables() {
+		return false;
+	}
+	
+	/**
+	 * Add the given collidable to the set of collidables attached to this world.
+	 * @param 	collidable
+	 * 			The collidable to be added.
+	 * @post	This world has the given collidable as one of its collidables.
+	 * 			| new.hasAsCollidable(collidable)
+	 * @post 	The given collidable references this world as the world to which it is attached
+	 * 			| (new collidable).getWorld() == (new this)
+	 * @throws  IllegalArgumentException
+	 * 			This world cannot have the given collidable as one of its collidables.
+	 * 			| ! canHaveAsCollidable(collidable)
+	 * @throws  IllegalArgumentException
+	 * 			The given collidable is already attached to some world.
+	 * 			| collidable.getWorld() != null
+	 * 			| 		&& collidable != null
+	 */
+	public void addAsCollidable(Collidable collidable) throws IllegalArgumentException{
+		
+	}
+	
+	/**
+	 * Remove the given collidable from the set of collidables attached to this world.
+	 * @param 	collidable
+	 * 			The collidable to be removed.
+	 * @post	This world does not have the given collidable as one of its collidables.
+	 * 			| ! new.hasAsCollidable(collidable)
+	 * @post    If this world has the given collidable as one of its collidables, the given collidable is no longer attached to any world.
+	 * 			| if (hasAsCollidable(collidable))
+	 * 			| 	then (new collidable).getWorld() == null
+	 */
+	public void removeAsCollidable(Collidable collidable) {
+		
+	}
+	
+	//TODO: 1 of 3 methodes om collidablesss toe te voegen en te checken?
 	
 	private List<Collidable> flyingObjects;
+	
+	public void evolve(double dt) {
+		
+	}
 }

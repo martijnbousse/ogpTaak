@@ -23,6 +23,8 @@ import java.util.Set;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import model.IFacade;
+
 @SuppressWarnings("serial")
 public class WorldView<World, Ship, Asteroid, Bullet> extends JPanel implements KeyListener, ActionListener, CollisionListener {
 

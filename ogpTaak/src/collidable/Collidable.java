@@ -1,5 +1,6 @@
 package collidable;
 
+import asteroids.SumOverflowException;
 import asteroids.TimesOverflowException;
 import asteroids.Util;
 import asteroids.Vector;
@@ -306,10 +307,10 @@ public abstract class Collidable {
 	 */
 	public abstract double getMass();
 	
-	/**
-	 * Variable registering the mass of this collidable.
-	 */
-	public double mass;
+//	/**
+//	 * Variable registering the mass of this collidable.
+//	 */
+//	public double mass;
 	
 	/**
 	 * Return the world of this collidable.
@@ -510,8 +511,25 @@ public abstract class Collidable {
 		return newPositionThis.add(directionRadius.scale(this.getRadius()));	
 	}
 	
+	// TODO: documentatie
 	public void invertSpeed() {
-		//TODO check of x of y is
+		Vector newVelocity;
+		if(Util.fuzzyEquals(getPosition().getXComponent()-getRadius(),0)) {
+			newVelocity = new Vector(-getPosition().getXComponent(),getPosition().getYComponent());
+		}
+		else if(Util.fuzzyEquals(getPosition().getYComponent()+getRadius(),getWorld().getHeight())) {
+			newVelocity = new Vector(getPosition().getXComponent(),-getPosition().getYComponent());
+		}
+		else if(Util.fuzzyEquals(getPosition().getXComponent()+getRadius(),getWorld().getWidth())) {
+			newVelocity = new Vector(-getPosition().getXComponent(),getPosition().getYComponent());
+		}
+		else if(Util.fuzzyEquals(getPosition().getYComponent()-getRadius(),0)) {
+			newVelocity = new Vector(getPosition().getXComponent(),-getPosition().getYComponent());
+		}
+		else {
+			newVelocity = getVelocity();
+		}
+		setVelocity(newVelocity);
 	}
 	
 	public void bounce(Collidable other) {
@@ -519,4 +537,42 @@ public abstract class Collidable {
 	}
 	
 	//TODO gettimetocollisionwithboundary
+	
+	/**
+	 * Check whether the given time is a valid time for any collidable.
+	 * 
+	 * @param 	dt
+	 * 			The time to check.
+	 * @return	True if and only if the given time is greater then or equal to zero.
+	 * 			| result == (Util.fuzzyLessThanOrEqualTo(0,dt))
+	 */
+	public static boolean isValidTime(double dt) {
+		return  !Double.isNaN(dt)
+				&& Util.fuzzyLessThanOrEqualTo(0,dt);
+	}
+	
+	/**
+	 * Move this collidable for the given amount of time.
+	 * 
+	 * @param 	dt
+	 * 			The amount of time to move.
+	 * @effect	The new position of this collidable is set to position of this collidable incremented with the velocity of this collidable, 
+	 * 			which is scaled with the given amount of time.
+	 * 			| setPosition(getPosition().add(getVelocity.scale(dt)))
+	 * @throws 	IllegalArgumentException
+	 * 			This collidable cannot accept the given amount of time to move.  
+	 * 			| !isValidTime(time)
+	 */
+	public void move(double dt) throws IllegalArgumentException {
+		if (!isValidTime(dt))
+			throw new IllegalArgumentException();
+		try{
+			setPosition(getPosition().add(getVelocity().scale(dt)));
+		} catch(SumOverflowException exc) {
+			setPosition(getPosition());
+		} 
+		catch(TimesOverflowException exc2) {
+			setPosition(getPosition());
+		}
+	}
 }

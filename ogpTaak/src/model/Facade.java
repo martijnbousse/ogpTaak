@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.Set;
 
 import asteroids.CollisionListener;
+import asteroids.Vector;
 import asteroids.World;
 
 
@@ -15,20 +16,17 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet> {
 
 	@Override
 	public World createWorld(double width, double height) {
-		// TODO Auto-generated method stub
-		return null;
+		return new World(width,height);
 	}
 
 	@Override
 	public double getWorldWidth(World world) {
-		// TODO Auto-generated method stub
-		return 0;
+		return world.getWidth();
 	}
 
 	@Override
 	public double getWorldHeight(World world) {
-		// TODO Auto-generated method stub
-		return 0;
+		return world.getHeight();
 	}
 
 	@Override
@@ -76,87 +74,75 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet> {
 	@Override
 	public void evolve(World world, double dt,
 			CollisionListener collisionListener) {
-		// TODO Auto-generated method stub
+		world.evolve(dt);
 
 	}
 
 	@Override
 	public Ship createShip(double x, double y, double xVelocity,
 			double yVelocity, double radius, double direction, double mass) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Ship(new Vector(x,y), new Vector(xVelocity,yVelocity), radius, mass, direction);
 	}
 
 	@Override
 	public boolean isShip(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+		return o instanceof Ship;
 	}
 
 	@Override
 	public double getShipX(Ship ship) {
-		// TODO Auto-generated method stub
-		return 0;
+		return ship.getPosition().getXComponent();
 	}
 
 	@Override
 	public double getShipY(Ship ship) {
-		// TODO Auto-generated method stub
-		return 0;
+		return ship.getPosition().getYComponent();
 	}
 
 	@Override
 	public double getShipXVelocity(Ship ship) {
-		// TODO Auto-generated method stub
-		return 0;
+		return ship.getVelocity().getXComponent();
 	}
 
 	@Override
 	public double getShipYVelocity(Ship ship) {
-		// TODO Auto-generated method stub
-		return 0;
+		return ship.getVelocity().getYComponent();
 	}
 
 	@Override
 	public double getShipRadius(Ship ship) {
-		// TODO Auto-generated method stub
-		return 0;
+		return ship.getRadius();
 	}
 
 	@Override
 	public double getShipDirection(Ship ship) {
-		// TODO Auto-generated method stub
-		return 0;
+		return ship.getDirection();
 	}
 
 	@Override
 	public double getShipMass(Ship ship) {
-		// TODO Auto-generated method stub
-		return 0;
+		return ship.getMass();
 	}
 
 	@Override
 	public World getShipWorld(Ship ship) {
-		// TODO Auto-generated method stub
-		return null;
+		return ship.getWorld();
 	}
 
 	@Override
 	public boolean isShipThrusterActive(Ship ship) {
-		// TODO Auto-generated method stub
-		return false;
+		return ship.getThrusterEnabled();
 	}
 
 	@Override
 	public void setThrusterActive(Ship ship, boolean active) {
-		// TODO Auto-generated method stub
+		ship.setThrusterEnabled(active);
 
 	}
 
 	@Override
 	public void turn(Ship ship, double angle) {
-		// TODO Auto-generated method stub
-
+		ship.turn(angle);
 	}
 
 	@Override
@@ -223,62 +209,52 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet> {
 
 	@Override
 	public World getAsteroidWorld(Asteroid asteroid) {
-		// TODO Auto-generated method stub
-		return null;
+		return asteroid.getWorld();
 	}
 
 	@Override
 	public boolean isBullets(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+		return o instanceof Bullet;
 	}
 
 	@Override
 	public double getBulletX(Bullet bullet) {
-		// TODO Auto-generated method stub
-		return 0;
+		return bullet.getPosition().getXComponent();
 	}
 
 	@Override
 	public double getBulletY(Bullet bullet) {
-		// TODO Auto-generated method stub
-		return 0;
+		return bullet.getPosition().getYComponent();
 	}
 
 	@Override
 	public double getBulletXVelocity(Bullet bullet) {
-		// TODO Auto-generated method stub
-		return 0;
+		return bullet.getVelocity().getXComponent();
 	}
 
 	@Override
 	public double getBulletYVelocity(Bullet bullet) {
-		// TODO Auto-generated method stub
-		return 0;
+		return bullet.getVelocity().getYComponent();
 	}
 
 	@Override
 	public double getBulletRadius(Bullet bullet) {
-		// TODO Auto-generated method stub
-		return 0;
+		return bullet.getRadius();
 	}
 
 	@Override
 	public double getBulletMass(Bullet bullet) {
-		// TODO Auto-generated method stub
-		return 0;
+		return bullet.getMass();
 	}
 
 	@Override
 	public World getBulletWorld(Bullet bullet) {
-		// TODO Auto-generated method stub
-		return null;
+		return bullet.getWorld();
 	}
 
 	@Override
 	public Ship getBulletSource(Bullet bullet) {
-		// TODO Auto-generated method stub
-		return null;
+		return bullet.getSource();
 	}
 
 }

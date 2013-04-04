@@ -43,33 +43,6 @@ public class Ship extends Collidable implements IShip{
 	 * 			| isValidDirection(direction)
 	 * @post	The new direction of this new ship is equal to the given direction.
 	 * 			| (new this).getDirection() == direction
-	 * 
-	 * 
-	 * 
-	 * 
-	 * //TODO: dit mag allemaal weg?
-	 * @post	The new position of this new ship is equal to the given position.
-	 * 			| (new this).getPosition().equals(position)
-	 * @post	The new velocity of this new ship is equal to the given velocity.
-	 * 			| (new this).getVelocity().equals(velocity) 
-	 * @post	The new radius of this new ship is equal to the given radius.
-	 * 			| (new this).getRadius() == radius
-	 * @throws	IllegalArgumentException
-	 * 			This new ship cannot have the given position as its position.
-	 * 			| !isValidPosition(position)
-	 * @throws	IllegalArgumentException
-	 * 			This ship cannot have the given radius as its radius
-	 * 			| !isValidRadius(radius)
-	 * 
-	 * //TODO: dit was niet nodig?
-	 * @throws	IllegalArgumentException
-	 * 			The x- or y-component of the vector position is not a valid number.
-	 * 			| !Vector.isValidNumber(position.getXComponent())
-	 * 			| || !Vector.isValidNumber(position.getYComponent())
-	 * @throws	IllegalArgumentException
-	 * 			The x- or y-component of the vector velocity is not a valid number.
-	 * 			| !Vector.isValidNumber(velocity.getXComponent())
-	 * 			| || !Vector.isValidNumber(velocity.getYComponent())
 	 */
 	@Raw
 	public Ship(Vector position, Vector velocity, double radius, double mass, double direction) throws IllegalArgumentException {
@@ -245,6 +218,17 @@ public class Ship extends Collidable implements IShip{
 				&& (amount > 0);
 	}
 	
+	/**
+	 * This ship fires a bullet.
+	 * 
+	 * @effect 	...
+	 * 			| ...
+	 */
+	public void fireBullet() {
+		// TODO: canFireBullet houdt rekening met: initiele positie al ingenomen en partially located outside of the world.
+		// TODO: nieuwe bullet aanmaken, juiste parameters meegeven via parameters this ship en toevoegen aan de lijst met collidables in world. (setWorld())
+	}
+	
 	
 	//TODO: toString in superklasse? + specialisatie overerving om iets extra mee te geven, zoals de direction?
 	/**
@@ -256,7 +240,7 @@ public class Ship extends Collidable implements IShip{
 	 * 			|	"[" + "Position: " + getPosition().toString() 
 	 * 			|		+ " Velocity: " + getVelocity().toString()
 	 * 			|		+ " Radius: " + getRadius().toString() 
-	 * 			|		+ " Direction: " + getDirection().toString() "]" )
+	 * 			|		+ " Direction: " + getDirection().toString() + "]" )
 	 */
 	@Override
 	public String toString(){

@@ -1,13 +1,8 @@
 package asteroids;
 
 import be.kuleuven.cs.som.annotate.*;
-
 import java.util.*;
-
-import collidable.Asteroid;
-import collidable.Bullet;
-import collidable.Collidable;
-import collidable.Ship;
+import collidable.*;
 
 
 /**
@@ -207,75 +202,32 @@ public class World {
 	 * Variable registering the maximum height of any world.
 	 */
 	private static double maxHeight = Double.MAX_VALUE;
-	
-	
-	//TODO: toch een getAllCollidables en getNbCollidables nodig, wordt gebruik van gemaakt in de constructor post annotatie en in documentatie van methodes.
-	//       je kan dat ook formuleren aan de hand van de drie aparte getters, want anders is er wel wat redundantie.
-	
-	
-	
+		
 	/**
-	 * Returns a list of all ships in this world.
-	 */
-	//TODO: set + 7.5.1 p489, moet set worden!
-	public List<Ship> getShips() {
-		List<Ship> ships = new ArrayList<Ship>();
-		for(Collidable flying : collidables)
-			if(flying instanceof Ship)
-				ships.add((Ship) flying);
-		return ships;
-	}
-	
-	/**
-	 * Return the number of ships in this world.
+	 * Return a set collecting all collidables associated with this world.
 	 * 
-	 * @return	| result == getShips().size()
+	 * @return	The resulting set does not contain a null reference.
+	 * 			| !result.contains(null)
+	 * @return	Each collidable in the resulting set is attached to this world, and vice versa.
+	 * 			| for each collidable in collidables:
+	 * 			|	(result.contains(collidable) == this.hasAsCollidable(collidable))
 	 */
-	public int getNbOfShips() {
-		return getShips().size();
+	public Set<Collidable> getAllCollidables() {
+		return new HashSet<Collidable>(this.collidables);
 	}
 	
 	/**
-	 * Returns a list of all asteroids in this world.
-	 */
-	@Basic
-	public List<Asteroid> getAsteroids() {
-		List<Asteroid> asteroids = new ArrayList<Asteroid>();
-		for(Collidable flying : collidables)
-			if(flying instanceof Asteroid)
-				asteroids.add((Asteroid) flying);
-		return asteroids;
-	}
-	
-	/**
-	 * Return the number of asteroids in this world.
+	 * Return the number of collidables that are attached to this world.
 	 * 
-	 * @return	| result == getAsteroids().size()
+	 * @return	The number of collidables that are attached to this world.
+	 * 			| card( {collidable in collidables | hasAsCollidable(collidable)})   //TODO: zie p. 410 -> Wat is dit voor iets raar?
 	 */
-	public int getNbOfAsteroids() {
-		return getAsteroids().size();
+	public int getNbCollidables() {
+		return getAllCollidables().size();
 	}
 	
-	/**
-	 * Returns a list of all bullets in this world.
-	 */
-	@Basic
-	public List<Bullet> getBullets() {
-		List<Bullet> bullets = new ArrayList<Bullet>();
-		for(Collidable flying : collidables)
-			if(flying instanceof Bullet)
-				bullets.add((Bullet) flying);
-		return bullets;
-	}
-	
-	/**
-	 * Return the number of bullets in this world.
-	 * 
-	 * @return	| result == getBullets().size()
-	 */
-	public int getNbOfBullets() {
-		return getBullets().size();
-	}
+	//TODO: getAllCollidables en getNbCollidables heb ik nodig in documentatie en invarianten. Ik zou ook de drie aparte methodes kunnen samen nemen in die 
+	// specificaties. Maar volgens mij is het beter om alleen die twee hier te definieren. En die andere methodes in Facade.
 	
 	/**
 	 * Checks whether this world can have the given collidable as one of its collidables.
@@ -289,7 +241,7 @@ public class World {
 	 * 			| else result ==
 	 * 			|	( (!this.isTerminated()) || collidable.isTerminated() )
 	 */
-	//TODO: een terminated world kan geen collidable krijgen en een getermineerde collidable kan ook niet toegevoegd worden.
+	// een terminated world kan geen collidable krijgen en een getermineerde collidable kan ook niet toegevoegd worden.
 	public boolean canHaveAsCollidable(Collidable collidable) {
 		return ((collidable != null) && ((!this.isTerminated()) || collidable.isTerminated()));
 	}
@@ -350,7 +302,7 @@ public class World {
 		if (collidable.getWorld() != null)
 			throw new IllegalArgumentException();
 		this.collidables.add(collidable);
-		collidable.setWorld(this);			//TODO: setworld is een "hulpmethode" en moet dus sterk afgeschermd worden!
+		collidable.setWorld(this);        // merk op: de volgorde, zie ook setWorld documentatie
 	}
 	
 	/**
@@ -367,23 +319,20 @@ public class World {
 	public void removeAsCollidable(Collidable collidable) {
 		if (hasAsCollidable(collidable))
 			this.collidables.remove(collidable);
-			collidable.setWorld(null);
+			collidable.setWorld(null);		// merk op: de volgorde, zie ook setWorld documentatie
 	}
 	
-	//TODO: 1 of 3 methodes om collidablesss toe te voegen en te checken?
-	
-	
-	// OPMERKINGEN
+	// OPMERKINGEN BIJ REPRESENTATIE INVARIANTEN
 	// * Representation invariants == trade-off between simplicity and efficiency in implementation of mutators and inspectors. (p. 420 2de alinea)
-	// * definitie p. 417 overgenomen
+	// * definitie p. 417 overgenomen en dat doorgezet voor de methodes die de bidirectionele relatie verzorgen.
 	// * onmiddellijk initialiseren (p. 416)
 	// * final - the instance variable itself is qualified final, meaning that it will reference the same set during the entire lifetime 
-	// of the world for which it collects collidables (p. 416)
+	//   of the world for which it collects collidables (p. 416)
 	// * HashSet - this class offers constant time performance for the basic operations (add, remove, contains and size), 
-	//   assuming the hash function disperses the elements properly among the buckets. TODO: of HashTree ? zie documentatie
+	//   assuming the hash function disperses the elements properly among the buckets. 
 	// * invar: effective -> geen zorgen maken over nullpointers, want volgens regel 92 moet je set rechtstreeks aanroepen.
 	
-	// TODO: p. 421 representatie inv cf klasse inv (encapsulated in hasProperCollidables) ~ hetzelfde?
+	// TODO: of HashTree ? zie documentatie, moeten grondige verklaring geven waarom we voor set/hashset kiezen.
 	/**
 	 * Set collecting references to collidables attached to this world.
 	 * 
@@ -406,5 +355,18 @@ public class World {
 		
 	}
 	
-	//TODO: toString
+	/**
+	 * Return a textual representation of this world.
+	 * 
+	 * @return	A string consisting of the textual representation of the width and the height of this world,		// TODO: and a listing of all its collidables?
+	 * 			separated by a space and enclosed in square brackets.
+	 * 			| result.equals(
+	 * 			|	"[" + "Width: " + getWidth().toString() 
+	 * 			|		+ " Height: " + getHeight().toString() + "]" )
+	 */
+	@Override
+	public String toString(){
+		return "[" + "Width: " + getWidth() 
+				   + " Height: " + getHeight() + "]";
+	}
 }

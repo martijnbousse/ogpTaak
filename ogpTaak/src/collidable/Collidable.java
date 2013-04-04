@@ -119,15 +119,13 @@ public abstract class Collidable {
 	 * 			The position to check.
 	 * @return 	True if and only if the given position is effective.
 	 * 			| result == (position != null)
-	 */
-	//TODO: FUZZZAAAAAY
-	
+	 */	
 	public boolean canHaveAsPosition(Vector position) {
 		return (position != null)
-				&& getPosition().getXComponent() + getRadius() < getWorld().getWidth()
-				&& getPosition().getYComponent() + getRadius() < getWorld().getHeight()
-				&& getPosition().getXComponent() - getRadius() > 0
-				&& getPosition().getYComponent() - getRadius() > 0;
+				&& Util.fuzzyLessThanOrEqualTo(getPosition().getXComponent()+getRadius(),getWorld().getWidth())
+				&& Util.fuzzyLessThanOrEqualTo(getPosition().getYComponent()+getRadius(),getWorld().getHeight())
+				&& Util.fuzzyLessThanOrEqualTo(0.0,getPosition().getXComponent()-getRadius())
+				&& Util.fuzzyLessThanOrEqualTo(0.0,getPosition().getYComponent()-getRadius());
 	}
 	
 	/**
@@ -251,7 +249,7 @@ public abstract class Collidable {
 	 * 			The given minimum radius is not a valid minimum radius.
 	 * 			| !isValidMinRadius(minRadius)
 	 */
-	public void setMinRadius(double minRadius) throws IllegalArgumentException {
+	public static void setMinRadius(double minRadius) throws IllegalArgumentException {
 		if(!isValidMinRadius(minRadius))
 			throw new IllegalArgumentException();
 		Collidable.minRadius = minRadius;
@@ -590,5 +588,20 @@ public abstract class Collidable {
 		}
 	}
 	
-	//TODO: toString
+	/**
+	 * Return a textual representation of this collidable.
+	 * 
+	 * @return	A string consisting of the textual representation of the position, the velocity and the radius of this collidable, //TODO: en verder? specialisatie overerving, zie ook ship.
+	 * 			separated by a space and enclosed in square brackets.
+	 * 			| result.equals(
+	 * 			|	"[" + "Position: " + getPosition().toString() 
+	 * 			|		+ " Velocity: " + getVelocity().toString()
+	 * 			|		+ " Radius: " + getRadius().toString() + "]" )
+	 */
+	@Override
+	public String toString(){
+		return "[" + "Position: " + getPosition().toString() 
+				   + " Velocity: " + getVelocity().toString()
+				   + " Radius: " + getRadius() + "]";
+	}
 }

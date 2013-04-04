@@ -1,16 +1,11 @@
 package model;
 
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 import asteroids.CollisionListener;
 import asteroids.Vector;
 import asteroids.World;
-
-
-import collidable.Asteroid;
-import collidable.Bullet;
-import collidable.Ship;
+import collidable.*;
 
 public class Facade implements IFacade<World, Ship, Asteroid, Bullet> {
 
@@ -31,43 +26,52 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet> {
 
 	@Override
 	public Set<Ship> getShips(World world) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<Ship> ships = new HashSet<Ship>();
+		for(Collidable collidable : world.getAllCollidables())
+			if(collidable instanceof Ship)
+				ships.add((Ship) collidable);
+		return ships;
 	}
 
 	@Override
 	public Set<Asteroid> getAsteroids(World world) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<Asteroid> asteroids = new HashSet<Asteroid>();
+		for(Collidable collidable : world.getAllCollidables())
+			if(collidable instanceof Asteroid)
+				asteroids.add((Asteroid) collidable);
+		return asteroids;
 	}
 
 	@Override
 	public Set<Bullet> getBullets(World world) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<Bullet> bullets = new HashSet<Bullet>();
+		for(Collidable collidable : world.getAllCollidables())
+			if(collidable instanceof Bullet)
+				bullets.add((Bullet) collidable);
+		return bullets;
 	}
 
 	@Override
 	public void addShip(World world, Ship ship) {
-		// TODO Auto-generated method stub
+		world.addAsCollidable(ship);
 
 	}
 
 	@Override
 	public void addAsteroid(World world, Asteroid asteroid) {
-		// TODO Auto-generated method stub
+		world.addAsCollidable(asteroid);
 
 	}
 
 	@Override
 	public void removeShip(World world, Ship ship) {
-		// TODO Auto-generated method stub
+		world.removeAsCollidable(ship);
 
 	}
 
 	@Override
 	public void removeAsteroid(World world, Asteroid asteroid) {
-		// TODO Auto-generated method stub
+		world.removeAsCollidable(asteroid);
 
 	}
 
@@ -154,57 +158,49 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet> {
 	@Override
 	public Asteroid createAsteroid(double x, double y, double xVelocity,
 			double yVelocity, double radius) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Asteroid(new Vector(x,y), new Vector(xVelocity,yVelocity), radius);
 	}
 
 	@Override
 	public Asteroid createAsteroid(double x, double y, double xVelocity,
 			double yVelocity, double radius, Random random) {
-		// TODO Auto-generated method stub
+		//TODO
 		return null;
 	}
 
 	@Override
 	public boolean isAsteroid(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+		return o instanceof Asteroid;
 	}
 
 	@Override
 	public double getAsteroidX(Asteroid asteroid) {
-		// TODO Auto-generated method stub
-		return 0;
+		return asteroid.getPosition().getXComponent();
 	}
 
 	@Override
 	public double getAsteroidY(Asteroid asteroid) {
-		// TODO Auto-generated method stub
-		return 0;
+		return asteroid.getPosition().getYComponent();
 	}
 
 	@Override
 	public double getAsteroidXVelocity(Asteroid asteroid) {
-		// TODO Auto-generated method stub
-		return 0;
+		return asteroid.getVelocity().getXComponent();
 	}
 
 	@Override
 	public double getAsteroidYVelocity(Asteroid asteroid) {
-		// TODO Auto-generated method stub
-		return 0;
+		return asteroid.getVelocity().getYComponent();
 	}
 
 	@Override
 	public double getAsteroidRadius(Asteroid asteroid) {
-		// TODO Auto-generated method stub
-		return 0;
+		return asteroid.getRadius();
 	}
 
 	@Override
 	public double getAsteroidMass(Asteroid asteroid) {
-		// TODO Auto-generated method stub
-		return 0;
+		return asteroid.getMass();
 	}
 
 	@Override

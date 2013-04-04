@@ -7,8 +7,6 @@
 
 package collidable;
 
-import asteroids.SumOverflowException;
-import asteroids.TimesOverflowException;
 import asteroids.Util;
 import asteroids.Vector;
 import be.kuleuven.cs.som.annotate.*;
@@ -247,6 +245,8 @@ public class Ship extends Collidable implements IShip{
 				&& (amount > 0);
 	}
 	
+	
+	//TODO: toString in superklasse? + specialisatie overerving om iets extra mee te geven, zoals de direction?
 	/**
 	 * Return a textual representation of this ship.
 	 * 

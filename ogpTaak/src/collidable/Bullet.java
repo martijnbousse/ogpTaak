@@ -1,7 +1,8 @@
 package collidable;
 
-import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.*;
 import asteroids.Vector;
+//TODO: vector ook in collidable?
 
 /**
  * A class of bullets as special kinds of collidables involving as additional property an association with ships.
@@ -40,6 +41,14 @@ public class Bullet extends Collidable {
 		setSource(source);
 	}
 	
+	
+	public void terminate() {
+		//TODO: moet terminate van collidable specialiseren? relatie breken, want isterminated = true wordt al in collidable gedaan.
+		//TODO: MOET deze link wel? ==> NEEN die moet niet, want de source mag niet null zijn en nooit veranderen na constructie
+		// ik veronderstel dus dat een link NAAR een ander object, geen probleem is voor de garbage collector
+		}
+	
+
 	/**
 	 * Returns the source of this bullet.
 	 */

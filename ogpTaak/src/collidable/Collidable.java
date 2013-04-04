@@ -18,20 +18,21 @@ import be.kuleuven.cs.som.annotate.*;
  * 			| canHaveAsSpeedLimit(getSpeedLimit())
  * @invar	Each collidable can have its radius as its radius.
  * 			| canHaveAsRadius(getRadius())
- * @invar	The minimum radius that applies to all collidable must be a valid minimum radius.
+ * @invar	The minimum radius that applies to all collidables must be a valid minimum radius.
  * 			| isValidMinRadius(getMinRadius())
- * @invar	The world of each collidable must be a valid world.
- * 			| isValidWorld(getWorld())
+ * @invar	Each collidable must have a proper world to which it is attached.
+ * 			| hasProperWorld()
  * 
  * @version	1.0
  * @author Martijn Boussé, Wout Vekemans
  * 
  */
 //TODO: alle annotaties nazien
-//TODO: invarianten toevoegen
+//TODO: invarianten in orde?
 public abstract class Collidable {
 	/**
-	 * Initialize this new collidable with given position, given velocity, given radius and given mass.
+	 * Initialize this new collidable with given position, given velocity, given radius and given mass
+	 * and not yet attached to a world.
 	 * 
 	 * @param 	position
 	 * 			The position for this new collidable.
@@ -73,8 +74,10 @@ public abstract class Collidable {
 		return this.isTerminated;
 	}
 	
+	/**
+	 * Terminate this collidable and its association with world, if any. 
+	 */
 	public void terminate() {
-		//TODO : break relation
 		this.isTerminated = true;
 	}
 	
@@ -235,8 +238,7 @@ public abstract class Collidable {
 	public static double getMinRadius() {
 		return minRadius;
 	}
-	//TODO: misschien niet meer static? zie sectie 8.2.3 p 524
-	//TODO: wat zei de assistent hier weer over? shizzle met setMinRadius. Iets van niet alle ships hebben dezelfde minradius, maar ik weet niet meer hoe op te lossen.
+	//TODO: voorlopig kunnen we die hier laten staan aangezien alle minradius hetzelfde zijn, of we kunnen er nu al voor kiezen om die in de subklasses te duwen?
 	
 	/**
 	 * Set the minimum radius that applies to all collidables to the given minimum radius.
@@ -324,43 +326,55 @@ public abstract class Collidable {
 	 * Set the world of this collidable to the given world.
 	 * 
 	 * @param	world
-	 * 			The new world for this collidable.
-	 * @post	The new world of this collidable is equal to the given world.
-	 * 			| (new this).getWorld().equals(world)
-	 * @throws	IllegalArgumentException
-	 * 			The given world is not a valid world.
-	 * 			| !isValidWorld(world)
+	 * 			The new world to attach this collidable to.
+	 * @pre		If the given world is effective, it must already reference this collidable as one of its collidables. // verklaart de volgorde in addAsCollidable
+	 * 			| if (world != null)
+	 * 				then world.hasAsCollidable(this)
+	 * @pre		If the given world is not effective and this collidable references an effective world,  // verklaart removeAsCollidable
+	 * 			that world may not reference this collidable as one of its collidables.						// ofwel binding "af"maken ofwel binding breken
+	 * 			| if ((world == null) && (getWorld() != null))
+	 * 			| 	then !getWorld().hasAsCollidable(this)
+	 * @post	This collidable references the given world as teh world to which it is attached.
+	 * 			| (new this).getWorld() == world
 	 */
+	//TODO: setWorld moet zeer beperkt toegankelijk zijn, package visible gaat hier niet (zoals op p. 440) hoe dan? nominaal gedaan zoals in het hb.
 	public void setWorld(World world) {
-		if (!isValidWorld(world)) 
-			throw new IllegalArgumentException();	
+		assert ( (world == null) || world.hasAsCollidable(this) );
+		assert ( (world != null) || (getWorld() == null) || (!getWorld().hasAsCollidable(this)) );
 		this.world = world;
 	}
 	
 	/**
-	 * Check whether this collidable has a proper world associated with it.
-	 * @return
+	 * Check whether this collidable has a proper world to which it is attached.
+	 * 
+	 * @return	True if and only if this collidable can have its world as the world to which it is attached,
+	 * 			and if that world is either not effective or has this collidable as one of its collidables.
+	 * 			| result == ( canHaveAsWorld(getWorld()) 
+	 * 						&& ( (getWorld() == null) || getWorld.hasAsCollidable(this))) 
 	 */
 	public boolean hasProperWorld() {
-		return false;
+		return ( canHaveAsWorld(getWorld()) 
+				&& ( (getWorld() == null) || getWorld().hasAsCollidable(this)));
 	}
 	
 	/**
-	 * Check whether the given world is a valid world for any collidable.
+	 * Check whether this collidable can be attached to the given world.
 	 * 
 	 * @param 	world
 	 * 			The world to check.
-	 * @return	True if and only if the given world is effective.
-	 * 			| result == (world != null)
+	 * @return	True if and only if the given world is not effective or if it can have this collidable as one of its collidables.
+	 * 			| result == ((world == null) || (world.canHaveAsCollidable(this)))
 	 */
-	public static boolean isValidWorld(World world) { 
-		return world != null;
+	// canHaveAsWorld is de complementaire checker in de bidirectionele associatie. Aangezien world de controllerende klasse is, 
+	// moet hier gewoon de checker uit world aangeroepen worden.
+	public boolean canHaveAsWorld(World world) { 
+		return ((world == null) || world.canHaveAsCollidable(this));
 	}
 		
 	/**
 	 * Variable registering the world of this collidable.
 	 */
-	private World world;
+	private World world = null;
 	
 	/**
 	 * Returns the distance between this collidable and the given collidable.
@@ -575,4 +589,6 @@ public abstract class Collidable {
 			setPosition(getPosition());
 		}
 	}
+	
+	//TODO: toString
 }

@@ -113,7 +113,7 @@ public abstract class Collidable {
 	}
 	
 	/**
-	 * Check whether the given position is a valid position for any collidable.
+	 * Check whether this collidable can have its position as its position.
 	 * 
 	 * @param 	position
 	 * 			The position to check.
@@ -123,11 +123,15 @@ public abstract class Collidable {
 	//TODO: werkt niet, nullpointer!
 	@Raw
 	public boolean canHaveAsPosition(Vector position) {
-		return (position != null)
-				&& Util.fuzzyLessThanOrEqualTo(getPosition().getXComponent()+getRadius(),getWorld().getWidth())
-				&& Util.fuzzyLessThanOrEqualTo(getPosition().getYComponent()+getRadius(),getWorld().getHeight())
-				&& Util.fuzzyLessThanOrEqualTo(0.0,getPosition().getXComponent()-getRadius())
-				&& Util.fuzzyLessThanOrEqualTo(0.0,getPosition().getYComponent()-getRadius());
+		if (getWorld() == null)
+			return true; //TODO: what about this?
+		else {
+			return (position != null)
+				&& Util.fuzzyLessThanOrEqualTo(position.getXComponent()+getRadius(),getWorld().getWidth())
+				&& Util.fuzzyLessThanOrEqualTo(position.getYComponent()+getRadius(),getWorld().getHeight())
+				&& Util.fuzzyLessThanOrEqualTo(0.0,position.getXComponent()-getRadius())
+				&& Util.fuzzyLessThanOrEqualTo(0.0,position.getYComponent()-getRadius());
+		}
 	}
 	
 	

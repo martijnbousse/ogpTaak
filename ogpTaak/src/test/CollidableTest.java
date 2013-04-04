@@ -95,7 +95,7 @@ public class CollidableTest {
 
 	@Test
 	public void testGetRadius() {
-		assertEquals(collidable1.getRadius(),15,Util.EPSILON);
+		assertEquals(collidable1.getRadius(),30,Util.EPSILON);
 	}
 	
 	// move

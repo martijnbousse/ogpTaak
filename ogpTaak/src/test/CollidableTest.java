@@ -19,40 +19,40 @@ import asteroids.*;
  */
 public class CollidableTest {
 	
-	//TODO: werkt niet, ik zie het niet onmiddellijk.
-	
-	
 	private static World world1;
 	private static Collidable collidable1;
+	private static Collidable collidable2;
+	private static Collidable collidable3;
+	
 	private World mutableWorld1;
 	private Collidable mutableCollidable1;
+	private Collidable mutableCollidable2;
 	
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		world1 = new World();
-		collidable1 = new Ship(new Vector(10,5), new Vector(5,10), 30, 1000, Math.PI/2);
-		initWorld(world1);
+		collidable1 = new Ship(new Vector(100,50), new Vector(5,10), 30, 1000, Math.PI/2);
+		collidable2 = new Ship(new Vector(110,50), new Vector(5,10), 30, 1000, Math.PI/2);
+		collidable3 = new Ship(new Vector(200,250), new Vector(-5,-10), 30, 1000, Math.PI/2);
+		
+		world1.addAsCollidable(collidable1);
 	}
 
 	@Before
 	public void setUp() throws Exception {
-		mutableWorld1 = new World(5000, 5000);
-		mutableCollidable1 = new Ship(new Vector(0,0), new Vector(1,1), 50, 800, Math.PI/2);
-//		mutableWorld1.addAsCollidable(mutableCollidable1);
-	}
-	
-	// initialisatie
-	
-	private static void initWorld(World world) {
-		world.addAsCollidable(collidable1);
+		mutableWorld1 = new World();
+		mutableCollidable1 = new Ship(new Vector(100,100), new Vector(1,1), 50, 800, Math.PI/2);
+		mutableCollidable2 = new Ship(new Vector(Double.MAX_VALUE-50,Double.MAX_VALUE-50), new Vector(1,1), 50, 800, Math.PI/2);
+		mutableWorld1.addAsCollidable(mutableCollidable1);
+		mutableWorld1.addAsCollidable(mutableCollidable2); //TODO: meerdere collidables ineens toevoegen? 
 	}
 	
 	// position
 	
 	@Test
 	public void testGetPosition() {
-		assertTrue(collidable1.getPosition().equals(new Vector(10,5)));
+		assertTrue(collidable1.getPosition().equals(new Vector(100,50)));
 	}
 	
 	//TODO: setPosition is protected. Hoe testen?
@@ -98,6 +98,17 @@ public class CollidableTest {
 		assertEquals(collidable1.getRadius(),30,Util.EPSILON);
 	}
 	
+	// world
+	
+	@Test
+	public void testgetWorld() {
+		assertTrue(collidable1.getWorld() == world1);
+	}
+	
+	//TODO: properWorld, canHaveAsWorld, ... setWorld zou afgeschermd zijn
+	
+	
+	
 	// move
 	
 	@Test 
@@ -126,12 +137,43 @@ public class CollidableTest {
 		assertTrue(mutableCollidable1.getPosition().equals(oldPosition));
 	}
 	
-//	@Test	TODO: op de rand?
-//	public void testMove_InfinityCase2() {
-//		Vector oldPosition = mutableCollidable2.getPosition();
-//		mutableCollidable2.move(10);
-//		assertTrue(mutableCollidable2.getPosition().equals(oldPosition));
-//	}
+	@Test
+	public void testMove_InfinityCase2() {
+		Vector oldPosition = mutableCollidable2.getPosition();
+		mutableCollidable2.move(10);
+		assertTrue(mutableCollidable2.getPosition().equals(oldPosition));
+	}
+	
+	// thrust
+	
+	// getDistanceBetween
+	
+	// getTimeToCollision	
+	
+	// getTimeToCollisionWithBoundary
+	
+	// overlap
+	
+	@Test
+	public void testOverlap_TrueCase() {
+		assertEquals(true,collidable1.overlap(collidable2));
+	}
+	@Test
+	public void testOverlap_FalseCase() {
+		assertEquals(false,collidable1.overlap(collidable3));
+	}
+	
+	@Test
+	public void testOverlap_ThisCase() {
+		assertEquals(true,collidable1.overlap(collidable1));
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testOverlap_IllegalCase() {
+		collidable1.overlap(null);
+	}
+	
+
 	
 	
 	

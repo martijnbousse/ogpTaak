@@ -120,7 +120,6 @@ public abstract class Collidable {
 	 * @return 	True if and only if the given position is effective.
 	 * 			| result == (position != null)
 	 */	
-	//TODO: werkt niet, nullpointer!
 	@Raw
 	public boolean canHaveAsPosition(Vector position) {
 		if (getWorld() == null)
@@ -129,8 +128,10 @@ public abstract class Collidable {
 			return (position != null)
 				&& Util.fuzzyLessThanOrEqualTo(position.getXComponent()+getRadius(),getWorld().getWidth())
 				&& Util.fuzzyLessThanOrEqualTo(position.getYComponent()+getRadius(),getWorld().getHeight())
-				&& Util.fuzzyLessThanOrEqualTo(0.0,position.getXComponent()-getRadius())
-				&& Util.fuzzyLessThanOrEqualTo(0.0,position.getYComponent()-getRadius());
+				&& position.getXComponent()-getRadius() > 0
+				&& position.getYComponent()-getRadius() > 0;
+//				&& Util.fuzzyLessThanOrEqualTo(0.0,position.getXComponent()-getRadius())
+//				&& Util.fuzzyLessThanOrEqualTo(0.0,position.getYComponent()-getRadius());
 		}
 	}
 	
@@ -454,6 +455,8 @@ public abstract class Collidable {
 	 *			| 		result == Double.POSITIVE_INFINITY
 	 *			|	else
 	 *			|		result == -(dotProductVR+Math.sqrt(d))/dotProductV)
+	 *@effect	True if and only if the collidables overlap after moving the calculated time.
+	 *			| ... 
 	 * @throws 	IllegalArgumentException
 	 * 			The given collidable is not effective.
 	 * 			| (other == null)
@@ -486,6 +489,19 @@ public abstract class Collidable {
 		} catch (TimesOverflowException exc) {
 			return Double.POSITIVE_INFINITY;
 		}
+	}
+	
+	/**
+	 * Returns when this collidable, if ever, will collide with the boundary.
+	 * 
+	 * @return	...
+	 * 			| ...
+	 * @throws	...
+	 * 			| ...
+	 */
+	public double getTimeToCollisionWithBoundary() {
+		return 0.0;
+		//TODO: implementatie
 	}
 	
 	/**

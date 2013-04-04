@@ -85,6 +85,9 @@ public class Bullet extends Collidable {
 	public static double DENSITY = 7.8e-12;
 
 
+	/**
+	 * Returns the mass of this bullet. //TODO: @basic?
+	 */
 	// TODO overflow
 	@Override
 	public double getMass() {

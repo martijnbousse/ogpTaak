@@ -1,6 +1,3 @@
-/**
- * 
- */
 package test;
 
 import static org.junit.Assert.*;
@@ -21,6 +18,8 @@ import asteroids.Vector;
  * @version	1.0
  *
  */
+
+//TODO: fuzzy's wegdoen
 public class VectorTest {
 	
 	/**

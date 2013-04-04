@@ -398,7 +398,10 @@ public abstract class Collidable {
 	 * 			|		result == 0.0
 	 * 			| 	else 	
 	 * 			|		result == Math.sqrt(delta.times(delta)) - this.getRadius() - other.getRadius() //TODO: dan overlappen ze niet ipv code.
+	 * 		//TODO ik zie niet hoe dit anders kan. Wout
 	 * @throws 	IllegalArgumentException
+	 * 
+	 *
 	 * 			The given collidable is not effective.
 	 * 			| (other == null)
 	 */
@@ -456,8 +459,13 @@ public abstract class Collidable {
 	 *			| 		result == Double.POSITIVE_INFINITY
 	 *			|	else
 	 *			|		result == -(dotProductVR+Math.sqrt(d))/dotProductV)
-	 *@effect	True if and only if the collidables overlap after moving the calculated time.
-	 *			| ... 
+	 *
+	 *
+	 *
+	 *
+	 * @effect	True if and only if the collidables overlap after moving the calculated time.
+	 *			| if this.move(result) && other.move(result)
+	 *			|	then this.getDistanceBetween(other) == 0
 	 * @throws 	IllegalArgumentException
 	 * 			The given collidable is not effective.
 	 * 			| (other == null)
@@ -492,6 +500,8 @@ public abstract class Collidable {
 		}
 	}
 	
+	
+	//TODO snelheid = 0 arithmetics
 	/**
 	 * Returns when this collidable, if ever, will collide with the boundary.
 	 * 
@@ -501,8 +511,31 @@ public abstract class Collidable {
 	 * 			| ...
 	 */
 	public double getTimeToCollisionWithBoundary() {
-		return 0.0;
-		//TODO: implementatie
+		if(getWorld() != null) {
+			if(getVelocity().getXComponent() != 0 && getVelocity().getYComponent() != 0) {
+				double maximumXTime = (getWorld().getWidth() - getPosition().getXComponent() - getRadius())/getVelocity().getXComponent();
+				double maximumYTime = (getWorld().getHeight() - getPosition().getYComponent() - getRadius())/getVelocity().getYComponent();
+				double zeroXTime = -getPosition().getXComponent() - getRadius()/getVelocity().getXComponent();
+				double zeroYTime = -getPosition().getYComponent() - getRadius()/getVelocity().getYComponent();
+				if(getVelocity().getXComponent() < 0 && getVelocity().getYComponent() < 0) {
+				return Math.min(zeroXTime, zeroYTime);
+				}
+				if(getVelocity().getXComponent() > 0 && getVelocity().getYComponent() < 0) {
+					return Math.min(maximumXTime, zeroYTime);
+				}
+				if(getVelocity().getXComponent() > 0 && getVelocity().getYComponent() > 0) {
+					return Math.min(maximumXTime, maximumYTime);
+				}
+				if(getVelocity().getXComponent() < 0 && getVelocity().getYComponent() > 0) {
+					return Math.min(zeroXTime, maximumYTime);
+				}
+			}
+			if(getVelocity().getXComponent() == 0)
+				return Math.min(zeroYTime, maximumYTime);
+			if(getVelocity().getYComponent() == 0)
+				return Math.min(zeroXTime , maximumXTime);
+		}
+		return Double.POSITIVE_INFINITY;
 	}
 	
 	/**
@@ -573,7 +606,6 @@ public abstract class Collidable {
 		// TODO implement
 	}
 	
-	//TODO gettimetocollisionwithboundary
 	
 	/**
 	 * Check whether the given time is a valid time for any collidable.

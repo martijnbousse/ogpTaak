@@ -117,12 +117,19 @@ public class Ship extends Collidable implements IShip{
 	
 	
 	
+	/**
+	 * Return the acceleration of this ship according to Newton's third law.
+	 * @return	The acceleration of this ship.
+	 * 			| result == getThrusterAmount()/getMass()
+	 */
 	public double getAcceleration() {
 		return getThrusterAmount()/getMass();
 	}
 	
 	public double getThrusterAmount() {
-		return this.thrusterAmount;
+		if(getThrusterEnabled()==true)
+			return this.thrusterAmount;
+		return 0;
 	}
 	
 	public void setThrusterAmount(double thrusterAmount) {
@@ -138,10 +145,11 @@ public class Ship extends Collidable implements IShip{
 	
 	private double thrusterAmount = 1.1*Math.pow(10,18);
 	
-	public void setThrusterEnabled(boolean isEnabled) {
-		this.isThrusterEnabled = isEnabled;
+	public void setThrusterEnabled(boolean flag) {
+		this.isThrusterEnabled = flag;
 	}
 	// todo: p 472, methodes enableThruster, disableThruster?
+	// TODO heb hier setThrusterEnabled..
 	
 	public boolean getThrusterEnabled() {
 		return this.isThrusterEnabled;

@@ -120,6 +120,8 @@ public abstract class Collidable {
 	 * @return 	True if and only if the given position is effective.
 	 * 			| result == (position != null)
 	 */	
+	//TODO: werkt niet, nullpointer!
+	@Raw
 	public boolean canHaveAsPosition(Vector position) {
 		return (position != null)
 				&& Util.fuzzyLessThanOrEqualTo(getPosition().getXComponent()+getRadius(),getWorld().getWidth())
@@ -127,6 +129,8 @@ public abstract class Collidable {
 				&& Util.fuzzyLessThanOrEqualTo(0.0,getPosition().getXComponent()-getRadius())
 				&& Util.fuzzyLessThanOrEqualTo(0.0,getPosition().getYComponent()-getRadius());
 	}
+	
+	
 	
 	/**
 	 * Variable registering the position of this collidable.

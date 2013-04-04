@@ -30,11 +30,12 @@ public class World {
 	 * @post	The new width of this new world is equal to the given width.
 	 * 			| (new this).getWidth().equals(width)
 	 * @post	The new height of this new world is equal to the given height.
-	 * 			| (new this).getheight().equals(height)
+	 * 			| (new this).getHeight().equals(height)
 	 * @post	No collidables are attached to this new world.
 	 * 			| (new this).getNbCollidables() == 0
 	 */
-	public World(double width, double height){
+	@Raw
+	public World(double width, double height) {
 		if(isValidWidth(width))
 			this.width = width;
 		else {
@@ -45,6 +46,15 @@ public class World {
 		else {
 			this.height =maxHeight;
 		}
+	}
+	
+	/**
+	 * Initialize this new world with all default values.
+	 * 
+	 * @effect	This new world is initialized with width and height equal to Double.MAX_VALUE.
+	 */
+	public World() {
+		this(Double.MAX_VALUE,Double.MAX_VALUE);
 	}
 	
 	/**

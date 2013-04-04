@@ -29,6 +29,7 @@ import be.kuleuven.cs.som.annotate.*;
  */
 //TODO: alle annotaties nazien
 //TODO: invarianten in orde?
+//TODO: belangrijke mutators moeten exceptions opgooien als wordt opgeroepen op terminated object. zie cursus
 public abstract class Collidable {
 	/**
 	 * Initialize this new collidable with given position, given velocity, given radius and given mass
@@ -620,7 +621,7 @@ public abstract class Collidable {
 	 * 			| result.equals(
 	 * 			|	"[" + "Position: " + getPosition().toString() 
 	 * 			|		+ " Velocity: " + getVelocity().toString()
-	 * 			|		+ " Radius: " + getRadius().toString() + "]" )
+	 * 			|		+ " Radius: " + getRadius() + "]" )
 	 */
 	@Override
 	public String toString(){

@@ -101,12 +101,16 @@ public class CollidableTest {
 	// world
 	
 	@Test
-	public void testgetWorld() {
+	public void testGetWorld() {
 		assertTrue(collidable1.getWorld() == world1);
 	}
 	
 	//TODO: properWorld, canHaveAsWorld, ... setWorld zou afgeschermd zijn
 	
+	@Test
+	public void testSetWorld() {
+		//TODO: implement! belangrijke! consistentie van bindingen aantonen
+	}
 	
 	
 	// move
@@ -144,13 +148,74 @@ public class CollidableTest {
 		assertTrue(mutableCollidable2.getPosition().equals(oldPosition));
 	}
 	
-	// thrust
+	// getDistanceBetween //TODO: documentatie aanpassen
 	
-	// getDistanceBetween
+//	@Test(expected=IllegalArgumentException.class)
+//	public void testGetDistanceBetween_NullCase() {
+//		shipDefault.getDistanceBetween(null);
+//	}
+//	
+//	@Test
+//	public void testGetDistanceBetween_ThisCase() {
+//		assertTrue(Util.fuzzyEquals(shipDefault.getDistanceBetween(shipDefault),0.0));
+//	}
+//	
+//	@Test
+//	public void testGetDistanceBetween_LegalCase() {
+//		assertTrue(Util.fuzzyEquals(shipDefault.getDistanceBetween(ship),Math.sqrt(10.0*10.0+5.0*5.0)-15.0-10.0));
+//	}
+//	
+//	@Test
+//	public void testGetDistanceBetween_OverflowCase() {
+//		System.out.println(shipDefault.getDistanceBetween(shipFarAway));
+//		assertEquals(shipDefault.getDistanceBetween(shipFarAway),Double.POSITIVE_INFINITY,0);
+//	}
 	
-	// getTimeToCollision	
+	// getTimeToCollision //TODO: documentatie aanpassen
 	
-	// getTimeToCollisionWithBoundary
+//	@Test(expected=IllegalArgumentException.class)
+//	public void testGetTimeToCollision_NullCase() {
+//		shipDefault.getTimeToCollision(null);
+//	}
+//	
+//	@Test
+//	public void testGetTimeToCollision_CollisionCase() {
+//		assertTrue(Util.fuzzyEquals(0.5870,ship.getTimeToCollision(ship2)));
+//	}
+//	
+//	@Test
+//	public void testGetTimeToCollision_NoCollisionCase1() { // standard no collision case
+//		assertTrue(Util.fuzzyEquals(Double.POSITIVE_INFINITY,ship.getTimeToCollision(ship3)));
+//	}
+//	
+//	@Test
+//	public void testGetTimeToCollision_NoCollisionCase2() { // ships overlap
+//		assertTrue(Util.fuzzyEquals(Double.POSITIVE_INFINITY,ship.getTimeToCollision(shipDefault)));
+//	}
+//	
+//	@Test
+//	public void testGetTimeToCollision_NoCollisionCase3() { // ships travel the same speed in the same direction without overlapping:
+//		assertTrue(Util.fuzzyEquals(Double.POSITIVE_INFINITY,ship2.getTimeToCollision(ship3)));
+//	}
+	
+	// getTimeToCollisionWithBoundary //TODO
+	
+	// getCollisionPosition //TODO: documentatie aanpassen
+	
+//		@Test(expected=IllegalArgumentException.class)
+//		public void testGetCollisionPosition_NullCase() {
+//			shipDefault.getCollisionPosition(null);
+//		}
+//		
+//		@Test
+//		public void testGetCollisionPosition_CollisionCase() {
+//			assertTrue((new Vector(25.6518,18.8259).equals(ship.getCollisionPosition(ship2))));
+//		}
+//		
+//		@Test
+//		public void testGetCollisionPosition_NoCollisionCase() {
+//			assertEquals(null,ship.getCollisionPosition(ship3));
+//		}
 	
 	// overlap
 	
@@ -172,9 +237,4 @@ public class CollidableTest {
 	public void testOverlap_IllegalCase() {
 		collidable1.overlap(null);
 	}
-	
-
-	
-	
-	
 }

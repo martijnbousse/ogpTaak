@@ -115,6 +115,8 @@ public class World {
 				&& 0 < width;
 	}
 	
+	//TODO: isValidWidth én isValidMaxDimension?
+	
 	/**
 	 * Variable registering the width of this world.
 	 */
@@ -252,8 +254,9 @@ public class World {
 	 * 			|	( (!this.isTerminated()) || collidable.isTerminated() )
 	 */
 	// een terminated world kan geen collidable krijgen en een getermineerde collidable kan ook niet toegevoegd worden.
+	// TODO: let op ! aangepast tov p 425, je kan dus NIET een terminated collidable toevoegen nu, origineel ging dat wel...
 	public boolean canHaveAsCollidable(Collidable collidable) {
-		return ((collidable != null) && ((!this.isTerminated()) || collidable.isTerminated()));
+		return ((collidable != null) && !( (this.isTerminated()) || (collidable.isTerminated())));
 	}
 	
 	/**

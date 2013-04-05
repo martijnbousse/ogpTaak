@@ -1,15 +1,10 @@
 package test;
 
 import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import be.kuleuven.cs.som.annotate.Raw;
-
 import collidable.*;
-
 import asteroids.*;
 
 /**
@@ -481,30 +476,30 @@ public class CollidableTest {
 	
 	// getCollisionPosition
 	
-		@Test(expected=IllegalArgumentException.class)
-		public void testGetCollisionPosition_NullCase() {
-			collidable1.getCollisionPosition(null);
-		}
-		
-		@Test(expected=IllegalStateException.class)
-		public void testGetCollisionPosition_ThisIsTerminatedCase() {
-			terminatedCollidable.getTimeToCollision(collidable1);
-		}
-		
-		@Test(expected=IllegalStateException.class)
-		public void testGetCollisionPosition_OtherIsTerminatedCase() {
-			collidable1.getTimeToCollision(terminatedCollidable);
-		}
-		
+	@Test(expected=IllegalArgumentException.class)
+	public void testGetCollisionPosition_NullCase() {
+		collidable1.getCollisionPosition(null);
+	}
+	
+	@Test(expected=IllegalStateException.class)
+	public void testGetCollisionPosition_ThisIsTerminatedCase() {
+		terminatedCollidable.getTimeToCollision(collidable1);
+	}
+	
+	@Test(expected=IllegalStateException.class)
+	public void testGetCollisionPosition_OtherIsTerminatedCase() {
+		collidable1.getTimeToCollision(terminatedCollidable);
+	}
+	
 //		@Test
 //		public void testGetCollisionPosition_CollisionCase() {
 //			assertTrue((new Vector(25.6518,18.8259).equals(ship.getCollisionPosition(ship2))));
 //		} //TODO: eerst documentatie aanpassen
-		
-		@Test
-		public void testGetCollisionPosition_NoCollisionCase() {
-			assertEquals(null,collidable1.getCollisionPosition(collidable4));
-		}
+	
+	@Test
+	public void testGetCollisionPosition_NoCollisionCase() {
+		assertEquals(null,collidable1.getCollisionPosition(collidable4));
+	}
 	
 	// overlap
 	

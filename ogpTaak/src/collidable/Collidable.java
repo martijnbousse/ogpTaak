@@ -120,23 +120,25 @@ public abstract class Collidable {
 	 * 			The position to check.
 	 * @return 	True if and only if the given position is effective.
 	 * 			| result == (position != null)
+	 *    //TODO: documentatie!
 	 */	
 	@Raw
 	public boolean canHaveAsPosition(Vector position) {
 		if (getWorld() == null)
-			return true; //TODO: what about this?
+			return (position != null)
+					&& Util.fuzzyLessThanOrEqualTo(position.getXComponent()+getRadius(),Double.MAX_VALUE)
+					&& Util.fuzzyLessThanOrEqualTo(position.getYComponent()+getRadius(),Double.MAX_VALUE)
+					&& Util.fuzzyLessThanOrEqualTo(0.0,position.getXComponent()-getRadius())
+					&& Util.fuzzyLessThanOrEqualTo(0.0,position.getYComponent()-getRadius());   
+		//TODO: what about this? misschien aparte checker, isValidPosition?
 		else {
 			return (position != null)
 				&& Util.fuzzyLessThanOrEqualTo(position.getXComponent()+getRadius(),getWorld().getWidth())
 				&& Util.fuzzyLessThanOrEqualTo(position.getYComponent()+getRadius(),getWorld().getHeight())
-				&& position.getXComponent()-getRadius() > 0
-				&& position.getYComponent()-getRadius() > 0;
-//				&& Util.fuzzyLessThanOrEqualTo(0.0,position.getXComponent()-getRadius())
-//				&& Util.fuzzyLessThanOrEqualTo(0.0,position.getYComponent()-getRadius());
+				&& Util.fuzzyLessThanOrEqualTo(0.0,position.getXComponent()-getRadius())
+				&& Util.fuzzyLessThanOrEqualTo(0.0,position.getYComponent()-getRadius());
 		}
 	}
-	
-	
 	
 	/**
 	 * Variable registering the position of this collidable.
@@ -391,23 +393,37 @@ public abstract class Collidable {
 	 * 			The other collidable.
 	 * @return	Returns the distance between this collidable and the given collidable. 
 	 * 			If this collidable is equal to the given collidable the result is always zero.
+	 * 			| if (other == this)
+	 * 			|	then result == 0.0
+	 * 			| else if (result != 0.0)
+	 * 			|	then this.overlap(other) == false
+	 * 
+	 *   //TODO: zoiets?
+	 * 
 	 * 			| let 
 	 * 			|	delta = this.getPosition().subtract(other.getPosition())
 	 * 			| in
 	 * 			| 	if(other.equals(this))
 	 * 			|		result == 0.0
 	 * 			| 	else 	
-	 * 			|		result == Math.sqrt(delta.times(delta)) - this.getRadius() - other.getRadius() //TODO: dan overlappen ze niet ipv code.
-	 * 		//TODO ik zie niet hoe dit anders kan. Wout
+	 * 			|		result == Math.sqrt(delta.times(delta)) - this.getRadius() - other.getRadius() 
 	 * @throws 	IllegalArgumentException
-	 * 
-	 *
 	 * 			The given collidable is not effective.
 	 * 			| (other == null)
+	 * @throws	IllegalStateException
+	 * 			This collidable is terminated.
+	 * 			| isTerminated()
+	 * @throws	IllegalStateException
+	 * 			The given collidable is terminated.
+	 * 			| other.isTerminated()
 	 */
 	public double getDistanceBetween(Collidable other) throws IllegalArgumentException {
+		if (isTerminated())
+			throw new IllegalStateException("This collidable is terminated!");
 		if (other == null)
-			throw new IllegalArgumentException("Non effective collidable!");
+			throw new IllegalArgumentException("Non effective collidable!");		//TODO: goed zo? komt nu wel een aantal keer voor, aparte checker voor nodig?
+		if (other.isTerminated())
+			throw new IllegalStateException("The given collidable is terminated!");
 		if(other.equals(this))
 			return 0.0;
 		try{
@@ -429,10 +445,20 @@ public abstract class Collidable {
 	 * @throws 	IllegalArgumentException 
 	 * 			The given collidable is not effective.
 	 * 			| (other == null)
+	 * @throws	IllegalStateException
+	 * 			This collidable is terminated.
+	 * 			| isTerminated()
+	 * @throws	IllegalStateException
+	 * 			The given collidable is terminated.
+	 * 			| other.isTerminated()
 	 */
 	public boolean overlap(Collidable other) throws IllegalArgumentException {
+		if (isTerminated())
+			throw new IllegalStateException("This collidable is terminated!");
 		if (other == null)
-			throw new IllegalArgumentException("Non effective collidable!");
+			throw new IllegalArgumentException("Non effective collidable!");		//TODO: goed zo?
+		if (other.isTerminated())
+			throw new IllegalStateException("The given collidable is terminated!");
 		if (other.equals(this))
 			return true;
 		return (getDistanceBetween(other) < 0);
@@ -443,37 +469,27 @@ public abstract class Collidable {
 	 * 
 	 * @param 	other
 	 * 			The other collidable.
-	 * @return	Returns the time until this collidable and the given collidable will collide.
-	 * 			| let 
-	 * 			|	sigma 	= this.getRadius() + other.getRadius()
-	 * 			| 	deltaR 	= getPosition().subtract(other.getPosition())
-	 *			| 	deltaV 	= getVelocity().subtract(other.getVelocity())
-	 *			| 	dotProductR 	= deltaR.times(deltaR)
-	 *			|	dotProductV 	= deltaV.times(deltaV)
-	 *			|	dotProductVR 	= deltaV.times(deltaR)
-	 *			|	d = (dotProductVR*dotProductVR) - dotProductV*(dotProductR-(sigma*sigma))
-	 *			| in
-	 *			|	if (Util.fuzzyLessThanOrEqualTo(0.0,dotProductVR))
-	 *			|		result == Double.POSITIVE_INFINITY
-	 *			|	else if (Util.fuzzyLessThanOrEqualTo(d,0.0))
-	 *			| 		result == Double.POSITIVE_INFINITY
-	 *			|	else
-	 *			|		result == -(dotProductVR+Math.sqrt(d))/dotProductV)
-	 *
-	 *
-	 *
-	 *
+	 * @effect	Returns the time until this collidable and the given collidable will collide, if ever.
 	 * @effect	True if and only if the collidables overlap after moving the calculated time.
 	 *			| if this.move(result) && other.move(result)
 	 *			|	then this.getDistanceBetween(other) == 0
 	 * @throws 	IllegalArgumentException
 	 * 			The given collidable is not effective.
 	 * 			| (other == null)
+	 * @throws	IllegalStateException
+	 * 			This collidable is terminated.
+	 * 			| isTerminated()
+	 * @throws	IllegalStateException
+	 * 			The given collidable is terminated.
+	 * 			| other.isTerminated()
 	 */
-	//TODO: geen kopie van de code, maar in termen van andere methodes (overlap)
 	public double getTimeToCollision(Collidable other) throws IllegalArgumentException{
+		if (isTerminated())
+			throw new IllegalStateException("This collidable is terminated!");
 		if (other == null)
-			throw new IllegalArgumentException("Non effective collidable!");
+			throw new IllegalArgumentException("Non effective collidable!");		//TODO: goed zo?
+		if (other.isTerminated())
+			throw new IllegalStateException("The given collidable is terminated!");
 		
 		Vector deltaR = other.getPosition().subtract(this.getPosition());
 		Vector deltaV = other.getVelocity().subtract(this.getVelocity());
@@ -544,6 +560,11 @@ public abstract class Collidable {
 	 * @param 	other
 	 * 			The other collidable.
 	 * @return	Returns the position where this collidable and the given collidable will collide. //TODO: documentatie ook in termen van methodes
+	 * 			
+	 * @effect	... geen idee?
+	 * 
+	 * 
+	 * 
 	 * 			| let
 	 * 			| 	dt = getTimeToCollision(other)
 	 *			|	newPositionThis = this.getPosition().add(this.getVelocity().scale(dt))
@@ -560,10 +581,20 @@ public abstract class Collidable {
 	 * @throws	IllegalArgumentException
 	 * 			The given collidable is not effective.
 	 * 			| (other == null)
+	 * @throws	IllegalStateException
+	 * 			This collidable is terminated.
+	 * 			| isTerminated()
+	 * @throws	IllegalStateException
+	 * 			The given collidable is terminated.
+	 * 			| other.isTerminated()
 	 */
 	public Vector getCollisionPosition(Collidable other) throws IllegalArgumentException{
+		if (isTerminated())
+			throw new IllegalStateException("This collidable is terminated!");
 		if (other == null)
-			throw new IllegalArgumentException("Non effective collidable!");	
+			throw new IllegalArgumentException("Non effective collidable!");		//TODO: goed zo?
+		if (other.isTerminated())
+			throw new IllegalStateException("The given collidable is terminated!");
 		double dt = getTimeToCollision(other); 
 		if (dt == Double.POSITIVE_INFINITY)
 			return null;
@@ -606,7 +637,6 @@ public abstract class Collidable {
 		// TODO implement
 	}
 	
-	
 	/**
 	 * Check whether the given time is a valid time for any collidable.
 	 * 
@@ -631,8 +661,13 @@ public abstract class Collidable {
 	 * @throws 	IllegalArgumentException
 	 * 			This collidable cannot accept the given amount of time to move.  
 	 * 			| !isValidTime(time)
+	 * @throws	IllegalStateException
+	 * 			This collidable is terminated.
+	 * 			| isTerminated()
 	 */
-	public void move(double dt) throws IllegalArgumentException {
+	public void move(double dt) throws IllegalArgumentException, IllegalStateException {
+		if (isTerminated())
+			throw new IllegalStateException();
 		if (!isValidTime(dt))
 			throw new IllegalArgumentException();
 		try{

@@ -1,5 +1,6 @@
 package collidable;
 
+import be.kuleuven.cs.som.annotate.*;
 import asteroids.Vector;
 
 /**
@@ -39,9 +40,41 @@ public class Asteroid extends Collidable{
 	 * Return the mass of this asteroid.
 	 * 
 	 */
-	// TODO overflow
-	@Override
+	//TODO: overflow
+	@Override @Basic @Immutable
 	public double getMass() {
-		return (4/3)*Math.PI*Math.pow(getRadius(),3)*DENSITY;
+		return this.mass;
 	}
+	
+	/**
+	 * Variable registering the mass of this asteroid.
+	 */
+	public final double mass = (4/3)*Math.PI*Math.pow(getRadius(),3)*DENSITY; 
+	
+	/**
+	 * Terminate this asteroid as an instance of collidable. In addition ...
+	 * 
+	 * 
+	 */
+	@Override
+	public void terminate() {
+		super.terminate();
+		//TODO: zie 1.7
+	}
+	
+	/**
+	 * Return a textual representation of this asteroid.
+	 * 
+	 * @return	A string consisting of the textual representation of a collidable and
+	 * 			complemented with the mass of this asteroid, separated by spaces and 
+	 * 			ended with a square bracket.
+	 * 			| result.equals(super.toString() 
+	 * 			|	+ " Mass: " + getMass() + "]");
+	 */
+	@Override
+	public String toString(){
+		return super.toString() + " Mass: " + getMass() + "]";
+	}
+	
+	
 }

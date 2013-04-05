@@ -10,7 +10,6 @@ import asteroids.Vector;
  * @invar	The source of each bullet must be a valid source for a bullet.
  * 			| isValidSource(getSource())
  * 
- * 
  * @version	1.0
  * @author 	Martijn Boussé, Wout Vekemans
  *
@@ -38,13 +37,15 @@ public class Bullet extends Collidable {
 	 */
 	public Bullet(Vector position, Vector velocity, double radius, Ship source) {
 		super(position, velocity, radius);
-		setSource(source);
+		if(!isValidSource(source))
+			throw new IllegalArgumentException();
+		this.source = source;
 	}
 	
 	/**
 	 * Returns the source of this bullet.
 	 */
-	@Basic
+	@Basic @Immutable
 	public Ship getSource() {
 		return this.source;
 	}
@@ -56,43 +57,64 @@ public class Bullet extends Collidable {
 	 * @return	| result = source != null
 	 */
 	public static boolean isValidSource(Ship source) {
-		return source != null;
+		return (source != null);
 	}
 	
-	/**
-	 * Set the source for this bullet to the given source.
-	 * 
-	 * @param 	source
-	 * 			The new source for this bullet.
-	 * @post	| (new this).getSource() == source
-	 * @throws	IllegalArgumentException
-	 * 			| !isValidSource(source)
-	 */
-	private void setSource(Ship source) throws IllegalArgumentException{
-		if(!isValidSource(source))
-			throw new IllegalArgumentException();
-		this.source = source;
-	}
+//	/**
+//	 * Set the source for this bullet to the given source.
+//	 * 
+//	 * @param 	source
+//	 * 			The new source for this bullet.
+//	 * @post	| (new this).getSource() == source
+//	 * @throws	IllegalArgumentException
+//	 * 			| !isValidSource(source)
+//	 */
+//	@Raw
+//	private void setSource(Ship source) throws IllegalArgumentException{
+//		if(!isValidSource(source))
+//			throw new IllegalArgumentException();
+//		this.source = source;
+//	}
+	
+	//TODO: aangezien source final is? in constructor én getSource is @Immutable
 	
 	/**
 	 * Variable registering the source of this bullet.
 	 */
-	private Ship source; 
+	private final Ship source; 
 	
 	/**
 	 * Symbolic constant registering the density of all bullets.
 	 */
 	public static double DENSITY = 7.8e-12;
 
-
 	/**
-	 * Returns the mass of this bullet. //TODO: @basic?
+	 * Returns the mass of this bullet.
 	 */
-	// TODO overflow
-	@Override
+	@Override @Basic @Immutable
 	public double getMass() {
-		return (4/3)*Math.PI*Math.pow(getRadius(),3)*DENSITY;
+		return this.mass;
 	}
 	
+	/**
+	 * Variable registering the mass of this bullet.
+	 */
+	public final double mass = (4/3)*Math.PI*Math.pow(getRadius(),3)*DENSITY; 
 	
+	
+	// TODO: alreadyBounced ? om te kunnen nagaan of de bullet al gebounced heeft met de rand in evolve.
+	
+	/**
+	 * Return a textual representation of this bullet.
+	 * 
+	 * @return	A string consisting of the textual representation of a collidable and
+	 * 			complemented with the mass and source of this bullet, separated by
+	 * 			spaces and ended with a square bracket.
+	 * 			| result.equals(super.toString() 
+	 * 			|	+ " Mass: " + getMass() + " Source: " + getSource() + "]");
+	 */
+	@Override
+	public String toString(){
+		return super.toString() + " Mass: " + getMass() +  " Source: " + getSource() + "]";
+	}
 }

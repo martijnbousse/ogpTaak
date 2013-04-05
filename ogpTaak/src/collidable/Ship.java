@@ -16,6 +16,8 @@ import be.kuleuven.cs.som.annotate.*;
  * 
  * @invar 	The direction of each ship must be a valid direction.
  * 			| isValidDirection(getDirection())
+ * @invar	The mass of each ship must be a valid mass.
+ * 			| isValidMass(getMass())
  * 
  * @version 2.0
  * @author Martijn Boussé, Wout Vekemans
@@ -43,31 +45,28 @@ public class Ship extends Collidable implements IShip{
 	 * 			| isValidDirection(direction)
 	 * @post	The new direction of this new ship is equal to the given direction.
 	 * 			| (new this).getDirection() == direction
+	 * @post	The new mass of this new ship is equal to the given mass.
+	 * 			| (new this).getMass() == mass
 	 */
 	@Raw
 	public Ship(Vector position, Vector velocity, double radius, double mass, double direction) throws IllegalArgumentException {
 		super(position,velocity, radius);
-		if(!canHaveAsRadius(radius)){
-			throw new IllegalArgumentException();	
-		}
 		setDirection(direction);
-		setMass(mass);
-	}
-	
-	private void setMass(double mass) {
-		
+		if (!isValidMass(mass)) // zoals radius in collidable, geen setter want massa verandert nooit.
+			throw new IllegalArgumentException();
+		this.mass = mass;
 	}
 
 	/**
 	 * Initialize this new ship with all default values.
 	 * 
-	 * @effect 	This new ship is initialized with position and velocity (0,0), 
-	 * 			the minimal radius as its radius and zero as its direction
-	 * 			| this(new Vector(0,0), new Vector(0,0), minRadius, 0)
+	 * @effect 	This new ship is initialized with position (10,10), velocity (0,0) ,
+	 * 			radius 10 and zero as its direction.
+	 * 			| this(new Vector(10,10), new Vector(0,0), 10, 0)
 	 */
 	@Raw
 	public Ship() {
-		this(new Vector(0, 0), new Vector(0, 0), 10, 10, 1);
+		this(new Vector(10, 10), new Vector(0, 0), 10, 10, 1);
 	}
 	
 	/**
@@ -115,10 +114,38 @@ public class Ship extends Collidable implements IShip{
 	 */
 	private double direction = 0.0;
 	
+	/**
+	 * Returns the mass of this ship.
+	 */
+	@Override @Basic @Immutable
+	public double getMass() {
+		return this.mass;
+	}
 	
+	/**
+	 * Check whether the given mass is a valid mass for any ship.
+	 * 
+	 * @param	mass
+	 * 			The mass to check.
+	 * @return	True if and only if the given mass is a number and if it is bigger then zero.
+	 * 			| result == !Double.isNaN(mass)
+	 * 			|			&& Util.fuzzyLessThanOrEqualTo(0.0,mass)  	
+	 */
+	public static boolean isValidMass(double mass) {
+		return !Double.isNaN(mass)
+				&& Util.fuzzyLessThanOrEqualTo(0.0,mass);
+	}
+	
+	/**
+	 * Variable registering the mass of this ship.
+	 */
+	public final double mass; 
+	//TODO: ik heb die hier gezet omdat mass volgens mij final is, maar dan krijg je error als die in collidable staat.
+	// maar dan hebt ge in elke subklasse in een variable mass?
 	
 	/**
 	 * Return the acceleration of this ship according to Newton's third law.
+	 * 
 	 * @return	The acceleration of this ship.
 	 * 			| result == getThrusterAmount()/getMass()
 	 */
@@ -126,39 +153,76 @@ public class Ship extends Collidable implements IShip{
 		return getThrusterAmount()/getMass();
 	}
 	
+	/**
+	 * Returns the thruster amount of this ship.
+	 * 
+	 * @return	...
+	 * 			| ...
+	 */
 	public double getThrusterAmount() {
-		if(getThrusterEnabled()==true)
+		if(isThrusterEnabled()==true)
 			return this.thrusterAmount;
 		return 0;
 	}
 	
+	/**
+	 * Set the thruster amount of this ship to the given thruster amount.
+	 * 
+	 * @param 	thrusterAmount
+	 * 			The given thruster amount.
+	 * @post	...
+	 * 			| ...
+	 */
 	public void setThrusterAmount(double thrusterAmount) {
 		if(isValidThrusterAmount(thrusterAmount)) {
 			this.thrusterAmount = thrusterAmount;
 		}
 	}
 	
+	/**
+	 * Check whether the given thruster amount is a valid thruster amount for any ship.
+	 * 	
+	 * @param 	thrusterAmount
+	 * 			The thruster amount to check.
+	 * @return	True if and only if the given thruster amount is a number and if it is bigger then zero.
+	 */
 	public boolean isValidThrusterAmount(double thrusterAmount) {
 		return !Double.isNaN(thrusterAmount)
-				&& 0 < thrusterAmount;
+				&& (0 < thrusterAmount);
 	}
 	
+	/**
+	 * Variable registering the trusher amount of this ship.
+	 */
 	private double thrusterAmount = 1.1*Math.pow(10,18);
 	
+	/**
+	 * Enable or disable the thruster corresponding to the given flag.
+	 * 	
+	 * @param 	flag
+	 * 			The given flag.
+	 * @post	...
+	 * 			| ...
+	 */
 	public void setThrusterEnabled(boolean flag) {
 		this.isThrusterEnabled = flag;
 	}
 	// todo: p 472, methodes enableThruster, disableThruster?
 	// TODO heb hier setThrusterEnabled..
 	
-	public boolean getThrusterEnabled() {
+	/**
+	 * Check whether the thruster of this ship is enabled.
+	 */
+	@Basic
+	public boolean isThrusterEnabled() {
 		return this.isThrusterEnabled;
 	}
 	
+	/**
+	 * Variable registering whether or not the thruster of this ship is enabled.
+	 */
 	private boolean isThrusterEnabled;
 		
-	
-	
 	/**
 	 * Add the given angle to the direction of this ship.
 	 * 
@@ -225,7 +289,7 @@ public class Ship extends Collidable implements IShip{
 	public static boolean isValidThrustAmount(double amount) {
 		return	!Double.isNaN(amount)
 				&& (amount > 0);
-	}
+	} //TODO: isValidThrustAmount én isValidThrusterAmount ?
 	
 	/**
 	 * This ship fires a bullet.
@@ -238,30 +302,17 @@ public class Ship extends Collidable implements IShip{
 		// TODO: nieuwe bullet aanmaken, juiste parameters meegeven via parameters this ship en toevoegen aan de lijst met collidables in world. (setWorld())
 	}
 	
-	
-	//TODO: toString in superklasse? + specialisatie overerving om iets extra mee te geven, zoals de direction?
 	/**
 	 * Return a textual representation of this ship.
 	 * 
-	 * @return	A string consisting of the textual representation of the position, the velocity, the radius and the direction of this ship,
-	 * 			separated by a space and enclosed in square brackets.
-	 * 			| result.equals(
-	 * 			|	"[" + "Position: " + getPosition().toString() 
-	 * 			|		+ " Velocity: " + getVelocity().toString()
-	 * 			|		+ " Radius: " + getRadius().toString() 
-	 * 			|		+ " Direction: " + getDirection().toString() + "]" )
+	 * @return	A string consisting of the textual representation of a collidable and
+	 * 			complemented with the mass and direction of this ship, separated by
+	 * 			spaces and ended with a square bracket.
+	 * 			| result.equals(super.toString() 
+	 * 			|	+ " Mass: " + getMass() + " Direction: " + getDirection() + "]");
 	 */
 	@Override
 	public String toString(){
-		return "[" + "Position: " + getPosition().toString() 
-				   + " Velocity: " + getVelocity().toString()
-				   + " Radius: " + getRadius() 
-				   + " Direction: " + getDirection() + "]";
-	}
-
-	@Override
-	public double getMass() {
-		// TODO Auto-generated method stub
-		return 0;
+		return super.toString() + " Mass: " + getMass() +  " Direction: " + getDirection() + "]";
 	}
 }

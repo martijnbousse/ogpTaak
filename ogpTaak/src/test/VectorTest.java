@@ -28,7 +28,7 @@ public class VectorTest {
 	private static Vector vector12;
 	
 	/**
-	 * Variable referencing vectors with components (2,2), (1,-4), (0,0) and (inf,inf).
+	 * Variable referencing vectors with components (2,2), (1,-4) and (inf,inf).
 	 */
 	private Vector vector22, vector1min4, vectorMaxMax;
 
@@ -48,12 +48,12 @@ public class VectorTest {
 
 	@Test
 	public void testGetXComponent() {
-		assertTrue(Util.fuzzyEquals(vector12.getXComponent(),1.0));
+		assertEquals(vector12.getXComponent(),1.0,Util.EPSILON);
 	}
 	
 	@Test
 	public void testGetYComponent() {
-		assertTrue(Util.fuzzyEquals(vector12.getYComponent(),2.0));
+		assertEquals(vector12.getYComponent(),2.0,Util.EPSILON);
 	}
 	
 	// add

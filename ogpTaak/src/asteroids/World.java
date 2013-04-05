@@ -77,6 +77,7 @@ public class World {
 	 */
 	//TODO: p. 437, alle non-terminated collidables worden verwijderd, maar er kunnen geen terminated collidables in die lijst zitten?? 
 	//																	toch wordt het zo gedaan in de cursus?
+	//TODO: neen! origineel kunnen er wel terminated collidables inzitten, maar ik heb dat verandert dat dat niet kan! dus if test mag weg.
 	public void terminate() {
 		for (Collidable collidable: collidables) {
 			if (!collidable.isTerminated()) {
@@ -237,9 +238,17 @@ public class World {
 	public int getNbCollidables() {
 		return getAllCollidables().size();
 	}
-	
-	//TODO: getAllCollidables en getNbCollidables heb ik nodig in documentatie en invarianten. Ik zou ook de drie aparte methodes kunnen samen nemen in die 
-	// specificaties. Maar volgens mij is het beter om alleen die twee hier te definieren. En die andere methodes in Facade.
+		
+	/**
+	 * Check whether this world has the given collidable as one of the collidables attached to it.
+	 * 
+	 * @param 	collidable
+	 * 			The collidable to check.
+	 */
+	@Basic @Raw
+	public boolean hasAsCollidable(Collidable collidable) {
+		return this.collidables.contains(collidable); // constant time
+	}
 	
 	/**
 	 * Checks whether this world can have the given collidable as one of its collidables.
@@ -254,20 +263,10 @@ public class World {
 	 * 			|	( (!this.isTerminated()) || collidable.isTerminated() )
 	 */
 	// een terminated world kan geen collidable krijgen en een getermineerde collidable kan ook niet toegevoegd worden.
-	// TODO: let op ! aangepast tov p 425, je kan dus NIET een terminated collidable toevoegen nu, origineel ging dat wel...
+	// let op ! aangepast tov p 425, je kan dus NIET een terminated collidable toevoegen nu, origineel ging dat wel...
+	@Raw
 	public boolean canHaveAsCollidable(Collidable collidable) {
 		return ((collidable != null) && !( (this.isTerminated()) || (collidable.isTerminated())));
-	}
-	
-	/**
-	 * Check whether this world has the given collidable as one of the collidables attached to it.
-	 * 
-	 * @param 	collidable
-	 * 			The collidable to check.
-	 */
-	@Basic
-	public boolean hasAsCollidable(Collidable collidable) {
-		return this.collidables.contains(collidable); // constant time
 	}
 	
 	/**
@@ -282,6 +281,7 @@ public class World {
 	 * 						  && (collidable.getWorld() == this))
 	 */
 	// encapsulating the class invariants cf representation invariants for the set.
+	@Raw
 	public boolean hasProperCollidables() {
 		for (Collidable collidable: this.collidables) {
 			if (!canHaveAsCollidable(collidable))

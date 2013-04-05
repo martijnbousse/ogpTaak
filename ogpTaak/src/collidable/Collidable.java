@@ -63,6 +63,9 @@ public abstract class Collidable {
 		setSpeedLimit(SPEED_OF_LIGHT);
 		setPosition(position);
 		setVelocity(velocity);
+		if(!canHaveAsRadius(radius)){
+			throw new IllegalArgumentException();	
+		}
 		this.radius = radius;
 	}
 	
@@ -76,10 +79,11 @@ public abstract class Collidable {
 	}
 	
 	/**
-	 * Terminate this collidable and its association with world, if any. 
+	 * Terminate this collidable. 
 	 */
 	public void terminate() {
-		this.isTerminated = true;
+		this.isTerminated = true; 
+		// Alle verantwoordelijkheid voor de biderectionele associatie ligt in world.
 	}
 	
 	/**
@@ -249,6 +253,7 @@ public abstract class Collidable {
 		return minRadius;
 	}
 	//TODO: voorlopig kunnen we die hier laten staan aangezien alle minradius hetzelfde zijn, of we kunnen er nu al voor kiezen om die in de subklasses te duwen?
+	//TODO: het vreemde hieraan is dat we die setter hebben, zei de assistent. 
 	
 	/**
 	 * Set the minimum radius that applies to all collidables to the given minimum radius.
@@ -319,11 +324,6 @@ public abstract class Collidable {
 	 */
 	public abstract double getMass();
 	
-//	/**
-//	 * Variable registering the mass of this collidable.
-//	 */
-//	public double mass;
-	
 	/**
 	 * Return the world of this collidable.
 	 */
@@ -348,7 +348,9 @@ public abstract class Collidable {
 	 * 			| (new this).getWorld() == world
 	 */
 	//TODO: setWorld moet zeer beperkt toegankelijk zijn, package visible gaat hier niet (zoals op p. 440) hoe dan? nominaal gedaan zoals in het hb.
-	public void setWorld(World world) {
+	//TODO: world ook @raw? zie p. 440
+	@Raw
+	public void setWorld(@Raw World world) {
 		assert ( (world == null) || world.hasAsCollidable(this) );
 		assert ( (world != null) || (getWorld() == null) || (!getWorld().hasAsCollidable(this)) );
 		this.world = world;
@@ -362,6 +364,7 @@ public abstract class Collidable {
 	 * 			| result == ( canHaveAsWorld(getWorld()) 
 	 * 						&& ( (getWorld() == null) || getWorld.hasAsCollidable(this))) 
 	 */
+	@Raw
 	public boolean hasProperWorld() {
 		return ( canHaveAsWorld(getWorld()) 
 				&& ( (getWorld() == null) || getWorld().hasAsCollidable(this)));
@@ -377,6 +380,7 @@ public abstract class Collidable {
 	 */
 	// canHaveAsWorld is de complementaire checker in de bidirectionele associatie. Aangezien world de controllerende klasse is, 
 	// moet hier gewoon de checker uit world aangeroepen worden.
+	@Raw
 	public boolean canHaveAsWorld(World world) { 
 		return ((world == null) || world.canHaveAsCollidable(this));
 	}
@@ -456,7 +460,7 @@ public abstract class Collidable {
 		if (isTerminated())
 			throw new IllegalStateException("This collidable is terminated!");
 		if (other == null)
-			throw new IllegalArgumentException("Non effective collidable!");		//TODO: goed zo?
+			throw new IllegalArgumentException("Non effective collidable!");	
 		if (other.isTerminated())
 			throw new IllegalStateException("The given collidable is terminated!");
 		if (other.equals(this))
@@ -487,7 +491,7 @@ public abstract class Collidable {
 		if (isTerminated())
 			throw new IllegalStateException("This collidable is terminated!");
 		if (other == null)
-			throw new IllegalArgumentException("Non effective collidable!");		//TODO: goed zo?
+			throw new IllegalArgumentException("Non effective collidable!");
 		if (other.isTerminated())
 			throw new IllegalStateException("The given collidable is terminated!");
 		
@@ -592,7 +596,7 @@ public abstract class Collidable {
 		if (isTerminated())
 			throw new IllegalStateException("This collidable is terminated!");
 		if (other == null)
-			throw new IllegalArgumentException("Non effective collidable!");		//TODO: goed zo?
+			throw new IllegalArgumentException("Non effective collidable!");
 		if (other.isTerminated())
 			throw new IllegalStateException("The given collidable is terminated!");
 		double dt = getTimeToCollision(other); 
@@ -613,6 +617,12 @@ public abstract class Collidable {
 	}
 	
 	// TODO: documentatie
+	/**
+	 * Inverts the speed of this collidable.
+	 * 
+	 * @return	...
+	 * 			| ...
+	 */
 	public void invertSpeed() {
 		Vector newVelocity;
 		if(Util.fuzzyEquals(getPosition().getXComponent()-getRadius(),0)) {
@@ -633,6 +643,14 @@ public abstract class Collidable {
 		setVelocity(newVelocity);
 	}
 	
+	/**
+	 * This ship bounces with the other ship.
+	 * 
+	 * @param 	other
+	 * 			The other collidable.
+	 * @return	...
+	 * 			| ...
+	 */
 	public void bounce(Collidable other) {
 		// TODO implement
 	}
@@ -683,8 +701,9 @@ public abstract class Collidable {
 	/**
 	 * Return a textual representation of this collidable.
 	 * 
-	 * @return	A string consisting of the textual representation of the position, the velocity and the radius of this collidable, //TODO: en verder? specialisatie overerving, zie ook ship.
-	 * 			separated by a space and enclosed in square brackets.
+	 * @return	A string consisting of the textual representation of the position, 
+	 * 			the velocity and the radius of this collidable, separated by a space 
+	 * 			and preceded by a square bracket.
 	 * 			| result.equals(
 	 * 			|	"[" + "Position: " + getPosition().toString() 
 	 * 			|		+ " Velocity: " + getVelocity().toString()

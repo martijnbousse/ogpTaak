@@ -237,9 +237,4 @@ public class WorldTest {
 		fail("Not yet implemented");
 	}
 
-	@Test
-	public void testToString() {
-		fail("Not yet implemented");
-	}
-
 }

@@ -27,9 +27,7 @@ import be.kuleuven.cs.som.annotate.*;
  * @author Martijn Boussé, Wout Vekemans
  * 
  */
-//TODO: alle annotaties nazien
-//TODO: invarianten in orde?
-//TODO: belangrijke mutators moeten exceptions opgooien als wordt opgeroepen op terminated object. zie cursus
+//TODO: Belangrijke mutators moeten IllegalStateException opgooien! bounce, invertspeed, etc 
 public abstract class Collidable {
 	/**
 	 * Initialize this new collidable with given position, given velocity, given radius and given mass

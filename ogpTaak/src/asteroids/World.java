@@ -70,7 +70,7 @@ public class World {
 	 * 
 	 * @post	This World is terminated.
 	 * 			| (new this).isTerminated()
-	 * @Effect	Each non-terminated collidable attached to this world is removed from this world.
+	 * @effect	Each non-terminated collidable attached to this world is removed from this world.
 	 * 			| for each collidable in getAllCollidables:
 	 * 			|	if (!collidable.isTerminated())
 	 * 			|		then this.removeAsCollidable(collidable)
@@ -83,6 +83,7 @@ public class World {
 			if (!collidable.isTerminated()) {
 				collidable.setWorld(null);
 				this.collidables.remove(collidable);
+				// Hier wordt niet collidable.terminate() aangeroepen! Moet in evolve.
 			}		
 		}	
 		this.isTerminated = true;	
@@ -361,11 +362,50 @@ public class World {
 	private final Set<Collidable> collidables = new HashSet<Collidable>();
 	
 	/**
+	 * Advances the time in this world.
 	 * 
 	 * @param dt
 	 */
 	public void evolve(double dt) {
+		// collidable.terminate() aanroepen + verwijderen van de lijst van collidables in de if structuur.
+		// Als dan terminate wordt aangeroepen op een asteroid, wordt in de gespecialiseerde terminate van asteroid twee nieuwe asteroids toegevoegd.
 		
+		
+		
+		
+		// TODO: 1.6 Advacing Time
+		// 1 getNextCollision
+		// 2 move voor t (uit collision data)
+		// 3 resolve the collision met die if structuur
+		// 4 ...
+		// 5 move(t)
+		
+	}
+	
+	/**
+	 * Predict the collisions in this world.
+	 * 
+	 * 
+	 */
+	public void predictCollisions() {
+		// return type = lijst van collisions (value class?)
+		// bevat collisionposition, timetocollision, this en other.
+		// ofwel ipv een type "collision" kan je ook een map meegeven en in evolve bereken je wat je nodig hebt.
+		// als we dat doen met een datastructuur moet ook hier weer representatie invarianten voor geschreven worden.
+		
+		// zie ook efficient prediction.
+		
+		// kunnen dit misschien enkel uitvoeren als er een verandering is gebeurt (zie extra) 
+		// via een methode getNextCollision halen we dan uit de datastructuur de juiste gegevens voor in evolve.
+	}
+	
+	/**
+	 * Returns the next collision in this world.
+	 * 
+	 * 
+	 */
+	public void getNextCollision() {
+		// return type = collision?
 	}
 	
 	/**

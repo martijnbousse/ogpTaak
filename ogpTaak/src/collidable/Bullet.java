@@ -102,7 +102,29 @@ public class Bullet extends Collidable {
 	public final double mass = (4/3)*Math.PI*Math.pow(getRadius(),3)*DENSITY; 
 	
 	
-	// TODO: alreadyBounced ? om te kunnen nagaan of de bullet al gebounced heeft met de rand in evolve.
+	// TODO: bouncedOnce ? om te kunnen nagaan of de bullet al gebounced heeft met de rand in evolve.
+	/**
+	 * Returns whether this bullet has already bounced with the boundary.
+	 */
+	@Basic
+	public boolean bouncedOnce() {
+		return this.bouncedOnce;
+	}
+	
+	/**
+	 * Sets this bullet as already bounced with the boundary.
+	 * 
+	 * @post	This bullet has bounced with the boundary.
+	 * 			(new this).bouncedOnce() == true
+	 */
+	public void setBouncedOnce() {
+		this.bouncedOnce = true;
+	}
+	
+	/**
+	 * Variable registering whether this bullet has already bounced with the boundary.
+	 */
+	private boolean bouncedOnce = false;
 	
 	/**
 	 * Return a textual representation of this bullet.

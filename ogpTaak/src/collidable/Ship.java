@@ -23,6 +23,7 @@ import be.kuleuven.cs.som.annotate.*;
  * @author Martijn Boussé, Wout Vekemans
  *
  */
+//TODO: important mutators should throw an illegalStateException if this isTerminated. Hier turn, thrust en fireBullet?
 public class Ship extends Collidable implements IShip{
 	
 	/**
@@ -298,8 +299,10 @@ public class Ship extends Collidable implements IShip{
 	 * 			| ...
 	 */
 	public void fireBullet() {
-		// TODO: canFireBullet houdt rekening met: initiele positie al ingenomen en partially located outside of the world.
-		// TODO: nieuwe bullet aanmaken, juiste parameters meegeven via parameters this ship en toevoegen aan de lijst met collidables in world. (setWorld())
+		// TODO: wederom testen op isTerminated?
+		// TODO: canFireBullet houdt rekening met: initiele positie al ingenomen en partially located outside of the world. -> Neen
+		// TODO: nieuwe bullet aanmaken, juiste parameters meegeven via parameters this ship en toevoegen aan de lijst met collidables in world. (addAsCollidable())
+		// TODO: fireBUllet enkel als ship een wereld heeft?
 	}
 	
 	/**

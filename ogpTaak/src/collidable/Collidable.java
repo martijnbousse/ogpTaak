@@ -529,7 +529,7 @@ public abstract class Collidable {
 	 * 			| ...
 	 */
 	public double getTimeToCollisionWithBoundary() {
-		if(getWorld() != null) {
+		if(!hasProperWorld()) {
 			if(getVelocity().getXComponent() != 0 && getVelocity().getYComponent() != 0) {
 				double maximumXTime = (getWorld().getWidth() - getPosition().getXComponent() - getRadius())/getVelocity().getXComponent();
 				double maximumYTime = (getWorld().getHeight() - getPosition().getYComponent() - getRadius())/getVelocity().getYComponent();

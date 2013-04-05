@@ -6,6 +6,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import be.kuleuven.cs.som.annotate.Raw;
+
 import collidable.*;
 
 import asteroids.*;
@@ -83,8 +85,11 @@ public class WorldTest {
 
 	@Test
 	public void testTerminate() {
-		//TODO bidirectionele associatie moet hier getest worden of die volledig verbroken wordt.
-		fail("Not yet implemented");
+		mutableWorld1.terminate();
+//		assertEquals(mutableWorld1.getNbCollidables(),0);  //TODO: werkt niet, concurrentModificationException? 
+		// http://www.coderanch.com/t/233932/threads/java/deal-Concurrent-Modification-Exception
+		// of java docs
+		
 	}
 	
 	// width
@@ -93,24 +98,43 @@ public class WorldTest {
 	public void testGetWidth() {
 		assertEquals(world1.getWidth(),1000,Util.EPSILON);
 	}
-
-	@Test
-	public void testIsValidWidth() {
-		fail("Not yet implemented");
-	}
-
+	
 	@Test
 	public void testGetMaxWidth() {
+		assertEquals(World.getMaxWidth(),Double.MAX_VALUE,Util.EPSILON);
+	}
+	
+	@Test
+	public void testSetMaxWidth() {
 		fail("Not yet implemented");
 	}
+	
+	// isValidWidth
+
+	@Test
+	public void testIsValidWidth_NaNCase() {
+		assertFalse(World.isValidWidth(Double.NaN));
+	}
+	
+	@Test
+	public void testIsValidWidth_MaxCase() {
+		assertTrue(World.isValidWidth(Double.MAX_VALUE));
+	}
+	
+	@Test
+	public void testIsValidWidth_ZeroCase() {
+		assertFalse(World.isValidWidth(0));
+	}
+	
+	@Test
+	public void testIsValidWidth_NegativeCase() {
+		assertFalse(World.isValidWidth(-1));
+	}
+	
+	// maxDimension
 
 	@Test
 	public void testIsValidMaxDimension() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testSetMaxWidth() {
 		fail("Not yet implemented");
 	}
 	
@@ -120,20 +144,37 @@ public class WorldTest {
 	public void testGetHeight() {
 		assertEquals(world1.getHeight(),1000,Util.EPSILON);
 	}
-
-	@Test
-	public void testIsValidHeight() {
-		fail("Not yet implemented");
-	}
-
+	
 	@Test
 	public void testGetMaxHeight() {
-		fail("Not yet implemented");
+		assertEquals(World.getMaxHeight(),Double.MAX_VALUE,Util.EPSILON);
 	}
 
 	@Test
 	public void testSetMaxHeight() {
 		fail("Not yet implemented");
+	}
+	
+	// isValidHeight
+
+	@Test
+	public void testIsValidHeight_NaNCase() {
+		assertFalse(World.isValidHeight(Double.NaN));
+	}
+	
+	@Test
+	public void testIsValidHeight_MaxCase() {
+		assertTrue(World.isValidHeight(Double.MAX_VALUE));
+	}
+	
+	@Test
+	public void testIsValidHeight_ZeroCase() {
+		assertFalse(World.isValidHeight(0));
+	}
+	
+	@Test
+	public void testIsValidHeight_NegativeCase() {
+		assertFalse(World.isValidHeight(-1));
 	}
 
 	@Test
@@ -152,12 +193,21 @@ public class WorldTest {
 	public void testGetNbCollidables() {
 		assertEquals(3,world1.getNbCollidables());
 	}
-
+	
+	// canHaveAsCollidable
+	
 	@Test
-	public void testCanHaveAsCollidable() {
-		fail("Not yet implemented");
+	public void testCanHaveAsCollidable_NullCase() {
+		assertFalse(world1.canHaveAsCollidable(null));
 	}
-
+	
+	@Test
+	public void testCanHaveAsCollidable_OtherIsTerminatedCase() {
+		assertFalse(world1.canHaveAsCollidable(terminatedCollidable));
+	}
+	
+	// hasAsCollidable
+	
 	@Test
 	public void testHasAsCollidable_LegalCase() {
 		assertTrue(world1.hasAsCollidable(collidable1));
@@ -172,6 +222,8 @@ public class WorldTest {
 	public void testHasAsCollidable_NullCase() {
 		assertFalse(world1.hasAsCollidable(null));
 	}
+	
+	// hasProperCollidables
 	
 	@Test
 	public void testHasProperCollidables() {

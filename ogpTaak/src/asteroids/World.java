@@ -79,7 +79,7 @@ public class World {
 	//																	toch wordt het zo gedaan in de cursus?
 	//TODO: neen! origineel kunnen er wel terminated collidables inzitten, maar ik heb dat verandert dat dat niet kan! dus if test mag weg.
 	public void terminate() {
-		for (Collidable collidable: collidables) {
+		for (Collidable collidable : collidables) {
 			if (!collidable.isTerminated()) {
 				collidable.setWorld(null);
 				this.collidables.remove(collidable);
@@ -111,7 +111,7 @@ public class World {
 	 *				&& Util.fuzzyLessThanOrEqualTo(width, maxWidth)
 	 *				&& 0 < width
 	 */
-	public boolean isValidWidth(double width) {
+	public static boolean isValidWidth(double width) {
 		return !Double.isNaN(width) 
 				&& Util.fuzzyLessThanOrEqualTo(width, maxWidth)
 				&& 0 < width;
@@ -180,7 +180,7 @@ public class World {
 	 *				&& Util.fuzzyLessThanOrEqualTo(width, maxHeight)
 	 *				&& 0 < height
 	 */
-	public boolean isValidHeight(double height) {
+	public static boolean isValidHeight(double height) {
 		return !Double.isNaN(height) 
 				&& Util.fuzzyLessThanOrEqualTo(height, maxHeight)
 				&& 0 < height;

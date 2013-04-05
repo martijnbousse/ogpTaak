@@ -292,17 +292,33 @@ public class Ship extends Collidable implements IShip{
 				&& (amount > 0);
 	} //TODO: isValidThrustAmount én isValidThrusterAmount ?
 	
+	
+	/**
+	 * Return a boolean reflecting whether this ship can fire bullets.
+	 * 
+	 * @effect	True if and only if this ship has a world to which it is attached and if it is not terminated.
+	 * 			| result == (getWorld() != null) && !isTerminated()
+	 */
+	public boolean canFireBullets() {
+		return ((getWorld() != null) && !isTerminated());
+	}
+	
 	/**
 	 * This ship fires a bullet.
 	 * 
-	 * @effect 	...
-	 * 			| ...
+	 * @effect 	A new bullet is added to the world of this ship with a new position, new velocity, new radius and this ship as its source.
+	 * 			| getWorld.addAsCollidable(bullet)
 	 */
 	public void fireBullet() {
-		// TODO: wederom testen op isTerminated?
-		// TODO: canFireBullet houdt rekening met: initiele positie al ingenomen en partially located outside of the world. -> Neen
-		// TODO: nieuwe bullet aanmaken, juiste parameters meegeven via parameters this ship en toevoegen aan de lijst met collidables in world. (addAsCollidable())
-		// TODO: fireBUllet enkel als ship een wereld heeft?
+		Vector initialPosition = getPosition().add( new Vector((getRadius()+3)*Math.cos(getDirection()),(getRadius()+3)*Math.sin(getDirection())));
+		Vector initialVelocity = (new Vector(Math.cos(getDirection()),Math.sin(getDirection()))).scale(250);
+		
+		Bullet bullet = new Bullet(initialPosition,initialVelocity,3,this);
+		
+		getWorld().addAsCollidable(bullet);
+		
+		// TODO: canFireBullet houdt rekening met: initiele positie al ingenomen en partially located outside of the world. Hoe hier rekening mee houden?
+		// TODO: exceptions? overflows? documentatie ok?
 	}
 	
 	/**

@@ -6,6 +6,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import collidable.Ship;
 import asteroids.Util;
+import asteroids.World;
 
 /**
  * A class collecting tests for the class of ships.
@@ -16,13 +17,21 @@ import asteroids.Util;
  */
 public class ShipTest {
 	
+	private static World world1;
 	private static Ship ship1;
+	private static Ship ship2;
+	private static Ship terminatedShip;
 	
 	private Ship mutableShip1;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
+		world1 = new World();
 		ship1 = new Ship();
+		ship2 = new Ship();
+		terminatedShip = new Ship();
+		world1.addAsCollidable(ship1);
+		terminatedShip.terminate();
 	}
 
 	@Before
@@ -119,5 +128,23 @@ public class ShipTest {
 		assertFalse(ship1.canAcceptForTurn(10));
 	}
 		
+	// canFireBullets
+	
+	@Test 
+	public void testCanFireBullets_LegalCase() {
+		assertTrue(ship1.canFireBullets());
+	}
+	
+	@Test
+	public void testCanFireBullets_NoWorldAttachedCase() {
+		assertFalse(ship2.canFireBullets());
+	}
+	@Test
+	public void testCanFireBullets_ThisIsTerminated() {
+		assertFalse(terminatedShip.canFireBullets());
+	}
+	
 	// fireBullet //TODO
+	
+	
 }

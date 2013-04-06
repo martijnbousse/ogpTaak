@@ -472,7 +472,7 @@ public abstract class Collidable {
 	 * @param 	other
 	 * 			The other collidable.
 	 * @effect	Returns the time until this collidable and the given collidable will collide, if ever.
-	 * @effect	True if and only if the collidables overlap after moving the calculated time.
+	 * @effect	True if and only if the collidables touch each other after moving the calculated time.
 	 *			| if this.move(result) && other.move(result)
 	 *			|	then this.getDistanceBetween(other) == 0
 	 * @throws 	IllegalArgumentException
@@ -523,35 +523,38 @@ public abstract class Collidable {
 	/**
 	 * Returns when this collidable, if ever, will collide with the boundary.
 	 * 
-	 * @return	...
+	 * @return	The amount of time until this ship collides with the boundary of its world.
 	 * 			| ...
 	 * @throws	...
 	 * 			| ...
 	 */
 	public double getTimeToCollisionWithBoundary() {
-		if(!hasProperWorld()) {
-			if(getVelocity().getXComponent() != 0 && getVelocity().getYComponent() != 0) {
-				double maximumXTime = (getWorld().getWidth() - getPosition().getXComponent() - getRadius())/getVelocity().getXComponent();
-				double maximumYTime = (getWorld().getHeight() - getPosition().getYComponent() - getRadius())/getVelocity().getYComponent();
-				double zeroXTime = -getPosition().getXComponent() - getRadius()/getVelocity().getXComponent();
-				double zeroYTime = -getPosition().getYComponent() - getRadius()/getVelocity().getYComponent();
-				if(getVelocity().getXComponent() < 0 && getVelocity().getYComponent() < 0) {
-				return Math.min(zeroXTime, zeroYTime);
-				}
-				if(getVelocity().getXComponent() > 0 && getVelocity().getYComponent() < 0) {
-					return Math.min(maximumXTime, zeroYTime);
-				}
-				if(getVelocity().getXComponent() > 0 && getVelocity().getYComponent() > 0) {
-					return Math.min(maximumXTime, maximumYTime);
-				}
-				if(getVelocity().getXComponent() < 0 && getVelocity().getYComponent() > 0) {
-					return Math.min(zeroXTime, maximumYTime);
-				}
+		if(hasProperWorld()) {
+			return Math.min(getMinXCollision(), getMinYCollision());
+		}
+		return Double.POSITIVE_INFINITY;
+	}
+	
+	private double getMinXCollision() {
+		if(!Util.fuzzyEquals(0, getVelocity().getXComponent())) {
+			double maximumXTime = (getWorld().getWidth() - getPosition().getXComponent() - getRadius())/getVelocity().getXComponent();
+			double zeroXTime = -getPosition().getXComponent() - getRadius()/getVelocity().getXComponent();
+			if(!Util.fuzzyLessThanOrEqualTo(0, getVelocity().getXComponent())) {
+				return zeroXTime;
 			}
-			if(getVelocity().getXComponent() == 0)
-				return Math.min(zeroYTime, maximumYTime);
-			if(getVelocity().getYComponent() == 0)
-				return Math.min(zeroXTime , maximumXTime);
+		return maximumXTime;
+		}
+		return Double.POSITIVE_INFINITY;
+	}
+	
+	private double getMinYCollision() {
+		if(!Util.fuzzyEquals(0, getVelocity().getYComponent())) {
+			double maximumYTime = (getWorld().getHeight() - getPosition().getYComponent() - getRadius())/getVelocity().getYComponent();
+			double zeroYTime = -getPosition().getYComponent() - getRadius()/getVelocity().getYComponent();
+			if(!Util.fuzzyLessThanOrEqualTo(0, getVelocity().getYComponent())) {
+				return zeroYTime;
+			}
+		return maximumYTime;
 		}
 		return Double.POSITIVE_INFINITY;
 	}
@@ -646,11 +649,39 @@ public abstract class Collidable {
 	 * 
 	 * @param 	other
 	 * 			The other collidable.
-	 * @return	...
-	 * 			| ...
+	 * @effect 	| let	
+	 * 			| 	deltaR = other.getPosition().subtract(this.getPosition());
+	 * 			| 	deltaV = other.getVelocity().subtract(this.getVelocity());double sigma = this.getRadius()+other.getRadius();
+	 * 			| 	J = 2*this.getMass()*deltaR.dotProduct(deltaV)/(sigma*(this.getMass()+other.getMass()));
+	 * 			| 	Jvector = deltaR.scale(J/sigma);
+	 * 			| 	newVelocityThis = this.getVelocity().add(Jvector.scale(1/this.getMass()));
+	 * 			| 	newVelocityOther = other.getVelocity().subtract(Jvector.scale(1/other.getMass()));
+	 * 			|in
+	 * 			| 	this.setVelocity(newVelocityThis);
+	 * 			| 	other.setVelocity(newVelocityOther);
 	 */
 	public void bounce(Collidable other) {
-		// TODO implement
+		try {
+			Vector deltaR = other.getPosition().subtract(this.getPosition());
+			Vector deltaV = other.getVelocity().subtract(this.getVelocity());
+			double sigma = this.getRadius()+other.getRadius();
+			
+			if(Util.fuzzyLessThanOrEqualTo(2*this.getMass()*deltaR.dotProduct(deltaV), Double.MAX_VALUE)
+					&& Util.fuzzyLessThanOrEqualTo(sigma*(this.getMass()+other.getMass()), Double.MAX_VALUE)) {
+				double J = 2*this.getMass()*deltaR.dotProduct(deltaV)/(sigma*(this.getMass()+other.getMass()));
+				Vector Jvector = deltaR.scale(J/sigma);
+				
+				Vector newVelocityThis = this.getVelocity().add(Jvector.scale(1/this.getMass()));
+				Vector newVelocityOther = other.getVelocity().subtract(Jvector.scale(1/other.getMass()));
+				
+				this.setVelocity(newVelocityThis);
+				other.setVelocity(newVelocityOther);
+			} else { 
+				throw new TimesOverflowException();
+			}
+		} catch(Exception exc) {
+			// TODO wat doen we hiermee?
+		}
 	}
 	
 	/**

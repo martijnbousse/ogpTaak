@@ -3,6 +3,7 @@ package model;
 import java.util.*;
 
 import asteroids.CollisionListener;
+import asteroids.Util;
 import asteroids.Vector;
 import asteroids.World;
 import collidable.*;
@@ -85,6 +86,13 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet> {
 	@Override
 	public Ship createShip(double x, double y, double xVelocity,
 			double yVelocity, double radius, double direction, double mass) {
+		while(!Util.fuzzyLessThanOrEqualTo(0.0, direction)){
+			direction = direction+ Math.PI*2;
+		}
+		while(!Util.fuzzyLessThanOrEqualTo(direction, Math.PI*2)){
+			direction = direction-Math.PI*2;
+		}
+		
 		return new Ship(new Vector(x,y), new Vector(xVelocity,yVelocity), radius, mass, direction);
 	}
 
@@ -141,12 +149,17 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet> {
 	@Override
 	public void setThrusterActive(Ship ship, boolean active) {
 		ship.setThrusterEnabled(active);
-
 	}
 
 	@Override
 	public void turn(Ship ship, double angle) {
-		ship.turn(angle);
+		if(!Util.fuzzyLessThanOrEqualTo(0.0, ship.getDirection()+angle)){
+			angle+=Math.PI*2;
+		}
+		else if(!Util.fuzzyLessThanOrEqualTo(ship.getDirection()+angle, Math.PI*2)){
+			angle = angle-Math.PI*2;
+		}
+		((Ship) ship).turn(angle);
 	}
 
 	@Override

@@ -78,8 +78,12 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet> {
 
 	@Override
 	public void evolve(World world, double dt,
-			CollisionListener collisionListener) {
-		world.evolve(dt);
+			CollisionListener collisionListener) throws ModelException {
+		try {
+			world.evolve(dt);
+		} catch(IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
 
 	}
 
@@ -164,8 +168,7 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet> {
 
 	@Override
 	public void fireBullet(Ship ship) {
-		// TODO Auto-generated method stub
-
+		ship.fireBullet();
 	}
 
 	@Override
@@ -177,8 +180,8 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet> {
 	@Override
 	public Asteroid createAsteroid(double x, double y, double xVelocity,
 			double yVelocity, double radius, Random random) {
-		//TODO
 		return null;
+		//TODO
 	}
 
 	@Override

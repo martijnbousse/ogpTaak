@@ -366,7 +366,7 @@ public class World {
 	 * 
 	 * @param dt
 	 */
-	public void evolve(double dt) {
+	public void evolve(double dt) throws IllegalArgumentException{
 		// collidable.terminate() aanroepen + verwijderen van de lijst van collidables in de if structuur.
 		// Als dan terminate wordt aangeroepen op een asteroid, wordt in de gespecialiseerde terminate van asteroid twee nieuwe asteroids toegevoegd.
 		
@@ -380,6 +380,28 @@ public class World {
 		// 4 ...
 		// 5 move(t)
 		
+		while(!Util.fuzzyLessThanOrEqualTo(dt,0)) {
+			Collision next = getNextCollision();
+			if(!Util.fuzzyLessThanOrEqualTo(next.getTime(),dt) && next.getTime() >= 0) {
+				for(Collidable collidable : getAllCollidables()) {
+					collidable.move(dt);
+					if(collidable instanceof Ship) {
+						((Ship) collidable).thrust(dt);
+					}
+				}
+				dt-=dt;
+			}
+			else if(next.getTime() > 0 && next.getTime() != Double.POSITIVE_INFINITY) {
+				for(Collidable collidable : getAllCollidables()) {
+					collidable.move(next.getTime());
+				}
+				next.getFirst().bounceOfBoundary();			//TODO waar komt deze methode ??
+				dt-=next.getTime();
+			} else {
+				dt = 0;
+			}
+			
+		}
 	}
 	
 	/**
@@ -400,12 +422,39 @@ public class World {
 	}
 	
 	/**
-	 * Returns the next collision in this world.
+	 * 
 	 * 
 	 * 
 	 */
-	public void getNextCollision() {
+	public Collision getNextCollision() {
 		// return type = collision?
+		Collidable first = null;
+		Collidable second = null;
+		double time = Double.MAX_VALUE;
+		for(Collidable collidable : getAllCollidables()) {
+			double collisionWithBoundary = collidable.getTimeToCollisionWithBoundary();
+			for(Collidable collidable2 : getAllCollidables()) {
+				double collisionWithOther = collidable.getTimeToCollision(collidable2);
+				double firstCollisionTime = Math.min(collisionWithBoundary,collisionWithOther);
+				if(!Util.fuzzyLessThanOrEqualTo(time, firstCollisionTime)) {					
+						time = firstCollisionTime;
+						first = collidable;
+					if(time == collisionWithBoundary) {
+						second = null;
+					} else {
+						second = collidable2;
+					}
+				}
+			}
+		}
+		if(second != null) {
+			Vector position = first.getCollisionPosition(second);
+			return new Collision(first, second, time, position);
+		}
+		else { 
+			Vector position = first.getCollisionWithBoundaryPosition();
+			return new Collision(first, second, time, position);
+		}
 	}
 	
 	/**

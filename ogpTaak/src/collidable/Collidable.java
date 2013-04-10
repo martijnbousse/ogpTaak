@@ -121,7 +121,7 @@ public abstract class Collidable {
 	 * @param 	position
 	 * 			The position to check.
 	 * @return 	True if and only if the given position is effective.
-	 * 			| result == (position != null)
+	 * 			| result == (position != null) && getDistanceToClosestBoundary > 0
 	 *    //TODO: documentatie!
 	 */	
 	@Raw
@@ -523,8 +523,9 @@ public abstract class Collidable {
 	/**
 	 * Returns when this collidable, if ever, will collide with the boundary.
 	 * 
-	 * @return	The amount of time until this ship collides with the boundary of its world.
-	 * 			| ...
+	 * @effect	...
+	 * 			| if this.move(result)
+	 * 			|	then this.getDistanceToClosestBoundary == 0
 	 * @throws	...
 	 * 			| ...
 	 */
@@ -535,14 +536,28 @@ public abstract class Collidable {
 		return Double.POSITIVE_INFINITY;
 	}
 	
+	/**
+	 * Returns where this collidable will be at the moment of collision with the boundary of its world.
+	 * @effect	...
+	 * 			| new.getDistanceToClosestBoundary() == 0
+	 */
+	public Vector getCollisionWithBoundaryPosition() {
+		if(hasProperWorld()) {
+			double dt = getTimeToCollisionWithBoundary();
+			return getPosition().add(getVelocity().scale(dt));
+		}
+		return null;
+	}
+	
+	
 	private double getMinXCollision() {
 		if(!Util.fuzzyEquals(0, getVelocity().getXComponent())) {
 			double maximumXTime = (getWorld().getWidth() - getPosition().getXComponent() - getRadius())/getVelocity().getXComponent();
-			double zeroXTime = -getPosition().getXComponent() - getRadius()/getVelocity().getXComponent();
+			double zeroXTime = -(getPosition().getXComponent() - getRadius())/getVelocity().getXComponent();
 			if(!Util.fuzzyLessThanOrEqualTo(0, getVelocity().getXComponent())) {
 				return zeroXTime;
 			}
-		return maximumXTime;
+			return maximumXTime;
 		}
 		return Double.POSITIVE_INFINITY;
 	}
@@ -550,13 +565,26 @@ public abstract class Collidable {
 	private double getMinYCollision() {
 		if(!Util.fuzzyEquals(0, getVelocity().getYComponent())) {
 			double maximumYTime = (getWorld().getHeight() - getPosition().getYComponent() - getRadius())/getVelocity().getYComponent();
-			double zeroYTime = -getPosition().getYComponent() - getRadius()/getVelocity().getYComponent();
+			double zeroYTime = -(getPosition().getYComponent() - getRadius())/getVelocity().getYComponent();
 			if(!Util.fuzzyLessThanOrEqualTo(0, getVelocity().getYComponent())) {
 				return zeroYTime;
 			}
-		return maximumYTime;
+			return maximumYTime;
 		}
 		return Double.POSITIVE_INFINITY;
+	}
+	
+	
+	/**
+	 *  //TODO 
+	 * @return 
+	 */
+	public double getDistanceToClosestBoundary() {
+		double minX = getPosition().getXComponent() - radius;
+		double maxX = getWorld().getWidth() -getPosition().getXComponent() + radius;
+		double minY = getPosition().getYComponent() - radius;
+		double maxY = getWorld().getHeight() - getPosition().getYComponent() + radius;
+		return Math.min(Math.min(minY, minX), Math.min(maxY, maxX));
 	}
 	
 	/**
@@ -621,10 +649,9 @@ public abstract class Collidable {
 	/**
 	 * Inverts the speed of this collidable.
 	 * 
-	 * @return	...
-	 * 			| ...
+	 * @effect	
 	 */
-	public void invertSpeed() {
+	public void bounceOfBoundary() {
 		Vector newVelocity;
 		if(Util.fuzzyEquals(getPosition().getXComponent()-getRadius(),0)) {
 			newVelocity = new Vector(-getPosition().getXComponent(),getPosition().getYComponent());
@@ -744,4 +771,7 @@ public abstract class Collidable {
 				   + " Velocity: " + getVelocity().toString()
 				   + " Radius: " + getRadius() + "]";
 	}
+
+
+	
 }

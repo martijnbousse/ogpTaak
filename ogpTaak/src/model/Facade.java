@@ -9,6 +9,7 @@ import asteroids.World;
 import collidable.*;
 
 public class Facade implements IFacade<World, Ship, Asteroid, Bullet> {
+	//TODO: modelexceptions!
 
 	@Override
 	public World createWorld(double width, double height) {

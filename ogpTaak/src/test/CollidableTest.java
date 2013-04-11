@@ -318,7 +318,7 @@ public class CollidableTest {
 	public void testSetWorld() {
 		//TODO: implement! belangrijke! consistentie van bindingen aantonen
 	}
-	
+		
 	//TODO: canHaveAsWorld
 	//TODO: hasProperWorld
 	

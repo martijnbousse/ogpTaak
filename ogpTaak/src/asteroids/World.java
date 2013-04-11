@@ -16,7 +16,7 @@ import collidable.*;
  * 			| hasProperCollidables()
  * 
  * @version	1.0
- * @author 	Wout Vekemans, Martijn Boussé
+ * @author 	Wout Vekemans, Martijn Bousse
  *
  */
 public class World {
@@ -117,7 +117,7 @@ public class World {
 				&& 0 < width;
 	}
 	
-	//TODO: isValidWidth én isValidMaxDimension?
+	//TODO: isValidWidth En isValidMaxDimension?
 	
 	/**
 	 * Variable registering the width of this world.
@@ -380,7 +380,7 @@ public class World {
 		// 4 ...
 		// 5 move(t)
 		
-		while(!Util.fuzzyLessThanOrEqualTo(dt,0)) {
+		while(dt!=0) {
 			Collision next = getNextCollision();
 			if(!Util.fuzzyLessThanOrEqualTo(next.getTime(),dt) && next.getTime() >= 0) {
 				for(Collidable collidable : getAllCollidables()) {
@@ -389,19 +389,17 @@ public class World {
 						((Ship) collidable).thrust(dt);
 					}
 				}
-				dt-=dt;
+				dt=0;
 			}
 			else if(next.getTime() > 0 && next.getTime() != Double.POSITIVE_INFINITY) {
 				for(Collidable collidable : getAllCollidables()) {
 					collidable.move(next.getTime());
 				}
-				next.getFirst().bounceOfBoundary();			//TODO waar komt deze methode ??
 				dt-=next.getTime();
 			} else {
-				dt = 0;
 			}
-			
 		}
+		
 	}
 	
 	/**
@@ -422,7 +420,7 @@ public class World {
 	}
 	
 	/**
-	 * 
+	 * Returns the first collision that will happen in this world.
 	 * 
 	 * 
 	 */
@@ -436,7 +434,7 @@ public class World {
 			for(Collidable collidable2 : getAllCollidables()) {
 				double collisionWithOther = collidable.getTimeToCollision(collidable2);
 				double firstCollisionTime = Math.min(collisionWithBoundary,collisionWithOther);
-				if(!Util.fuzzyLessThanOrEqualTo(time, firstCollisionTime)) {					
+				if(!Util.fuzzyLessThanOrEqualTo(time, firstCollisionTime) && Util.fuzzyLessThanOrEqualTo(0,firstCollisionTime)) {					
 						time = firstCollisionTime;
 						first = collidable;
 					if(time == collisionWithBoundary) {
@@ -447,6 +445,8 @@ public class World {
 				}
 			}
 		}
+		if(time == Double.MAX_VALUE)
+			return null;
 		if(second != null) {
 			Vector position = first.getCollisionPosition(second);
 			return new Collision(first, second, time, position);

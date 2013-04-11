@@ -10,10 +10,10 @@ import collidable.Collidable;
  * @invar	...
  * 			| isValidTime(time)
  * @invar	...
- * 			| isValidFirstCollidable(first)
+ * 			| isValidCollidables(first,second)
  * @invar	...
  * 			| isValidPosition(position)
- * @author	Martijn Boussé, Wout Vekemans
+ * @author	Martijn Bousse, Wout Vekemans
  * @version	1.0
  *
  */
@@ -36,7 +36,7 @@ public class Collision {
 	 */
 	public Collision(Collidable first, Collidable second, double time,
 			Vector position) throws IllegalArgumentException {
-		if(!isValidTime(time) || !isValidFirstCollidable(first) || !isValidPosition(position)) {
+		if(!isValidTime(time) || !isValidCollidables(first, second) || !isValidPosition(position)) {
 			throw new IllegalArgumentException();
 		}
 		this.first = first;
@@ -73,11 +73,16 @@ public class Collision {
 	 * ...
 	 * @param 	first
 	 * 			...
-	 * @return	...
+	 * @param	second
+	 * 			...
+	 * @return	True if and only if the given collidables are both effective, non-terminated and touching each other
+	 * 			or the first collidable is touching the border of its world.
 	 * 			| result == first != null && !first.isTerminated()
 	 */
-	public boolean isValidFirstCollidable(Collidable first) {
-		return first != null && !first.isTerminated();
+	public boolean isValidCollidables(Collidable first, Collidable second) {
+		return first != null && !first.isTerminated() && 
+				((second == null ) || 
+						(!second.isTerminated() && first.getDistanceBetween(second)==0)) ;
 	}
 	
 	@Basic @Immutable @Raw

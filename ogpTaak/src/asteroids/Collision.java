@@ -35,7 +35,10 @@ public class Collision {
 			throw new IllegalArgumentException();
 		}
 		this.first = first;
+		first.setLastCollision(second);
 		this.second = second;
+		if(second!=null)
+			second.setLastCollision(first);
 		this.time = time;
 	}
 	

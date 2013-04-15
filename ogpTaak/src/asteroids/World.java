@@ -386,7 +386,7 @@ public class World {
 				for(Collidable collidable : getAllCollidables()) {
 					collidable.move(dt);
 					if(collidable instanceof Ship) {
-						((Ship) collidable).thrust(dt);
+						((Ship) collidable).thrust();
 					}
 				}
 			}
@@ -395,7 +395,7 @@ public class World {
 					collidable.move(next.getTime());
 				}
 				resolveCollision(next);
-//				if(!Util.fuzzyEquals(dt, next.getTime()))
+				if(!Util.fuzzyEquals(dt, next.getTime()))
 					evolve(dt-next.getTime());
 			}
 		}
@@ -406,19 +406,20 @@ public class World {
 		Collidable second = next.getSecond();
 		if(second == null)
 			first.bounceOfBoundary();
-		else if(Bullet.class.isInstance(first) || Bullet.class.isInstance(second)){
-			first.terminate();
-			second.terminate();
-		}
-		else if(first.getClass().isAssignableFrom(second.getClass())) {
-			first.bounce(second);
-		}
-		else {
-			if(Asteroid.class.isInstance(first))
-				second.terminate();
-			else
-				first.terminate();
-		}
+		first.bounce(second);
+//		else if(Bullet.class.isInstance(first) || Bullet.class.isInstance(second)){
+//			first.terminate();
+//			second.terminate();
+//		}
+//		else if(first.getClass().isAssignableFrom((second.getClass()))) {
+//			first.bounce(second);
+//		}
+//		else {
+//			if(Asteroid.class.isInstance(first))
+//				second.terminate();
+//			else
+//				first.terminate();
+//		}
 	}
 
 	/**
@@ -451,15 +452,17 @@ public class World {
 		for(int i = 0; i<getNbCollidables(); i++) {
 			double collisionWithBoundary = collidables.get(i).getTimeToCollisionWithBoundary();
 			for(int j = i+1; j<getNbCollidables(); j++) {
-				double collisionWithOther = collidables.get(i).getTimeToCollision(collidables.get(j));
-				double firstCollisionTime = Math.min(collisionWithBoundary,collisionWithOther);
-				if(!Util.fuzzyLessThanOrEqualTo(time, firstCollisionTime) && Util.fuzzyLessThanOrEqualTo(0,firstCollisionTime)) {					
-						time = firstCollisionTime;
-						first = collidables.get(i);
-					if(time == collisionWithBoundary) {
-						second = null;
-					} else {
-						second = collidables.get(j);
+				if(!collidables.get(j).equals(collidables.get(i).getLastCollision()) && !collidables.get(i).equals(collidables.get(j).getLastCollision()))	{ 
+					double collisionWithOther = collidables.get(i).getTimeToCollision(collidables.get(j));
+					double firstCollisionTime = Math.min(collisionWithBoundary,collisionWithOther);
+					if(!Util.fuzzyLessThanOrEqualTo(time, firstCollisionTime) && Util.fuzzyLessThanOrEqualTo(0,firstCollisionTime)) {					
+							time = firstCollisionTime;
+							first = collidables.get(i);
+						if(time == collisionWithBoundary) {
+							second = null;
+						} else {
+							second = collidables.get(j);
+						}
 					}
 				}
 			}

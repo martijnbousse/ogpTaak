@@ -268,10 +268,9 @@ public class Ship extends Collidable implements IShip{
 	 * 			|			else
 	 * 			|				then setVelocity(newVelocity)
 	 */
-	public void thrust(double amount) {
-		if(!isValidThrustAmount(amount))
-			amount = 0.0;
-		Vector newVelocity = this.getVelocity().add((new Vector(Math.cos(direction),Math.sin(direction)).scale(amount)));
+	public void thrust() {
+		double acceleration = getAcceleration();
+		Vector newVelocity = this.getVelocity().add((new Vector(Math.cos(direction),Math.sin(direction)).scale(acceleration)));
 		if(Math.sqrt(newVelocity.dotProduct(newVelocity))>this.getSpeedLimit())
 			setVelocity(newVelocity.scale((Double) (this.getSpeedLimit()/Math.sqrt(newVelocity.dotProduct(newVelocity)))));
 		else{

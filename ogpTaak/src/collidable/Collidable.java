@@ -772,4 +772,14 @@ public abstract class Collidable {
 				   + " Velocity: " + getVelocity().toString()
 				   + " Radius: " + getRadius() + "]";
 	}
+	
+	public Collidable getLastCollision() {
+		return lastCollision;
+	}
+	
+	public void setLastCollision(Collidable other) {
+		this.lastCollision = other;
+	}
+	
+	private Collidable lastCollision;
 }

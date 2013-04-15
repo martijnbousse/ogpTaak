@@ -80,6 +80,7 @@ public abstract class Collidable {
 	 * Terminate this collidable. 
 	 */
 	public void terminate() {
+		this.getWorld().removeAsCollidable(this);
 		this.isTerminated = true; 
 		// Alle verantwoordelijkheid voor de biderectionele associatie ligt in world.
 	}
@@ -587,63 +588,63 @@ public abstract class Collidable {
 		return Math.min(Math.min(minY, minX), Math.min(maxY, maxX));
 	}
 	
-	/**
-	 * Returns the position where this collidable and the given collidable will collide.
-	 * 
-	 * @param 	other
-	 * 			The other collidable.
-	 * @return	Returns the position where this collidable and the given collidable will collide. //TODO: documentatie ook in termen van methodes
-	 * 			
-	 * @effect	... geen idee?
-	 * 
-	 * 
-	 * 
-	 * 			| let
-	 * 			| 	dt = getTimeToCollision(other)
-	 *			|	newPositionThis = this.getPosition().add(this.getVelocity().scale(dt))
-	 *			|	newPositionOther = other.getPosition().add(other.getVelocity().scale(dt))
-	 *			|	theta = Math.atan2(newPositionOther.getYComponent()-newPositionThis.getYComponent(),
-	 *			|						newPositionOther.getXComponent()-newPositionThis.getXComponent())
-	 *			|   directionRadius = new Vector(Math.cos(theta),Math.sin(theta));
-	 *			| in
-	 *			|	if dt == Double.POSITIVE_INFINITY
-	 *			|		then result == null
-	 *			|   if newPositionOther.getXComponent()-newPositionThis.getXComponent()<0
-	 *			|		then theta+= Math.PI*2
-	 *			|	result == newPositionThis.add(directionRadius.scale(this.getRadius()))
-	 * @throws	IllegalArgumentException
-	 * 			The given collidable is not effective.
-	 * 			| (other == null)
-	 * @throws	IllegalStateException
-	 * 			This collidable is terminated.
-	 * 			| isTerminated()
-	 * @throws	IllegalStateException
-	 * 			The given collidable is terminated.
-	 * 			| other.isTerminated()
-	 */
-	public Vector getCollisionPosition(Collidable other) throws IllegalArgumentException{
-		if (isTerminated())
-			throw new IllegalStateException("This collidable is terminated!");
-		if (other == null)
-			throw new IllegalArgumentException("Non effective collidable!");
-		if (other.isTerminated())
-			throw new IllegalStateException("The given collidable is terminated!");
-		double dt = getTimeToCollision(other); 
-		if (dt == Double.POSITIVE_INFINITY)
-			return null;
-		
-		Vector newPositionThis = this.getPosition().add(this.getVelocity().scale(dt));
-		Vector newPositionOther = other.getPosition().add(other.getVelocity().scale(dt));
-		
-		double theta = Math.atan2(newPositionOther.getYComponent()-newPositionThis.getYComponent(),
-									newPositionOther.getXComponent()-newPositionThis.getXComponent());
-		
-		if(newPositionOther.getXComponent()-newPositionThis.getXComponent()<0)
-			theta+= Math.PI*2;
-
-		Vector directionRadius = new Vector(Math.cos(theta),Math.sin(theta));
-		return newPositionThis.add(directionRadius.scale(this.getRadius()));	
-	}
+//	/**
+//	 * Returns the position where this collidable and the given collidable will collide.
+//	 * 
+//	 * @param 	other
+//	 * 			The other collidable.
+//	 * @return	Returns the position where this collidable and the given collidable will collide. //TODO: documentatie ook in termen van methodes
+//	 * 			
+//	 * @effect	... geen idee?
+//	 * 
+//	 * 
+//	 * 
+//	 * 			| let
+//	 * 			| 	dt = getTimeToCollision(other)
+//	 *			|	newPositionThis = this.getPosition().add(this.getVelocity().scale(dt))
+//	 *			|	newPositionOther = other.getPosition().add(other.getVelocity().scale(dt))
+//	 *			|	theta = Math.atan2(newPositionOther.getYComponent()-newPositionThis.getYComponent(),
+//	 *			|						newPositionOther.getXComponent()-newPositionThis.getXComponent())
+//	 *			|   directionRadius = new Vector(Math.cos(theta),Math.sin(theta));
+//	 *			| in
+//	 *			|	if dt == Double.POSITIVE_INFINITY
+//	 *			|		then result == null
+//	 *			|   if newPositionOther.getXComponent()-newPositionThis.getXComponent()<0
+//	 *			|		then theta+= Math.PI*2
+//	 *			|	result == newPositionThis.add(directionRadius.scale(this.getRadius()))
+//	 * @throws	IllegalArgumentException
+//	 * 			The given collidable is not effective.
+//	 * 			| (other == null)
+//	 * @throws	IllegalStateException
+//	 * 			This collidable is terminated.
+//	 * 			| isTerminated()
+//	 * @throws	IllegalStateException
+//	 * 			The given collidable is terminated.
+//	 * 			| other.isTerminated()
+//	 */
+//	public Vector getCollisionPosition(Collidable other) throws IllegalArgumentException{
+//		if (isTerminated())
+//			throw new IllegalStateException("This collidable is terminated!");
+//		if (other == null)
+//			throw new IllegalArgumentException("Non effective collidable!");
+//		if (other.isTerminated())
+//			throw new IllegalStateException("The given collidable is terminated!");
+//		double dt = getTimeToCollision(other); 
+//		if (dt == Double.POSITIVE_INFINITY)
+//			return null;
+//		
+//		Vector newPositionThis = this.getPosition().add(this.getVelocity().scale(dt));
+//		Vector newPositionOther = other.getPosition().add(other.getVelocity().scale(dt));
+//		
+//		double theta = Math.atan2(newPositionOther.getYComponent()-newPositionThis.getYComponent(),
+//									newPositionOther.getXComponent()-newPositionThis.getXComponent());
+//		
+//		if(newPositionOther.getXComponent()-newPositionThis.getXComponent()<0)
+//			theta+= Math.PI*2;
+//
+//		Vector directionRadius = new Vector(Math.cos(theta),Math.sin(theta));
+//		return newPositionThis.add(directionRadius.scale(this.getRadius()));	
+//	}
 	
 	// TODO: documentatie
 	/**
@@ -654,16 +655,16 @@ public abstract class Collidable {
 	public void bounceOfBoundary() {
 		Vector newVelocity;
 		if(Util.fuzzyEquals(getPosition().getXComponent()-getRadius(),0)) {
-			newVelocity = new Vector(-getPosition().getXComponent(),getPosition().getYComponent());
+			newVelocity = new Vector(-getVelocity().getXComponent(),getVelocity().getYComponent());
 		}
 		else if(Util.fuzzyEquals(getPosition().getYComponent()+getRadius(),getWorld().getHeight())) {
-			newVelocity = new Vector(getPosition().getXComponent(),-getPosition().getYComponent());
+			newVelocity = new Vector(getVelocity().getXComponent(),-getVelocity().getYComponent());
 		}
 		else if(Util.fuzzyEquals(getPosition().getXComponent()+getRadius(),getWorld().getWidth())) {
-			newVelocity = new Vector(-getPosition().getXComponent(),getPosition().getYComponent());
+			newVelocity = new Vector(-getVelocity().getXComponent(),getVelocity().getYComponent());
 		}
 		else if(Util.fuzzyEquals(getPosition().getYComponent()-getRadius(),0)) {
-			newVelocity = new Vector(getPosition().getXComponent(),-getPosition().getYComponent());
+			newVelocity = new Vector(getVelocity().getXComponent(),-getVelocity().getYComponent());
 		}
 		else {
 			newVelocity = getVelocity();
@@ -683,7 +684,7 @@ public abstract class Collidable {
 	 * 			| 	Jvector = deltaR.scale(J/sigma);
 	 * 			| 	newVelocityThis = this.getVelocity().add(Jvector.scale(1/this.getMass()));
 	 * 			| 	newVelocityOther = other.getVelocity().subtract(Jvector.scale(1/other.getMass()));
-	 * 			|in
+	 * 			| in
 	 * 			| 	this.setVelocity(newVelocityThis);
 	 * 			| 	other.setVelocity(newVelocityOther);
 	 */
@@ -771,7 +772,4 @@ public abstract class Collidable {
 				   + " Velocity: " + getVelocity().toString()
 				   + " Radius: " + getRadius() + "]";
 	}
-
-
-	
 }

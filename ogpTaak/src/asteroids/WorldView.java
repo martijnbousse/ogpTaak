@@ -222,7 +222,7 @@ public class WorldView<World, Ship, Asteroid, Bullet> extends JPanel implements 
       facade.fireBullet(player2);
       game.getSound().play("torpedo");
     }
-    facade.evolve(world, millisSinceLastEvolve / 1000., this);
+		facade.evolve(world, millisSinceLastEvolve / 1000., this);
     Iterator<Explosion> iter = explosions.iterator();
     while (iter.hasNext()) {
       boolean done = iter.next().evolve(millisSinceLastEvolve / 1000.);

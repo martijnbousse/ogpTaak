@@ -5,14 +5,12 @@ import collidable.Collidable;
 
 
 /**
- * A class of collisions involving two collidables, the time to collide and a postion.
+ * A class of collisions involving two collidables, the time to collide and a position.
  * 
  * @invar	...
  * 			| isValidTime(time)
  * @invar	...
  * 			| isValidCollidables(first,second)
- * @invar	...
- * 			| isValidPosition(position)
  * @author	Martijn Bousse, Wout Vekemans
  * @version	1.0
  *
@@ -21,9 +19,7 @@ import collidable.Collidable;
 public class Collision {
 
 	/**
-	 * Initialize this new collision with given collidables, time and position.
-	 * @post	...
-	 * 			| new.getPosition = position
+	 * Initialize this new collision with given collidables and time.
 	 * @post	...
 	 * 			| new.getTime = time
 	 * @post	...
@@ -32,35 +28,16 @@ public class Collision {
 	 * 			| new.getSecond = second
 	 * @throws 	IllegalArgumentException
 	 * 			The given time,position or first collidable is invalid
-	 * 			| !isValidTime(time) || !isValidFirstCollidable(first) || !isValidPosition(position)
+	 * 			| !isValidTime(time) || !isValidFirstCollidable(first)
 	 */
-	public Collision(Collidable first, Collidable second, double time,
-			Vector position) throws IllegalArgumentException {
-		if(!isValidTime(time) || !isValidCollidables(first, second) || !isValidPosition(position)) {
+	public Collision(Collidable first, Collidable second, double time) throws IllegalArgumentException {
+		if(!isValidTime(time) || !isValidCollidables(first, second)) {
 			throw new IllegalArgumentException();
 		}
 		this.first = first;
 		this.second = second;
 		this.time = time;
-		this.position = position;
 	}
-	
-	@Basic @Immutable @Raw
-	public Vector getPosition() {
-		return position;
-	}
-	
-	/**
-	 * ...
-	 * 
-	 * @return	...
-	 * 			| result position != null
-	 */
-	public boolean isValidPosition(Vector position) {
-		return position != null;
-	}
-	
-	private Vector position;
 	
 	@Basic @Immutable @Raw
 	public Collidable getFirst() {
@@ -77,12 +54,12 @@ public class Collision {
 	 * 			...
 	 * @return	True if and only if the given collidables are both effective, non-terminated and touching each other
 	 * 			or the first collidable is touching the border of its world.
-	 * 			| result == first != null && !first.isTerminated()
+	 * 			| result == first != null && !first.isTerminated() && 
+					((second == null ) || (!second.isTerminated())) 
 	 */
 	public boolean isValidCollidables(Collidable first, Collidable second) {
 		return first != null && !first.isTerminated() && 
-				((second == null ) || 
-						(!second.isTerminated() && first.getDistanceBetween(second)==0)) ;
+				((second == null ) || (!second.isTerminated())) ;
 	}
 	
 	@Basic @Immutable @Raw

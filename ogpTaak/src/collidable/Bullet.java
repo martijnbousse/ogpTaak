@@ -42,6 +42,15 @@ public class Bullet extends Collidable {
 		this.source = source;
 	}
 	
+	@Override
+	public void bounceOfBoundary() {
+		if(bouncedOnce)
+			this.terminate();
+		else{
+			super.bounceOfBoundary();
+		}
+	}
+	
 	/**
 	 * Returns the source of this bullet.
 	 */

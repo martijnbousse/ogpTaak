@@ -83,6 +83,7 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet> {
 		try {
 			world.evolve(dt);
 		} catch(IllegalArgumentException exc) {
+			exc.printStackTrace();
 			throw new ModelException(exc);
 		}
 
@@ -181,8 +182,7 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet> {
 	@Override
 	public Asteroid createAsteroid(double x, double y, double xVelocity,
 			double yVelocity, double radius, Random random) {
-		return null;
-		//TODO
+		return new Asteroid(new Vector(x,y), new Vector(xVelocity,yVelocity), radius);
 	}
 
 	@Override

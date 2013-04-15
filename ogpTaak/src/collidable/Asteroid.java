@@ -39,9 +39,9 @@ public class Asteroid extends Collidable{
 	 */
 	@Override
 	public void terminate() {
-		super.terminate();
 		if (canSpawn())
 			spawn();
+		super.terminate();
 	}
 	
 	/**
@@ -87,7 +87,7 @@ public class Asteroid extends Collidable{
 	/**
 	 * Symbolic constant registering the density of all asteroids.
 	 */
-	public static double DENSITY = 2.65e-12;
+	public static double DENSITY = 2.65e12;
 
 	/**
 	 * Return the mass of this asteroid.

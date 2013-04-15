@@ -367,22 +367,17 @@ public class World {
 	 * @param dt
 	 */
 	public void evolve(double dt) throws IllegalArgumentException{
-		// collidable.terminate() aanroepen + verwijderen van de lijst van collidables in de if structuur.
-		// Als dan terminate wordt aangeroepen op een asteroid, wordt in de gespecialiseerde terminate van asteroid twee nieuwe asteroids toegevoegd.
-		
-		
-		
-		
-		// TODO: 1.6 Advacing Time
-		// 1 getNextCollision
-		// 2 move voor t (uit collision data)
-		// 3 resolve the collision met die if structuur
-		// 4 ...
-		// 5 move(t)
-		
-	if(Util.fuzzyLessThanOrEqualTo(0, dt)) {
+			
 			Collision next = getNextCollision();
-			if(!Util.fuzzyLessThanOrEqualTo(next.getTime(),dt)) {
+			
+			if (next != null && Util.fuzzyLessThanOrEqualTo(0.0, next.getTime()) && Util.fuzzyLessThanOrEqualTo(next.getTime(),dt) ) {
+				for(Collidable collidable : getAllCollidables()) {
+					collidable.move(next.getTime());
+				}
+				resolveCollision(next);
+				evolve(dt-next.getTime());
+			}
+			else {
 				for(Collidable collidable : getAllCollidables()) {
 					collidable.move(dt);
 					if(collidable instanceof Ship) {
@@ -390,15 +385,23 @@ public class World {
 					}
 				}
 			}
-			else{
-				for(Collidable collidable : getAllCollidables()) {
-					collidable.move(next.getTime());
-				}
-				resolveCollision(next);
-				if(!Util.fuzzyEquals(dt, next.getTime()))
-					evolve(dt-next.getTime());
-			}
-		}
+			
+//			if((next == null) || !Util.fuzzyLessThanOrEqualTo(next.getTime(),dt)) {
+//				for(Collidable collidable : getAllCollidables()) {
+//					collidable.move(dt);
+//					if(collidable instanceof Ship) {
+//						((Ship) collidable).thrust();
+//					}
+//				}
+//			}
+//			else if (!Util.fuzzyEquals(0.0,next.getTime())) {
+//				for(Collidable collidable : getAllCollidables()) {
+//					collidable.move(next.getTime());
+//				}
+//				resolveCollision(next);
+//				evolve(dt-next.getTime());
+//			}
+
 	}
 
 	private void resolveCollision(Collision next) {
@@ -406,20 +409,23 @@ public class World {
 		Collidable second = next.getSecond();
 		if(second == null)
 			first.bounceOfBoundary();
-		first.bounce(second);
-//		else if(Bullet.class.isInstance(first) || Bullet.class.isInstance(second)){
-//			first.terminate();
-//			second.terminate();
-//		}
-//		else if(first.getClass().isAssignableFrom((second.getClass()))) {
-//			first.bounce(second);
-//		}
-//		else {
-//			if(Asteroid.class.isInstance(first))
-//				second.terminate();
-//			else
-//				first.terminate();
-//		}
+		else if(Bullet.class.isInstance(first) || Bullet.class.isInstance(second)){
+			System.out.println("bullet");
+			first.terminate();
+			second.terminate();
+		}
+		else if(first.getClass().equals((second.getClass()))) {
+			System.out.println("bounce");
+			if (!Util.fuzzyLessThanOrEqualTo(first.getDistanceBetween(second),0.0) )
+				first.bounce(second);
+		}
+		else {
+			System.out.println("shipasteroidvica");
+			if(Asteroid.class.isInstance(first))
+				second.terminate();
+			else
+				first.terminate();
+		}
 	}
 
 	/**
@@ -448,17 +454,23 @@ public class World {
 		Collidable first = null;
 		Collidable second = null;
 		ArrayList<Collidable> collidables = new ArrayList<Collidable>(getAllCollidables());
+		
 		double time = Double.MAX_VALUE;
 		for(int i = 0; i<getNbCollidables(); i++) {
+			
 			double collisionWithBoundary = collidables.get(i).getTimeToCollisionWithBoundary();
+			
 			for(int j = i+1; j<getNbCollidables(); j++) {
-				if(!collidables.get(j).equals(collidables.get(i).getLastCollision()) && !collidables.get(i).equals(collidables.get(j).getLastCollision()))	{ 
+				
+//				if(!collidables.get(j).equals(collidables.get(i).getLastCollision()) && !collidables.get(i).equals(collidables.get(j).getLastCollision()))	{
+					// vervangen door overlap
+				if(!collidables.get(i).overlap(collidables.get(j))) {
 					double collisionWithOther = collidables.get(i).getTimeToCollision(collidables.get(j));
 					double firstCollisionTime = Math.min(collisionWithBoundary,collisionWithOther);
 					if(!Util.fuzzyLessThanOrEqualTo(time, firstCollisionTime) && Util.fuzzyLessThanOrEqualTo(0,firstCollisionTime)) {					
 							time = firstCollisionTime;
 							first = collidables.get(i);
-						if(time == collisionWithBoundary) {
+						if(Util.fuzzyEquals(time,collisionWithBoundary)) {
 							second = null;
 						} else {
 							second = collidables.get(j);
@@ -469,7 +481,13 @@ public class World {
 		}
 		if(time == Double.POSITIVE_INFINITY)
 			return null;
-		return new Collision(first, second, time);
+		try {
+			Collision nextCollision = new Collision(first, second, time);
+			return nextCollision;
+		} catch(IllegalArgumentException e) {	
+			return null;
+		}
+
 	}
 	
 	/**

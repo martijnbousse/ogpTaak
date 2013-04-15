@@ -84,7 +84,7 @@ public class Collision {
 	 * 			| result == Util.fuzzyLessThanOrEqualTo(0, time)
 	 */
 	public boolean isValidTime(double time) {
-		return Util.fuzzyLessThanOrEqualTo(0, time);
+		return (time>0);
 	}
 	
 	private double time;

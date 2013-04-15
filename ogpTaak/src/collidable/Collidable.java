@@ -1,5 +1,6 @@
 package collidable;
 
+import asteroids.InvalidPositionException;
 import asteroids.SumOverflowException;
 import asteroids.TimesOverflowException;
 import asteroids.Util;
@@ -80,9 +81,9 @@ public abstract class Collidable {
 	 * Terminate this collidable. 
 	 */
 	public void terminate() {
-		this.getWorld().removeAsCollidable(this);
+		if (getWorld() != null) 
+			this.getWorld().removeAsCollidable(this);
 		this.isTerminated = true; 
-		// Alle verantwoordelijkheid voor de biderectionele associatie ligt in world.
 	}
 	
 	/**
@@ -110,9 +111,9 @@ public abstract class Collidable {
 	 * 			| !isValidPosition(position)
 	 */
 	@Raw
-	protected void setPosition(Vector position) throws IllegalArgumentException {
+	protected void setPosition(Vector position) throws InvalidPositionException {
 		if (!canHaveAsPosition(position)) 
-			throw new IllegalArgumentException();	
+			throw new InvalidPositionException();	
 		this.position = position;
 	}
 	
@@ -510,6 +511,7 @@ public abstract class Collidable {
 				return Double.POSITIVE_INFINITY;
 			else
 				try {
+					System.out.println(-(dotProductVR+Math.sqrt(d))/dotProductV);
 					return (-(dotProductVR+Math.sqrt(d))/dotProductV);
 				} catch (ArithmeticException exc) {
 					return Double.POSITIVE_INFINITY;
@@ -753,6 +755,9 @@ public abstract class Collidable {
 		catch(TimesOverflowException exc2) {
 			setPosition(getPosition());
 		}
+		catch(InvalidPositionException exc3) {
+			// do nothing
+		}
 	}
 	
 	/**
@@ -773,13 +778,13 @@ public abstract class Collidable {
 				   + " Radius: " + getRadius() + "]";
 	}
 	
-	public Collidable getLastCollision() {
-		return lastCollision;
-	}
-	
-	public void setLastCollision(Collidable other) {
-		this.lastCollision = other;
-	}
-	
-	private Collidable lastCollision;
+//	public Collidable getLastCollision() {
+//		return lastCollision;
+//	}
+//	
+//	public void setLastCollision(Collidable other) {
+//		this.lastCollision = other;
+//	}
+//	
+//	private Collidable lastCollision;
 }

@@ -6,8 +6,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import asteroids.SumOverflowException;
-import asteroids.TimesOverflowException;
+import exceptions.SumOverflowException;
+import exceptions.TimesOverflowException;
+
 import asteroids.Util;
 import asteroids.Vector;
 

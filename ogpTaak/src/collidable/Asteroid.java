@@ -1,6 +1,9 @@
 package collidable;
 
 import java.util.Random;
+
+import exceptions.SumOverflowException;
+import exceptions.TimesOverflowException;
 import be.kuleuven.cs.som.annotate.*;
 import asteroids.Util;
 import asteroids.Vector;
@@ -38,8 +41,13 @@ public class Asteroid extends Collidable{
 	 */
 	@Override
 	public void terminate() {
-		if (canSpawn())
-			spawn();
+		if (canSpawn()) {
+			try{	
+				spawn();
+			} catch (Exception e) {
+				//do nothing
+			}
+		}
 		super.terminate();
 	}
 	
@@ -60,24 +68,28 @@ public class Asteroid extends Collidable{
 	 * This asteroids spawns two new smaller asteroids.
 	 * 
 	 * @effect	Two new smaller asteroids are added to the world of this asteroid with a new position, new velocity and half the radius.
-	 * 			| getWorld().addAsCollidable(new Asteroid(firstNewPosition,firstNewVelocity,getRadius()/2));
-	 * 			| getWorld().addAsCollidable(new Asteroid(secondNewPosition,secondNewVelocity,getRadius()/2))
+	 * 			| let
+	 * 			|  	firstNewPosition = getPosition().subtract(new Vector(getRadius()/2,0))
+	 *			|	secondNewPosition = getPosition().add(new Vector(getRadius()/2,0))
+	 *			| 	firstNewVelocity = new Vector(newSpeed*Math.cos(randomDirection),newSpeed*Math.cos(randomDirection))
+	 *			|	secondNewVelocity = new Vector(newSpeed*Math.cos(randomDirection+Math.PI),newSpeed*Math.cos(randomDirection+Math.PI))
+	 *			| in
+	 * 			|	getWorld().addAsCollidable(new Asteroid(firstNewPosition,firstNewVelocity,getRadius()/2));
+	 * 			| 	getWorld().addAsCollidable(new Asteroid(secondNewPosition,secondNewVelocity,getRadius()/2))
 	 */
-	// TODO: exceptions? try/catch? documentatie in orde?
-	public void spawn() {
-		// new position ( //TODO: positie zal nooit problemen geven)
+	public void spawn() throws IllegalArgumentException, SumOverflowException, TimesOverflowException {
 		Vector firstNewPosition = getPosition().subtract(new Vector(getRadius()/2,0));
 		Vector secondNewPosition = getPosition().add(new Vector(getRadius()/2,0));
-		// new velocity ( //TODO: de speed kan wel te groot zijn, maar hoe oplossen dan?)
 		Random r = new Random();
 		double randomDirection = 2*Math.PI * r.nextDouble();
-		double newSpeed = 1.5*getVelocity().dotProduct(getVelocity());
+		double newSpeed = 1.5*Math.sqrt(getVelocity().dotProduct(getVelocity()));
 		
 		if (Util.fuzzyLessThanOrEqualTo(getSpeedLimit(),newSpeed))
-			newSpeed = getSpeedLimit();	//TODO: nieuwe checker in collidable, canHaveAsSpeed?
+			newSpeed = getSpeedLimit();	
 		
 		Vector firstNewVelocity = new Vector(newSpeed*Math.cos(randomDirection),newSpeed*Math.cos(randomDirection));
 		Vector secondNewVelocity = new Vector(newSpeed*Math.cos(randomDirection+Math.PI),newSpeed*Math.cos(randomDirection+Math.PI));
+		
 		// add new asteroids
 		getWorld().addAsCollidable(new Asteroid(firstNewPosition,firstNewVelocity,getRadius()/2));
 		getWorld().addAsCollidable(new Asteroid(secondNewPosition,secondNewVelocity,getRadius()/2));	
@@ -100,7 +112,7 @@ public class Asteroid extends Collidable{
 	/**
 	 * Variable registering the mass of this asteroid.
 	 */
-	public final double mass = (4/3)*Math.PI*Math.pow(getRadius(),3)*DENSITY;  //TODO: overflow?
+	public final double mass = (4/3)*Math.PI*Math.pow(getRadius(),3)*DENSITY;
 	
 	/**
 	 * Return a textual representation of this asteroid.

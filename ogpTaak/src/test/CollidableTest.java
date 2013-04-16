@@ -4,7 +4,9 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import collidable.*;
+import exceptions.TimesOverflowException;
 import asteroids.*;
 
 /**
@@ -405,16 +407,6 @@ public class CollidableTest {
 		collidable1.getDistanceBetween(null);
 	}
 	
-	@Test(expected=IllegalStateException.class)
-	public void testGetDistanceBetween_ThisIsTerminatedCase() {
-		terminatedCollidable.getTimeToCollision(collidable1);
-	}
-	
-	@Test(expected=IllegalStateException.class)
-	public void testGetDistanceBetween_OtherIsTerminatedCase() {
-		collidable1.getTimeToCollision(terminatedCollidable);
-	}
-	
 	@Test
 	public void testGetDistanceBetween_ThisCase() {
 		assertEquals(collidable1.getDistanceBetween(collidable1),0,Util.EPSILON);
@@ -435,16 +427,6 @@ public class CollidableTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void testGetTimeToCollision_NullCase() {
 		collidable1.getTimeToCollision(null);
-	}
-	
-	@Test(expected=IllegalStateException.class)
-	public void testGetTimeToCollision_ThisIsTerminatedCase() {
-		terminatedCollidable.getTimeToCollision(collidable1);
-	}
-	
-	@Test(expected=IllegalStateException.class)
-	public void testGetTimeToCollision_OtherIsTerminatedCase() {
-		collidable1.getTimeToCollision(terminatedCollidable);
 	}
 	
 	@Test

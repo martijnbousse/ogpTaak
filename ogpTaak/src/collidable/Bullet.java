@@ -2,7 +2,6 @@ package collidable;
 
 import be.kuleuven.cs.som.annotate.*;
 import asteroids.Vector;
-//TODO: vector ook in collidable?
 
 /**
  * A class of bullets as special kinds of collidables involving a mass and an association with ships.
@@ -69,23 +68,6 @@ public class Bullet extends Collidable {
 		return (source != null);
 	}
 	
-//	/**
-//	 * Set the source for this bullet to the given source.
-//	 * 
-//	 * @param 	source
-//	 * 			The new source for this bullet.
-//	 * @post	| (new this).getSource() == source
-//	 * @throws	IllegalArgumentException
-//	 * 			| !isValidSource(source)
-//	 */
-//	@Raw
-//	private void setSource(Ship source) throws IllegalArgumentException{
-//		if(!isValidSource(source))
-//			throw new IllegalArgumentException();
-//		this.source = source;
-//	}
-	
-	//TODO: aangezien source final is? in constructor én getSource is @Immutable
 	
 	/**
 	 * Variable registering the source of this bullet.
@@ -110,8 +92,6 @@ public class Bullet extends Collidable {
 	 */
 	public final double mass = (4/3)*Math.PI*Math.pow(getRadius(),3)*DENSITY; 
 	
-	
-	// TODO: bouncedOnce ? om te kunnen nagaan of de bullet al gebounced heeft met de rand in evolve.
 	/**
 	 * Returns whether this bullet has already bounced with the boundary.
 	 */

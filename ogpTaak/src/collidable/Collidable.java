@@ -1,8 +1,8 @@
 package collidable;
 
-import asteroids.InvalidPositionException;
-import asteroids.SumOverflowException;
-import asteroids.TimesOverflowException;
+import exceptions.InvalidPositionException;
+import exceptions.SumOverflowException;
+import exceptions.TimesOverflowException;
 import asteroids.Util;
 import asteroids.Vector;
 import asteroids.World;
@@ -122,19 +122,25 @@ public abstract class Collidable {
 	 * 
 	 * @param 	position
 	 * 			The position to check.
-	 * @return 	True if and only if the given position is effective.
-	 * 			| result == (position != null) && getDistanceToClosestBoundary > 0
-	 *    //TODO: documentatie!
+	 * @effect 	If this collidable has a world, true if and only if the given position is effective, and inbetween the borders of the collidables world.
+	 * 			| if getWorld() != null
+	 * 			| 	then result == (position != null) && getDistanceToClosestBoundary() > 0
+	 * @effect	If this collidable doesn't have a world, true if and only if the given position is effective and its coordinates are inbetween zero and the maximum value.
+	 * 			| if getWorld() == null
+	 * 			|	then result == (position != null)
+	 *			|		&& Util.fuzzyLessThanOrEqualTo(position.getXComponent()+getRadius(),Double.MAX_VALUE)
+	 *			|		&& Util.fuzzyLessThanOrEqualTo(position.getYComponent()+getRadius(),Double.MAX_VALUE)
+	 *			|		&& Util.fuzzyLessThanOrEqualTo(0.0,position.getXComponent()-getRadius())
+	 *			|		&& Util.fuzzyLessThanOrEqualTo(0.0,position.getYComponent()-getRadius())
 	 */	
 	@Raw
 	public boolean canHaveAsPosition(Vector position) {
 		if (getWorld() == null)
 			return (position != null)
-					&& Util.fuzzyLessThanOrEqualTo(position.getXComponent()+getRadius(),Double.MAX_VALUE)
-					&& Util.fuzzyLessThanOrEqualTo(position.getYComponent()+getRadius(),Double.MAX_VALUE)
-					&& Util.fuzzyLessThanOrEqualTo(0.0,position.getXComponent()-getRadius())
-					&& Util.fuzzyLessThanOrEqualTo(0.0,position.getYComponent()-getRadius());   
-		//TODO: what about this? misschien aparte checker, isValidPosition?
+				&& Util.fuzzyLessThanOrEqualTo(position.getXComponent()+getRadius(),Double.MAX_VALUE)
+				&& Util.fuzzyLessThanOrEqualTo(position.getYComponent()+getRadius(),Double.MAX_VALUE)
+				&& Util.fuzzyLessThanOrEqualTo(0.0,position.getXComponent()-getRadius())
+				&& Util.fuzzyLessThanOrEqualTo(0.0,position.getYComponent()-getRadius());
 		else {
 			return (position != null)
 				&& Util.fuzzyLessThanOrEqualTo(position.getXComponent()+getRadius(),getWorld().getWidth())
@@ -143,7 +149,31 @@ public abstract class Collidable {
 				&& Util.fuzzyLessThanOrEqualTo(0.0,position.getYComponent()-getRadius());
 		}
 	}
-	
+		
+	/**
+	 * Calculate the distance from this collidable to the closest boundary of its world.
+	 * 
+	 * @effect	...
+	 * 			| if getWorld() != null
+	 * 			|	then if this.move(getTimeToCollisionWithBoundary)
+	 * 			|		then result == Math.min(new.getPosition().getXComponent()-this.getPosition().getXComponent(), 
+	 * 			|								(new.getPosition().getYComponent()-this.getPosition().getYComponent())
+	 * @effect 	If this collidable has the null reference as its world, then the distance is infinity.
+	 * 			| if getWorld() == null
+	 * 			|	then result == Double.POSITIVE_INFINITY
+	 */
+	@Raw
+	public double getDistanceToClosestBoundary() {
+		if(getWorld() !=null) {
+			double minX = getPosition().getXComponent() - radius;
+			double maxX = getWorld().getWidth() -getPosition().getXComponent() + radius;
+			double minY = getPosition().getYComponent() - radius;
+			double maxY = getWorld().getHeight() - getPosition().getYComponent() + radius;
+			return Math.min(Math.min(minY, minX), Math.min(maxY, maxX));
+		}
+		return Double.POSITIVE_INFINITY;
+	}
+
 	/**
 	 * Variable registering the position of this collidable.
 	 */
@@ -252,8 +282,6 @@ public abstract class Collidable {
 	public static double getMinRadius() {
 		return minRadius;
 	}
-	//TODO: voorlopig kunnen we die hier laten staan aangezien alle minradius hetzelfde zijn, of we kunnen er nu al voor kiezen om die in de subklasses te duwen?
-	//TODO: het vreemde hieraan is dat we die setter hebben, zei de assistent. 
 	
 	/**
 	 * Set the minimum radius that applies to all collidables to the given minimum radius.
@@ -347,10 +375,8 @@ public abstract class Collidable {
 	 * @post	This collidable references the given world as teh world to which it is attached.
 	 * 			| (new this).getWorld() == world
 	 */
-	//TODO: setWorld moet zeer beperkt toegankelijk zijn, package visible gaat hier niet (zoals op p. 440) hoe dan? nominaal gedaan zoals in het hb.
-	//TODO: world ook @raw? zie p. 440
 	@Raw
-	public void setWorld(@Raw World world) {
+	public void setWorld(World world) {
 		assert ( (world == null) || world.hasAsCollidable(this) );
 		assert ( (world != null) || (getWorld() == null) || (!getWorld().hasAsCollidable(this)) );
 		this.world = world;
@@ -395,22 +421,15 @@ public abstract class Collidable {
 	 * 
 	 * @param  	other
 	 * 			The other collidable.
-	 * @return	Returns the distance between this collidable and the given collidable. 
-	 * 			If this collidable is equal to the given collidable the result is always zero.
+	 * @effect	If this collidable is equal to the given collidable the result is always zero.
 	 * 			| if (other == this)
 	 * 			|	then result == 0.0
-	 * 			| else if (result != 0.0)
+	 * @effect	If the result is positive, this collidable and the given collidable don't overlap
+	 * 			| if (result > 0.0)
 	 * 			|	then this.overlap(other) == false
-	 * 
-	 *   //TODO: zoiets?
-	 * 
-	 * 			| let 
-	 * 			|	delta = this.getPosition().subtract(other.getPosition())
-	 * 			| in
-	 * 			| 	if(other.equals(this))
-	 * 			|		result == 0.0
-	 * 			| 	else 	
-	 * 			|		result == Math.sqrt(delta.times(delta)) - this.getRadius() - other.getRadius() 
+	 * @effect	If the result is negative, this collidable and the given collidable overlap
+	 * 			| if (result < 0.0)
+	 * 			|	then this.overlap(other) == true
 	 * @throws 	IllegalArgumentException
 	 * 			The given collidable is not effective.
 	 * 			| (other == null)
@@ -425,7 +444,7 @@ public abstract class Collidable {
 		if (isTerminated())
 			throw new IllegalStateException("This collidable is terminated!");
 		if (other == null)
-			throw new IllegalArgumentException("Non effective collidable!");		//TODO: goed zo? komt nu wel een aantal keer voor, aparte checker voor nodig?
+			throw new IllegalArgumentException("Non effective collidable!");
 		if (other.isTerminated())
 			throw new IllegalStateException("The given collidable is terminated!");
 		if(other.equals(this))
@@ -443,45 +462,38 @@ public abstract class Collidable {
 	 * 
 	 * @param 	other
 	 * 			The other collidable.
-	 * @return	True if and only if the distance between this collidable and the given collidable is negative 
+	 * @effect	True if and only if the distance between this collidable and the given collidable is negative 
 	 * 			or if the given collidable is equal to this collidable.
 	 * 			| result == (getDistanceBetween(other) < 0) || (other.equals(this))  
 	 * @throws 	IllegalArgumentException 
 	 * 			The given collidable is not effective.
 	 * 			| (other == null)
-	 * @throws	IllegalStateException
-	 * 			This collidable is terminated.
-	 * 			| isTerminated()
-	 * @throws	IllegalStateException
-	 * 			The given collidable is terminated.
-	 * 			| other.isTerminated()
 	 */
 	public boolean overlap(Collidable other) throws IllegalArgumentException, IllegalStateException {
-		if (isTerminated())
-			throw new IllegalStateException("This collidable is terminated!");
 		if (other == null)
-			throw new IllegalArgumentException("Non effective collidable!");	
-		if (other.isTerminated())
-			throw new IllegalStateException("The given collidable is terminated!");
+			throw new IllegalArgumentException("Non effective collidable!");
 		if (other.equals(this))
 			return true;
 		return (getDistanceBetween(other) < 0);
 	}
 	
-//	/**
-//	 * 
-//	 * @return
-//	 * @throws IllegalStateException
-//	 */
-//	public boolean overlapWithBoundary() throws IllegalStateException {
-//		if (isTerminated())
-//			throw new IllegalStateException("This collidable is terminated!");	
-//		return (Util.fuzzyLessThanOrEqualTo(getPosition().getXComponent()-getRadius(),0.0))
-//				|| (Util.fuzzyLessThanOrEqualTo(getWorld().getHeight(),getPosition().getYComponent()+getRadius())) 
-//				|| (Util.fuzzyLessThanOrEqualTo(getWorld().getWidth(),getPosition().getXComponent()+getRadius())) 
-//				|| (Util.fuzzyLessThanOrEqualTo(getPosition().getYComponent()-getRadius(),0.0));
-//	}
-	
+	/**
+	 * Returns whether this collidable overlaps with the boundaries of its world.
+	 * @effect 	True if and only if the distance to the closest boundary of this collidables world is negative.
+	 * 			| result == getDistanceToClosestBoundary < 0
+	 * @throws 	IllegalStateException
+	 * 			This collidable is terminated.
+	 * 			| isTerminated()
+	 */
+	public boolean overlapWithBoundary() throws IllegalStateException {
+		if (isTerminated())
+			throw new IllegalStateException("This collidable is terminated!");	
+		if(getWorld() != null) {
+			return getDistanceToClosestBoundary() < 0;
+		}
+		return false;
+	}
+
 	/**
 	 * Returns when this collidable, if ever, will collide with the given collidable.
 	 * 
@@ -494,20 +506,10 @@ public abstract class Collidable {
 	 * @throws 	IllegalArgumentException
 	 * 			The given collidable is not effective.
 	 * 			| (other == null)
-	 * @throws	IllegalStateException
-	 * 			This collidable is terminated.
-	 * 			| isTerminated()
-	 * @throws	IllegalStateException
-	 * 			The given collidable is terminated.
-	 * 			| other.isTerminated()
 	 */
-	public double getTimeToCollision(Collidable other) throws IllegalArgumentException, IllegalStateException {
-		if (isTerminated())
-			throw new IllegalStateException("This collidable is terminated!");
+	public double getTimeToCollision(Collidable other) throws IllegalArgumentException{
 		if (other == null)
 			throw new IllegalArgumentException("Non effective collidable!");
-		if (other.isTerminated())
-			throw new IllegalStateException("The given collidable is terminated!");
 		
 		Vector deltaR = other.getPosition().subtract(this.getPosition());
 		Vector deltaV = other.getVelocity().subtract(this.getVelocity());
@@ -534,39 +536,19 @@ public abstract class Collidable {
 		}
 	}
 	
-	
-	//TODO snelheid = 0 arithmetics
 	/**
 	 * Returns when this collidable, if ever, will collide with the boundary.
 	 * 
-	 * @effect	...
+	 * @effect	After moving the calculated amount of time, the distance to the closest boundary is equal to zero.
 	 * 			| if this.move(result)
 	 * 			|	then this.getDistanceToClosestBoundary == 0
-	 * @throws	... illegalstate TODO
-	 * 			| ...
 	 */
 	public double getTimeToCollisionWithBoundary() throws IllegalStateException {
-		if (isTerminated())
-			throw new IllegalStateException("This collidable is terminated!");
-		if(hasProperWorld()) {
+		if(getWorld() != null) {
 			return Math.min(getMinXCollision(), getMinYCollision());
 		}
 		return Double.POSITIVE_INFINITY;
 	}
-	
-//	/**
-//	 * Returns where this collidable will be at the moment of collision with the boundary of its world.
-//	 * @effect	...
-//	 * 			| new.getDistanceToClosestBoundary() == 0
-//	 */
-//	public Vector getCollisionWithBoundaryPosition() {
-//		if(hasProperWorld()) {
-//			double dt = getTimeToCollisionWithBoundary();
-//			return getPosition().add(getVelocity().scale(dt));
-//		}
-//		return null;
-//	}
-	
 	
 	private double getMinXCollision() {
 		if(!Util.fuzzyEquals(0, getVelocity().getXComponent())) {
@@ -592,118 +574,44 @@ public abstract class Collidable {
 		return Double.POSITIVE_INFINITY;
 	}
 	
-	
-//	public double getDistanceToClosestBoundary() {
-//		double minX = getPosition().getXComponent() - radius;
-//		double maxX = getWorld().getWidth() -getPosition().getXComponent() + radius;
-//		double minY = getPosition().getYComponent() - radius;
-//		double maxY = getWorld().getHeight() - getPosition().getYComponent() + radius;
-//		return Math.min(Math.min(minY, minX), Math.min(maxY, maxX));
-//	}
-	
-//	/**
-//	 * Returns the position where this collidable and the given collidable will collide.
-//	 * 
-//	 * @param 	other
-//	 * 			The other collidable.
-//	 * @return	Returns the position where this collidable and the given collidable will collide. //TODO: documentatie ook in termen van methodes
-//	 * 			
-//	 * @effect	... geen idee?
-//	 * 
-//	 * 
-//	 * 
-//	 * 			| let
-//	 * 			| 	dt = getTimeToCollision(other)
-//	 *			|	newPositionThis = this.getPosition().add(this.getVelocity().scale(dt))
-//	 *			|	newPositionOther = other.getPosition().add(other.getVelocity().scale(dt))
-//	 *			|	theta = Math.atan2(newPositionOther.getYComponent()-newPositionThis.getYComponent(),
-//	 *			|						newPositionOther.getXComponent()-newPositionThis.getXComponent())
-//	 *			|   directionRadius = new Vector(Math.cos(theta),Math.sin(theta));
-//	 *			| in
-//	 *			|	if dt == Double.POSITIVE_INFINITY
-//	 *			|		then result == null
-//	 *			|   if newPositionOther.getXComponent()-newPositionThis.getXComponent()<0
-//	 *			|		then theta+= Math.PI*2
-//	 *			|	result == newPositionThis.add(directionRadius.scale(this.getRadius()))
-//	 * @throws	IllegalArgumentException
-//	 * 			The given collidable is not effective.
-//	 * 			| (other == null)
-//	 * @throws	IllegalStateException
-//	 * 			This collidable is terminated.
-//	 * 			| isTerminated()
-//	 * @throws	IllegalStateException
-//	 * 			The given collidable is terminated.
-//	 * 			| other.isTerminated()
-//	 */
-//	public Vector getCollisionPosition(Collidable other) throws IllegalArgumentException{
-//		if (isTerminated())
-//			throw new IllegalStateException("This collidable is terminated!");
-//		if (other == null)
-//			throw new IllegalArgumentException("Non effective collidable!");
-//		if (other.isTerminated())
-//			throw new IllegalStateException("The given collidable is terminated!");
-//		double dt = getTimeToCollision(other); 
-//		if (dt == Double.POSITIVE_INFINITY)
-//			return null;
-//		
-//		Vector newPositionThis = this.getPosition().add(this.getVelocity().scale(dt));
-//		Vector newPositionOther = other.getPosition().add(other.getVelocity().scale(dt));
-//		
-//		double theta = Math.atan2(newPositionOther.getYComponent()-newPositionThis.getYComponent(),
-//									newPositionOther.getXComponent()-newPositionThis.getXComponent());
-//		
-//		if(newPositionOther.getXComponent()-newPositionThis.getXComponent()<0)
-//			theta+= Math.PI*2;
-//
-//		Vector directionRadius = new Vector(Math.cos(theta),Math.sin(theta));
-//		return newPositionThis.add(directionRadius.scale(this.getRadius()));	
-//	}
-	
-	// TODO: documentatie
 	/**
-	 * Inverts the speed of this collidable.
+	 * Makes this collidable bounce away from the boundary of its world.
 	 * 
-	 * @effect	
+	 * @effect	If this collidable collides with the left boundary, the x-component of its velocity is inverted.
+	 * 			| if Util.fuzzyEquals(getPosition().getXComponent(),getRadius())
+	 * 			|	then newVelocity = new Vector(-getVelocity().getXComponent(),getVelocity().getYComponent())
+	 * @effect	If this collidable collides with the upper boundary, the y-component of its velocity is inverted.
+	 * 			| if Util.fuzzyEquals(getPosition().getYComponent()+getRadius(),getWorld().getHeight())
+	 * 			| 	then newVelocity = new Vector(getVelocity().getXComponent(),-getVelocity().getYComponent())	 
+	 * @effect	If this collidable collides with the right boundary, the x-component of its velocity is inverted.
+	 * 			| if Util.fuzzyEquals(getPosition().getXComponent()+getRadius(),getWorld().getWidth())
+	 * 			|	then newVelocity = new Vector(-getVelocity().getXComponent(),getVelocity().getYComponent())
+	 * @effect	If this collidable collides with the lower boundary, the y-component of its velocity is inverted.
+	 * 			| if Util.fuzzyEquals(getPosition().getYComponent(),getRadius())
+	 * 			|	then newVelocity = new Vector(getVelocity().getXComponent(),-getVelocity().getYComponent())
 	 */
 	public void bounceOfBoundary() {
-		Vector newVelocity;
-		if(Util.fuzzyEquals(getPosition().getXComponent(),getRadius())) {
-			newVelocity = new Vector(-getVelocity().getXComponent(),getVelocity().getYComponent());
-			System.out.println("inverted x component, because of collision with left boundary");
+		
+		if(getWorld() != null) {
+			Vector newVelocity;
+			if(Util.fuzzyEquals(getPosition().getXComponent(),getRadius())) {
+				newVelocity = new Vector(-getVelocity().getXComponent(),getVelocity().getYComponent());
+				System.out.println("inverted x component, because of collision with left boundary");
+			}
+			else if(Util.fuzzyEquals(getPosition().getYComponent()+getRadius(),getWorld().getHeight())) {
+				newVelocity = new Vector(getVelocity().getXComponent(),-getVelocity().getYComponent());
+				System.out.println("inverted y component, because of collision with upper boundary");
+			}
+			else if(Util.fuzzyEquals(getPosition().getXComponent()+getRadius(),getWorld().getWidth())) {
+				newVelocity = new Vector(-getVelocity().getXComponent(),getVelocity().getYComponent());
+				System.out.println("inverted x component, because of collision with right boundary");
+			}
+			else {
+				newVelocity = new Vector(getVelocity().getXComponent(),-getVelocity().getYComponent());
+				System.out.println("inverted y component, because of collision with lower boundary");
+			}
+			setVelocity(newVelocity);
 		}
-		else if(Util.fuzzyEquals(getPosition().getYComponent()+getRadius(),getWorld().getHeight())) {
-			newVelocity = new Vector(getVelocity().getXComponent(),-getVelocity().getYComponent());
-			System.out.println("inverted y component, because of collision with upper boundary");
-		}
-		else if(Util.fuzzyEquals(getPosition().getXComponent()+getRadius(),getWorld().getWidth())) {
-			newVelocity = new Vector(-getVelocity().getXComponent(),getVelocity().getYComponent());
-			System.out.println("inverted x component, because of collision with right boundary");
-		}
-		else if(Util.fuzzyEquals(getPosition().getYComponent(),getRadius())) {
-			newVelocity = new Vector(getVelocity().getXComponent(),-getVelocity().getYComponent());
-			System.out.println("inverted y component, because of collision with lower boundary");
-		}
-		// maakt niks uit
-//		if(Util.fuzzyLessThanOrEqualTo(getPosition().getXComponent()-getRadius(),0.0)) {
-//			newVelocity = new Vector(-getVelocity().getXComponent(),getVelocity().getYComponent());
-//			System.out.println("inverted x component, because of collision with left boundary");
-//		}
-//		else if(Util.fuzzyLessThanOrEqualTo(getWorld().getHeight(),getPosition().getYComponent()+getRadius())) {
-//			newVelocity = new Vector(getVelocity().getXComponent(),-getVelocity().getYComponent());
-//			System.out.println("inverted y component, because of collision with upper boundary");
-//		}
-//		else if(Util.fuzzyLessThanOrEqualTo(getWorld().getWidth(),getPosition().getXComponent()+getRadius())) {
-//			newVelocity = new Vector(-getVelocity().getXComponent(),getVelocity().getYComponent());
-//			System.out.println("inverted x component, because of collision with right boundary");
-//		}
-//		else if(Util.fuzzyLessThanOrEqualTo(getPosition().getYComponent()-getRadius(),0.0)) {
-//			newVelocity = new Vector(getVelocity().getXComponent(),-getVelocity().getYComponent());
-//			System.out.println("inverted y component, because of collision with lower boundary");
-//		}
-		else {
-			newVelocity = getVelocity();
-		}
-		setVelocity(newVelocity);
 	}
 	
 	/**
@@ -733,9 +641,7 @@ public abstract class Collidable {
 					&& Util.fuzzyLessThanOrEqualTo(sigma*(this.getMass()+other.getMass()), Double.MAX_VALUE)) {
 				
 				double J = 2*this.getMass()*other.getMass()*deltaR.dotProduct(deltaV)/(sigma*(this.getMass()+other.getMass()));
-				System.out.println(J);
 				Vector Jvector = deltaR.scale(J/sigma);
-				System.out.println(Jvector.toString());
 				
 				Vector newVelocityThis = this.getVelocity().add(Jvector.scale(1/this.getMass()));
 				Vector newVelocityOther = other.getVelocity().subtract(Jvector.scale(1/other.getMass()));
@@ -747,7 +653,9 @@ public abstract class Collidable {
 				throw new TimesOverflowException();
 			}
 		} catch(Exception exc) {
-			//TODO: !
+			//if the calculation fails at any moment, the two collidables stop moving
+			this.setVelocity(new Vector(0,0));
+			other.setVelocity(new Vector(0,0));
 		}
 	}
 	

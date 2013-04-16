@@ -1,7 +1,8 @@
 package asteroids;
 
-import be.kuleuven.cs.som.annotate.*;
 import collidable.Collidable;
+import be.kuleuven.cs.som.annotate.*;
+import exceptions.IllegalTimeException;
 
 
 /**
@@ -30,8 +31,11 @@ public class Collision {
 	 * 			The given time,position or first collidable is invalid
 	 * 			| !isValidTime(time) || !isValidFirstCollidable(first)
 	 */
-	public Collision(Collidable first, Collidable second, double time) throws IllegalArgumentException {
-		if(!isValidTime(time) || !isValidCollidables(first, second)) {
+	public Collision(Collidable first, Collidable second, double time) throws IllegalArgumentException, IllegalTimeException {
+		if(!isValidTime(time)) {
+			throw new IllegalTimeException(time);
+		}
+		if(!isValidCollidables(first, second)) {
 			throw new IllegalArgumentException();
 		}
 		this.first = first;
@@ -82,6 +86,7 @@ public class Collision {
 	 */
 	public boolean isValidTime(double time) {
 		return (time > 0);
+		//return Util.fuzzyLessThanOrEqualTo(0, time);
 	}
 	
 	private double time;

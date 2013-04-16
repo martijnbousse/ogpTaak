@@ -7,6 +7,7 @@
 
 package collidable;
 
+import exceptions.InvalidPositionException;
 import asteroids.Util;
 import asteroids.Vector;
 import be.kuleuven.cs.som.annotate.*;
@@ -23,7 +24,6 @@ import be.kuleuven.cs.som.annotate.*;
  * @author Martijn Boussé, Wout Vekemans
  *
  */
-//TODO: important mutators should throw an illegalStateException if this isTerminated. Hier turn, thrust en fireBullet?
 public class Ship extends Collidable implements IShip{
 	
 	/**
@@ -53,7 +53,7 @@ public class Ship extends Collidable implements IShip{
 	public Ship(Vector position, Vector velocity, double radius, double mass, double direction) throws IllegalArgumentException {
 		super(position,velocity, radius);
 		setDirection(direction);
-		if (!isValidMass(mass)) // zoals radius in collidable, geen setter want massa verandert nooit.
+		if (!isValidMass(mass))
 			throw new IllegalArgumentException();
 		this.mass = mass;
 	}
@@ -140,9 +140,7 @@ public class Ship extends Collidable implements IShip{
 	/**
 	 * Variable registering the mass of this ship.
 	 */
-	public final double mass; 
-	//TODO: ik heb die hier gezet omdat mass volgens mij final is, maar dan krijg je error als die in collidable staat.
-	// maar dan hebt ge in elke subklasse in een variable mass?
+	public final double mass;
 	
 	/**
 	 * Return the acceleration of this ship according to Newton's third law.
@@ -239,28 +237,17 @@ public class Ship extends Collidable implements IShip{
 	 * 			|			else
 	 * 			|				then setVelocity(newVelocity)
 	 */
-	public void thrust() {
-		double acceleration = getAcceleration();
-		Vector newVelocity = this.getVelocity().add((new Vector(Math.cos(direction),Math.sin(direction)).scale(acceleration)));
+	public void thrust(double dt) {
+		if (isTerminated())
+			throw new IllegalStateException();
+		double amount = dt*getAcceleration();
+		Vector newVelocity = this.getVelocity().add((new Vector(Math.cos(direction),Math.sin(direction)).scale(amount)));
 		if(Math.sqrt(newVelocity.dotProduct(newVelocity))>this.getSpeedLimit())
 			setVelocity(newVelocity.scale((Double) (this.getSpeedLimit()/Math.sqrt(newVelocity.dotProduct(newVelocity)))));
 		else{
 			setVelocity(newVelocity);
 		}
 	}
-	
-//	/**
-//	 * Returns a boolean whether this ship can accept the given amount to thrust.
-//	 * 
-//	 * @param 	amount
-//	 * 			The amount to check.
-//	 * @return	True if and only if the given amount is a number and if it is greater than zero.	
-//	 * 			| result == !Double.isNaN(amount) && (amount > 0)
-//	 */
-//	public static boolean isValidThrustAmount(double amount) {
-//		return	!Double.isNaN(amount)
-//				&& (amount > 0);
-//	} //TODO: isValidThrustAmount én isValidThrusterAmount ?
 	
 	/**
 	 * Add the given angle to the direction of this ship.
@@ -269,11 +256,14 @@ public class Ship extends Collidable implements IShip{
 	 * 			The angle to be added.
 	 * @pre		This ship can accept the given angle for turning.
 	 * 			| canAcceptForTurn(angle)
+	 * @pre		This ship is not terminated
+	 * 			| !isTerminated()
 	 * @effect	The new direction of this ship is set to the direction of this ship incremented with the given angle.
 	 * 			| setDirection(getDirection()+angle)
 	 */
 	public void turn(double angle) {
 		assert canAcceptForTurn(angle);
+		assert !isTerminated();
 		setDirection(getDirection()+angle);
 	}
 	
@@ -294,17 +284,22 @@ public class Ship extends Collidable implements IShip{
 	 * 
 	 * @effect 	A new bullet is added to the world of this ship with a new position, new velocity, new radius and this ship as its source.
 	 * 			| getWorld.addAsCollidable(bullet)
+	 * @throws	IllegalStateException
+	 * 			This ship is terminated
+	 * 			| isTerminated()
 	 */
+	
 	public void fireBullet() throws IllegalStateException {
 		if (isTerminated())
 			throw new IllegalStateException();
-		
 		Vector initialPosition = getPosition().add( new Vector((getRadius()+3)*Math.cos(getDirection()),(getRadius()+3)*Math.sin(getDirection())));
 		Vector initialVelocity = (new Vector(Math.cos(getDirection()),Math.sin(getDirection()))).scale(250);
-		Bullet bullet = new Bullet(initialPosition,initialVelocity,3,this);
-		getWorld().addAsCollidable(bullet);
-	
-		// TODO: exceptions? overflows? documentatie ok?
+		try {
+			Bullet bullet = new Bullet(initialPosition,initialVelocity,3,this);
+			getWorld().addAsCollidable(bullet);
+		} catch (InvalidPositionException e) {
+			//dont fire
+		}
 	}
 	
 	/**
@@ -315,7 +310,6 @@ public class Ship extends Collidable implements IShip{
 	 */
 	public boolean canFireBullets() {
 		return ((getWorld() != null) && !isTerminated());
-		// TODO: canFireBullet houdt rekening met: initiele positie al ingenomen en partially located outside of the world. Hoe hier rekening mee houden?
 	}
 	
 	/**

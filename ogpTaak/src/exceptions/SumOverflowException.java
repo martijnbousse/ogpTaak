@@ -1,7 +1,7 @@
 /**
  * 
  */
-package asteroids;
+package exceptions;
 
 /**
  * A class of exceptions signaling overflows in sums.

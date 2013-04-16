@@ -193,7 +193,7 @@ public class Ship extends Collidable implements IShip{
 	}
 	
 	/**
-	 * Variable registering the trusher amount of this ship.
+	 * Variable registering the thruster amount of this ship.
 	 */
 	private double thrusterAmount = 1.1*Math.pow(10,18);
 	
@@ -208,8 +208,6 @@ public class Ship extends Collidable implements IShip{
 	public void setThrusterEnabled(boolean flag) {
 		this.isThrusterEnabled = flag;
 	}
-	// todo: p 472, methodes enableThruster, disableThruster?
-	// TODO heb hier setThrusterEnabled..
 	
 	/**
 	 * Check whether the thruster of this ship is enabled.
@@ -223,33 +221,6 @@ public class Ship extends Collidable implements IShip{
 	 * Variable registering whether or not the thruster of this ship is enabled.
 	 */
 	private boolean isThrusterEnabled;
-		
-	/**
-	 * Add the given angle to the direction of this ship.
-	 * 
-	 * @param 	angle
-	 * 			The angle to be added.
-	 * @pre		This ship can accept the given angle for turning.
-	 * 			| canAcceptForTurn(angle)
-	 * @effect	The new direction of this ship is set to the direction of this ship incremented with the given angle.
-	 * 			| setDirection(getDirection()+angle)
-	 */
-	public void turn(double angle) {
-		assert canAcceptForTurn(angle);
-		setDirection(getDirection()+angle);
-	}
-	
-	/**
-	 * Return a boolean reflecting whether this ship can accept the given angle for turning.
-	 * 
-	 * @param 	angle
-	 * 			The angle to be checked.
-	 * @return	True if and only if the direction of this ship incremented with the given angle is a valid direction for this ship. 
-	 * 			| isValidDirection(getDirection()+angle)
-	 */
-	public boolean canAcceptForTurn(double angle) {
-		return isValidDirection(getDirection()+angle);
-	}
 	
 	/**
 	 * Change the velocity of this ship with a given amount. 
@@ -278,19 +249,63 @@ public class Ship extends Collidable implements IShip{
 		}
 	}
 	
-	/**
-	 * Returns a boolean whether this ship can accept the given amount to thrust.
-	 * 
-	 * @param 	amount
-	 * 			The amount to check.
-	 * @return	True if and only if the given amount is a number and if it is greater than zero.	
-	 * 			| result == !Double.isNaN(amount) && (amount > 0)
-	 */
-	public static boolean isValidThrustAmount(double amount) {
-		return	!Double.isNaN(amount)
-				&& (amount > 0);
-	} //TODO: isValidThrustAmount én isValidThrusterAmount ?
+//	/**
+//	 * Returns a boolean whether this ship can accept the given amount to thrust.
+//	 * 
+//	 * @param 	amount
+//	 * 			The amount to check.
+//	 * @return	True if and only if the given amount is a number and if it is greater than zero.	
+//	 * 			| result == !Double.isNaN(amount) && (amount > 0)
+//	 */
+//	public static boolean isValidThrustAmount(double amount) {
+//		return	!Double.isNaN(amount)
+//				&& (amount > 0);
+//	} //TODO: isValidThrustAmount én isValidThrusterAmount ?
 	
+	/**
+	 * Add the given angle to the direction of this ship.
+	 * 
+	 * @param 	angle
+	 * 			The angle to be added.
+	 * @pre		This ship can accept the given angle for turning.
+	 * 			| canAcceptForTurn(angle)
+	 * @effect	The new direction of this ship is set to the direction of this ship incremented with the given angle.
+	 * 			| setDirection(getDirection()+angle)
+	 */
+	public void turn(double angle) {
+		assert canAcceptForTurn(angle);
+		setDirection(getDirection()+angle);
+	}
+	
+	/**
+	 * Return a boolean reflecting whether this ship can accept the given angle for turning.
+	 * 
+	 * @param 	angle
+	 * 			The angle to be checked.
+	 * @return	True if and only if the direction of this ship incremented with the given angle is a valid direction for this ship. 
+	 * 			| isValidDirection(getDirection()+angle)
+	 */
+	public boolean canAcceptForTurn(double angle) {
+		return isValidDirection(getDirection()+angle);
+	}
+	
+	/**
+	 * This ship fires a bullet.
+	 * 
+	 * @effect 	A new bullet is added to the world of this ship with a new position, new velocity, new radius and this ship as its source.
+	 * 			| getWorld.addAsCollidable(bullet)
+	 */
+	public void fireBullet() throws IllegalStateException {
+		if (isTerminated())
+			throw new IllegalStateException();
+		
+		Vector initialPosition = getPosition().add( new Vector((getRadius()+3)*Math.cos(getDirection()),(getRadius()+3)*Math.sin(getDirection())));
+		Vector initialVelocity = (new Vector(Math.cos(getDirection()),Math.sin(getDirection()))).scale(250);
+		Bullet bullet = new Bullet(initialPosition,initialVelocity,3,this);
+		getWorld().addAsCollidable(bullet);
+	
+		// TODO: exceptions? overflows? documentatie ok?
+	}
 	
 	/**
 	 * Return a boolean reflecting whether this ship can fire bullets.
@@ -300,24 +315,7 @@ public class Ship extends Collidable implements IShip{
 	 */
 	public boolean canFireBullets() {
 		return ((getWorld() != null) && !isTerminated());
-	}
-	
-	/**
-	 * This ship fires a bullet.
-	 * 
-	 * @effect 	A new bullet is added to the world of this ship with a new position, new velocity, new radius and this ship as its source.
-	 * 			| getWorld.addAsCollidable(bullet)
-	 */
-	public void fireBullet() {
-		Vector initialPosition = getPosition().add( new Vector((getRadius()+3)*Math.cos(getDirection()),(getRadius()+3)*Math.sin(getDirection())));
-		Vector initialVelocity = (new Vector(Math.cos(getDirection()),Math.sin(getDirection()))).scale(250);
-		
-		Bullet bullet = new Bullet(initialPosition,initialVelocity,3,this);
-		
-		getWorld().addAsCollidable(bullet);
-		
 		// TODO: canFireBullet houdt rekening met: initiele positie al ingenomen en partially located outside of the world. Hoe hier rekening mee houden?
-		// TODO: exceptions? overflows? documentatie ok?
 	}
 	
 	/**
@@ -333,4 +331,5 @@ public class Ship extends Collidable implements IShip{
 	public String toString(){
 		return super.toString() + " Mass: " + getMass() +  " Direction: " + getDirection() + "]";
 	}
+	
 }

@@ -5,7 +5,7 @@ import asteroids.Vector;
 //TODO: vector ook in collidable?
 
 /**
- * A class of bullets as special kinds of collidables involving as additional property an association with ships.
+ * A class of bullets as special kinds of collidables involving a mass and an association with ships.
  * 
  * @invar	The source of each bullet must be a valid source for a bullet.
  * 			| isValidSource(getSource())
@@ -148,4 +148,5 @@ public class Bullet extends Collidable {
 	public String toString(){
 		return super.toString() + " Mass: " + getMass() +  " Source: " + getSource() + "]";
 	}
+
 }

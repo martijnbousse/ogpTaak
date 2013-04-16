@@ -187,7 +187,7 @@ public abstract class Collidable {
 	public boolean canHaveAsVelocity(Vector velocity) {
 		return 	(velocity != null)
 				&& Util.fuzzyLessThanOrEqualTo(0.0,Math.sqrt(velocity.dotProduct(velocity)))
-				&& Util.fuzzyLessThanOrEqualTo(Math.sqrt(velocity.dotProduct(velocity)),getSpeedLimit());	
+				&& Util.fuzzyLessThanOrEqualTo(Math.sqrt(velocity.dotProduct(velocity)), getSpeedLimit());	
 	}
 	
 	/**
@@ -421,7 +421,7 @@ public abstract class Collidable {
 	 * 			The given collidable is terminated.
 	 * 			| other.isTerminated()
 	 */
-	public double getDistanceBetween(Collidable other) throws IllegalArgumentException {
+	public double getDistanceBetween(Collidable other) throws IllegalArgumentException, IllegalStateException {
 		if (isTerminated())
 			throw new IllegalStateException("This collidable is terminated!");
 		if (other == null)
@@ -456,7 +456,7 @@ public abstract class Collidable {
 	 * 			The given collidable is terminated.
 	 * 			| other.isTerminated()
 	 */
-	public boolean overlap(Collidable other) throws IllegalArgumentException {
+	public boolean overlap(Collidable other) throws IllegalArgumentException, IllegalStateException {
 		if (isTerminated())
 			throw new IllegalStateException("This collidable is terminated!");
 		if (other == null)
@@ -467,6 +467,20 @@ public abstract class Collidable {
 			return true;
 		return (getDistanceBetween(other) < 0);
 	}
+	
+//	/**
+//	 * 
+//	 * @return
+//	 * @throws IllegalStateException
+//	 */
+//	public boolean overlapWithBoundary() throws IllegalStateException {
+//		if (isTerminated())
+//			throw new IllegalStateException("This collidable is terminated!");	
+//		return (Util.fuzzyLessThanOrEqualTo(getPosition().getXComponent()-getRadius(),0.0))
+//				|| (Util.fuzzyLessThanOrEqualTo(getWorld().getHeight(),getPosition().getYComponent()+getRadius())) 
+//				|| (Util.fuzzyLessThanOrEqualTo(getWorld().getWidth(),getPosition().getXComponent()+getRadius())) 
+//				|| (Util.fuzzyLessThanOrEqualTo(getPosition().getYComponent()-getRadius(),0.0));
+//	}
 	
 	/**
 	 * Returns when this collidable, if ever, will collide with the given collidable.
@@ -487,7 +501,7 @@ public abstract class Collidable {
 	 * 			The given collidable is terminated.
 	 * 			| other.isTerminated()
 	 */
-	public double getTimeToCollision(Collidable other) throws IllegalArgumentException{
+	public double getTimeToCollision(Collidable other) throws IllegalArgumentException, IllegalStateException {
 		if (isTerminated())
 			throw new IllegalStateException("This collidable is terminated!");
 		if (other == null)
@@ -511,7 +525,6 @@ public abstract class Collidable {
 				return Double.POSITIVE_INFINITY;
 			else
 				try {
-					System.out.println(-(dotProductVR+Math.sqrt(d))/dotProductV);
 					return (-(dotProductVR+Math.sqrt(d))/dotProductV);
 				} catch (ArithmeticException exc) {
 					return Double.POSITIVE_INFINITY;
@@ -529,33 +542,35 @@ public abstract class Collidable {
 	 * @effect	...
 	 * 			| if this.move(result)
 	 * 			|	then this.getDistanceToClosestBoundary == 0
-	 * @throws	...
+	 * @throws	... illegalstate TODO
 	 * 			| ...
 	 */
-	public double getTimeToCollisionWithBoundary() {
+	public double getTimeToCollisionWithBoundary() throws IllegalStateException {
+		if (isTerminated())
+			throw new IllegalStateException("This collidable is terminated!");
 		if(hasProperWorld()) {
 			return Math.min(getMinXCollision(), getMinYCollision());
 		}
 		return Double.POSITIVE_INFINITY;
 	}
 	
-	/**
-	 * Returns where this collidable will be at the moment of collision with the boundary of its world.
-	 * @effect	...
-	 * 			| new.getDistanceToClosestBoundary() == 0
-	 */
-	public Vector getCollisionWithBoundaryPosition() {
-		if(hasProperWorld()) {
-			double dt = getTimeToCollisionWithBoundary();
-			return getPosition().add(getVelocity().scale(dt));
-		}
-		return null;
-	}
+//	/**
+//	 * Returns where this collidable will be at the moment of collision with the boundary of its world.
+//	 * @effect	...
+//	 * 			| new.getDistanceToClosestBoundary() == 0
+//	 */
+//	public Vector getCollisionWithBoundaryPosition() {
+//		if(hasProperWorld()) {
+//			double dt = getTimeToCollisionWithBoundary();
+//			return getPosition().add(getVelocity().scale(dt));
+//		}
+//		return null;
+//	}
 	
 	
 	private double getMinXCollision() {
 		if(!Util.fuzzyEquals(0, getVelocity().getXComponent())) {
-			double maximumXTime = (getWorld().getWidth() - getPosition().getXComponent() - getRadius())/getVelocity().getXComponent();
+			double maximumXTime = (getWorld().getWidth() - getPosition().getXComponent() + getRadius())/getVelocity().getXComponent();
 			double zeroXTime = -(getPosition().getXComponent() - getRadius())/getVelocity().getXComponent();
 			if(!Util.fuzzyLessThanOrEqualTo(0, getVelocity().getXComponent())) {
 				return zeroXTime;
@@ -567,7 +582,7 @@ public abstract class Collidable {
 	
 	private double getMinYCollision() {
 		if(!Util.fuzzyEquals(0, getVelocity().getYComponent())) {
-			double maximumYTime = (getWorld().getHeight() - getPosition().getYComponent() - getRadius())/getVelocity().getYComponent();
+			double maximumYTime = (getWorld().getHeight() - getPosition().getYComponent() + getRadius())/getVelocity().getYComponent();
 			double zeroYTime = -(getPosition().getYComponent() - getRadius())/getVelocity().getYComponent();
 			if(!Util.fuzzyLessThanOrEqualTo(0, getVelocity().getYComponent())) {
 				return zeroYTime;
@@ -578,17 +593,13 @@ public abstract class Collidable {
 	}
 	
 	
-	/**
-	 *  //TODO 
-	 * @return 
-	 */
-	public double getDistanceToClosestBoundary() {
-		double minX = getPosition().getXComponent() - radius;
-		double maxX = getWorld().getWidth() -getPosition().getXComponent() + radius;
-		double minY = getPosition().getYComponent() - radius;
-		double maxY = getWorld().getHeight() - getPosition().getYComponent() + radius;
-		return Math.min(Math.min(minY, minX), Math.min(maxY, maxX));
-	}
+//	public double getDistanceToClosestBoundary() {
+//		double minX = getPosition().getXComponent() - radius;
+//		double maxX = getWorld().getWidth() -getPosition().getXComponent() + radius;
+//		double minY = getPosition().getYComponent() - radius;
+//		double maxY = getWorld().getHeight() - getPosition().getYComponent() + radius;
+//		return Math.min(Math.min(minY, minX), Math.min(maxY, maxX));
+//	}
 	
 //	/**
 //	 * Returns the position where this collidable and the given collidable will collide.
@@ -656,18 +667,39 @@ public abstract class Collidable {
 	 */
 	public void bounceOfBoundary() {
 		Vector newVelocity;
-		if(Util.fuzzyEquals(getPosition().getXComponent()-getRadius(),0)) {
+		if(Util.fuzzyEquals(getPosition().getXComponent(),getRadius())) {
 			newVelocity = new Vector(-getVelocity().getXComponent(),getVelocity().getYComponent());
+			System.out.println("inverted x component, because of collision with left boundary");
 		}
 		else if(Util.fuzzyEquals(getPosition().getYComponent()+getRadius(),getWorld().getHeight())) {
 			newVelocity = new Vector(getVelocity().getXComponent(),-getVelocity().getYComponent());
+			System.out.println("inverted y component, because of collision with upper boundary");
 		}
 		else if(Util.fuzzyEquals(getPosition().getXComponent()+getRadius(),getWorld().getWidth())) {
 			newVelocity = new Vector(-getVelocity().getXComponent(),getVelocity().getYComponent());
+			System.out.println("inverted x component, because of collision with right boundary");
 		}
-		else if(Util.fuzzyEquals(getPosition().getYComponent()-getRadius(),0)) {
+		else if(Util.fuzzyEquals(getPosition().getYComponent(),getRadius())) {
 			newVelocity = new Vector(getVelocity().getXComponent(),-getVelocity().getYComponent());
+			System.out.println("inverted y component, because of collision with lower boundary");
 		}
+		// maakt niks uit
+//		if(Util.fuzzyLessThanOrEqualTo(getPosition().getXComponent()-getRadius(),0.0)) {
+//			newVelocity = new Vector(-getVelocity().getXComponent(),getVelocity().getYComponent());
+//			System.out.println("inverted x component, because of collision with left boundary");
+//		}
+//		else if(Util.fuzzyLessThanOrEqualTo(getWorld().getHeight(),getPosition().getYComponent()+getRadius())) {
+//			newVelocity = new Vector(getVelocity().getXComponent(),-getVelocity().getYComponent());
+//			System.out.println("inverted y component, because of collision with upper boundary");
+//		}
+//		else if(Util.fuzzyLessThanOrEqualTo(getWorld().getWidth(),getPosition().getXComponent()+getRadius())) {
+//			newVelocity = new Vector(-getVelocity().getXComponent(),getVelocity().getYComponent());
+//			System.out.println("inverted x component, because of collision with right boundary");
+//		}
+//		else if(Util.fuzzyLessThanOrEqualTo(getPosition().getYComponent()-getRadius(),0.0)) {
+//			newVelocity = new Vector(getVelocity().getXComponent(),-getVelocity().getYComponent());
+//			System.out.println("inverted y component, because of collision with lower boundary");
+//		}
 		else {
 			newVelocity = getVelocity();
 		}
@@ -691,26 +723,31 @@ public abstract class Collidable {
 	 * 			| 	other.setVelocity(newVelocityOther);
 	 */
 	public void bounce(Collidable other) {
+		System.out.println("Actually entered bounce!");
 		try {
 			Vector deltaR = other.getPosition().subtract(this.getPosition());
 			Vector deltaV = other.getVelocity().subtract(this.getVelocity());
 			double sigma = this.getRadius()+other.getRadius();
 			
-			if(Util.fuzzyLessThanOrEqualTo(2*this.getMass()*deltaR.dotProduct(deltaV), Double.MAX_VALUE)
+			if(Util.fuzzyLessThanOrEqualTo(Math.abs(2*this.getMass()*other.getMass()*deltaR.dotProduct(deltaV)),Double.MAX_VALUE)
 					&& Util.fuzzyLessThanOrEqualTo(sigma*(this.getMass()+other.getMass()), Double.MAX_VALUE)) {
-				double J = 2*this.getMass()*deltaR.dotProduct(deltaV)/(sigma*(this.getMass()+other.getMass()));
+				
+				double J = 2*this.getMass()*other.getMass()*deltaR.dotProduct(deltaV)/(sigma*(this.getMass()+other.getMass()));
+				System.out.println(J);
 				Vector Jvector = deltaR.scale(J/sigma);
+				System.out.println(Jvector.toString());
 				
 				Vector newVelocityThis = this.getVelocity().add(Jvector.scale(1/this.getMass()));
 				Vector newVelocityOther = other.getVelocity().subtract(Jvector.scale(1/other.getMass()));
 				
 				this.setVelocity(newVelocityThis);
 				other.setVelocity(newVelocityOther);
+				
 			} else { 
 				throw new TimesOverflowException();
 			}
 		} catch(Exception exc) {
-			// TODO wat doen we hiermee?
+			//TODO: !
 		}
 	}
 	
@@ -775,7 +812,7 @@ public abstract class Collidable {
 	public String toString(){
 		return "[" + "Position: " + getPosition().toString() 
 				   + " Velocity: " + getVelocity().toString()
-				   + " Radius: " + getRadius() + "]";
+				   + " Radius: " + getRadius();
 	}
 	
 //	public Collidable getLastCollision() {
@@ -787,4 +824,5 @@ public abstract class Collidable {
 //	}
 //	
 //	private Collidable lastCollision;
+
 }

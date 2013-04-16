@@ -35,10 +35,7 @@ public class Collision {
 			throw new IllegalArgumentException();
 		}
 		this.first = first;
-		first.setLastCollision(second);
 		this.second = second;
-		if(second!=null)
-			second.setLastCollision(first);
 		this.time = time;
 	}
 	
@@ -84,9 +81,57 @@ public class Collision {
 	 * 			| result == Util.fuzzyLessThanOrEqualTo(0, time)
 	 */
 	public boolean isValidTime(double time) {
-		return (time>0);
+		return (time > 0);
 	}
 	
 	private double time;
+	
+	/**
+	 * Check whether this collision is equal to the given object.
+	 * 
+	 * @return	True if and only if the given object is effective, 
+	 * 			if this collision and the given object belong to the same class, 
+	 * 			and if this collision and the other object interpreted as a collision 
+	 * 			have equal first, second and time.
+	 * 			| result == 
+	 * 			|  	( (other != null)
+	 * 			|  && (this.getClass() == other.getClass())
+	 * 			|  && (this.getFirst().equals(otherCollision.getFirst()))
+	 * 			|  && (this.getSecond().equals(otherCollision.getSecond())) 
+	 * 			|  && (Util.fuzzyEquals(this.getTime(),otherCollision.getTime())) )
+	 */
+	@Override
+	public boolean equals(Object other){
+		if (other == null)
+			return false;
+		if (this.getClass() != other.getClass())
+			return false;
+		Collision otherCollision = (Collision) other;
+		return (this.getFirst().equals(otherCollision.getFirst())
+				&& this.getSecond().equals(otherCollision.getSecond())
+				&& Util.fuzzyEquals(this.getTime(),otherCollision.getTime()));
+	}
+	
+	/**
+	 * Return a textual representation of this collision.
+	 * 
+	 * @return	A string consisting of the textual representation of a collision 
+	 * 			.......... , separated by spaces and ended with a square bracket.
+	 * 			| .....
+	 */
+	@Override
+	public String toString(){
+		if (second == null)
+			return "[" + " First: " + getFirst().toString() +  " with boundary " + "]";
+		return "[" + " First: " + getFirst().toString() +  " and second: " + getSecond().toString() + "]";
+	}
+	
+	/**
+	 * Return the hash code for this collision.
+	 */
+	@Override
+	public int hashCode() {
+		return ( getFirst().hashCode() + getSecond().hashCode() + ((Double) getTime()).hashCode()); 
+	}
 
 }

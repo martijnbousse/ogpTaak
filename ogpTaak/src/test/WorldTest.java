@@ -5,11 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import be.kuleuven.cs.som.annotate.Raw;
-
 import collidable.*;
-
 import asteroids.*;
 
 /**

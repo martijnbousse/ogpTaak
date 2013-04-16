@@ -6,13 +6,12 @@ import asteroids.Util;
 import asteroids.Vector;
 
 /**
- * A class of asteroids as special kinds of collidables involving no additional properties ?
+ * A class of asteroids as special kinds of collidables involving a mass.
  * 
  * @version	1.0
  * @author 	Martijn Boussé, Wout Vekemans
  *
  */
-//TODO: important mutators should throw an illegalStateException if this isTerminated. Hier spawn?
 public class Asteroid extends Collidable{
 
 	/**

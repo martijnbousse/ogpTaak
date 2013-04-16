@@ -133,8 +133,10 @@ public class Vector {
 	public Vector scale(double scaleFactor) throws IllegalArgumentException, TimesOverflowException {
 		if(!isValidScaleFactor(scaleFactor))
 			throw new IllegalArgumentException();
-		if((scaleFactor != 0) && (!Util.fuzzyLessThanOrEqualTo(this.getXComponent(),Double.MAX_VALUE/scaleFactor))  
-			|| (!Util.fuzzyLessThanOrEqualTo(this.getYComponent(),Double.MAX_VALUE/scaleFactor)))
+		//TODO: scaleFactor not exactly zero or not fuzzy zero?
+		//TODO: because isValidScalefactor no longer checks on zero, Math.abs(scaleFactor) has been used!
+		if((scaleFactor != 0) && (!Util.fuzzyLessThanOrEqualTo(this.getXComponent(),Double.MAX_VALUE/Math.abs(scaleFactor)))  
+			|| (!Util.fuzzyLessThanOrEqualTo(this.getYComponent(),Double.MAX_VALUE/Math.abs(scaleFactor))))
 			throw new TimesOverflowException();
 		return new Vector(this.getXComponent()*scaleFactor,this.getYComponent()*scaleFactor);
 	}
@@ -195,7 +197,7 @@ public class Vector {
 	 * 			| result == !Double.isNaN(scaleFactor) && Util.fuzzyEquals(scaleFactor,0)
 	 */
 	public boolean isValidScaleFactor(double scaleFactor){
-		return (isValidNumber(scaleFactor) && Util.fuzzyLessThanOrEqualTo(0.0,scaleFactor));
+		return (isValidNumber(scaleFactor)); //&& Util.fuzzyLessThanOrEqualTo(0.0,scaleFactor)); TODO: UPDATE
 	}
 	
 	/**

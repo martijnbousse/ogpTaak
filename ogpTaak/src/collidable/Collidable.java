@@ -28,7 +28,6 @@ import be.kuleuven.cs.som.annotate.*;
  * @author Martijn Boussé, Wout Vekemans
  * 
  */
-//TODO: Belangrijke mutators moeten IllegalStateException opgooien! bounce, invertspeed, etc 
 public abstract class Collidable {
 	/**
 	 * Initialize this new collidable with given position, given velocity, given radius and given mass
@@ -124,7 +123,10 @@ public abstract class Collidable {
 	 * 			The position to check.
 	 * @effect 	If this collidable has a world, true if and only if the given position is effective, and inbetween the borders of the collidables world.
 	 * 			| if getWorld() != null
-	 * 			| 	then result == (position != null) && getDistanceToClosestBoundary() > 0
+	 * 			| 	then result == (position != null) && Util.fuzzyLessThanOrEqualTo(position.getXComponent()+getRadius(),getWorld().getWidth())
+				&& Util.fuzzyLessThanOrEqualTo(position.getYComponent()+getRadius(),getWorld().getHeight())
+				&& Util.fuzzyLessThanOrEqualTo(0.0,position.getXComponent()-getRadius())
+				&& Util.fuzzyLessThanOrEqualTo(0.0,position.getYComponent()-getRadius());
 	 * @effect	If this collidable doesn't have a world, true if and only if the given position is effective and its coordinates are inbetween zero and the maximum value.
 	 * 			| if getWorld() == null
 	 * 			|	then result == (position != null)

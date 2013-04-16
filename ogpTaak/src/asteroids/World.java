@@ -367,24 +367,48 @@ public class World {
 	 * @param dt
 	 */
 	public void evolve(double dt) throws IllegalArgumentException{
-		Collision next = getNextCollision();
-		if (next != null && Util.fuzzyLessThanOrEqualTo(0.0, next.getTime()) && Util.fuzzyLessThanOrEqualTo(next.getTime(),dt) && !Util.fuzzyEquals(0, dt) ) {
-			System.out.println("NEXT COLLISION:" + next.toString()); //PRINT NEXT COLLISION
-			for(Collidable collidable : getAllCollidables()) {
-				collidable.move(next.getTime());
+		if(!Util.fuzzyEquals(0.0, dt)) {
+			Collision next = getNextCollision();
+			if (next != null && Util.fuzzyLessThanOrEqualTo(0.0, next.getTime()) && Util.fuzzyLessThanOrEqualTo(next.getTime(),dt) && !Util.fuzzyEquals(0, dt) ) {
+				System.out.println("NEXT COLLISION:" + next.toString()); //PRINT NEXT COLLISION
+				for(Collidable collidable : getAllCollidables()) {
+					collidable.move(next.getTime());
+				}
+				resolveCollision(next);
+				evolve(dt-next.getTime());
 			}
-			resolveCollision(next);
-			evolve(dt-next.getTime());
-		}
-		else {
-			for(Collidable collidable : getAllCollidables()) {
-				collidable.move(dt);
-				if(collidable instanceof Ship) {
-					((Ship) collidable).thrust(dt);
+			else {
+				for(Collidable collidable : getAllCollidables()) {
+					collidable.move(dt);
+					if(collidable instanceof Ship) {
+						((Ship) collidable).thrust(dt);
+					}
 				}
 			}
 		}
 	}
+	
+//	public void evolve(double dt) throws IllegalArgumentException{
+//		while(Util.fuzzyLessThanOrEqualTo(0, dt)) {
+//			Collision next = getNextCollision();
+//			if (next != null && Util.fuzzyLessThanOrEqualTo(0.0, next.getTime()) && Util.fuzzyLessThanOrEqualTo(next.getTime(),dt) && !Util.fuzzyEquals(0, dt) ) {
+//				System.out.println("NEXT COLLISION:" + next.toString()); //PRINT NEXT COLLISION
+//				for(Collidable collidable : getAllCollidables()) {
+//					collidable.move(next.getTime());
+//				}
+//				resolveCollision(next);
+//				dt-=next.getTime();
+//			}
+//			else {
+//				for(Collidable collidable : getAllCollidables()) {
+//					collidable.move(dt);
+//					if(collidable instanceof Ship) {
+//						((Ship) collidable).thrust(dt);
+//					}
+//				}
+//			}
+//		}
+//	}
 	
 //	public void evolve(double dt) throws IllegalArgumentException {
 //		Collision nextCollision = getNextCollision();
@@ -437,35 +461,35 @@ public class World {
 	 * 
 	 * 
 	 */
-//	public Collision getNextCollision() {
-//		Collidable first = null;
-//		Collidable second = null;
-//		ArrayList<Collidable> collidables = new ArrayList<Collidable>(getAllCollidables());
-//		
-//		double time = Double.MAX_VALUE;
-//		for(int i = 0; i<getNbCollidables(); i++) {
-//			
-//			double collisionWithBoundary = collidables.get(i).getTimeToCollisionWithBoundary();
-//			
-//			for(int j = i+1; j<getNbCollidables(); j++) {
-//				
-////				if(!collidables.get(j).equals(collidables.get(i).getLastCollision()) && !collidables.get(i).equals(collidables.get(j).getLastCollision()))	{
-//					// NIET NODIG?
-//				if(!collidables.get(i).overlap(collidables.get(j))) {
-//					double collisionWithOther = collidables.get(i).getTimeToCollision(collidables.get(j));
-////					double firstCollisionTime = Math.min(collisionWithBoundary,collisionWithOther);
-//					if(!Util.fuzzyLessThanOrEqualTo(time, firstCollisionTime) && Util.fuzzyLessThanOrEqualTo(0,firstCollisionTime)) {					
-//							time = firstCollisionTime;
-//							first = collidables.get(i);
-//						if(Util.fuzzyEquals(time,collisionWithBoundary)) {
-//							second = null;
-//						} else {
-//							second = collidables.get(j);
-//						}
-//					}
-//				}
-//			}
-//		}
+	public Collision getNextCollision() {
+		Collidable first = null;
+		Collidable second = null;
+		ArrayList<Collidable> collidables = new ArrayList<Collidable>(getAllCollidables());
+		
+		double time = Double.MAX_VALUE;
+		for(int i = 0; i<getNbCollidables(); i++) {
+			
+			double collisionWithBoundary = collidables.get(i).getTimeToCollisionWithBoundary();
+			
+			for(int j = i+1; j<getNbCollidables(); j++) {
+				
+//				if(!collidables.get(j).equals(collidables.get(i).getLastCollision()) && !collidables.get(i).equals(collidables.get(j).getLastCollision()))	{
+					// NIET NODIG?
+				if(!collidables.get(i).overlap(collidables.get(j))) {
+					double collisionWithOther = collidables.get(i).getTimeToCollision(collidables.get(j));
+					double firstCollisionTime = Math.min(collisionWithBoundary,collisionWithOther);
+					if(!Util.fuzzyLessThanOrEqualTo(time, firstCollisionTime) && Util.fuzzyLessThanOrEqualTo(0,firstCollisionTime)) {					
+							time = firstCollisionTime;
+							first = collidables.get(i);
+						if(Util.fuzzyEquals(time,collisionWithBoundary)) {
+							second = null;
+						} else {
+							second = collidables.get(j);
+						}
+					}
+				}
+			}
+		}
 		
 		//TODO: BELANGRIJK!!!!!!!!!!
 		// Als een collidable de rand bereikt (en niet bounced) dan blijkt het dat getNextCollision constant dezelfde Collision (zie prompt) blijft
@@ -498,80 +522,80 @@ public class World {
 //		}
 
 		
-//		if(time == Double.POSITIVE_INFINITY || Util.fuzzyLessThanOrEqualTo(time,0.0)) { // Tweede voorwaarde mag niet weg, dan werken bullets niet meer!!
+		if(time == Double.POSITIVE_INFINITY || Util.fuzzyLessThanOrEqualTo(time,0.0)) { // Tweede voorwaarde mag niet weg, dan werken bullets niet meer!!
+			return null;
+		}
+
+//		try {
+			Collision nextCollision = new Collision(first, second, time);
+			return nextCollision;
+		//TODO: niet de bedoeling, vervangen door de fuzzy in de if hierboven. Of toch een illegalargument houden?   
+//		} catch(IllegalArgumentException e) {	
 //			return null;
 //		}
-//
-////		try {
-//			Collision nextCollision = new Collision(first, second, time);
-//			return nextCollision;
-//		//TODO: niet de bedoeling, vervangen door de fuzzy in de if hierboven. Of toch een illegalargument houden?   
-////		} catch(IllegalArgumentException e) {	
-////			return null;
-////		}
-//
-//	}
+
+	}
 	
 	// WERKT ALLEMAAL NIET....
 	
-	public Collision getNextCollision() {
-		Collision nextCollisionWithCollidable = getNextCollisionWithCollidable();
-		Collision nextCollisionWithBoundary = getNextCollisionWithBoundary();
-		if (nextCollisionWithBoundary == null) {
-			return nextCollisionWithCollidable;
-		}
-		else if (nextCollisionWithCollidable == null)
-			return nextCollisionWithBoundary;
-		else if (Util.fuzzyLessThanOrEqualTo(nextCollisionWithBoundary.getTime(),nextCollisionWithCollidable.getTime())) {
-			return nextCollisionWithBoundary;
-		} else {
-		return nextCollisionWithCollidable;
-		}
-	}
-	
-	public Collision getNextCollisionWithCollidable() {
-		// Allocation
-		Collidable first = null;
-		Collidable second = null;
-		ArrayList<Collidable> collidables = new ArrayList<Collidable>(getAllCollidables());
-		double time = Double.MAX_VALUE;
-		// Loop
-		for(int i = 0; i<getNbCollidables(); i++) {
-			for(int j = i+1; j<getNbCollidables(); j++) {
-				double possibleNewCollisionTime = collidables.get(i).getTimeToCollision(collidables.get(j));
-				if (!Util.fuzzyLessThanOrEqualTo(time,possibleNewCollisionTime) && 0<possibleNewCollisionTime)
-					time = possibleNewCollisionTime; 
-					first = collidables.get(i);
-					second = collidables.get(j);
-			}
-		}
-		// Return 
-		if (time == Double.MAX_VALUE)
-			return null;
-		System.out.println(time>0);
-		return new Collision(first, second, time);
-	}
-	
-	public Collision getNextCollisionWithBoundary() {
-		// Allocation
-		Collidable first = null;
-		ArrayList<Collidable> collidables = new ArrayList<Collidable>(getAllCollidables());
-		double time = Double.MAX_VALUE;
-		// Loop
-		for(int i = 0; i<getNbCollidables(); i++) {
-			if (!collidables.get(i).overlapWithBoundary()) {
-			double collisionWithBoundaryTime = collidables.get(i).getTimeToCollisionWithBoundary(); 
-			if (!Util.fuzzyLessThanOrEqualTo(time,collisionWithBoundaryTime) && Util.fuzzyLessThanOrEqualTo(0,collisionWithBoundaryTime)) {
-				time = collisionWithBoundaryTime;
-				first = collidables.get(i);
-			}
-		}
-		}
-		// Return
-		if ((time == Double.MAX_VALUE) && Util.fuzzyLessThanOrEqualTo(time,0.0))
-			return null;
-		return new Collision(first, null, time);
-	}
+//	public Collision getNextCollision() {
+//		Collision nextCollisionWithCollidable = getNextCollisionWithCollidable();
+//		Collision nextCollisionWithBoundary = getNextCollisionWithBoundary();
+//		if (nextCollisionWithBoundary == null) {
+//			return nextCollisionWithCollidable;
+//		}
+//		else if (nextCollisionWithCollidable == null)
+//			return nextCollisionWithBoundary;
+//		else if (Util.fuzzyLessThanOrEqualTo(nextCollisionWithBoundary.getTime(),nextCollisionWithCollidable.getTime())) {
+//			return nextCollisionWithBoundary;
+//		} else {
+//		return nextCollisionWithCollidable;
+//		}
+//	}
+//	
+//	public Collision getNextCollisionWithCollidable() {
+//		// Allocation
+//		Collidable first = null;
+//		Collidable second = null;
+//		ArrayList<Collidable> collidables = new ArrayList<Collidable>(getAllCollidables());
+//		double time = Double.MAX_VALUE;
+//		// Loop
+//		for(int i = 0; i<getNbCollidables(); i++) {
+//			for(int j = i+1; j<getNbCollidables(); j++) {
+//				double possibleNewCollisionTime = collidables.get(i).getTimeToCollision(collidables.get(j));
+//				if (!Util.fuzzyLessThanOrEqualTo(time,possibleNewCollisionTime) && 0<possibleNewCollisionTime)
+//					time = possibleNewCollisionTime; 
+//					first = collidables.get(i);
+//					second = collidables.get(j);
+//			}
+//		}
+//		// Return 
+//		if (time == Double.MAX_VALUE)
+//			return null;
+//		System.out.println(time>0);
+//		return new Collision(first, second, time);
+//	}
+//	
+//	public Collision getNextCollisionWithBoundary() {
+//		// Allocation
+//		Collidable first = null;
+//		ArrayList<Collidable> collidables = new ArrayList<Collidable>(getAllCollidables());
+//		double time = Double.MAX_VALUE;
+//		// Loop
+//		for(int i = 0; i<getNbCollidables(); i++) {
+//			if (!collidables.get(i).overlapWithBoundary()) {
+//			double collisionWithBoundaryTime = collidables.get(i).getTimeToCollisionWithBoundary(); 
+//			if (!Util.fuzzyLessThanOrEqualTo(time,collisionWithBoundaryTime) && Util.fuzzyLessThanOrEqualTo(0,collisionWithBoundaryTime)) {
+//				time = collisionWithBoundaryTime;
+//				first = collidables.get(i);
+//			}
+//		}
+//		}
+//		// Return
+//		if ((time == Double.MAX_VALUE) && Util.fuzzyLessThanOrEqualTo(time,0.0))
+//			return null;
+//		return new Collision(first, null, time);
+//	}
 	
 	/**
 	 * Return a textual representation of this world.

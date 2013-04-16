@@ -631,34 +631,57 @@ public abstract class Collidable {
 	 * 			| in
 	 * 			| 	this.setVelocity(newVelocityThis);
 	 * 			| 	other.setVelocity(newVelocityOther);
+	 * @throws 	IllegalArgumentException
+	 * 			The other collidable is not effective.
+	 * 			| other == null
+	 * @throws 	IllegalArgumentException
+	 * 			The other collidable is not attached to a world or the other collidable is terminated.
+	 * 			| (other.getWorld() == null || other.isTerminated()
+	 * @throws	IllegalStateException
+	 * 			This collidable is not attached to a world or this collidable is terminated.
+	 * 			| !hasProperWorld()
+	 * @throws	IllegalStateException
+	 * 			This collidable is terminated.
+	 * 			| isTerminated()
+	 * 
 	 */
-	public void bounce(Collidable other) {
+	public void bounce(Collidable other) throws IllegalArgumentException, IllegalStateException {
+		if (other == null)
+			throw new IllegalArgumentException();
+		if ((other.getWorld() == null) && other.hasProperWorld())
+			throw new IllegalArgumentException();
+		if ((getWorld() == null) && hasProperWorld())
+			throw new IllegalStateException();
+		
+		// Hier wordt aangenomen dat getDistanceBetween fuzzy equals 0 oftewel getTimeToCollision fuzzy equals 0. -> expliciet testen
 		System.out.println("Actually entered bounce!");
-		try {
-			Vector deltaR = other.getPosition().subtract(this.getPosition());
-			Vector deltaV = other.getVelocity().subtract(this.getVelocity());
-			double sigma = this.getRadius()+other.getRadius();
-			
-			if(Util.fuzzyLessThanOrEqualTo(Math.abs(2*this.getMass()*other.getMass()*deltaR.dotProduct(deltaV)),Double.MAX_VALUE)
-					&& Util.fuzzyLessThanOrEqualTo(sigma*(this.getMass()+other.getMass()), Double.MAX_VALUE)) {
+		
+		if (Util.fuzzyEquals(getTimeToCollision(other),0.0))
+			try {
+				Vector deltaR = other.getPosition().subtract(this.getPosition());
+				Vector deltaV = other.getVelocity().subtract(this.getVelocity());
+				double sigma = this.getRadius()+other.getRadius();
 				
-				double J = 2*this.getMass()*other.getMass()*deltaR.dotProduct(deltaV)/(sigma*(this.getMass()+other.getMass()));
-				Vector Jvector = deltaR.scale(J/sigma);
-				
-				Vector newVelocityThis = this.getVelocity().add(Jvector.scale(1/this.getMass()));
-				Vector newVelocityOther = other.getVelocity().subtract(Jvector.scale(1/other.getMass()));
-				
-				this.setVelocity(newVelocityThis);
-				other.setVelocity(newVelocityOther);
-				
-			} else { 
-				throw new TimesOverflowException();
+				if(Util.fuzzyLessThanOrEqualTo(Math.abs(2*this.getMass()*other.getMass()*deltaR.dotProduct(deltaV)),Double.MAX_VALUE)
+						&& Util.fuzzyLessThanOrEqualTo(sigma*(this.getMass()+other.getMass()), Double.MAX_VALUE)) {
+					
+					double J = 2*this.getMass()*other.getMass()*deltaR.dotProduct(deltaV)/(sigma*(this.getMass()+other.getMass()));
+					Vector Jvector = deltaR.scale(J/sigma);
+					
+					Vector newVelocityThis = this.getVelocity().add(Jvector.scale(1/this.getMass()));
+					Vector newVelocityOther = other.getVelocity().subtract(Jvector.scale(1/other.getMass()));
+					
+					this.setVelocity(newVelocityThis);
+					other.setVelocity(newVelocityOther);
+					
+				} else { 
+					throw new TimesOverflowException();
+				}
+			} catch(Exception exc) {
+				//if the calculation fails at any moment, the two collidables stop moving
+				this.setVelocity(new Vector(0,0));
+				other.setVelocity(new Vector(0,0));
 			}
-		} catch(Exception exc) {
-			//if the calculation fails at any moment, the two collidables stop moving
-			this.setVelocity(new Vector(0,0));
-			other.setVelocity(new Vector(0,0));
-		}
 	}
 	
 	/**

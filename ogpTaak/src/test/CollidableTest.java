@@ -54,7 +54,7 @@ public class CollidableTest {
 		mutableCollidable1 = new Ship(new Vector(100,100), new Vector(1,1), 50, 800, Math.PI/2);
 		mutableCollidable2 = new Ship(new Vector(Double.MAX_VALUE-50,Double.MAX_VALUE-50), new Vector(1,1), 50, 800, Math.PI/2);
 		mutableWorld1.addAsCollidable(mutableCollidable1);
-		mutableWorld1.addAsCollidable(mutableCollidable2); //TODO: meerdere collidables ineens toevoegen?
+		mutableWorld1.addAsCollidable(mutableCollidable2);
 		mutableCollidable3 = new Ship(new Vector(200,200), new Vector(-1,-1), 50, 800, Math.PI/2);
 	}
 	
@@ -64,8 +64,6 @@ public class CollidableTest {
 	public void testGetPosition() {
 		assertTrue(collidable1.getPosition().equals(new Vector(100,50)));
 	}
-	
-	//TODO: setPosition is protected. Hoe testen?
 	
 	// canHaveAsPosition: collidable not attached to a world.
 	
@@ -187,8 +185,6 @@ public class CollidableTest {
 	public void testGetVelocity() {
 		assertTrue(collidable1.getVelocity().equals(new Vector(5,10)));
 	}
-	
-	//TODO: setVelocity is protected. Hoe testen?
 	
 	@Test
 	public void testSetSpeedLimit_LegalCase() {
@@ -513,10 +509,4 @@ public class CollidableTest {
 	public void testOverlap_OtherIsTerminatedCase() {
 		collidable1.overlap(terminatedCollidable);
 	}
-	
-	// bounce //TODO
-	
-	// invertspeed //TODO
-	
-	
 }

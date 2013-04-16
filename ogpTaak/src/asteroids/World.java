@@ -422,7 +422,7 @@ public class World {
 				second.terminate();
 		}
 		else if(first.getClass().equals((second.getClass()))) {
-				first.bounce(second);
+				first.bounce(second); // er staat nu een if test in bounce!
 		}
 		else {
 			if(Asteroid.class.isInstance(first))

@@ -51,53 +51,73 @@ public class Collision {
 		this.time = time;
 	}
 	
+	/**
+	 * Returns the first collidable of this collision.
+	 */
 	@Basic @Immutable @Raw
 	public Collidable getFirst() {
 		return first;
 	}
 	
+	/**
+	 * Variable referencing the first collidable of this collision.
+	 */
 	private Collidable first;
 	
 	/**
-	 * ...
-	 * 
-	 * @param 	first
-	 * 			...
-	 * @param	second
-	 * 			...
-	 * @return	True if and only if the given collidables are both effective, non-terminated and touching each other
-	 * 			or the first collidable is touching the border of its world.
-	 * 			| result == first != null && !first.isTerminated() && 
-					((second == null ) || (!second.isTerminated())) 
+	 * Returns the second collidable of this collision.
 	 */
-	public boolean isValidCollidables(Collidable first, Collidable second) {
-		return first != null && !first.isTerminated() && 
-				((second == null ) || (!second.isTerminated())) ;
-	}
-	
 	@Basic @Immutable @Raw
 	public Collidable getSecond() {
 		return second;
 	}
 	
+	/**
+	 * Variable referencing the second collidable of this collision.
+	 */
 	private Collidable second;
 	
+	/**
+	 * Check whether the given collidables are valid collidables for any collision.
+	 * 
+	 * @param 	first
+	 * 			The first collidable.
+	 * @param	second
+	 * 			The second collidable.
+	 * @return	True if and only if the given collidables are both effective, non-terminated and touching each other
+	 * 			or the first collidable is touching the border of its world.
+	 * 			| result == first != null && !first.isTerminated() && 
+					((second == null ) || (!second.isTerminated())) 
+	 */
+	//TODO: touching each other?
+	public boolean isValidCollidables(Collidable first, Collidable second) {
+		return first != null && !first.isTerminated() && 
+				((second == null ) || (!second.isTerminated())) ;
+	}
+	
+	/**
+	 * Returns the time of this collision.
+	 */
 	@Basic @Immutable @Raw
 	public double getTime() {
 		return time;
 	}
 	
 	/**
-	 * ...	
+	 * Checks whether the given time is a valid time for any collision.
+	 * 	
 	 * @param 	time
-	 * @return	...
-	 * 			| result == Util.fuzzyLessThanOrEqualTo(0, time)
+	 * 			The given time.
+	 * @return	True if and only if the given time is bigger than zero.
+	 * 			| result == (time>0)
 	 */
 	public boolean isValidTime(double time) {
 		return (time > 0);
-		//return Util.fuzzyLessThanOrEqualTo(0, time);
 	}
 	
+	/**
+	 * Variable referencing the time of this collision.
+	 */
 	private double time;
 	
 	/**
@@ -129,9 +149,11 @@ public class Collision {
 	/**
 	 * Return a textual representation of this collision.
 	 * 
-	 * @return	A string consisting of the textual representation of a collision 
-	 * 			.......... , separated by spaces and ended with a square bracket.
-	 * 			| .....
+	 * @return	A string consisting of the textual representation of the first collidable,
+	 * 			the second collidable and the time of this collision, seperated by spaces
+	 * 			and enclosed with square brackets. If the second collidable is null, than
+	 * 			only the first collidable and the time are given, together with the textual
+	 * 			comment "with boundary".
 	 */
 	@Override
 	public String toString(){

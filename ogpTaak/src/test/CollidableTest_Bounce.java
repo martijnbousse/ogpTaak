@@ -97,6 +97,8 @@ public class CollidableTest_Bounce {
 		terminatedCollidable2.terminate();
 	}
 	
+	// BOUNCE
+	
 	// bounce: legal case
 	@Test
 	public void testBounce_LegalCase() {
@@ -156,12 +158,6 @@ public class CollidableTest_Bounce {
 		terminatedCollidable1.bounce(mutableCollidable1);
 	}
 	
-//	// bounce: overlap case
-//	@Test(expected=IllegalArgumentException.class)
-//	public void testBounce_OverlapCase() {
-//		mutableCollidable4.bounce(mutableCollidable5);
-//	}
-	
 	// bounce: this ship is in another world case
 	@Test(expected=IllegalArgumentException.class)
 	public void testBounce_ThisInAnotherWorldCase() {
@@ -173,6 +169,8 @@ public class CollidableTest_Bounce {
 	public void testBounce_OtherInAnotherWorldCase() {
 		mutableCollidable7.bounce(mutableCollidable1);
 	}
+	
+	// BOUNCEOFBOUNDARY
 	
 	// bounce of boundary: left case
 	@Test

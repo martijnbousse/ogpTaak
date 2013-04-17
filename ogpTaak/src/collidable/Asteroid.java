@@ -119,6 +119,23 @@ public class Asteroid extends Collidable{
 	 */
 	public final double mass = (4/3)*Math.PI*Math.pow(getRadius(),3)*DENSITY;
 	
+	public void collide(Collidable collidable) {
+		collidable.collidesWith(this);
+	}
+	
+	public void collidesWith(Ship ship) {
+		ship.collidesWith(this);
+	}
+	
+	public void collidesWith(Asteroid asteroid) {
+		bounce(asteroid);
+	}
+	
+	public void collidesWith(Bullet bullet) {
+		this.terminate();
+		bullet.terminate();
+	}
+	
 	/**
 	 * Return a textual representation of this asteroid.
 	 * 

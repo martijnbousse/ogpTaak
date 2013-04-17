@@ -188,11 +188,11 @@ public class WorldTest {
 		}
 	}
 	
-	// getAllShips //TODO 				Alle drie hetzelfde als getAllCollidables
+	// getAllShips //TODO: test 				Alle drie hetzelfde als getAllCollidables
 	
-	// getAllAsteroids //TODO
+	// getAllAsteroids //TODO: test
 	
-	// getAllBullets //TODO
+	// getAllBullets //TODO: test
 	
 	@Test
 	public void testGetNbCollidables() {
@@ -287,11 +287,15 @@ public class WorldTest {
 		mutableWorld1.removeAsCollidable(mutableCollidable4);
 	}
 	
-	// evolve
+	// evolve TODO: testen
 	
 	@Test
 	public void testEvolve() {
 		fail("Not yet implemented");
 	}
+	
+	// resolveCollision TODO: testen
+	
+	// 
 
 }

@@ -312,6 +312,38 @@ public class Ship extends Collidable implements IShip{
 		return ((getWorld() != null) && !isTerminated());
 	}
 	
+	
+	
+	/**
+	 * TODO: doc
+	 */
+	public void collide(Collidable collidable) {
+		collidable.collidesWith(this);
+	}
+	
+	/**
+	 * TODO: doc
+	 */
+	public void collidesWith(Ship ship) {
+		bounce(ship);
+	}
+	
+	/**
+	 * TODO: doc
+	 */
+	public void collidesWith(Asteroid asteroid) {
+		terminate();
+	}
+	
+	/**
+	 * TODO: doc
+	 */
+	public void collidesWith(Bullet bullet) {
+		bullet.terminate();
+		if (!bullet.getSource().equals(this))
+			this.terminate();
+	}
+	
 	/**
 	 * Return a textual representation of this ship.
 	 * 

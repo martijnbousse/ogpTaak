@@ -83,9 +83,9 @@ public class ShipTest {
 		assertFalse(Ship.isValidDirection(Double.NaN));
 	}
 	
+	// mass TODO: testen
 	
-	
-	// thrust //TODO
+	// thrust, accelaration, al dieje bazaar TODO: testen
 	
 //	@Test
 //	public void testThrust_LegalCase() {
@@ -145,7 +145,17 @@ public class ShipTest {
 		assertFalse(terminatedShip.canFireBullets());
 	}
 	
-	// fireBullet //TODO
+	// fireBullet TODO: testen
+	
+	// collidesWith(Collidable collidable) TODO
+	
+	// collidesWith(Ship ship) TODO
+	
+	// collidesWith(Asteroid asteroid) TODO
+	
+	// collidesWith(Bullet bullet) TODO
+	
+	// toString TODO
 	
 	
 }

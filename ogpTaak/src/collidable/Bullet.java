@@ -116,6 +116,37 @@ public class Bullet extends Collidable {
 	private boolean bouncedOnce = false;
 	
 	/**
+	 * 
+	 */
+	@Override
+	public void collideWithBoundary() {
+		if (bouncedOnce()) {
+			terminate();
+		}
+		else {
+			setBouncedOnce();
+			super.collideWithBoundary();
+		}
+	}
+	
+	public void collide(Collidable collidable) {
+		collidable.collidesWith(this);
+	}
+	
+	public void collidesWith(Ship ship) {
+		ship.collidesWith(this);
+	}
+	
+	public void collidesWith(Asteroid asteroid) {
+		asteroid.collidesWith(this);
+	}
+	
+	public void collidesWith(Bullet bullet) {
+		this.terminate();
+		bullet.terminate();
+	}
+	
+	/**
 	 * Return a textual representation of this bullet.
 	 * 
 	 * @return	A string consisting of the textual representation of a collidable and

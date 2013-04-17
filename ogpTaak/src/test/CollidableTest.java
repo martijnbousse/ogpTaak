@@ -394,9 +394,6 @@ public class CollidableTest {
 		assertFalse(Collidable.isValidTime(Double.NaN));
 	}
 	
-	
-	
-	
 	// getDistanceBetween //TODO: documentatie aanpassen + testen bijschrijven
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -483,5 +480,7 @@ public class CollidableTest {
 		collidable1.overlap(terminatedCollidable);
 	}
 	
-	// overlap with boundary //TODO
+	// overlap with boundary TODO: testen
+	
+	// toString TODO: testen
 }

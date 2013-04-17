@@ -21,7 +21,10 @@ import collidable.*;
  *
  */
 //TODO: facade -> Modelexceptions opgooien
-//TODO: getAllShips, ... terug naar hier + classCastException gebruiken
+//TODO: opgave overlopen of alles gedaan is!
+//TODO: laatste check van invarianten
+//TODO: alles getest?
+//TODO: snel documentatie overlopen.
 public class World {
 	/**
 	 * Initialize this new world with given width, height and no collidables attached to it.
@@ -452,78 +455,33 @@ public class World {
 		}
 	}
 	
-//	public void evolve(double dt) throws IllegalArgumentException{
-//		while(Util.fuzzyLessThanOrEqualTo(0, dt)) {
-//			Collision next = getNextCollision();
-//			if (next != null && Util.fuzzyLessThanOrEqualTo(0.0, next.getTime()) && Util.fuzzyLessThanOrEqualTo(next.getTime(),dt) && !Util.fuzzyEquals(0, dt) ) {
-//				System.out.println("NEXT COLLISION:" + next.toString()); //PRINT NEXT COLLISION
-//				for(Collidable collidable : getAllCollidables()) {
-//					collidable.move(next.getTime());
-//				}
-//				resolveCollision(next);
-//				dt-=next.getTime();
-//			}
-//			else {
-//				for(Collidable collidable : getAllCollidables()) {
-//					collidable.move(dt);
-//					if(collidable instanceof Ship) {
-//						((Ship) collidable).thrust(dt);
-//					}
-//				}
-//			}
-//		}
-//	}
-	
-//	public void evolve(double dt) throws IllegalArgumentException {
-//		Collision nextCollision = getNextCollision();
-//		if ((nextCollision != null) && (nextCollision.getTime()<dt)) {//time is altijd groter dan nul, zie inv collision EN getTime moet STRIKT kleiner zijn dan dt (anders kan getTime lichtjes groter zijn dan dt -> negatieve tijd)
-//			System.out.println("NEXT COLLISION:" + nextCollision.toString()); //PRINT NEXT COLLISION
-//			for(Collidable collidable : getAllCollidables()) {
-//				collidable.move(nextCollision.getTime());
-//			}
-//			resolveCollision(nextCollision);
-//			evolve(dt-nextCollision.getTime());
-//		}
-//		else {
-//			for(Collidable collidable : getAllCollidables()) {
-//				collidable.move(dt);
-//				if(collidable instanceof Ship) {
-//					((Ship) collidable).thrust();
-//				}
-//			}
-//		}
-//	}
-
+	/**
+	 * Resolve the given collision.
+	 * 
+	 * @param 	next
+	 * 			The given collision.
+	 * @effect  If there is only one collidable involved with the collision, then this this collidable bounces of the boundary.
+	 * 			| if (next.getSecond() == null)
+	 * 			|	then next.getFirst().bounceOfBoundary()
+	 * 			Else the two collidables collide.
+	 * 			| else next.getFirst().collides(next.getSecond())
+	 */
 	private void resolveCollision(Collision next) {
-		System.out.println("Actually entered resolveCollision");
 		Collidable first = next.getFirst();
 		Collidable second = next.getSecond();
-		if(second == null) {
-			if (Bullet.class.isInstance(first) && !((Bullet) first).bouncedOnce())
-				((Bullet) first).setBouncedOnce(); //TODO: bullet mag niet eigen schip kapot maken
-			first.bounceOfBoundary();	
-			//TODO overlap met bullet: collide immediately
-		}
-		else if(Bullet.class.isInstance(first) || Bullet.class.isInstance(second)){
-//			if(!((Bullet) first).getSource().equals(second) || !((Bullet) second).getSource().equals(first))
-				first.terminate();
-				second.terminate();
-		}
-		else if(first.getClass().equals((second.getClass()))) {
-				first.bounce(second); // er staat nu een if test in bounce!
+		if (second == null) {
+			first.collideWithBoundary();
 		}
 		else {
-			if(Asteroid.class.isInstance(first))
-				second.terminate();
-			else
-				first.terminate();
+			first.collide(second);
 		}
 	}
 	
 	/**
 	 * Returns the first collision that will happen in this world.
 	 * 
-	 * 
+	 * @return	...
+	 * 			| ... //TODO: documentatie
 	 */
 	public Collision getNextCollision() {
 		Collidable first = null;
@@ -532,13 +490,8 @@ public class World {
 		
 		double time = Double.MAX_VALUE;
 		for(int i = 0; i<getNbCollidables(); i++) {
-			
 			double collisionWithBoundary = collidables.get(i).getTimeToCollisionWithBoundary();
-			
 			for(int j = i+1; j<getNbCollidables(); j++) {
-				
-//				if(!collidables.get(j).equals(collidables.get(i).getLastCollision()) && !collidables.get(i).equals(collidables.get(j).getLastCollision()))	{
-					// NIET NODIG?
 				if(!collidables.get(i).overlap(collidables.get(j))) {
 					double collisionWithOther = collidables.get(i).getTimeToCollision(collidables.get(j));
 					double firstCollisionTime = Math.min(collisionWithBoundary,collisionWithOther);
@@ -553,43 +506,10 @@ public class World {
 					}
 				}
 			}
-		}
-		
-		//TODO: BELANGRIJK!!!!!!!!!!
-		// Als een collidable de rand bereikt (en niet bounced) dan blijkt het dat getNextCollision constant dezelfde Collision (zie prompt) blijft
-		// berekenen en teruggeven. Het probleem zit em in evolve bij evolve(dt-next.getTime()). Volgens mij wordt dat verschil enorm klein ma net 
-		// niet klein genoeg.
-		
-		
-		
-		
-		
-		
-////		EENS OPNIEUW GESCHREVEN, WERKT NIET, maar hiet zit het probleem! 
-//		double time = Double.MAX_VALUE;
-//		for(int i = 0; i<getNbCollidables(); i++) {
-//			for(int j = i+1; j<getNbCollidables(); j++) {
-//				if(!collidables.get(i).overlap(collidables.get(j))) {
-//					double possibleNewCollisionTime = collidables.get(i).getTimeToCollision(collidables.get(j));
-//					if (!Util.fuzzyLessThanOrEqualTo(time,possibleNewCollisionTime) && Util.fuzzyLessThanOrEqualTo(0,possibleNewCollisionTime))
-//						time = possibleNewCollisionTime; 
-//						first = collidables.get(i);
-//						second = collidables.get(j);
-//				}
-//			}
-//			double collisionWithBoundaryTime = collidables.get(i).getTimeToCollisionWithBoundary(); 
-//			if (!Util.fuzzyLessThanOrEqualTo(time,collisionWithBoundaryTime) && Util.fuzzyLessThanOrEqualTo(0,collisionWithBoundaryTime)) {
-//				time = collisionWithBoundaryTime;
-//				first = collidables.get(i);
-//				second = null;
-//				}
-//		}
-
-		
-		if(time == Double.POSITIVE_INFINITY || Util.fuzzyLessThanOrEqualTo(time,0.0)) { // Tweede voorwaarde mag niet weg, dan werken bullets niet meer!!
+		}	
+		if(time == Double.POSITIVE_INFINITY || Util.fuzzyLessThanOrEqualTo(time,0.0))  // Tweede voorwaarde mag niet weg, dan werken bullets niet meer!!
 			return null;
-		}
-
+		
 //		try {
 			Collision nextCollision = new Collision(first, second, time);
 			return nextCollision;

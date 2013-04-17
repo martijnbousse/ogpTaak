@@ -591,20 +591,6 @@ public abstract class Collidable {
 	 * 			than the previous time to collision with that boundary.
 	 * 			|	else move(dt)
 	 * 			| 		 getTimeToCollisionWithBoundary > (new this).getTimeToCollisionWithBoundary	
-	 * 
-	 * 
-	 * @effect	If this collidable collides with the left boundary, the x-component of its velocity is inverted.
-	 * 			| if Util.fuzzyEquals(getPosition().getXComponent(),getRadius())
-	 * 			|	then newVelocity = new Vector(-getVelocity().getXComponent(),getVelocity().getYComponent())
-	 * @effect	If this collidable collides with the upper boundary, the y-component of its velocity is inverted.
-	 * 			| if Util.fuzzyEquals(getPosition().getYComponent()+getRadius(),getWorld().getHeight())
-	 * 			| 	then newVelocity = new Vector(getVelocity().getXComponent(),-getVelocity().getYComponent())	 
-	 * @effect	If this collidable collides with the right boundary, the x-component of its velocity is inverted.
-	 * 			| if Util.fuzzyEquals(getPosition().getXComponent()+getRadius(),getWorld().getWidth())
-	 * 			|	then newVelocity = new Vector(-getVelocity().getXComponent(),getVelocity().getYComponent())
-	 * @effect	If this collidable collides with the lower boundary, the y-component of its velocity is inverted.
-	 * 			| if Util.fuzzyEquals(getPosition().getYComponent(),getRadius())
-	 * 			|	then newVelocity = new Vector(getVelocity().getXComponent(),-getVelocity().getYComponent())
 	 * @throws	IllegalStateException
 	 * 			This collidable is not attached to a world and has a proper world to which it is attached.
 	 * 			| (getWorld() == null) && hasProperWorld()	
@@ -617,7 +603,9 @@ public abstract class Collidable {
 	
 	// TODO: exceptions opvangen?
 	
-	public void bounceOfBoundary() {
+	// TODO: kan protected maar dan geen testen meer op doen!
+	
+	public void bounceOfBoundary() throws IllegalStateException {
 		if ((getWorld() == null) && hasProperWorld())
 			throw new IllegalStateException();
 //		if (overlapWithBoundary() && (!(getWorld() == null) && hasProperWorld()))
@@ -686,6 +674,8 @@ public abstract class Collidable {
 	//TODO: alle exceptions afhandelen in collidesWith(...) !!! misschien een checker schrijven en totaal implementeren. misschien later..
 	//      Handel in collidesWith(...) nu gewoon af door beide apart op te vangen en een kleine boodschap met wat er mogelijk mis is, voor
 	// 		de rest doe niets. OF doorgooien naar de facade en daar meegeven als modelexception!
+	
+	//TODO: we kunnen bounce protected maken opdat users daar niet aan kunnen, maar dan mogen alle testen van bounce weg !
 	
 	public void bounce(Collidable other) throws IllegalArgumentException, IllegalStateException {
 		// Severely restrict application possibilities.
@@ -771,9 +761,42 @@ public abstract class Collidable {
 			setPosition(getPosition());
 		}
 		catch(InvalidPositionException exc3) {
-			// do nothing
+			// do nothing  TODO: HET IS DEZE EXCEPTION DIE OPGEGOOID WORDT TEGEN DE RAND
 		}
 	}
+	
+	/**
+	 *  TODO: doc
+	 */
+	public void collideWithBoundary() {
+		bounceOfBoundary();
+	}
+	
+	/**
+	 * This collidable collides with the given collidable.
+	 * 
+	 * @param 	collidable
+	 * 			The given collidable.
+	 */
+	public abstract void collide(Collidable collidable);
+	
+	/**
+	 * TODO: doc
+	 * @param ship
+	 */
+	abstract void collidesWith(Ship ship);
+	
+	/**
+	 * TODO: doc
+	 * @param asteroid
+	 */
+	abstract void collidesWith(Asteroid asteroid);
+	
+	/**
+	 * TODO: doc
+	 * @param bullet
+	 */
+	abstract void collidesWith(Bullet bullet);
 	
 	/**
 	 * Return a textual representation of this collidable.

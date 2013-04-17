@@ -78,7 +78,7 @@ public class CollidableTest_Bounce {
 		
 		mutableWorld3 = new World(200,200);
 		mutableCollidable8 = new Ship(new Vector(10,100), new Vector(-1,0), 10, 1000, 0); 	// left boundary
-		mutableCollidable9 = new Ship(new Vector(100,90), new Vector(0,1), 10, 1000, 0); 	// upper boundary
+		mutableCollidable9 = new Ship(new Vector(100,190), new Vector(0,1), 10, 1000, 0); 	// upper boundary
 		mutableCollidable10 = new Ship(new Vector(190,100), new Vector(1,0), 10, 1000, 0); 	// right boundary
 		mutableCollidable11 = new Ship(new Vector(100,10), new Vector(0,-1), 10, 1000, 0); 	// lower boundary
 		mutableCollidable12 = new Ship(new Vector(100,100), new Vector(1,1), 10, 1000, 0); // middle of world
@@ -97,82 +97,175 @@ public class CollidableTest_Bounce {
 		terminatedCollidable2.terminate();
 	}
 	
-	// BOUNCE
+	// canBounce
 	
-	// bounce: legal case
+	@Test
+	public void testCanBounce_LegalCase() {
+		assertTrue(mutableCollidable1.canBounce(mutableCollidable2));	
+	}
+	
+	@Test
+	public void testCanBounce_IllegalCase() {
+		assertFalse(mutableCollidable3.canBounce(mutableCollidable4));
+	}
+	
+	@Test
+	public void testCanBounce_OtherNotInAWorldCase() {
+		assertFalse(mutableCollidable1.canBounce(mutableCollidable13));
+	}
+	
+	@Test
+	public void testCanBounce_ThisNotInAWorldCase() {
+		assertFalse(mutableCollidable13.canBounce(mutableCollidable1));
+	}
+	
+	@Test
+	public void testCanBounce_BothNotInAWorldCase() {
+		assertFalse(mutableCollidable13.canBounce(mutableCollidable14));
+	}
+	
+	@Test
+	public void testCanBounce_OtherIsTerminatedCase() {
+		assertFalse(mutableCollidable1.canBounce(terminatedCollidable1));
+	}
+	
+	@Test
+	public void testCanBounce_ThisIsTerminatedCase() {
+		assertFalse(terminatedCollidable1.canBounce(mutableCollidable1));
+	}
+	
+	@Test
+	public void testCanBounce_ThisInAnotherWorldCase() {
+		assertFalse(mutableCollidable1.canBounce(mutableCollidable7));
+	}
+	
+	@Test
+	public void testCanBounce_OtherInAnotherWorldCase() {
+		assertFalse(mutableCollidable7.canBounce(mutableCollidable1));
+	}
+	
+	// bounce
+	
 	@Test
 	public void testBounce_LegalCase() {
-		mutableCollidable1.bounce(mutableCollidable2);
-		mutableCollidable1.move(1);
-		mutableCollidable2.move(1);
-		assertFalse(mutableCollidable1.overlap(mutableCollidable2));
+		Vector oldVelocity1 = mutableCollidable1.getVelocity();
+		Vector oldVelocity2 = mutableCollidable2.getVelocity();
+		mutableCollidable1.collide(mutableCollidable2);
+		assertFalse(mutableCollidable1.getVelocity().equals(oldVelocity1));
+		assertFalse(mutableCollidable2.getVelocity().equals(oldVelocity2));
 	}
 	
-	// bounce: illegal case (the collidables move closer to each other)
 	@Test
 	public void testBounce_IllegalCase() {
-		double oldTimeToCollision = mutableCollidable3.getTimeToCollision(mutableCollidable4);
-		mutableCollidable3.bounce(mutableCollidable4);
-		mutableCollidable3.move(1);
-		mutableCollidable4.move(1);
-		assertTrue(oldTimeToCollision>mutableCollidable3.getTimeToCollision(mutableCollidable4));
+		Vector oldVelocity3 = mutableCollidable3.getVelocity();
+		Vector oldVelocity4 = mutableCollidable4.getVelocity();
+		mutableCollidable3.collide(mutableCollidable4);
+		assertTrue(mutableCollidable3.getVelocity().equals(oldVelocity3));
+		assertTrue(mutableCollidable4.getVelocity().equals(oldVelocity4));
 	}
 	
-	// bounce: null case
-	@Test(expected=IllegalArgumentException.class)
-	public void testBounce_NullCase() {
-		mutableCollidable1.bounce(null);
-	}
-	
-	// bounce: other not in a world case
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void testBounce_OtherNotInWorldCase() {
-		mutableCollidable1.bounce(mutableCollidable13);
+		Vector oldVelocity1 = mutableCollidable1.getVelocity();
+		Vector oldVelocity13 = mutableCollidable13.getVelocity();
+		mutableCollidable1.collide(mutableCollidable13);
+		assertTrue(mutableCollidable1.getVelocity().equals(oldVelocity1));
+		assertTrue(mutableCollidable13.getVelocity().equals(oldVelocity13));
 	}
-	
-	// bounce: this not in a world case
-	@Test(expected=IllegalStateException.class)
+
+	@Test
 	public void testBounce_ThisNotInWorldCase() {
-		mutableCollidable13.bounce(mutableCollidable1);
+		Vector oldVelocity13 = mutableCollidable13.getVelocity();
+		Vector oldVelocity1 = mutableCollidable1.getVelocity();
+		mutableCollidable13.collide(mutableCollidable1);
+		assertTrue(mutableCollidable13.getVelocity().equals(oldVelocity13));
+		assertTrue(mutableCollidable1.getVelocity().equals(oldVelocity1));
 	}
 	
-	// bounce: both collidables not in a world case
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void testBounce_BothCollidablesNotInAWorldCase() {
-		mutableCollidable13.bounce(mutableCollidable14);
+		Vector oldVelocity14 = mutableCollidable14.getVelocity();
+		Vector oldVelocity13 = mutableCollidable13.getVelocity();
+		mutableCollidable14.collide(mutableCollidable13);
+		assertTrue(mutableCollidable14.getVelocity().equals(oldVelocity14));
+		assertTrue(mutableCollidable13.getVelocity().equals(oldVelocity13));
 	}
 	
-	// bounce: other is terminated case 
-	// (REMINDER: hasProperWorld() in bounce() also calls the complementary checker canHaveAsCollidable() 
-	//				from the bidirectional association. Hence, terminated collidables are also included.
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void testBounce_OtherIsTerminatedCase() {
-		mutableCollidable1.bounce(terminatedCollidable1);
+		Vector oldVelocity1 = mutableCollidable1.getVelocity();
+		Vector oldVelocity2 = terminatedCollidable1.getVelocity();
+		mutableCollidable1.collide(terminatedCollidable1);
+		assertTrue(mutableCollidable1.getVelocity().equals(oldVelocity1));
+		assertTrue(terminatedCollidable1.getVelocity().equals(oldVelocity2));
 	}
-	
-	// bounce: this is terminated case
-	// (REMINDER: hasProperWorld() in bounce() also calls the complementary checker canHaveAsCollidable() 
-		//				from the bidirectional association. Hence, terminated collidables are also included.
-	@Test(expected=IllegalStateException.class)
+
+	@Test
 	public void testBounce_ThisIsTerminatedCase() {
-		terminatedCollidable1.bounce(mutableCollidable1);
+		Vector oldVelocity1 = terminatedCollidable1.getVelocity();
+		Vector oldVelocity2 = mutableCollidable1.getVelocity();
+		terminatedCollidable1.collide(mutableCollidable1);
+		assertTrue(terminatedCollidable1.getVelocity().equals(oldVelocity1));
+		assertTrue(mutableCollidable1.getVelocity().equals(oldVelocity2));
 	}
 	
-	// bounce: this ship is in another world case
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void testBounce_ThisInAnotherWorldCase() {
-		mutableCollidable1.bounce(mutableCollidable7);
+		Vector oldVelocity1 = mutableCollidable1.getVelocity();
+		Vector oldVelocity2 = mutableCollidable7.getVelocity();
+		mutableCollidable1.collide(mutableCollidable7);
+		assertTrue(mutableCollidable1.getVelocity().equals(oldVelocity1));
+		assertTrue(mutableCollidable7.getVelocity().equals(oldVelocity2));
 	}
 	
-	// bounce: other ship is in another world case
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void testBounce_OtherInAnotherWorldCase() {
-		mutableCollidable7.bounce(mutableCollidable1);
+		Vector oldVelocity1 = mutableCollidable7.getVelocity();
+		Vector oldVelocity2 = mutableCollidable1.getVelocity();
+		mutableCollidable7.collide(mutableCollidable1);
+		assertTrue(mutableCollidable7.getVelocity().equals(oldVelocity1));
+		assertTrue(mutableCollidable1.getVelocity().equals(oldVelocity2));
 	}
 	
-	// BOUNCEOFBOUNDARY
+	// canBounceOfBoundary
 	
-	// bounce of boundary: left case
+	@Test
+	public void testCanBounceOfBoundary_LeftCase() {
+		assertTrue(mutableCollidable8.canBounceOfBoundary());
+	}
+	
+	@Test
+	public void testCanBounceOfBoundary_UpperCase() {
+		assertTrue(mutableCollidable9.canBounceOfBoundary());
+	}
+	
+	@Test
+	public void testCanBounceOfBoundary_RightCase() {
+		assertTrue(mutableCollidable10.canBounceOfBoundary());
+	}
+	
+	@Test
+	public void testCanBounceOfBoundary_LowerCase() {
+		assertTrue(mutableCollidable11.canBounceOfBoundary());
+	}
+	
+	@Test
+	public void testCanBounceOfBoundary_FalseCase() {
+		assertFalse(mutableCollidable12.canBounceOfBoundary());
+	}
+	
+	@Test
+	public void testCanBounceOfBoundary_ThisIsTerminatedCase() {
+		assertFalse(terminatedCollidable1.canBounceOfBoundary());
+	}
+	
+	@Test
+	public void testCanBounceOfBoundary_ThisNotInAWorldCase() {
+		assertFalse(mutableCollidable13.canBounceOfBoundary());
+	}
+	
+	// bounceOfBoundary
+	
 	@Test
 	public void testBounceOfBoundary_LeftCase() {
 		mutableCollidable8.bounceOfBoundary();
@@ -180,7 +273,6 @@ public class CollidableTest_Bounce {
 		assertFalse(mutableCollidable8.overlapWithBoundary());
 	}
 	
-	// bounce of boundary: upper case
 	@Test
 	public void testBounceOfBoundary_UpperCase() {
 		mutableCollidable9.bounceOfBoundary();
@@ -188,7 +280,6 @@ public class CollidableTest_Bounce {
 		assertFalse(mutableCollidable9.overlapWithBoundary());
 	}
 	
-	// bounce of boundary: right case
 	@Test
 	public void testBounceOfBoundary_RightCase() {
 		mutableCollidable10.bounceOfBoundary();
@@ -196,7 +287,6 @@ public class CollidableTest_Bounce {
 		assertFalse(mutableCollidable10.overlapWithBoundary());
 	}
 	
-	// bounce of boundary: right case
 	@Test
 	public void testBounceOfBoundary_LowerCase() {
 		mutableCollidable11.bounceOfBoundary();
@@ -204,25 +294,11 @@ public class CollidableTest_Bounce {
 		assertFalse(mutableCollidable11.overlapWithBoundary());
 	}
 	
-	// bounce of boundary: illegal case
 	@Test
-	public void testBounceOfBoundary_IllegalCase() {
+	public void testBounceOfBoundary_FalseCase() {
 		double oldTimeToCollision = mutableCollidable12.getTimeToCollisionWithBoundary();
 		mutableCollidable12.bounceOfBoundary();
 		mutableCollidable12.move(1);
 		assertTrue(oldTimeToCollision>mutableCollidable12.getTimeToCollisionWithBoundary());
 	}
-	
-	// bounce of boundary: terminated case
-	@Test(expected=IllegalStateException.class)
-	public void testBounceOfBoundary_TerminatedCase() {
-		terminatedCollidable1.bounceOfBoundary();
-	}
-	
-	// bounce of boundary: not in a world case
-	@Test(expected=IllegalStateException.class)
-	public void testBounceOfBoundary_NotInAWorldCase() {
-		mutableCollidable13.bounceOfBoundary();
-	}
-	
 }

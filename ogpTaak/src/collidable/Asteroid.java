@@ -42,7 +42,6 @@ public class Asteroid extends Collidable{
 		if (canSpawn()) {	
 			spawn();
 		}
-		// TODO: comment de lijn hieronder eens en speel dan eens :p dan zie je pas hoe goed bounce werkt!
 		super.terminate();
 	}
 	
@@ -119,18 +118,51 @@ public class Asteroid extends Collidable{
 	 */
 	public final double mass = (4/3)*Math.PI*Math.pow(getRadius(),3)*DENSITY;
 	
+	/**
+	 * This asteroid collides with the given collidable.
+	 * 
+	 * @param	collidable
+	 * 			The given collidable.
+	 * @effect	The given collidable collides with this asteroid.
+	 * 			| collidable.collidesWith(this)
+	 */
 	public void collide(Collidable collidable) {
 		collidable.collidesWith(this);
 	}
 	
+	/**
+	 * This asteroid collides with the given ship.
+	 * 
+	 * @param	ship
+	 * 			The given ship.
+	 * @effect 	The given ship collides with this asteroid.
+	 * 			| ship.collidesWith(this)
+	 */
 	public void collidesWith(Ship ship) {
 		ship.collidesWith(this);
 	}
 	
+	/**
+	 * This asteroid collides with the given asteroid.
+	 * 
+	 * @param	asteroid
+	 * 			The given asteroid.
+	 * @effect 	This asteroid bounces with the given asteroid.
+	 * 			| bounce(asteroid)
+	 */
 	public void collidesWith(Asteroid asteroid) {
 		bounce(asteroid);
 	}
 	
+	/**
+	 * This asteroid collides with the given bullet.
+	 * 
+	 * @param	bullet
+	 * 			The given bullet.
+	 * @effect 	This asteroid and the given bullet are terminated.
+	 * 			| this.terminate()
+	 * 			| bullet.terminate()
+	 */
 	public void collidesWith(Bullet bullet) {
 		this.terminate();
 		bullet.terminate();

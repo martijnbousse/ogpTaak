@@ -8,10 +8,11 @@ import exceptions.IllegalTimeException;
 /**
  * A class of collisions involving two collidables, the time to collide and a position.
  * 
- * @invar	...
+ * @invar	The time of each collision must be a valid time.
  * 			| isValidTime(time)
- * @invar	...
+ * @invar	The collidables of each collision must be valid collidables.
  * 			| isValidCollidables(first,second)
+ * 
  * @author	Martijn Bousse, Wout Vekemans
  * @version	1.0
  *
@@ -20,16 +21,23 @@ import exceptions.IllegalTimeException;
 public class Collision {
 
 	/**
-	 * Initialize this new collision with given collidables and time.
-	 * @post	...
-	 * 			| new.getTime = time
-	 * @post	...
+	 * Initialize this new collision with given first collidable, given second collidable and given time.
+	 * 
+	 * @param	first
+	 * 			The first collidable.
+	 * @param	second
+	 * 			The second collidable.
+	 * @param	time
+	 * 			The given time.
+	 * @post	The new first collidable of this new collision is equal to the given first collidable.
 	 * 			| new.getFirst = first
-	 * @post	...
+	 * @post	The new second collidable of this new collision is equal to the given second collidable.
 	 * 			| new.getSecond = second
+	 * @post	The new time of this new collision is equal to the given time.
+	 * 			| new.getTime = time
 	 * @throws 	IllegalArgumentException
-	 * 			The given time,position or first collidable is invalid
-	 * 			| !isValidTime(time) || !isValidFirstCollidable(first)
+	 * 			The given time or the collidables are invalid.
+	 * 			| !isValidTime(time) || !isValidCollidable(first,second)
 	 */
 	public Collision(Collidable first, Collidable second, double time) throws IllegalArgumentException, IllegalTimeException {
 		if(!isValidTime(time)) {
@@ -52,6 +60,7 @@ public class Collision {
 	
 	/**
 	 * ...
+	 * 
 	 * @param 	first
 	 * 			...
 	 * @param	second

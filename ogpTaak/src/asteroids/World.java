@@ -8,7 +8,7 @@ import collidable.*;
 
 /**
  * A class of virtual worlds, containing asteroids, ships and bullets.
- *
+ *    //TODO: informeel
  * @Invar	|isValidWidth(getWidth())
  * @Invar	|isValidHeight(getHeight())
  * @Invar	|isValidMaxDimension(getMaxWidth())
@@ -81,9 +81,6 @@ public class World {
 	 * 			|	if (!collidable.isTerminated())
 	 * 			|		then this.removeAsCollidable(collidable)
 	 */
-	//TODO: p. 437, alle non-terminated collidables worden verwijderd, maar er kunnen geen terminated collidables in die lijst zitten?? 
-	//																	toch wordt het zo gedaan in de cursus?
-	//TODO: neen! origineel kunnen er wel terminated collidables inzitten, maar ik heb dat verandert dat dat niet kan! dus if test mag weg.
 	public void terminate() {
 		for (Collidable collidable : collidables) {
 			if (!collidable.isTerminated()) {
@@ -122,7 +119,7 @@ public class World {
 				&& 0 < width;
 	}
 	
-	//TODO: isValidWidth En isValidMaxDimension?
+	//TODO: isValidWidth En isValidMaxDimension? Hebt ge die allebei nodig?
 	
 	/**
 	 * Variable registering the width of this world.
@@ -235,13 +232,11 @@ public class World {
 		return new HashSet<Collidable>(this.collidables);
 	}
 	
-	// TODO: de andere getAll's terug naar hier halen en werken met class cast exceptions!
-	
 	/**
 	 * Return the number of collidables that are attached to this world.
 	 * 
 	 * @return	The number of collidables that are attached to this world.
-	 * 			| card( {collidable in collidables | hasAsCollidable(collidable)})   //TODO: zie p. 410 -> Wat is dit voor iets raar?
+	 * 			| card( {collidable in collidables | hasAsCollidable(collidable)}) 
 	 */
 	public int getNbCollidables() {
 		return getAllCollidables().size();
@@ -334,7 +329,6 @@ public class World {
 	@Raw
 	public boolean canHaveAsCollidable(Collidable collidable) {
 		return ((collidable != null) && !( (this.isTerminated()) || (collidable.isTerminated())) && collidable.getRadius() < Math.min(getWidth()/2, getHeight()/2));
-		//TODO: geen collidables toevoegen die elkaar overlappen!
 	}
 	
 	/**
@@ -412,8 +406,6 @@ public class World {
 	// * HashSet - this class offers constant time performance for the basic operations (add, remove, contains and size), 
 	//   assuming the hash function disperses the elements properly among the buckets. 
 	// * invar: effective -> geen zorgen maken over nullpointers, want volgens regel 92 moet je set rechtstreeks aanroepen.
-	
-	// TODO: of HashTree ? zie documentatie, moeten grondige verklaring geven waarom we voor set/hashset kiezen.
 	/**
 	 * Set collecting references to collidables attached to this world.
 	 * 
@@ -470,7 +462,7 @@ public class World {
 		Collidable first = next.getFirst();
 		Collidable second = next.getSecond();
 		if (second == null) {
-			first.collideWithBoundary();
+			first.bounceOfBoundary();
 		}
 		else {
 			first.collide(second);
@@ -480,8 +472,11 @@ public class World {
 	/**
 	 * Returns the first collision that will happen in this world.
 	 * 
-	 * @return	...
-	 * 			| ... //TODO: documentatie
+	 * @effect	For each collidable in collidables, the time to collision with another collidable or with the boundary is smaller
+	 * 			than the time of the result. 
+	 * 			| for each collidable in collidables
+	 * 			|	result.getTime() < collidable.getTimeToCollision()	
+	 * 			|	result.getTime() < collidable.getTimeToCollisionWithBoundary()
 	 */
 	public Collision getNextCollision() {
 		Collidable first = null;
@@ -509,15 +504,8 @@ public class World {
 		}	
 		if(time == Double.POSITIVE_INFINITY || Util.fuzzyLessThanOrEqualTo(time,0.0))  // Tweede voorwaarde mag niet weg, dan werken bullets niet meer!!
 			return null;
-		
-//		try {
-			Collision nextCollision = new Collision(first, second, time);
-			return nextCollision;
-		//TODO: niet de bedoeling, vervangen door de fuzzy in de if hierboven. Of toch een illegalargument houden?   
-//		} catch(IllegalArgumentException e) {	
-//			return null;
-//		}
-
+		Collision nextCollision = new Collision(first, second, time);
+		return nextCollision;
 	}
 	
 	// WERKT ALLEMAAL NIET....
@@ -584,7 +572,7 @@ public class World {
 	/**
 	 * Return a textual representation of this world.
 	 * 
-	 * @return	A string consisting of the textual representation of the width and the height of this world,		// TODO: and a listing of all its collidables?
+	 * @return	A string consisting of the textual representation of the width and the height of this world,
 	 * 			separated by a space and enclosed in square brackets.
 	 * 			| result.equals(
 	 * 			|	"[" + "Width: " + getWidth().toString() 

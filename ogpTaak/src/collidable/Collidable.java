@@ -576,7 +576,7 @@ public abstract class Collidable {
 	}
 	
 	/**
-	 * This ship bounces with the boundary of its world.
+	 * This collidable bounces with the boundary of its world.
 	 * 
 	 * @effect	If the time to collision with a boundary of this collidable is equal to zero and this collidable 
 	 * 			is moved for a small time interval, then this collidable does not overlap with that boundary.
@@ -766,35 +766,38 @@ public abstract class Collidable {
 	}
 	
 	/**
-	 *  TODO: doc
-	 */
-	public void collideWithBoundary() {
-		bounceOfBoundary();
-	}
-	
-	/**
 	 * This collidable collides with the given collidable.
 	 * 
 	 * @param 	collidable
 	 * 			The given collidable.
+	 * @return	...
 	 */
 	public abstract void collide(Collidable collidable);
 	
 	/**
-	 * TODO: doc
-	 * @param ship
+	 * This collidable collides with the given ship.
+	 * 
+	 * @param 	ship
+	 * 			The given ship.
+	 * @return	...
 	 */
 	abstract void collidesWith(Ship ship);
 	
 	/**
-	 * TODO: doc
-	 * @param asteroid
+	 * This collidable collides with the given asteroid.
+	 * 
+	 * @param 	asteroid
+	 * 			The given asteroid.
+	 * @return	...
 	 */
 	abstract void collidesWith(Asteroid asteroid);
 	
 	/**
-	 * TODO: doc
-	 * @param bullet
+	 * This collidable collides with the given bullet.
+	 * 	
+	 * @param 	bullet
+	 * 			The given bullet.
+	 * @return	...
 	 */
 	abstract void collidesWith(Bullet bullet);
 	

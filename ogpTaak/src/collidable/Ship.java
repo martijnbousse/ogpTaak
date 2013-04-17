@@ -315,33 +315,56 @@ public class Ship extends Collidable implements IShip{
 	
 	
 	/**
-	 * TODO: doc
+	 * This ship collides with the given collidable.
+	 * 
+	 * @param	collidable
+	 * 			The given collidable.
+	 * @effect	The given collidable collides with this ship.
+	 * 			| collidable.collidesWith(this)
 	 */
 	public void collide(Collidable collidable) {
 		collidable.collidesWith(this);
 	}
 	
 	/**
-	 * TODO: doc
+	 * This ship collides with the given ship.
+	 * 
+	 * @param	ship
+	 * 			The given ship.
+	 * @effect 	This ship bounces with the given ship.
+	 * 			| bounce(ship)
 	 */
 	public void collidesWith(Ship ship) {
 		bounce(ship);
 	}
 	
 	/**
-	 * TODO: doc
+	 * This ship collides with the given asteroid.
+	 * 
+	 * @param	asteroid
+	 * 			The given asteroid.
+	 * @effect	This ship is terminated.
+	 * 			| terminate()
 	 */
 	public void collidesWith(Asteroid asteroid) {
 		terminate();
 	}
 	
 	/**
-	 * TODO: doc
+	 * This ship collides with the given bullet.
+	 * 
+	 * @param	bullet
+	 * 			The given bullet
+	 * @effect	The given bullet is terminated and if the source of the given bullet does not equal this ship, 
+	 * 			than this ship is terminated.
+	 * 			| bullet.terminate()
+	 * 			| if (!bullet.getSource().equals(this))7
+	 * 			|	then terminate()
 	 */
 	public void collidesWith(Bullet bullet) {
 		bullet.terminate();
 		if (!bullet.getSource().equals(this))
-			this.terminate();
+			terminate();
 	}
 	
 	/**

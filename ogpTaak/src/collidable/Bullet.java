@@ -41,15 +41,6 @@ public class Bullet extends Collidable {
 		this.source = source;
 	}
 	
-	@Override
-	public void bounceOfBoundary() {
-		if(bouncedOnce)
-			this.terminate();
-		else{
-			super.bounceOfBoundary();
-		}
-	}
-	
 	/**
 	 * Returns the source of this bullet.
 	 */
@@ -119,28 +110,61 @@ public class Bullet extends Collidable {
 	 * 
 	 */
 	@Override
-	public void collideWithBoundary() {
+	public void bounceOfBoundary() {
 		if (bouncedOnce()) {
 			terminate();
 		}
 		else {
 			setBouncedOnce();
-			super.collideWithBoundary();
+			super.bounceOfBoundary();
 		}
 	}
 	
+	/**
+	 * This bullet collides with the given collidable.
+	 * 
+	 * @param	collidable
+	 * 			The given collidable.
+	 * @effect	The given collidable collides with this bullet.
+	 * 			| collidable.collidesWith(this)
+	 */
 	public void collide(Collidable collidable) {
 		collidable.collidesWith(this);
 	}
 	
+	/**
+	 * This bullet collides with the given ship.
+	 * 
+	 * @param	ship
+	 * 			The given ship.
+	 * @effect	The given ship collides with this bullet.
+	 * 			| ship.collidesWith(this)
+	 */
 	public void collidesWith(Ship ship) {
 		ship.collidesWith(this);
 	}
 	
+	/**
+	 * This bullet collides with the given asteroid.
+	 * 
+	 * @param	asteroid
+	 * 			The given asteroid.
+	 * @effect	The given asteroid collides with this bullet.
+	 * 			| asteroid.collidesWith(this)
+	 */
 	public void collidesWith(Asteroid asteroid) {
 		asteroid.collidesWith(this);
 	}
 	
+	/**
+	 * This bullet collides with the given bullet.
+	 * 
+	 * @param	bullet
+	 * 			The given bullet.
+	 * @effect	This bullet and the given bullet are terminated.
+	 * 			| this.terminate()
+	 * 			| bullet.terminate()
+	 */
 	public void collidesWith(Bullet bullet) {
 		this.terminate();
 		bullet.terminate();

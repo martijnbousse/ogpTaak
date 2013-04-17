@@ -310,15 +310,16 @@ public class CollidableTest {
 		assertTrue(collidable1.getWorld() == world1);
 	}
 	
-	//TODO: setWorld
+	// setWorld //TODO: belangrijk!
 	
 	@Test
 	public void testSetWorld() {
-		//TODO: implement! belangrijke! consistentie van bindingen aantonen
+		//TODO: implement! belangrijke! consistentie van bindingen aantonen, veel testen!
 	}
 		
-	//TODO: canHaveAsWorld
-	//TODO: hasProperWorld
+	// canHaveAsWorld //TODO
+	
+	// hasProperWorld //TODO
 	
 	
 	// move
@@ -396,7 +397,7 @@ public class CollidableTest {
 	
 	
 	
-	// getDistanceBetween //TODO: documentatie aanpassen
+	// getDistanceBetween //TODO: documentatie aanpassen + testen bijschrijven
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testGetDistanceBetween_NullCase() {
@@ -451,34 +452,6 @@ public class CollidableTest {
 	// getTimeToCollisionWithBoundary //TODO
 	
 	
-	
-//	// getCollisionPosition
-//	
-//	@Test(expected=IllegalArgumentException.class)
-//	public void testGetCollisionPosition_NullCase() {
-//		collidable1.getCollisionPosition(null);
-//	}
-//	
-//	@Test(expected=IllegalStateException.class)
-//	public void testGetCollisionPosition_ThisIsTerminatedCase() {
-//		terminatedCollidable.getTimeToCollision(collidable1);
-//	}
-//	
-//	@Test(expected=IllegalStateException.class)
-//	public void testGetCollisionPosition_OtherIsTerminatedCase() {
-//		collidable1.getTimeToCollision(terminatedCollidable);
-//	}
-//	
-////		@Test
-////		public void testGetCollisionPosition_CollisionCase() {
-////			assertTrue((new Vector(25.6518,18.8259).equals(ship.getCollisionPosition(ship2))));
-////		} //TODO: eerst documentatie aanpassen
-//	
-//	@Test
-//	public void testGetCollisionPosition_NoCollisionCase() {
-//		assertEquals(null,collidable1.getCollisionPosition(collidable4));
-//	}
-	
 	// overlap
 	
 	@Test
@@ -509,4 +482,6 @@ public class CollidableTest {
 	public void testOverlap_OtherIsTerminatedCase() {
 		collidable1.overlap(terminatedCollidable);
 	}
+	
+	// overlap with boundary //TODO
 }

@@ -29,29 +29,17 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet> {
 
 	@Override
 	public Set<Ship> getShips(World world) {
-		Set<Ship> ships = new HashSet<Ship>();
-		for(Collidable collidable : world.getAllCollidables())
-			if(collidable instanceof Ship)
-				ships.add((Ship) collidable);
-		return ships;
+		return world.getAllShips();
 	}
 
 	@Override
 	public Set<Asteroid> getAsteroids(World world) {
-		Set<Asteroid> asteroids = new HashSet<Asteroid>();
-		for(Collidable collidable : world.getAllCollidables())
-			if(collidable instanceof Asteroid)
-				asteroids.add((Asteroid) collidable);
-		return asteroids;
+		return world.getAllAsteroids();
 	}
 
 	@Override
 	public Set<Bullet> getBullets(World world) {
-		Set<Bullet> bullets = new HashSet<Bullet>();
-		for(Collidable collidable : world.getAllCollidables())
-			if(collidable instanceof Bullet)
-				bullets.add((Bullet) collidable);
-		return bullets;
+		return world.getAllBullets();
 	}
 
 	@Override

@@ -406,8 +406,7 @@ public abstract class Collidable {
 	 * @return	True if and only if the given world is not effective or if it can have this collidable as one of its collidables.
 	 * 			| result == ((world == null) || (world.canHaveAsCollidable(this)))
 	 */
-	// canHaveAsWorld is de complementaire checker in de bidirectionele associatie. Aangezien world de controllerende klasse is, 
-	// moet hier gewoon de checker uit world aangeroepen worden.
+	// canHaveAsWorld calls the complementary checker in the bidirectional association.
 	@Raw
 	public boolean canHaveAsWorld(World world) { 
 		return ((world == null) || world.canHaveAsCollidable(this));
@@ -577,7 +576,22 @@ public abstract class Collidable {
 	}
 	
 	/**
-	 * Makes this collidable bounce away from the boundary of its world.
+	 * This ship bounces with the boundary of its world.
+	 * 
+	 * @effect	If the time to collision with a boundary of this collidable is equal to zero and this collidable 
+	 * 			is moved for a small time interval, then this collidable does not overlap with that boundary.
+	 * 			| let
+	 * 			|	dt be a small time interval
+	 * 			| in	
+	 * 			| 	if Util.fuzzyEquals(this.getTimeToCollisionWithBoundary(),0.0)
+	 * 			|		then move(dt)
+	 * 			|			 this.overlapWithBoundary == false
+	 * 			Else if the time to collision with a boundary of this collidable is bigger than zero and this collidable
+	 * 			is moved for a small time interval, then the new time to collision with that boundary will be smaller 
+	 * 			than the previous time to collision with that boundary.
+	 * 			|	else move(dt)
+	 * 			| 		 getTimeToCollisionWithBoundary > (new this).getTimeToCollisionWithBoundary	
+	 * 
 	 * 
 	 * @effect	If this collidable collides with the left boundary, the x-component of its velocity is inverted.
 	 * 			| if Util.fuzzyEquals(getPosition().getXComponent(),getRadius())
@@ -591,29 +605,43 @@ public abstract class Collidable {
 	 * @effect	If this collidable collides with the lower boundary, the y-component of its velocity is inverted.
 	 * 			| if Util.fuzzyEquals(getPosition().getYComponent(),getRadius())
 	 * 			|	then newVelocity = new Vector(getVelocity().getXComponent(),-getVelocity().getYComponent())
+	 * @throws	IllegalStateException
+	 * 			This collidable is not attached to a world and has a proper world to which it is attached.
+	 * 			| (getWorld() == null) && hasProperWorld()	
+	 * @throws	IllegalStateException
+	 * 			This collidable overlaps with the boundaries of its world.
+	 * 			| this.overlapWithBoundary() && (!(getWorld() == null) && hasProperWorld())
 	 */
+	// REMINDER: hasProperWorld() also calls the complementary checker canHaveAsCollidable() from the bidirectional association.
+	//           Hence, terminated collidables are also included in the if construct.
+	
+	// TODO: exceptions opvangen?
+	
 	public void bounceOfBoundary() {
-		
-		if(getWorld() != null) {
-			Vector newVelocity;
-			if(Util.fuzzyEquals(getPosition().getXComponent(),getRadius())) {
-				newVelocity = new Vector(-getVelocity().getXComponent(),getVelocity().getYComponent());
-				System.out.println("inverted x component, because of collision with left boundary");
-			}
-			else if(Util.fuzzyEquals(getPosition().getYComponent()+getRadius(),getWorld().getHeight())) {
-				newVelocity = new Vector(getVelocity().getXComponent(),-getVelocity().getYComponent());
-				System.out.println("inverted y component, because of collision with upper boundary");
-			}
-			else if(Util.fuzzyEquals(getPosition().getXComponent()+getRadius(),getWorld().getWidth())) {
-				newVelocity = new Vector(-getVelocity().getXComponent(),getVelocity().getYComponent());
-				System.out.println("inverted x component, because of collision with right boundary");
-			}
-			else {
-				newVelocity = new Vector(getVelocity().getXComponent(),-getVelocity().getYComponent());
-				System.out.println("inverted y component, because of collision with lower boundary");
-			}
-			setVelocity(newVelocity);
+		if ((getWorld() == null) && hasProperWorld())
+			throw new IllegalStateException();
+//		if (overlapWithBoundary() && (!(getWorld() == null) && hasProperWorld()))
+//			throw new IllegalStateException(); // TODO: is niet mogelijk want canHaveAsCollidable zou dat moeten tegenhouden!
+	
+		Vector newVelocity;
+		if(Util.fuzzyEquals(getPosition().getXComponent(),getRadius())) {
+			newVelocity = new Vector(-getVelocity().getXComponent(),getVelocity().getYComponent());
+			System.out.println("inverted x component, because of collision with left boundary");
 		}
+		else if(Util.fuzzyEquals(getPosition().getYComponent()+getRadius(),getWorld().getHeight())) {
+			newVelocity = new Vector(getVelocity().getXComponent(),-getVelocity().getYComponent());
+			System.out.println("inverted y component, because of collision with upper boundary");
+		}
+		else if(Util.fuzzyEquals(getPosition().getXComponent()+getRadius(),getWorld().getWidth())) {
+			newVelocity = new Vector(-getVelocity().getXComponent(),getVelocity().getYComponent());
+			System.out.println("inverted x component, because of collision with right boundary");
+		}
+		else {
+			newVelocity = new Vector(getVelocity().getXComponent(),-getVelocity().getYComponent());
+			System.out.println("inverted y component, because of collision with lower boundary");
+		}
+		setVelocity(newVelocity);
+
 	}
 	
 	/**
@@ -621,40 +649,57 @@ public abstract class Collidable {
 	 * 
 	 * @param 	other
 	 * 			The other collidable.
-	 * @effect 	| let	
-	 * 			| 	deltaR = other.getPosition().subtract(this.getPosition());
-	 * 			| 	deltaV = other.getVelocity().subtract(this.getVelocity());double sigma = this.getRadius()+other.getRadius();
-	 * 			| 	J = 2*this.getMass()*deltaR.dotProduct(deltaV)/(sigma*(this.getMass()+other.getMass()));
-	 * 			| 	Jvector = deltaR.scale(J/sigma);
-	 * 			| 	newVelocityThis = this.getVelocity().add(Jvector.scale(1/this.getMass()));
-	 * 			| 	newVelocityOther = other.getVelocity().subtract(Jvector.scale(1/other.getMass()));
-	 * 			| in
-	 * 			| 	this.setVelocity(newVelocityThis);
-	 * 			| 	other.setVelocity(newVelocityOther);
+	 * @effect 	If the time to collision of this ship and the other ship is equal to zero and both ships
+	 * 			are moved for a small time interval, then they will not overlap.
+	 * 			| let
+	 * 			|	dt be a small time interval
+	 * 			| in	
+	 * 			| 	if Util.fuzzyEquals(this.getTimeToCollision(other),0.0)
+	 * 			|		then this.move(dt)
+	 * 			|			 other.move(dt)
+	 * 			|			 (new this).overlap(new other) == false
+	 * 			Else if the time to collision of this ship and the other ship is bigger than zero and both
+	 * 			ship are moved for a small time interval, then the new time to collision will be smaller
+	 * 			than the previous time to collision.
+	 * 			|	else this.move(dt)
+	 * 			|		 other.move(dt)
+	 * 			|		 this.getTimeToCollision(other)  > (new this).getTimeToCollision(new other)
 	 * @throws 	IllegalArgumentException
 	 * 			The other collidable is not effective.
 	 * 			| other == null
 	 * @throws 	IllegalArgumentException
-	 * 			The other collidable is not attached to a world or the other collidable is terminated.
-	 * 			| (other.getWorld() == null || other.isTerminated()
+	 * 			The other collidable is not attached to a world and has a proper world to which it is attached.
+	 * 			| (other.getWorld() == null && other.hasProperWorld()
+	 * @throws	IllegalArgumentException
+	 * 			The other collidable is not attached to the same world as this collidable.
+	 * 			| !(this.getWorld() == other.getWorld())
+	 * @throws	IllegalArgumentException
+	 * 			This collidable overlaps with the other collidable.
+	 * 			| this.overlap(other)
 	 * @throws	IllegalStateException
-	 * 			This collidable is not attached to a world or this collidable is terminated.
-	 * 			| !hasProperWorld()
-	 * @throws	IllegalStateException
-	 * 			This collidable is terminated.
-	 * 			| isTerminated()
-	 * 
+	 * 			This collidable is not attached to a world and has a proper world to which it is attached.
+	 * 			| (getWorld() == null) && hasProperWorld()
 	 */
+	// REMINDER: hasProperWorld() also calls the complementary checker canHaveAsCollidable() from the bidirectional association.
+	//           Hence, terminated collidables are also included in the if construct.
+	
+	//TODO: alle exceptions afhandelen in collidesWith(...) !!! misschien een checker schrijven en totaal implementeren. misschien later..
+	//      Handel in collidesWith(...) nu gewoon af door beide apart op te vangen en een kleine boodschap met wat er mogelijk mis is, voor
+	// 		de rest doe niets. OF doorgooien naar de facade en daar meegeven als modelexception!
+	
 	public void bounce(Collidable other) throws IllegalArgumentException, IllegalStateException {
+		// Severely restrict application possibilities.
 		if (other == null)
 			throw new IllegalArgumentException();
 		if ((other.getWorld() == null) && other.hasProperWorld())
 			throw new IllegalArgumentException();
 		if ((getWorld() == null) && hasProperWorld())
 			throw new IllegalStateException();
-		
-		// Hier wordt aangenomen dat getDistanceBetween fuzzy equals 0 oftewel getTimeToCollision fuzzy equals 0. -> expliciet testen
-		System.out.println("Actually entered bounce!");
+		if (!(this.getWorld() == other.getWorld()))
+			throw new IllegalArgumentException();
+//		if (this.overlap(other))
+//			throw new IllegalArgumentException(); // TODO: deze exception wordts soms opgegooid. Indien commented krijg je die nooit en
+												  // lijkt mij alles juist te werken..
 		
 		if (Util.fuzzyEquals(getTimeToCollision(other),0.0))
 			try {
@@ -677,8 +722,8 @@ public abstract class Collidable {
 				} else { 
 					throw new TimesOverflowException();
 				}
-			} catch(Exception exc) {
-				//if the calculation fails at any moment, the two collidables stop moving
+			} catch(Exception e) {
+				// if the calculation fails at any moment, the two collidables stop moving (design choice)
 				this.setVelocity(new Vector(0,0));
 				other.setVelocity(new Vector(0,0));
 			}

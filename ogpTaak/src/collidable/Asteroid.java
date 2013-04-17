@@ -2,8 +2,6 @@ package collidable;
 
 import java.util.Random;
 
-import exceptions.SumOverflowException;
-import exceptions.TimesOverflowException;
 import be.kuleuven.cs.som.annotate.*;
 import asteroids.Util;
 import asteroids.Vector;
@@ -41,13 +39,10 @@ public class Asteroid extends Collidable{
 	 */
 	@Override
 	public void terminate() {
-		if (canSpawn()) {
-			try{	
-				spawn();
-			} catch (Exception e) {
-				//do nothing
-			}
+		if (canSpawn()) {	
+			spawn();
 		}
+		// TODO: comment de lijn hieronder eens en speel dan eens :p dan zie je pas hoe goed bounce werkt!
 		super.terminate();
 	}
 	
@@ -77,22 +72,32 @@ public class Asteroid extends Collidable{
 	 * 			|	getWorld().addAsCollidable(new Asteroid(firstNewPosition,firstNewVelocity,getRadius()/2));
 	 * 			| 	getWorld().addAsCollidable(new Asteroid(secondNewPosition,secondNewVelocity,getRadius()/2))
 	 */
-	public void spawn() throws IllegalArgumentException, SumOverflowException, TimesOverflowException {
-		Vector firstNewPosition = getPosition().subtract(new Vector(getRadius()/2,0));
-		Vector secondNewPosition = getPosition().add(new Vector(getRadius()/2,0));
-		Random r = new Random();
-		double randomDirection = 2*Math.PI * r.nextDouble();
-		double newSpeed = 1.5*Math.sqrt(getVelocity().dotProduct(getVelocity()));
-		
-		if (Util.fuzzyLessThanOrEqualTo(getSpeedLimit(),newSpeed))
-			newSpeed = getSpeedLimit();	
-		
-		Vector firstNewVelocity = new Vector(newSpeed*Math.cos(randomDirection),newSpeed*Math.cos(randomDirection));
-		Vector secondNewVelocity = new Vector(newSpeed*Math.cos(randomDirection+Math.PI),newSpeed*Math.cos(randomDirection+Math.PI));
-		
+	public void spawn() {
+		Asteroid firstNewAsteroid = null;
+		Asteroid secondNewAsteroid = null;
+		try {
+			// create random direction
+			Random r = new Random();
+			double randomDirection = 2*Math.PI * r.nextDouble();
+			double newSpeed = 1.5*Math.sqrt(getVelocity().dotProduct(getVelocity()));
+			// check speed limit
+			if (Util.fuzzyLessThanOrEqualTo(getSpeedLimit(),newSpeed))
+				newSpeed = getSpeedLimit();	
+			// create vectors
+			Vector firstNewVelocity = new Vector(newSpeed*Math.cos(randomDirection),newSpeed*Math.sin(randomDirection));
+			Vector secondNewVelocity = new Vector(-newSpeed*Math.cos(randomDirection),-newSpeed*Math.sin(randomDirection));
+			Vector firstNewPosition = getPosition().add(new Vector((getRadius()/2)*Math.cos(randomDirection),(getRadius()/2)*Math.sin(randomDirection)));
+			Vector secondNewPosition = getPosition().subtract(new Vector((getRadius()/2)*Math.cos(randomDirection),(getRadius()/2)*Math.sin(randomDirection)));
+			// create asteroids
+			firstNewAsteroid = new Asteroid(firstNewPosition,firstNewVelocity,getRadius()/2);
+			secondNewAsteroid = new Asteroid(secondNewPosition,secondNewVelocity,getRadius()/2);
+		}
+		catch (Exception e) {
+			// spawn calculations have failed, do nothing.
+		}
 		// add new asteroids
-		getWorld().addAsCollidable(new Asteroid(firstNewPosition,firstNewVelocity,getRadius()/2));
-		getWorld().addAsCollidable(new Asteroid(secondNewPosition,secondNewVelocity,getRadius()/2));	
+		getWorld().addAsCollidable(firstNewAsteroid);
+		getWorld().addAsCollidable(secondNewAsteroid);	
 	}
 	
 	/**

@@ -173,6 +173,8 @@ public class WorldTest {
 	public void testIsValidHeight_NegativeCase() {
 		assertFalse(World.isValidHeight(-1));
 	}
+	
+	// getAllCollidables
 
 	@Test
 	public void testGetAllCollidables_NullReference() {
@@ -185,6 +187,12 @@ public class WorldTest {
 			assertEquals(world1.getAllCollidables().contains(collidable),world1.hasAsCollidable(collidable));
 		}
 	}
+	
+	// getAllShips //TODO 				Alle drie hetzelfde als getAllCollidables
+	
+	// getAllAsteroids //TODO
+	
+	// getAllBullets //TODO
 	
 	@Test
 	public void testGetNbCollidables() {

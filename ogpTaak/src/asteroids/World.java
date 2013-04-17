@@ -20,6 +20,8 @@ import collidable.*;
  * @author 	Wout Vekemans, Martijn Bousse
  *
  */
+//TODO: facade -> Modelexceptions opgooien
+//TODO: getAllShips, ... terug naar hier + classCastException gebruiken
 public class World {
 	/**
 	 * Initialize this new world with given width, height and no collidables attached to it.
@@ -241,6 +243,66 @@ public class World {
 	public int getNbCollidables() {
 		return getAllCollidables().size();
 	}
+	
+	/**
+	 * Return a set collecting all ships associated with this world.
+	 * 
+	 * @return	The resulting set does not contain a null reference.
+	 * 			| !result.contains(null)
+	 * @return	Each ship in the resulting set is attached to this world, and vice versa.
+	 * 			| for each ship in ships:
+	 * 			| (result.contains(ship) == this.hasAsCollidable(ship))
+	 */
+	public Set<Ship> getAllShips() {
+		Set<Ship> ships = new HashSet<Ship>();
+		for(Collidable collidable : collidables)
+			try {
+				ships.add((Ship) collidable);
+			} catch (ClassCastException e) {
+				// ignore
+			}
+		return ships;
+	}
+	
+	/**
+	 * Return a set collecting all asteroids associated with this world.
+	 * 
+	 * @return	The resulting set does not contain a null reference.
+	 * 			| !result.contains(null)
+	 * @return	Each asteroid in the resulting set is attached to this world, and vice versa.
+	 * 			| for each asteroid in asteroids:
+	 * 			| (result.contains(asteroid) == this.hasAsCollidable(asteroid))
+	 */
+	public Set<Asteroid> getAllAsteroids() {
+		Set<Asteroid> asteroids = new HashSet<Asteroid>();
+		for(Collidable collidable : collidables)
+			try {
+				asteroids.add((Asteroid) collidable);
+			} catch (ClassCastException e) {
+				// ignore
+			}
+		return asteroids;
+	}
+	
+	/**
+	 * Return a set collecting all bullets associated with this world.
+	 * 
+	 * @return	The resulting set does not contain a null reference.
+	 * 			| !result.contains(null)
+	 * @return	Each bullet in the resulting set is attached to this world, and vice versa.
+	 * 			| for each bullet in bullets:
+	 * 			| (result.contains(bullet) == this.hasAsCollidable(bullet))
+	 */
+	public Set<Bullet> getAllBullets() {
+		Set<Bullet> bullets = new HashSet<Bullet>();
+		for(Collidable collidable : collidables)
+			try {
+				bullets.add((Bullet) collidable);
+			} catch (ClassCastException e) {
+				// ignore
+			}
+		return bullets;
+	}
 		
 	/**
 	 * Check whether this world has the given collidable as one of the collidables attached to it.
@@ -261,13 +323,15 @@ public class World {
 	 * @return  False if the given collide is not effective
 	 * 			| if (collidable == null)
 	 * 			|	then result == false
-	 * 			Otherwise, true if and only if this world and the collidable are not yet terminated and the collidable fits this world's dimensions.
+	 * 			Otherwise, true if and only if this world and the collidable are not yet terminated 
+	 * 			and the collidable fits this world's dimensions.
 	 * 			| else result ==
 	 * 			|	!((this.isTerminated()) || collidable.isTerminated()) && collidable.getRadius() < Math.min(getWidth()/2, getHeight()/2)
 	 */
 	@Raw
 	public boolean canHaveAsCollidable(Collidable collidable) {
 		return ((collidable != null) && !( (this.isTerminated()) || (collidable.isTerminated())) && collidable.getRadius() < Math.min(getWidth()/2, getHeight()/2));
+		//TODO: geen collidables toevoegen die elkaar overlappen!
 	}
 	
 	/**

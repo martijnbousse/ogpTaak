@@ -1,13 +1,16 @@
 package test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import gameObjects.Collidable;
+import gameObjects.Ship;
+import gameObjects.World;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import collidable.*;
-import asteroids.*;
+import support.Vector;
 
 /**
  * A class collecting tests for all methods concerning bouncing of collidables or boundaries from the class of collidables.
@@ -270,28 +273,28 @@ public class CollidableTest_Bounce {
 	public void testBounceOfBoundary_LeftCase() {
 		mutableCollidable8.bounceOfBoundary();
 		mutableCollidable8.move(1);
-		assertFalse(mutableCollidable8.overlapWithBoundary());
+		assertTrue(mutableCollidable8.getDistanceToClosestBoundary() > 0);
 	}
 	
 	@Test
 	public void testBounceOfBoundary_UpperCase() {
 		mutableCollidable9.bounceOfBoundary();
 		mutableCollidable9.move(1);
-		assertFalse(mutableCollidable9.overlapWithBoundary());
+		assertTrue(mutableCollidable9.getDistanceToClosestBoundary() > 0);
 	}
 	
 	@Test
 	public void testBounceOfBoundary_RightCase() {
 		mutableCollidable10.bounceOfBoundary();
 		mutableCollidable10.move(1);
-		assertFalse(mutableCollidable10.overlapWithBoundary());
+		assertTrue(mutableCollidable10.getDistanceToClosestBoundary() > 0);
 	}
 	
 	@Test
 	public void testBounceOfBoundary_LowerCase() {
 		mutableCollidable11.bounceOfBoundary();
 		mutableCollidable11.move(1);
-		assertFalse(mutableCollidable11.overlapWithBoundary());
+		assertTrue(mutableCollidable11.getDistanceToClosestBoundary() > 0);
 	}
 	
 	@Test

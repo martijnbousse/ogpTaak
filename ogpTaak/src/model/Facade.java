@@ -1,13 +1,14 @@
 package model;
 
+import gameObjects.*;
+
 import java.util.*;
 
-import collidable.*;
+import support.Vector;
+
 
 import asteroids.CollisionListener;
 import asteroids.Util;
-import asteroids.Vector;
-import asteroids.World;
 
 public class Facade implements IFacade<World, Ship, Asteroid, Bullet> {
 	//TODO: modelexceptions!

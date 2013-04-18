@@ -1,7 +1,7 @@
-package collidable;
+package gameObjects;
 
+import support.Vector;
 import be.kuleuven.cs.som.annotate.*;
-import asteroids.Vector;
 
 /**
  * A class of bullets as special kinds of collidables involving a mass and an association with ships.

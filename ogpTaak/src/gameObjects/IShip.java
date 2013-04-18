@@ -1,4 +1,4 @@
-package collidable;
+package gameObjects;
 
 /**
  * Classes for representing ships should implement <code>IShip</code>. Do not

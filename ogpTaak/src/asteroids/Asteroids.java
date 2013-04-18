@@ -136,18 +136,18 @@ public class Asteroids<World, Ship, Asteroid, Bullet> extends JFrame {
       return;
     }
     // <begin>
-    IFacade<asteroids.World, collidable.Ship, collidable.Asteroid, collidable.Bullet> facade = new model.Facade();
+    IFacade<gameObjects.World, gameObjects.Ship, gameObjects.Asteroid, gameObjects.Bullet> facade = new model.Facade();
     // <end>
     GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
     GraphicsDevice screen = env.getDefaultScreenDevice();
-    Asteroids<asteroids.World, collidable.Ship, collidable.Asteroid, collidable.Bullet> asteroids;
+    Asteroids<gameObjects.World, gameObjects.Ship, gameObjects.Asteroid, gameObjects.Bullet> asteroids;
     Sound sound = enableSound ? new FileSoundManager("asteroids/resources/sounds.txt") : new NullSound();
     if (tryFullscreen && screen.isFullScreenSupported()) {
       Rectangle dimensions = screen.getDefaultConfiguration().getBounds();
-      asteroids = new Asteroids<asteroids.World, collidable.Ship, collidable.Asteroid, collidable.Bullet>(facade, dimensions.width, dimensions.height, true, sound);
+      asteroids = new Asteroids<gameObjects.World, gameObjects.Ship, gameObjects.Asteroid, gameObjects.Bullet>(facade, dimensions.width, dimensions.height, true, sound);
       screen.setFullScreenWindow(asteroids);
     } else {
-      asteroids = new Asteroids<asteroids.World, collidable.Ship, collidable.Asteroid, collidable.Bullet>(facade, 1024, 768, false, sound);
+      asteroids = new Asteroids<gameObjects.World, gameObjects.Ship, gameObjects.Asteroid, gameObjects.Bullet>(facade, 1024, 768, false, sound);
     }
     asteroids.start();
   }

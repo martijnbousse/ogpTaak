@@ -1,11 +1,10 @@
-package collidable;
+package gameObjects;
 
+import support.Vector;
 import exceptions.InvalidPositionException;
 import exceptions.SumOverflowException;
 import exceptions.TimesOverflowException;
 import asteroids.Util;
-import asteroids.Vector;
-import asteroids.World;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
@@ -153,30 +152,6 @@ public abstract class Collidable {
 	}
 		
 	/**
-	 * Calculate the distance from this collidable to the closest boundary of its world.
-	 * 
-	 * @effect	...
-	 * 			| if getWorld() != null
-	 * 			|	then if this.move(getTimeToCollisionWithBoundary)
-	 * 			|		then result == Math.min(new.getPosition().getXComponent()-this.getPosition().getXComponent(), 
-	 * 			|								(new.getPosition().getYComponent()-this.getPosition().getYComponent())
-	 * @effect 	If this collidable has the null reference as its world, then the distance is infinity.
-	 * 			| if getWorld() == null
-	 * 			|	then result == Double.POSITIVE_INFINITY
-	 */
-	@Raw
-	public double getDistanceToClosestBoundary() {
-		if(getWorld() !=null) {
-			double minX = getPosition().getXComponent() - radius;
-			double maxX = getWorld().getWidth() -getPosition().getXComponent() + radius;
-			double minY = getPosition().getYComponent() - radius;
-			double maxY = getWorld().getHeight() - getPosition().getYComponent() + radius;
-			return Math.min(Math.min(minY, minX), Math.min(maxY, maxX));
-		}
-		return Double.POSITIVE_INFINITY;
-	}
-
-	/**
 	 * Variable registering the position of this collidable.
 	 */
 	private Vector position;
@@ -313,7 +288,7 @@ public abstract class Collidable {
 	 */
 	public static boolean isValidMinRadius(double minRadius) {
 		return 	!Double.isNaN(minRadius)
-				&& (minRadius > 0);
+				&& (Util.fuzzyLessThanOrEqualTo(0, minRadius));
 	}
 	
 	/**
@@ -341,7 +316,7 @@ public abstract class Collidable {
 	@Raw
 	public boolean canHaveAsRadius(double radius) {	
 		return 	!Double.isNaN(radius)
-				&& (Util.fuzzyLessThanOrEqualTo(getMinRadius(),radius));
+				&& (Util.fuzzyLessThanOrEqualTo(getMinRadius(), radius));
 	}
 	
 	/**
@@ -374,11 +349,11 @@ public abstract class Collidable {
 	 * 			that world may not reference this collidable as one of its collidables.						// ofwel binding "af"maken ofwel binding breken
 	 * 			| if ((world == null) && (getWorld() != null))
 	 * 			| 	then !getWorld().hasAsCollidable(this)
-	 * @post	This collidable references the given world as teh world to which it is attached.
+	 * @post	This collidable references the given world as the world to which it is attached.
 	 * 			| (new this).getWorld() == world
 	 */
 	@Raw
-	public void setWorld(World world) {
+	void setWorld(World world) {
 		assert ( (world == null) || world.hasAsCollidable(this) );
 		assert ( (world != null) || (getWorld() == null) || (!getWorld().hasAsCollidable(this)) );
 		this.world = world;
@@ -459,6 +434,31 @@ public abstract class Collidable {
 	}
 	
 	/**
+	 * Calculate the distance from this collidable to the closest boundary of its world.
+	 * 
+	 * @effect	...
+	 * 			| if getWorld() != null
+	 * 			|	then if this.move(getTimeToCollisionWithBoundary)
+	 * 			|		then result == Math.min(new.getPosition().getXComponent()-this.getPosition().getXComponent(), 
+	 * 			|								(new.getPosition().getYComponent()-this.getPosition().getYComponent())
+	 * @effect 	If this collidable has the null reference as its world, then the distance is infinity.
+	 * 			| if getWorld() == null
+	 * 			|	then result == Double.POSITIVE_INFINITY
+	 */
+	@Raw
+	public double getDistanceToClosestBoundary() {
+		if(getWorld() !=null) {
+			double minX = getPosition().getXComponent() - radius;
+			double maxX = getWorld().getWidth() -getPosition().getXComponent() - radius;
+			double minY = getPosition().getYComponent() - radius;
+			double maxY = getWorld().getHeight() - getPosition().getYComponent() - radius;
+			return Math.min(Math.min(minY, minX), Math.min(maxY, maxX));
+		}
+		return Double.POSITIVE_INFINITY;
+	}
+
+
+	/**
 	 * Returns a boolean reflecting whether this collidable and the given collidable overlap.
 	 * 
 	 * @param 	other
@@ -476,23 +476,6 @@ public abstract class Collidable {
 		if (other.equals(this))
 			return true;
 		return (getDistanceBetween(other) < 0);
-	}
-	
-	/**
-	 * Returns whether this collidable overlaps with the boundaries of its world.
-	 * @effect 	True if and only if the distance to the closest boundary of this collidables world is negative.
-	 * 			| result == getDistanceToClosestBoundary < 0
-	 * @throws 	IllegalStateException
-	 * 			This collidable is terminated.
-	 * 			| isTerminated()
-	 */
-	public boolean overlapWithBoundary() throws IllegalStateException {
-		if (isTerminated())
-			throw new IllegalStateException("This collidable is terminated!");	
-		if(getWorld() != null) {
-			return getDistanceToClosestBoundary() < 0;
-		}
-		return false;
 	}
 
 	/**
@@ -540,20 +523,26 @@ public abstract class Collidable {
 	/**
 	 * Returns when this collidable, if ever, will collide with the boundary.
 	 * 
-	 * @effect	After moving the calculated amount of time, the distance to the closest boundary is equal to zero.
-	 * 			| if this.move(result)
-	 * 			|	then this.getDistanceToClosestBoundary == 0
+	 * @effect	If this collidable has an effective world and is not terminated, then if this collidable is moved 
+	 * 				over the result, then the distace to the closest boundary of its world is zero.
+	 * 			| if getWorld() != null && !isTerminated()
+	 * 			| 	then this.move(result)
+	 * 			|		new.getDistanceToClosestBoundary == 0
 	 */
-	public double getTimeToCollisionWithBoundary() throws IllegalStateException {
-		if(getWorld() != null) {
+	public double getTimeToCollisionWithBoundary() {
+		if(getWorld() != null && !isTerminated()) {
 			return Math.min(getMinXCollision(), getMinYCollision());
 		}
 		return Double.POSITIVE_INFINITY;
 	}
-	
+
+
 	/**
-	 * TODO: moet in principe wel doc bij
-	 * @return
+	 * Calculates the time to collision with a vertical boundary of this collidables world.
+	 * @effect	...
+	 * 			| if result != Double.POSITIVE.INFINITY
+	 * 			|	then this.move(result)
+	 * 			|		new.getDistanceToClosestBoundary == 0
 	 */
 	private double getMinXCollision() {
 		if(!Util.fuzzyEquals(0, getVelocity().getXComponent())) {
@@ -568,8 +557,11 @@ public abstract class Collidable {
 	}
 	
 	/**
-	 * TODO: moet in principe wel doc bij
-	 * @return
+	 * Calculates the time to collision with a horizontal boundary of this collidables world.
+	 * @effect	...
+	 * 			| if result != Double.POSITIVE.INFINITY
+	 * 			|	then this.move(result)
+	 * 			|		new.getDistanceToClosestBoundary == 0
 	 */
 	private double getMinYCollision() {
 		if(!Util.fuzzyEquals(0, getVelocity().getYComponent())) {
@@ -795,7 +787,7 @@ public abstract class Collidable {
 			setPosition(getPosition());
 		}
 		catch(InvalidPositionException exc3) {
-			// do nothing  TODO: HET IS DEZE EXCEPTION DIE OPGEGOOID WORDT TEGEN DE RAND
+			// do nothing
 		}
 	}
 	

@@ -5,11 +5,11 @@
  * repository: https://github.com/martijnbousse/ogpTaak
  */
 
-package collidable;
+package gameObjects;
 
+import support.Vector;
 import exceptions.InvalidPositionException;
 import asteroids.Util;
-import asteroids.Vector;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
@@ -19,6 +19,8 @@ import be.kuleuven.cs.som.annotate.*;
  * 			| isValidDirection(getDirection())
  * @invar	The mass of each ship must be a valid mass.
  * 			| isValidMass(getMass())
+ * @invar 	The thruster amount of each ship must be a valid thruster amount
+ * 			| isValidThrusterAmount(getThrusterAmount())
  * 
  * @version 2.0
  * @author Martijn Boussé, Wout Vekemans
@@ -134,7 +136,7 @@ public class Ship extends Collidable implements IShip{
 	 */
 	public static boolean isValidMass(double mass) {
 		return !Double.isNaN(mass)
-				&& Util.fuzzyLessThanOrEqualTo(0.0,mass);
+				&& !Util.fuzzyLessThanOrEqualTo(mass,0);
 	}
 	
 	/**
@@ -143,39 +145,11 @@ public class Ship extends Collidable implements IShip{
 	public final double mass;
 	
 	/**
-	 * Return the acceleration of this ship according to Newton's third law.
-	 * 
-	 * @return	The acceleration of this ship.
-	 * 			| result == getThrusterAmount()/getMass()
-	 */
-	public double getAcceleration() {
-		return getThrusterAmount()/getMass();
-	}
-	
-	/**
 	 * Returns the thruster amount of this ship.
-	 * 
-	 * @return	...
-	 * 			| ...
 	 */
-	public double getThrusterAmount() {
-		if(isThrusterEnabled()==true)
-			return this.thrusterAmount;
-		return 0;
-	}
-	
-	/**
-	 * Set the thruster amount of this ship to the given thruster amount.
-	 * 
-	 * @param 	thrusterAmount
-	 * 			The given thruster amount.
-	 * @post	...
-	 * 			| ...
-	 */
-	public void setThrusterAmount(double thrusterAmount) {
-		if(isValidThrusterAmount(thrusterAmount)) {
-			this.thrusterAmount = thrusterAmount;
-		}
+	@Basic
+	public static double getThrusterAmount() {
+		return thrusterAmount;
 	}
 	
 	/**
@@ -185,7 +159,7 @@ public class Ship extends Collidable implements IShip{
 	 * 			The thruster amount to check.
 	 * @return	True if and only if the given thruster amount is a number and if it is bigger then zero.
 	 */
-	public boolean isValidThrusterAmount(double thrusterAmount) {
+	public static boolean isValidThrusterAmount(double thrusterAmount) {
 		return !Double.isNaN(thrusterAmount)
 				&& (0 < thrusterAmount);
 	}
@@ -193,7 +167,7 @@ public class Ship extends Collidable implements IShip{
 	/**
 	 * Variable registering the thruster amount of this ship.
 	 */
-	private double thrusterAmount = 1.1*Math.pow(10,18);
+	private static double thrusterAmount = 1.1*Math.pow(10,21);
 	
 	/**
 	 * Enable or disable the thruster corresponding to the given flag.
@@ -221,6 +195,16 @@ public class Ship extends Collidable implements IShip{
 	private boolean isThrusterEnabled;
 	
 	/**
+	 * Return the acceleration of this ship according to Newton's third law.
+	 * 
+	 * @return	The acceleration of this ship.
+	 * 			| result == getThrusterAmount()/getMass()/1000
+	 */
+	public double getAcceleration() {
+		return getThrusterAmount()/getMass()/1000;
+	}
+
+	/**
 	 * Change the velocity of this ship with a given amount. 
 	 * 
 	 * @param 	amount
@@ -236,16 +220,21 @@ public class Ship extends Collidable implements IShip{
 	 * 			|				then setVelocity(newVelocity.scale(newVelocity.dotProduct(newVelocity)/speedLimit))
 	 * 			|			else
 	 * 			|				then setVelocity(newVelocity)
+	 * @throws	IllegalStateException
+	 * 			This ship is terminated.
+	 * 			| isTerminated()
 	 */
-	public void thrust(double dt) {
+	public void thrust(double dt) throws IllegalStateException{
 		if (isTerminated())
 			throw new IllegalStateException();
-		double amount = dt*getAcceleration();
-		Vector newVelocity = this.getVelocity().add((new Vector(Math.cos(direction),Math.sin(direction)).scale(amount)));
-		if(Math.sqrt(newVelocity.dotProduct(newVelocity))>this.getSpeedLimit())
-			setVelocity(newVelocity.scale((Double) (this.getSpeedLimit()/Math.sqrt(newVelocity.dotProduct(newVelocity)))));
-		else{
-			setVelocity(newVelocity);
+		if(isThrusterEnabled() && isValidTime(dt)) {
+			double amount = dt*getAcceleration();
+			Vector newVelocity = this.getVelocity().add((new Vector(Math.cos(direction),Math.sin(direction)).scale(amount)));
+			if(Math.sqrt(newVelocity.dotProduct(newVelocity)) > this.getSpeedLimit())
+				setVelocity(newVelocity.scale((Double) (this.getSpeedLimit()/Math.sqrt(newVelocity.dotProduct(newVelocity)))));
+			else{
+				setVelocity(newVelocity);
+			}
 		}
 	}
 	
@@ -290,15 +279,15 @@ public class Ship extends Collidable implements IShip{
 	 */
 	
 	public void fireBullet() throws IllegalStateException {
-		if (isTerminated())
-			throw new IllegalStateException();
-		Vector initialPosition = getPosition().add( new Vector((getRadius()+3)*Math.cos(getDirection()),(getRadius()+3)*Math.sin(getDirection())));
-		Vector initialVelocity = (new Vector(Math.cos(getDirection()),Math.sin(getDirection()))).scale(250);
-		try {
-			Bullet bullet = new Bullet(initialPosition,initialVelocity,3,this);
-			getWorld().addAsCollidable(bullet);
-		} catch (InvalidPositionException e) {
-			//dont fire
+		if (canFireBullets()) {
+			Vector initialPosition = getPosition().add( new Vector((getRadius()+3)*Math.cos(getDirection()),(getRadius()+3)*Math.sin(getDirection())));
+			Vector initialVelocity = (new Vector(Math.cos(getDirection()),Math.sin(getDirection()))).scale(250);
+			try {
+				Bullet bullet = new Bullet(initialPosition,initialVelocity,3,this);
+				getWorld().addAsCollidable(bullet);
+			} catch (InvalidPositionException e) {
+				//dont fire
+			}
 		}
 	}
 	

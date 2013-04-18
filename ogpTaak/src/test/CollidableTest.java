@@ -5,8 +5,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import collidable.*;
+import support.Vector;
+
 import exceptions.TimesOverflowException;
+import gameObjects.*;
 import asteroids.*;
 
 /**
@@ -19,12 +21,16 @@ import asteroids.*;
 public class CollidableTest {
 	
 	private static World world1;
+	private static World world2;
+	private static World world3;
+	
 	private static Collidable collidable1;
 	private static Collidable collidable2;
 	private static Collidable collidable3;
 	private static Collidable collidable4;
 	private static Collidable collidable5;
 	private static Collidable collidable6;
+	
 	private static Collidable terminatedCollidable;
 	
 	private World mutableWorld1;
@@ -32,20 +38,33 @@ public class CollidableTest {
 	private Collidable mutableCollidable2;
 	private Collidable mutableCollidable3;
 	
+	private Collidable mutableCollidable7;
+	private Collidable mutableCollidable8;
+	private Collidable mutableCollidable9;
+	private Collidable mutableCollidable10;
+	private Collidable mutableCollidable11;
+	
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		world1 = new World();
+		world2 = new World();
+		world3 = new World(100,100);
+		
 		collidable1 = new Ship(new Vector(100,50), new Vector(5,10), 30, 1000, Math.PI/2);
+		world1.addAsCollidable(collidable1);
+		
 		collidable2 = new Ship(new Vector(110,50), new Vector(5,10), 30, 1000, Math.PI/2);
 		collidable3 = new Ship(new Vector(200,250), new Vector(-5,-10), 30, 1000, Math.PI/2);
 		collidable4 = new Ship(new Vector(400,50), new Vector(50,10), 30, 1000, Math.PI/2);
 		collidable5 = new Ship(new Vector(400,650), new Vector(5,10), 30, 1000, Math.PI/2);
 		collidable6 = new Ship(new Vector(Double.MAX_VALUE,Double.MAX_VALUE), new Vector(5,10), 30, 1000, Math.PI/2);
+		
 		terminatedCollidable = new Ship();
 		terminatedCollidable.terminate();
 		
-		world1.addAsCollidable(collidable1);
+		
+		
 	}
 
 	@Before
@@ -56,6 +75,27 @@ public class CollidableTest {
 		mutableWorld1.addAsCollidable(mutableCollidable1);
 		mutableWorld1.addAsCollidable(mutableCollidable2);
 		mutableCollidable3 = new Ship(new Vector(200,200), new Vector(-1,-1), 50, 800, Math.PI/2);
+		
+		mutableCollidable7 = new Ship(new Vector(20,50), new Vector(-1,1), 10, 1000,0);
+		mutableCollidable8 = new Ship(new Vector(80,50), new Vector(1,1), 10, 1000,0);
+		mutableCollidable9 = new Ship(new Vector(50,20), new Vector(1,-1), 10, 1000,0);
+		mutableCollidable10 = new Ship(new Vector(50,80), new Vector(1,1), 10, 1000,0);
+		mutableCollidable11 = new Ship(new Vector(50,50), new Vector(0,0), 10, 1000,0);
+		world3.addAsCollidable(mutableCollidable7);
+		world3.addAsCollidable(mutableCollidable8);
+		world3.addAsCollidable(mutableCollidable9);
+		world3.addAsCollidable(mutableCollidable10);
+		world3.addAsCollidable(mutableCollidable11);
+	}
+	
+	// terminate
+	
+	@Test
+	public void testTerminate() {
+		World oldWorld = mutableCollidable1.getWorld();
+		mutableCollidable1.terminate();
+		assertTrue(mutableCollidable1.isTerminated());
+		assertFalse(oldWorld.hasAsCollidable(mutableCollidable1));
 	}
 	
 	// position
@@ -246,16 +286,18 @@ public class CollidableTest {
 	// minRadius
 	
 	@Test
-	public void testGetMinRadius() {
-		assertEquals(Collidable.getMinRadius(),0,Util.EPSILON);
-	}
-	
-	@Test
 	public void testSetMinRadius_LegalCase() {
 		Collidable.setMinRadius(25);
 		assertEquals(Collidable.getMinRadius(),25,Util.EPSILON);
+		Collidable.setMinRadius(0);
 	}
-		
+	
+	@Test
+	public void testGetMinRadius() {
+		System.out.println(Collidable.getMinRadius());
+		assertEquals(Collidable.getMinRadius(),0,Util.EPSILON);
+	}
+	
 	@Test(expected=IllegalArgumentException.class)
 	public void testSetMinRadius_IllegalCase() {
 		Collidable.setMinRadius(-25);
@@ -295,7 +337,10 @@ public class CollidableTest {
 	
 	@Test
 	public void testCanHaveAsRadius_IllegalCase() {
-		assertFalse(collidable1.canHaveAsRadius(10));
+		Collidable.setMinRadius(1);
+		System.out.println(Collidable.getMinRadius());
+		System.out.println(collidable1.canHaveAsRadius(0));
+		assertFalse(collidable1.canHaveAsRadius(0));
 	}
 	
 	@Test
@@ -309,18 +354,36 @@ public class CollidableTest {
 	public void testGetWorld() {
 		assertTrue(collidable1.getWorld() == world1);
 	}
-	
-	// setWorld //TODO: belangrijk!
+		
+	// canHaveAsWorld 
 	
 	@Test
-	public void testSetWorld() {
-		//TODO: implement! belangrijke! consistentie van bindingen aantonen, veel testen!
+	public void testCanHaveAsWorld_LegalCase() {
+		assertTrue(collidable2.canHaveAsWorld(world1));
 	}
-		
-	// canHaveAsWorld //TODO
 	
-	// hasProperWorld //TODO
 	
+	@Test
+	public void testCanHaveAsWorld_LegalCase2() {
+		assertTrue(collidable1.canHaveAsWorld(world2));
+	}
+
+	@Test
+	public void testCanHaveAsWorld_NullCase() {
+		assertTrue(collidable2.canHaveAsWorld(null));
+	}
+	//REMINDER: collidable1 can still have another world as its world, but the precondition of setWorld 
+	//			prohibits this if the collidable is already attached to another world.
+	
+	@Test
+	public void testHasProperWorld_LegalCase() {
+		assertTrue(collidable1.hasProperWorld());
+	}
+	
+	@Test
+	public void testHasProperWorld_LegalCase2() {
+		assertTrue(collidable2.hasProperWorld());
+	}
 	
 	// move
 	
@@ -394,7 +457,7 @@ public class CollidableTest {
 		assertFalse(Collidable.isValidTime(Double.NaN));
 	}
 	
-	// getDistanceBetween //TODO: documentatie aanpassen + testen bijschrijven
+	// getDistanceBetween
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void testGetDistanceBetween_NullCase() {
@@ -414,6 +477,16 @@ public class CollidableTest {
 	@Test
 	public void testGetDistanceBetween_OverflowCase() {
 		assertEquals(collidable1.getDistanceBetween(collidable6),Double.POSITIVE_INFINITY,Util.EPSILON);
+	}
+	
+	@Test(expected=IllegalStateException.class)
+	public void testGetDistanceBetween_ThisIsTerminatedCase() {
+		terminatedCollidable.getDistanceBetween(collidable1);
+	}
+	
+	@Test(expected=IllegalStateException.class)
+	public void testGetDistanceBetween_OtherIsTerminatedCase() {
+		collidable1.getDistanceBetween(terminatedCollidable);
 	}
 	
 	// getTimeToCollision 
@@ -446,8 +519,55 @@ public class CollidableTest {
 		assertEquals(Double.POSITIVE_INFINITY,collidable1.getTimeToCollision(collidable5),Util.EPSILON);
 	}
 	
-	// getTimeToCollisionWithBoundary //TODO
+	@Test
+	public void testGetTimeToCollision_OverflowCase() {	// the calculation overflows
+		assertEquals(Double.POSITIVE_INFINITY,collidable6.getTimeToCollision(collidable5),Util.EPSILON);
+	}
 	
+	// getTimeToCollisionWithBoundary
+	
+	@Test
+	public void testGetTimeToCollisionWithBoundary_ThisNotInWorldCase() {
+		assertEquals(Double.POSITIVE_INFINITY,collidable2.getTimeToCollisionWithBoundary(), Util.EPSILON);
+	}
+	
+	@Test
+	public void testGetTimeToCollisionWithBoundary_TerminatedCase() {
+		assertEquals(Double.POSITIVE_INFINITY,terminatedCollidable.getTimeToCollisionWithBoundary(), Util.EPSILON);
+	}
+	
+	@Test
+	public void testGetTimeToCollisionWithBoundary_LeftLegalCase() {
+		double time = mutableCollidable7.getTimeToCollisionWithBoundary();
+		mutableCollidable7.move(time);
+		assertEquals(mutableCollidable7.getDistanceToClosestBoundary(),0.0,Util.EPSILON);
+	}
+	
+	@Test
+	public void testGetTimeToCollisionWithBoundary_RightLegalCase() {
+		double time = mutableCollidable8.getTimeToCollisionWithBoundary();
+		mutableCollidable8.move(time);
+		assertEquals(mutableCollidable8.getDistanceToClosestBoundary(),0.0,Util.EPSILON);
+	}
+	
+	@Test
+	public void testGetTimeToCollisionWithBoundary_BottomLegalCase() {
+		double time = mutableCollidable9.getTimeToCollisionWithBoundary();
+		mutableCollidable9.move(time);
+		assertEquals(mutableCollidable9.getDistanceToClosestBoundary(),0.0,Util.EPSILON);
+	}
+	
+	@Test
+	public void testGetTimeToCollisionWithBoundary_TopLegalCase() {
+		double time = mutableCollidable10.getTimeToCollisionWithBoundary();
+		mutableCollidable10.move(time);
+		assertEquals(mutableCollidable10.getDistanceToClosestBoundary(),0.0,Util.EPSILON);
+	}
+	
+	@Test
+	public void testGetTimeToCollisionWithBoundary_ZeroVelocityCase() {
+		assertEquals(Double.POSITIVE_INFINITY, mutableCollidable11.getTimeToCollisionWithBoundary(),Util.EPSILON);
+	}
 	
 	// overlap
 	
@@ -479,8 +599,4 @@ public class CollidableTest {
 	public void testOverlap_OtherIsTerminatedCase() {
 		collidable1.overlap(terminatedCollidable);
 	}
-	
-	// overlap with boundary TODO: testen
-	
-	// toString TODO: testen
 }

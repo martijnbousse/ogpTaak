@@ -1,12 +1,13 @@
 package test;
 
 import static org.junit.Assert.*;
+import gameObjects.*;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import collidable.*;
+
 import asteroids.*;
 
 /**
@@ -83,7 +84,7 @@ public class WorldTest {
 	@Test
 	public void testTerminate() {
 		mutableWorld1.terminate();
-//		assertEquals(mutableWorld1.getNbCollidables(),0);  //TODO: werkt niet, concurrentModificationException? 
+		assertEquals(mutableWorld1.getNbCollidables(),0);  //TODO: werkt niet, concurrentModificationException? 
 		// http://www.coderanch.com/t/233932/threads/java/deal-Concurrent-Modification-Exception
 		// of java docs
 		

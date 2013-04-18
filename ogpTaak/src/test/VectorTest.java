@@ -6,11 +6,12 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import support.Vector;
+
 import exceptions.SumOverflowException;
 import exceptions.TimesOverflowException;
 
 import asteroids.Util;
-import asteroids.Vector;
 
 /**
  * A class collecting tests for the class of vectors.
@@ -19,8 +20,6 @@ import asteroids.Vector;
  * @version	1.0
  *
  */
-
-//TODO: fuzzy's wegdoen
 public class VectorTest {
 	
 	/**

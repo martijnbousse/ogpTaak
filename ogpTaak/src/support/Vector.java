@@ -1,7 +1,8 @@
-package asteroids;
+package support;
 
 import exceptions.SumOverflowException;
 import exceptions.TimesOverflowException;
+import asteroids.Util;
 import be.kuleuven.cs.som.annotate.*;
 
 /**

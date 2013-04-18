@@ -1,10 +1,11 @@
-package collidable;
+package gameObjects;
 
 import java.util.Random;
 
+import support.Vector;
+
 import be.kuleuven.cs.som.annotate.*;
 import asteroids.Util;
-import asteroids.Vector;
 
 /**
  * A class of asteroids as special kinds of collidables involving a mass.

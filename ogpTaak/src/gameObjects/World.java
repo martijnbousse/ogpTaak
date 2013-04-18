@@ -1,9 +1,12 @@
-package asteroids;
+package gameObjects;
 
+import asteroids.Util;
 import be.kuleuven.cs.som.annotate.*;
+
 import java.util.*;
 
-import collidable.*;
+import support.Collision;
+
 
 
 /**
@@ -85,7 +88,8 @@ public class World {
 		for (Collidable collidable : collidables) {
 			if (!collidable.isTerminated()) {
 				collidable.setWorld(null);
-				this.collidables.remove(collidable);
+				removeAsCollidable(collidable);
+				
 			}		
 		}	
 		this.isTerminated = true;	
@@ -118,8 +122,6 @@ public class World {
 				&& Util.fuzzyLessThanOrEqualTo(width, maxWidth)
 				&& 0 < width;
 	}
-	
-	//TODO: isValidWidth En isValidMaxDimension? Hebt ge die allebei nodig?
 	
 	/**
 	 * Variable registering the width of this world.
@@ -282,6 +284,8 @@ public class World {
 		return asteroids;
 	}
 	
+	
+	
 	/**
 	 * Return a set collecting all bullets associated with this world.
 	 * 
@@ -424,10 +428,17 @@ public class World {
 	 * Advances the time in this world.
 	 * 
 	 * @param dt
+	 * @param collisionListener 
 	 */
 	public void evolve(double dt) throws IllegalArgumentException{
 		if(!Util.fuzzyEquals(0.0, dt)) {
-			Collision next = getNextCollision();
+			Collision next = null;
+			try{
+				next = getNextCollision();
+			} catch(Exception exc) {
+				//numeric error causing fail in calculation of next collision.
+				//do nothing
+			}
 			if (next != null && Util.fuzzyLessThanOrEqualTo(0.0, next.getTime()) && Util.fuzzyLessThanOrEqualTo(next.getTime(),dt) && !Util.fuzzyEquals(0, dt) ) {
 				System.out.println("NEXT COLLISION:" + next.toString()); //PRINT NEXT COLLISION
 				for(Collidable collidable : getAllCollidables()) {

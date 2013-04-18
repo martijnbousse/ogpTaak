@@ -1,8 +1,9 @@
-package asteroids;
+package support;
 
-import collidable.Collidable;
+import asteroids.Util;
 import be.kuleuven.cs.som.annotate.*;
 import exceptions.IllegalTimeException;
+import gameObjects.Collidable;
 
 
 /**
@@ -84,15 +85,14 @@ public class Collision {
 	 * 			The first collidable.
 	 * @param	second
 	 * 			The second collidable.
-	 * @return	True if and only if the given collidables are both effective, non-terminated and touching each other
-	 * 			or the first collidable is touching the border of its world.
+	 * @return	True if and only if the given collidables are both effective and non-terminated
+	 * 			or the first is effective and non-terminated and the second is null.
 	 * 			| result == first != null && !first.isTerminated() && 
-					((second == null ) || (!second.isTerminated())) 
+	 *				((second == null ) || (!second.isTerminated())) 
 	 */
-	//TODO: touching each other?
 	public boolean isValidCollidables(Collidable first, Collidable second) {
 		return first != null && !first.isTerminated() && 
-				((second == null ) || (!second.isTerminated())) ;
+				( second == null || (!second.isTerminated()) ) ;
 	}
 	
 	/**

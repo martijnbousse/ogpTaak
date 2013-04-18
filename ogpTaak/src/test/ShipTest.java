@@ -1,13 +1,17 @@
 package test;
 
 import static org.junit.Assert.*;
+import gameObjects.Ship;
+import gameObjects.World;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import collidable.Ship;
+import support.Vector;
+
+
 import asteroids.Util;
-import asteroids.World;
 
 /**
  * A class collecting tests for the class of ships.
@@ -24,6 +28,7 @@ public class ShipTest {
 	private static Ship terminatedShip;
 	
 	private Ship mutableShip1;
+	private Ship mutableTerminatedShip;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -38,6 +43,8 @@ public class ShipTest {
 	@Before
 	public void setUp() throws Exception {
 		mutableShip1 = new Ship();
+		mutableTerminatedShip = new Ship();
+		mutableTerminatedShip.terminate();
 	}
 	
 	// direction
@@ -83,33 +90,115 @@ public class ShipTest {
 		assertFalse(Ship.isValidDirection(Double.NaN));
 	}
 	
-	// mass TODO: testen
+	// mass
 	
-	// thrust, accelaration, al dieje bazaar TODO: testen
+	@Test
+	public void testGetMass() {
+		assertEquals(mutableShip1.getMass(),10,Util.EPSILON);
+	}
 	
-//	@Test
-//	public void testThrust_LegalCase() {
-//		mutableShip.thrust(1.0);
-//		assertTrue(mutableShip.getVelocity().equals(new Vector(1.0,0.0)));
-//	}
-//	
-//	@Test
-//	public void testThrust_NaNCase() {
-//		mutableShip.thrust(Double.NaN);
-//		assertTrue(mutableShip.getVelocity().equals(new Vector(0.0,0.0)));
-//	}
-//	
-//	@Test
-//	public void testThrust_NegativeAmountCase() {
-//		mutableShip.thrust(-1.0);
-//		assertTrue(mutableShip.getVelocity().equals(new Vector(0.0,0.0)));
-//	}
-//	
-//	@Test
-//	public void testThrust_TooHighAmountCase() {
-//		mutableShip.thrust(400000.0);
-//		assertTrue(mutableShip.getVelocity().equals(new Vector(300000.0,0.0)));
-//	}
+	@Test
+	public void testIsValidMass_NaNCase() {
+		assertFalse(Ship.isValidMass(Double.NaN));
+	}
+	
+	@Test
+	public void testIsValidMass_NegativeCase() {
+		assertFalse(Ship.isValidMass(-1));
+	}
+	
+	@Test
+	public void testIsValidMass_ZeroCase() {
+		assertFalse(Ship.isValidMass(0));
+	}
+	
+	@Test
+	public void testIsValidMass_LegalCase() {
+		assertTrue(Ship.isValidMass(5));
+	}
+	
+	// thruster amount
+	
+	@Test
+	public void testGetThrusterAmount() {
+		assertEquals(Ship.getThrusterAmount(),1.1*Math.pow(10,21),Util.EPSILON);
+	}
+	
+	@Test
+	public void testIsValidThrusterAmount_NaNCase() {
+		assertFalse(Ship.isValidThrusterAmount(Double.NaN));
+	}
+	
+	@Test
+	public void testIsValidThrusterAmount_NegativeCase() {
+		assertFalse(Ship.isValidThrusterAmount(-5));
+	}
+	
+	@Test
+	public void testIsValidThrusterAmount_ZeroCase() {
+		assertFalse(Ship.isValidThrusterAmount(0));
+	}
+	
+	@Test
+	public void testIsValidThrusterAmount_LegalCase() {
+		assertTrue(Ship.isValidThrusterAmount(25));
+	}
+	
+	// acceleration
+	
+	@Test
+	public void testGetAcceleration() {
+		assertEquals(mutableShip1.getAcceleration(), 1.1*Math.pow(10,21)/1000/10, Util.EPSILON);
+	}
+	
+	// enabling thruster
+	
+	@Test
+	public void testSetThrusterEnabled() {
+		mutableShip1.setThrusterEnabled(true);
+		assertTrue(mutableShip1.isThrusterEnabled());
+	}
+	
+	@Test
+	public void testIsThrusterEnabled() {
+		assertFalse(mutableShip1.isThrusterEnabled());
+	}
+	
+	// thrust
+	
+	@Test
+	public void testThrust_LegalCase() {
+		mutableShip1.setThrusterEnabled(true);
+		mutableShip1.thrust(1E-16);
+		assertTrue(mutableShip1.getVelocity().equals(new Vector(mutableShip1.getAcceleration()*Math.cos(1),mutableShip1.getAcceleration()*Math.sin(1)).scale(1E-16)));
+	}
+	
+	@Test
+	public void testThrust_NaNCase() {
+		mutableShip1.setThrusterEnabled(true);
+		mutableShip1.thrust(Double.NaN);
+		assertTrue(mutableShip1.getVelocity().equals(new Vector(0.0,0.0)));
+	}
+	
+	@Test
+	public void testThrust_NegativeAmountCase() {
+		mutableShip1.setThrusterEnabled(true);
+		mutableShip1.thrust(-1.0);
+		assertTrue(mutableShip1.getVelocity().equals(new Vector(0.0,0.0)));
+	}
+	
+	@Test
+	public void testThrust_TooHighAmountCase() {
+		mutableShip1.setThrusterEnabled(true);
+		mutableShip1.thrust(4000000000000000000000000000000000.0);
+		assertTrue(mutableShip1.getVelocity().equals(new Vector(300000.0*Math.cos(1),300000.0*Math.sin(1))));
+	}
+	
+	@Test(expected = IllegalStateException.class)
+	public void testThrust_ThisIsTerminatedCase() {
+		mutableTerminatedShip.setThrusterEnabled(true);
+		mutableTerminatedShip.thrust(1);
+	}
 	
 	// turn
 	
@@ -145,7 +234,17 @@ public class ShipTest {
 		assertFalse(terminatedShip.canFireBullets());
 	}
 	
-	// fireBullet TODO: testen
+	// fireBullet
+	
+	@Test
+	public void testFireBullet_NoWorldAttachedCase() {
+		
+	}
+	
+	@Test
+	public void testFireBullet_ThisIsTerminatedCase() {
+		
+	}
 	
 	// collidesWith(Collidable collidable) TODO
 	

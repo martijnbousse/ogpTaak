@@ -36,6 +36,16 @@ public class Asteroid extends Collidable{
 	}
 	
 	/**
+	 * Initialize this new asteroid with all default values.
+	 * 
+	 * @effect 	This new asteroid is initialized with position (10,10), velocity (0,0) and radius 10.
+	 * 			| this(new Vector(10,10), new Vector(0,0), 10)
+	 */
+	public Asteroid() {
+		this(new Vector(10,10), new Vector(0,0),10);
+	}
+	
+	/**
 	 * Terminate this asteroid as an instance of collidable. In addition, if this asteroid can spawn to smaller asteroids, it will spawn them.	
 	 */
 	@Override

@@ -28,31 +28,28 @@ public class WorldTest {
 	
 	private World mutableWorld1;
 	private World mutableWorld2;
+	private World mutableWorld3;
 	private World terminatedWorld;
 	
 	private Collidable mutableCollidable1;
 	private Collidable mutableCollidable2;
 	private Collidable mutableCollidable3;
 	private Collidable mutableCollidable4;
+	private Ship mutableCollidable5;
+	private Asteroid mutableCollidable6;
 	private Collidable terminatedCollidable;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
+		world1 = new World(1000,1000);
 		collidable1 = new Ship();
 		collidable2 = new Ship();
 		collidable3 = new Ship();
 		collidable4 = new Ship();
-		world1 = new World(1000,1000);
-		initWorld(world1);
-
+		world1.addAsCollidable(collidable1);
+		world1.addAsCollidable(collidable2);
+		world1.addAsCollidable(collidable3);
 	}
-	
-	private static void initWorld(World world) {
-		world.addAsCollidable(collidable1);
-		world.addAsCollidable(collidable2);
-		world.addAsCollidable(collidable3);
-	}
-	
 	
 	@Before
 	public void setUp() throws Exception {
@@ -71,6 +68,14 @@ public class WorldTest {
 		mutableWorld1.addAsCollidable(mutableCollidable1);
 		mutableWorld1.addAsCollidable(mutableCollidable2);
 		mutableWorld2.addAsCollidable(mutableCollidable3);
+		
+		
+		mutableWorld3 = new World();
+		mutableCollidable5 = new Ship();
+		mutableCollidable6 = new Asteroid();
+		mutableWorld2.addAsCollidable(mutableCollidable5);
+		mutableWorld2.addAsCollidable(mutableCollidable6);
+		mutableCollidable5.fireBullet();
 		
 	}	
 	
@@ -189,15 +194,66 @@ public class WorldTest {
 		}
 	}
 	
-	// getAllShips //TODO: test 				Alle drie hetzelfde als getAllCollidables
-	
-	// getAllAsteroids //TODO: test
-	
-	// getAllBullets //TODO: test
-	
 	@Test
 	public void testGetNbCollidables() {
 		assertEquals(3,world1.getNbCollidables());
+	}
+	
+	// getAllShips 
+	
+	@Test
+	public void testGetAllShips_NullReference() {
+		assertEquals(false,mutableWorld3.getAllShips().contains(null));
+	}
+	
+	@Test
+	public void testGetAllShips_WorldReference() {
+		for(Ship ship : mutableWorld3.getAllShips()) {
+			assertEquals(mutableWorld3.getAllShips().contains(ship),mutableWorld3.hasAsCollidable(ship));
+		}
+	}
+	
+	@Test
+	public void testGetNbShips() {
+		assertEquals(1,mutableWorld3.getNbShips());
+	}
+	
+	// getAllAsteroids 
+	
+	@Test
+	public void testGetAllAsteroids_NullReference() {
+		assertEquals(false,mutableWorld3.getAllAsteroids().contains(null));
+	}
+	
+	@Test
+	public void testGetAllAsteroids_WorldReference() {
+		for(Asteroid asteroid : mutableWorld3.getAllAsteroids()) {
+			assertEquals(mutableWorld3.getAllAsteroids().contains(asteroid),mutableWorld3.hasAsCollidable(asteroid));
+		}
+	}
+	
+	@Test
+	public void testGetNbAsteroids() {
+		assertEquals(1,mutableWorld3.getNbAsteroids());
+	}
+	
+	// getAllBullets
+	
+	@Test
+	public void testGetAllBullets_NullReference() {
+		assertEquals(false,mutableWorld3.getAllBullets().contains(null));
+	}
+	
+	@Test
+	public void testGetAllBullets_WorldReference() {
+		for(Bullet bullet : mutableWorld3.getAllBullets()) {
+			assertEquals(mutableWorld3.getAllBullets().contains(bullet),mutableWorld3.hasAsCollidable(bullet));
+		}
+	}
+	
+	@Test
+	public void testGetNbBullets() {
+		assertEquals(1,mutableWorld3.getNbBullets());
 	}
 	
 	// canHaveAsCollidable

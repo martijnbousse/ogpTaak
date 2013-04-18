@@ -265,6 +265,16 @@ public class World {
 	}
 	
 	/**
+	 * Return the number of ships that are attached to this world.
+	 * 
+	 * @return	The number of ships that are attached to this world.
+	 * 			| card( {collidable in collidables | collidable instanceof Ship}) 
+	 */
+	public int getNbShips() {
+		return getAllShips().size();
+	} 
+	
+	/**
 	 * Return a set collecting all asteroids associated with this world.
 	 * 
 	 * @return	The resulting set does not contain a null reference.
@@ -284,7 +294,15 @@ public class World {
 		return asteroids;
 	}
 	
-	
+	/**
+	 * Return the number of asteroids that are attached to this world.
+	 * 
+	 * @return	The number of asteroids that are attached to this world.
+	 * 			| card( {collidable in collidables | collidable instanceof Asteroid}) 
+	 */
+	public int getNbAsteroids() {
+		return getAllAsteroids().size();
+	}
 	
 	/**
 	 * Return a set collecting all bullets associated with this world.
@@ -304,6 +322,16 @@ public class World {
 				// ignore
 			}
 		return bullets;
+	}
+	
+	/**
+	 * Return the number of bullets that are attached to this world.
+	 * 
+	 * @return	The number of bullets that are attached to this world.
+	 * 			| card( {collidable in collidables | collidable instanceof Bullet}) 
+	 */
+	public int getNbBullets() {
+		return getAllBullets().size();
 	}
 		
 	/**

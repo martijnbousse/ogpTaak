@@ -237,13 +237,9 @@ public class ShipTest {
 	// fireBullet
 	
 	@Test
-	public void testFireBullet_NoWorldAttachedCase() {
-		
-	}
-	
-	@Test
-	public void testFireBullet_ThisIsTerminatedCase() {
-		
+	public void testFireBullet_LegalCase() {
+		ship1.fireBullet();
+		assertEquals(ship1.getWorld().getNbBullets(),1);
 	}
 	
 	// collidesWith(Collidable collidable) TODO
@@ -253,8 +249,4 @@ public class ShipTest {
 	// collidesWith(Asteroid asteroid) TODO
 	
 	// collidesWith(Bullet bullet) TODO
-	
-	// toString TODO
-	
-	
 }

@@ -56,7 +56,7 @@ public class Bullet extends Collidable {
 	 * @return	| result = source != null
 	 */
 	public static boolean isValidSource(Ship source) {
-		return (source != null);
+		return (source != null) ;
 	}
 	
 	

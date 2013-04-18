@@ -33,8 +33,11 @@ public class Bullet extends Collidable {
 	 * 			| super(position, velocity, radius, mass)
 	 * @post	The new source of this new bullet is equal to the given source.
 	 * 			| (new this).getSource() == source
+	 * @throws 	IllegalArgumentException
+	 * 			The source is invalid
+	 * 			| !isValidSource(source)
 	 */
-	public Bullet(Vector position, Vector velocity, double radius, Ship source) {
+	public Bullet(Vector position, Vector velocity, double radius, Ship source) throws IllegalArgumentException {
 		super(position, velocity, radius);
 		if(!isValidSource(source))
 			throw new IllegalArgumentException();
@@ -66,11 +69,6 @@ public class Bullet extends Collidable {
 	private final Ship source; 
 	
 	/**
-	 * Symbolic constant registering the density of all bullets.
-	 */
-	public static double DENSITY = 7.8e-12;
-
-	/**
 	 * Returns the mass of this bullet.
 	 */
 	@Override @Basic @Immutable
@@ -84,10 +82,15 @@ public class Bullet extends Collidable {
 	public final double mass = (4/3)*Math.PI*Math.pow(getRadius(),3)*DENSITY; 
 	
 	/**
+	 * Symbolic constant registering the density of all bullets.
+	 */
+	public static double DENSITY = 7.8e-12;
+
+	/**
 	 * Returns whether this bullet has already bounced with the boundary.
 	 */
 	@Basic
-	public boolean bouncedOnce() {
+	public boolean hasBouncedOnce() {
 		return this.bouncedOnce;
 	}
 	
@@ -107,11 +110,17 @@ public class Bullet extends Collidable {
 	private boolean bouncedOnce = false;
 	
 	/**
+	 * Bounces this bullet off the boundary if it hasn't bounced yet.
 	 * 
+	 * @effect	| if bouncedOnce()
+	 * 			|	then terminate()
+	 * 			| else 
+	 * 			|	super.bounceOfBoundary()
+	 * 			|	setBouncedOnce()
 	 */
 	@Override
 	public void bounceOfBoundary() {
-		if (bouncedOnce()) {
+		if (hasBouncedOnce()) {
 			terminate();
 		}
 		else {

@@ -16,6 +16,9 @@ import asteroids.Util;
 /**
  * A class collecting tests for the class of ships.
  * 
+ * REMINDER: 	collide and collidesWith in all its versions won't be tested, because they only use already tested methods. 
+ * 				They are only used do make a distinction between the dynamic type of the collidable.
+ * 
  * @author 	Martijn Boussé, Wout Vekemans
  * @version	1.0
  *
@@ -241,12 +244,5 @@ public class ShipTest {
 		ship1.fireBullet();
 		assertEquals(ship1.getWorld().getNbBullets(),1);
 	}
-	
-	// collidesWith(Collidable collidable) TODO
-	
-	// collidesWith(Ship ship) TODO
-	
-	// collidesWith(Asteroid asteroid) TODO
-	
-	// collidesWith(Bullet bullet) TODO
+
 }

@@ -61,22 +61,12 @@ public class Collision {
 	}
 	
 	/**
-	 * Variable referencing the first collidable of this collision.
-	 */
-	private Collidable first;
-	
-	/**
 	 * Returns the second collidable of this collision.
 	 */
 	@Basic @Immutable @Raw
 	public Collidable getSecond() {
 		return second;
 	}
-	
-	/**
-	 * Variable referencing the second collidable of this collision.
-	 */
-	private Collidable second;
 	
 	/**
 	 * Check whether the given collidables are valid collidables for any collision.
@@ -95,6 +85,16 @@ public class Collision {
 				( second == null || (!second.isTerminated()) ) ;
 	}
 	
+	/**
+	 * Variable referencing the first collidable of this collision.
+	 */
+	private Collidable first;
+
+	/**
+	 * Variable referencing the second collidable of this collision.
+	 */
+	private Collidable second;
+
 	/**
 	 * Returns the time of this collision.
 	 */
@@ -142,7 +142,8 @@ public class Collision {
 			return false;
 		Collision otherCollision = (Collision) other;
 		return (this.getFirst().equals(otherCollision.getFirst())
-				&& this.getSecond().equals(otherCollision.getSecond())
+				&& ((this.getSecond()== null && otherCollision.getSecond()==null) 
+						|| this.getSecond().equals(otherCollision.getSecond()))
 				&& Util.fuzzyEquals(this.getTime(),otherCollision.getTime()));
 	}
 	

@@ -170,6 +170,14 @@ public class Ship extends Collidable implements IShip{
 	private static double thrusterAmount = 1.1*Math.pow(10,21);
 	
 	/**
+	 * Check whether the thruster of this ship is enabled.
+	 */
+	@Basic
+	public boolean isThrusterEnabled() {
+		return this.isThrusterEnabled;
+	}
+
+	/**
 	 * Enable or disable the thruster corresponding to the given flag.
 	 * 	
 	 * @param 	flag
@@ -179,14 +187,6 @@ public class Ship extends Collidable implements IShip{
 	 */
 	public void setThrusterEnabled(boolean flag) {
 		this.isThrusterEnabled = flag;
-	}
-	
-	/**
-	 * Check whether the thruster of this ship is enabled.
-	 */
-	@Basic
-	public boolean isThrusterEnabled() {
-		return this.isThrusterEnabled;
 	}
 	
 	/**

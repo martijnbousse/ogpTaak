@@ -123,9 +123,9 @@ public abstract class Collidable {
 	 * @effect 	If this collidable has a world, true if and only if the given position is effective, and inbetween the borders of the collidables world.
 	 * 			| if getWorld() != null
 	 * 			| 	then result == (position != null) && Util.fuzzyLessThanOrEqualTo(position.getXComponent()+getRadius(),getWorld().getWidth())
-				&& Util.fuzzyLessThanOrEqualTo(position.getYComponent()+getRadius(),getWorld().getHeight())
-				&& Util.fuzzyLessThanOrEqualTo(0.0,position.getXComponent()-getRadius())
-				&& Util.fuzzyLessThanOrEqualTo(0.0,position.getYComponent()-getRadius());
+	 *			|		&& Util.fuzzyLessThanOrEqualTo(position.getYComponent()+getRadius(),getWorld().getHeight())
+	 *			| 		&& Util.fuzzyLessThanOrEqualTo(0.0,position.getXComponent()-getRadius())
+	 *			| 		&& Util.fuzzyLessThanOrEqualTo(0.0,position.getYComponent()-getRadius());
 	 * @effect	If this collidable doesn't have a world, true if and only if the given position is effective and its coordinates are inbetween zero and the maximum value.
 	 * 			| if getWorld() == null
 	 * 			|	then result == (position != null)
@@ -310,7 +310,7 @@ public abstract class Collidable {
 	 * @param 	radius
 	 * 			The radius to check.
 	 * @return	True if and only if the given radius is a number and if it is greater than the mininum radius.
-	 * 			| result == !Doulbe.isNaN(minRadius)
+	 * 			| result == !Double.isNaN(minRadius)
 	 * 			|			&& (radius >= minRadius)
 	 */
 	@Raw
@@ -342,11 +342,11 @@ public abstract class Collidable {
 	 * 
 	 * @param	world
 	 * 			The new world to attach this collidable to.
-	 * @pre		If the given world is effective, it must already reference this collidable as one of its collidables. // verklaart de volgorde in addAsCollidable
+	 * @pre		If the given world is effective, it must already reference this collidable as one of its collidables.
 	 * 			| if (world != null)
 	 * 				then world.hasAsCollidable(this)
-	 * @pre		If the given world is not effective and this collidable references an effective world,  // verklaart removeAsCollidable
-	 * 			that world may not reference this collidable as one of its collidables.						// ofwel binding "af"maken ofwel binding breken
+	 * @pre		If the given world is not effective and this collidable references an effective world,
+	 * 			that world may not reference this collidable as one of its collidables.						
 	 * 			| if ((world == null) && (getWorld() != null))
 	 * 			| 	then !getWorld().hasAsCollidable(this)
 	 * @post	This collidable references the given world as the world to which it is attached.
@@ -393,6 +393,27 @@ public abstract class Collidable {
 	private World world = null;
 	
 	/**
+	 * Returns a boolean reflecting whether this collidable and the given collidable overlap.
+	 * 
+	 * @param 	other
+	 * 			The other collidable.
+	 * @effect	True if and only if the distance between this collidable and the given collidable is negative 
+	 * 			or if the given collidable is equal to this collidable.
+	 * 			| result == (getDistanceBetween(other) < 0) || (other.equals(this))  
+	 * @throws 	IllegalArgumentException 
+	 * 			The given collidable is not effective.
+	 * 			| (other == null)
+	 */
+	public boolean overlap(Collidable other) throws IllegalArgumentException, IllegalStateException {
+		if (other == null)
+			throw new IllegalArgumentException("Non effective collidable!");
+		if (other.equals(this))
+			return true;
+		return (getDistanceBetween(other) < 0);
+	}
+
+
+	/**
 	 * Returns the distance between this collidable and the given collidable.
 	 * 
 	 * @param  	other
@@ -436,8 +457,7 @@ public abstract class Collidable {
 	/**
 	 * Calculate the distance from this collidable to the closest boundary of its world.
 	 * 
-	 * @effect	...
-	 * 			| if getWorld() != null
+	 * @effect	| if getWorld() != null
 	 * 			|	then if this.move(getTimeToCollisionWithBoundary)
 	 * 			|		then result == Math.min(new.getPosition().getXComponent()-this.getPosition().getXComponent(), 
 	 * 			|								(new.getPosition().getYComponent()-this.getPosition().getYComponent())
@@ -457,26 +477,6 @@ public abstract class Collidable {
 		return Double.POSITIVE_INFINITY;
 	}
 
-
-	/**
-	 * Returns a boolean reflecting whether this collidable and the given collidable overlap.
-	 * 
-	 * @param 	other
-	 * 			The other collidable.
-	 * @effect	True if and only if the distance between this collidable and the given collidable is negative 
-	 * 			or if the given collidable is equal to this collidable.
-	 * 			| result == (getDistanceBetween(other) < 0) || (other.equals(this))  
-	 * @throws 	IllegalArgumentException 
-	 * 			The given collidable is not effective.
-	 * 			| (other == null)
-	 */
-	public boolean overlap(Collidable other) throws IllegalArgumentException, IllegalStateException {
-		if (other == null)
-			throw new IllegalArgumentException("Non effective collidable!");
-		if (other.equals(this))
-			return true;
-		return (getDistanceBetween(other) < 0);
-	}
 
 	/**
 	 * Returns when this collidable, if ever, will collide with the given collidable.
@@ -519,7 +519,8 @@ public abstract class Collidable {
 			return Double.POSITIVE_INFINITY;
 		}
 	}
-	
+
+
 	/**
 	 * Returns when this collidable, if ever, will collide with the boundary.
 	 * 
@@ -539,8 +540,7 @@ public abstract class Collidable {
 
 	/**
 	 * Calculates the time to collision with a vertical boundary of this collidables world.
-	 * @effect	...
-	 * 			| if result != Double.POSITIVE.INFINITY
+	 * @effect	| if result != Double.POSITIVE.INFINITY
 	 * 			|	then this.move(result)
 	 * 			|		new.getDistanceToClosestBoundary == 0
 	 */
@@ -555,11 +555,11 @@ public abstract class Collidable {
 		}
 		return Double.POSITIVE_INFINITY;
 	}
-	
+
+
 	/**
 	 * Calculates the time to collision with a horizontal boundary of this collidables world.
-	 * @effect	...
-	 * 			| if result != Double.POSITIVE.INFINITY
+	 * @effect	| if result != Double.POSITIVE.INFINITY
 	 * 			|	then this.move(result)
 	 * 			|		new.getDistanceToClosestBoundary == 0
 	 */
@@ -574,7 +574,24 @@ public abstract class Collidable {
 		}
 		return Double.POSITIVE_INFINITY;
 	}
-	
+
+
+	/**
+	 * Return a boolean reflecting whether this collidable can bounce of the boundary.
+	 * 
+	 * @return	True if and only if the world to which this 
+	 * 			collidable is attached to is effective and is a proper world for this collidable, 
+	 * 			which also includes that this collidable is not terminated and effective. 
+	 * 			And if the time to collision of this collidable with the boundary is equal to zero.
+	 * 			| result == ( !((getWorld() == null) && hasProperWorld())
+	 *			|			&& (Util.fuzzyEquals(getTimeToCollisionWithBoundary(),0.0)))
+	 */
+	public boolean canBounceOfBoundary() {
+		return ( !((getWorld() == null) && hasProperWorld())
+				&& (Util.fuzzyEquals(getTimeToCollisionWithBoundary(),0.0)));
+	}
+
+
 	/**
 	 * This collidable bounces with the boundary of its world.
 	 * 
@@ -585,61 +602,59 @@ public abstract class Collidable {
 	 * 			| in	
 	 * 			| 	if Util.fuzzyEquals(this.getTimeToCollisionWithBoundary(),0.0)
 	 * 			|		then move(dt)
-	 * 			|			 this.overlapWithBoundary == false
+	 * 			|			 this.getDistancetoClosestBoundary > 0
 	 * 			Else if the time to collision with a boundary of this collidable is bigger than zero and this collidable
 	 * 			is moved for a small time interval, then the new time to collision with that boundary will be smaller 
 	 * 			than the previous time to collision with that boundary.
 	 * 			|	else move(dt)
 	 * 			| 		 getTimeToCollisionWithBoundary > (new this).getTimeToCollisionWithBoundary	
-	 * @throws	IllegalStateException
-	 * 			This collidable is not attached to a world and has a proper world to which it is attached.
-	 * 			| (getWorld() == null) && hasProperWorld()	
-	 * @throws	IllegalStateException
-	 * 			This collidable overlaps with the boundaries of its world.
-	 * 			| this.overlapWithBoundary() && (!(getWorld() == null) && hasProperWorld())
 	 */
 	// REMINDER: hasProperWorld() also calls the complementary checker canHaveAsCollidable() from the bidirectional association.
 	//           Hence, terminated collidables are also included in the if construct.	
-	public void bounceOfBoundary() throws IllegalStateException {
-//		if (overlapWithBoundary() && (!(getWorld() == null) && hasProperWorld()))
-//			throw new IllegalStateException(); // TODO: is niet mogelijk want canHaveAsCollidable zou dat moeten tegenhouden!
-	
+	public void bounceOfBoundary(){
 		if (canBounceOfBoundary()) {
 			Vector newVelocity;
 			if(Util.fuzzyEquals(getPosition().getXComponent(),getRadius())) {
 				newVelocity = new Vector(-getVelocity().getXComponent(),getVelocity().getYComponent());
-				System.out.println("inverted x component, because of collision with left boundary");
 			}
 			else if(Util.fuzzyEquals(getPosition().getYComponent()+getRadius(),getWorld().getHeight())) {
 				newVelocity = new Vector(getVelocity().getXComponent(),-getVelocity().getYComponent());
-				System.out.println("inverted y component, because of collision with upper boundary");
 			}
 			else if(Util.fuzzyEquals(getPosition().getXComponent()+getRadius(),getWorld().getWidth())) {
 				newVelocity = new Vector(-getVelocity().getXComponent(),getVelocity().getYComponent());
-				System.out.println("inverted x component, because of collision with right boundary");
 			}
 			else {
 				newVelocity = new Vector(getVelocity().getXComponent(),-getVelocity().getYComponent());
-				System.out.println("inverted y component, because of collision with lower boundary");
 			}
 			setVelocity(newVelocity);
 		}
 	}
-		
+
+
 	/**
-	 * Return a boolean reflecting whether this collidable can bounce of the boundary.
+	 * Return a boolean reflecting whether this collidable can bounce with the given collidable.
 	 * 
-	 * @return	True if and only if the world to which this 
+	 * @param 	other
+	 * 			The other collidable to check.
+	 * @return	True if and only if the world to which the other collidable is attached to is effective and is a proper world for the other 
+	 * 			collidable, which also includes that the other collidable is not terminated and effective. And if the world to which this 
 	 * 			collidable is attached to is effective and is a proper world for this collidable, which also includes that this collidable
-	 * 			is not terminated and effective. And if the time to collision of this collidable with the boundary is equal to zero.
-	 * 			| result == ( !((getWorld() == null) && hasProperWorld())
-				|			&& (Util.fuzzyEquals(getTimeToCollisionWithBoundary(),0.0)) )
+	 * 			is not terminated and effective. And if the time to collision of this collidable with the other collidable is equal to zero.
+	 * 			| result == ( !((other.getWorld() == null) && other.hasProperWorld())  
+	 *						&& !((getWorld() == null) && hasProperWorld())
+	 *						&& ((this.getWorld() == other.getWorld())) )
+	 *						&& (Util.fuzzyEquals(getTimeToCollision(other),0.0));	
 	 */
-	public boolean canBounceOfBoundary() {
-		return (   !((getWorld() == null) && hasProperWorld())
-				&& (Util.fuzzyEquals(getTimeToCollisionWithBoundary(),0.0)));
+	//REMINDER: canBounce does not have to check if other is non-effective, because the method bounce has a restricted use. 
+	//          It can only be used for collidables in the list of collidables of a world, which can never be null. 
+	public boolean canBounce(Collidable other) {
+		return ( !((other.getWorld() == null) && other.hasProperWorld())  
+				&& !((getWorld() == null) && hasProperWorld())
+				&& ((this.getWorld() == other.getWorld())) )
+				&& (Util.fuzzyEquals(getTimeToCollision(other),0.0));	
 	}
-	
+
+
 	/**
 	 * This collidable bounces with the other collidable.
 	 * 
@@ -650,48 +665,12 @@ public abstract class Collidable {
 	 * 			| if canBounce(other)
 	 * 			| 	then (new this).getVelocity() != this.getVelocity()
 	 * 			| 		 (new other).getVelocity() != other.getVelocity()
-	 * 			| else (new this).getVelocity() == this.getVelocity()
+	 * 			| else 	(new this).getVelocity() == this.getVelocity()
 	 * 			| 		 (new other).getVelocity() == other.getVelocity()
-	 * 
-	 * 
-	 * 
-	 * 
-	 *         //TODO: Is hierboven ok? Hierop zijn de testen gebaseerd... maar ik heb wel de commentaar gekregen dat dit niet "genoeg" is
-	 *                    je zou ook moeten beschrijven HOE de vectoren zijn veranderd, maar dat resulteert weer in code kopies.
-	 * 			
-	 * 
-	 * 			//TODO: Ik vind beiden wel ok, maar voor bounce is het bovenste makkelijker te testen. Bij bounceOfBoundary kunnen we het
-	 * 					misschien zo laten staan .. dan zien ze allebei de manieren. wat denkt uch?
-	 * 			
-	 * 			//TODO: merk ook op dat je dan geen terminated of not in a world cases kan doen in test.
-	 * 			
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 			| let
-	 * 			|	dt be a small time interval
-	 * 			| in	
-	 * 			| 	if Util.fuzzyEquals(this.getTimeToCollision(other),0.0)
-	 * 			|		then this.move(dt)
-	 * 			|			 other.move(dt)
-	 * 			|			 (new this).overlap(new other) == false
-	 * 			Else if the time to collision of this Collidable and the other collidable is bigger than zero and both
-	 * 			collidable are moved for a small time interval, then the new time to collision will be smaller
-	 * 			than the previous time to collision.
-	 * 			|	else this.move(dt)
-	 * 			|		 other.move(dt)
-	 * 			|		 this.getTimeToCollision(other)  > (new this).getTimeToCollision(new other)
 	 */
 	// REMINDER: hasProperWorld() also calls the complementary checker canHaveAsCollidable() from the bidirectional association.
 	//           Hence, terminated collidables are also included in the if construct.	
 	protected void bounce(Collidable other) {
-//		if ((getWorld() == null) && hasProperWorld())
-//			throw new IllegalStateException(); //TODO: gooit nu geen IllegalStateException meer aangezien dit in canBounce zit.. ?
-//		if (this.overlap(other))
-//		throw new IllegalArgumentException(); // TODO: deze exception wordts soms opgegooid. Indien commented krijg je die nooit en
-											  // lijkt mij alles juist te werken..
-		
 		if (canBounce(other)) {
 				try {
 					Vector deltaR = other.getPosition().subtract(this.getPosition());
@@ -720,44 +699,8 @@ public abstract class Collidable {
 				}
 		}
 	}
-	
-	/**
-	 * Return a boolean reflecting whether this collidable can bounce with the given collidable.
-	 * 
-	 * @param 	other
-	 * 			The other collidable to check.
-	 * @return	True if and only if the world to which the other collidable is attached to is effective and is a proper world for the other 
-	 * 			collidable, which also includes that the other collidable is not terminated and effective. And if the world to which this 
-	 * 			collidable is attached to is effective and is a proper world for this collidable, which also includes that this collidable
-	 * 			is not terminated and effective. And if the time to collision of this collidable with the other collidable is equal to zero.
-	 * 			| result == ( !((other.getWorld() == null) && other.hasProperWorld())  
-	 *						&& !((getWorld() == null) && hasProperWorld())
-	 *						&& ((this.getWorld() == other.getWorld())) )
-	 *						&& (Util.fuzzyEquals(getTimeToCollision(other),0.0));	
-	 */
-	//REMINDER: canBounce does not have to check if other is non-effective, because the method bounce has a restricted use. 
-	//          It can only be used for collidables in the list of collidables of a world, which can never be null. 
-	public boolean canBounce(Collidable other) {
-		
-		return (   !((other.getWorld() == null) && other.hasProperWorld())  
-				&& !((getWorld() == null) && hasProperWorld())
-				&& ((this.getWorld() == other.getWorld())) )
-				&& (Util.fuzzyEquals(getTimeToCollision(other),0.0));	
-	}
-	
-	/**
-	 * Check whether the given time is a valid time for any collidable.
-	 * 
-	 * @param 	dt
-	 * 			The time to check.
-	 * @return	True if and only if the given time is greater then or equal to zero.
-	 * 			| result == (Util.fuzzyLessThanOrEqualTo(0,dt))
-	 */
-	public static boolean isValidTime(double dt) {
-		return  !Double.isNaN(dt)
-				&& Util.fuzzyLessThanOrEqualTo(0,dt);
-	}
-	
+
+
 	/**
 	 * Move this collidable for the given amount of time.
 	 * 
@@ -790,13 +733,26 @@ public abstract class Collidable {
 			// do nothing
 		}
 	}
+
+
+	/**
+	 * Check whether the given time is a valid time for any collidable.
+	 * 
+	 * @param 	dt
+	 * 			The time to check.
+	 * @return	True if and only if the given time is greater then or equal to zero.
+	 * 			| result == (Util.fuzzyLessThanOrEqualTo(0,dt))
+	 */
+	public static boolean isValidTime(double dt) {
+		return  !Double.isNaN(dt)
+				&& Util.fuzzyLessThanOrEqualTo(0,dt);
+	}
 	
 	/**
 	 * This collidable collides with the given collidable.
 	 * 
 	 * @param 	collidable
 	 * 			The given collidable.
-	 * @return	...
 	 */
 	public abstract void collide(Collidable collidable);
 	
@@ -805,7 +761,6 @@ public abstract class Collidable {
 	 * 
 	 * @param 	ship
 	 * 			The given ship.
-	 * @return	...
 	 */
 	abstract void collidesWith(Ship ship);
 	
@@ -814,7 +769,6 @@ public abstract class Collidable {
 	 * 
 	 * @param 	asteroid
 	 * 			The given asteroid.
-	 * @return	...
 	 */
 	abstract void collidesWith(Asteroid asteroid);
 	
@@ -823,7 +777,6 @@ public abstract class Collidable {
 	 * 	
 	 * @param 	bullet
 	 * 			The given bullet.
-	 * @return	...
 	 */
 	abstract void collidesWith(Bullet bullet);
 	
@@ -844,6 +797,4 @@ public abstract class Collidable {
 				   + " Velocity: " + getVelocity().toString()
 				   + " Radius: " + getRadius();
 	}
-
-
 }

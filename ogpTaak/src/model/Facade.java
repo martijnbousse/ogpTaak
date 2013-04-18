@@ -11,7 +11,6 @@ import asteroids.CollisionListener;
 import asteroids.Util;
 
 public class Facade implements IFacade<World, Ship, Asteroid, Bullet> {
-	//TODO: modelexceptions!
 
 	@Override
 	public World createWorld(double width, double height) {
@@ -44,21 +43,26 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet> {
 	}
 
 	@Override
-	public void addShip(World world, Ship ship) {
-		world.addAsCollidable(ship);
-
+	public void addShip(World world, Ship ship) throws ModelException {
+		try {
+			world.addAsCollidable(ship);
+		} catch (IllegalArgumentException e) {
+			throw new ModelException(e);
+		}
 	}
 
 	@Override
-	public void addAsteroid(World world, Asteroid asteroid) {
-		world.addAsCollidable(asteroid);
-
+	public void addAsteroid(World world, Asteroid asteroid) throws ModelException {
+		try {
+			world.addAsCollidable(asteroid);
+		} catch (IllegalArgumentException e) {
+			throw new ModelException(e);
+		}
 	}
 
 	@Override
 	public void removeShip(World world, Ship ship) {
 		world.removeAsCollidable(ship);
-
 	}
 
 	@Override
@@ -76,20 +80,22 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet> {
 			exc.printStackTrace();
 			throw new ModelException(exc);
 		}
-
 	}
 
 	@Override
 	public Ship createShip(double x, double y, double xVelocity,
-			double yVelocity, double radius, double direction, double mass) {
+			double yVelocity, double radius, double direction, double mass) throws ModelException {
 		while(!Util.fuzzyLessThanOrEqualTo(0.0, direction)){
 			direction = direction+ Math.PI*2;
 		}
 		while(!Util.fuzzyLessThanOrEqualTo(direction, Math.PI*2)){
 			direction = direction-Math.PI*2;
 		}
-		
-		return new Ship(new Vector(x,y), new Vector(xVelocity,yVelocity), radius, mass, direction);
+		try {
+			return new Ship(new Vector(x,y), new Vector(xVelocity,yVelocity), radius, mass, direction);
+		} catch(IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
@@ -159,20 +165,32 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet> {
 	}
 
 	@Override
-	public void fireBullet(Ship ship) {
-		ship.fireBullet();
+	public void fireBullet(Ship ship) throws ModelException {
+		try {
+			ship.fireBullet();
+		} catch (IllegalStateException e) {
+			throw new ModelException(e);
+		}
 	}
 
 	@Override
 	public Asteroid createAsteroid(double x, double y, double xVelocity,
-			double yVelocity, double radius) {
-		return new Asteroid(new Vector(x,y), new Vector(xVelocity,yVelocity), radius);
+			double yVelocity, double radius) throws ModelException {
+		try {
+			return new Asteroid(new Vector(x,y), new Vector(xVelocity,yVelocity), radius);
+		} catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public Asteroid createAsteroid(double x, double y, double xVelocity,
 			double yVelocity, double radius, Random random) {
-		return new Asteroid(new Vector(x,y), new Vector(xVelocity,yVelocity), radius);
+		try {
+			return new Asteroid(new Vector(x,y), new Vector(xVelocity,yVelocity), radius);
+		} catch (IllegalArgumentException exc) {
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override

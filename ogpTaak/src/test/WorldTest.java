@@ -7,11 +7,16 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import support.Collision;
+import support.Vector;
+
 
 import asteroids.*;
 
 /**
  * A class collecting tests for the class of worlds.
+ * 
+ * REMINDER : resolveCollision won't be tested here, because it only uses other methods, tested elsewhere
  * 
  * @author 	Martijn Boussé, Wout Vekemans
  * @version	1.0
@@ -20,23 +25,36 @@ import asteroids.*;
 public class WorldTest {
 	
 	private static World world1;
-	
 	private static Collidable collidable1;
 	private static Collidable collidable2;
 	private static Collidable collidable3;
+	
 	private static Collidable collidable4;
 	
 	private World mutableWorld1;
-	private World mutableWorld2;
-	private World mutableWorld3;
-	private World terminatedWorld;
-	
 	private Collidable mutableCollidable1;
 	private Collidable mutableCollidable2;
-	private Collidable mutableCollidable3;
+	
 	private Collidable mutableCollidable4;
-	private Ship mutableCollidable5;
-	private Asteroid mutableCollidable6;
+	
+	private World mutableWorld2;
+	private Collidable mutableCollidable3;
+	
+	private World mutableWorld3;
+	private Ship mutableShip1;
+	private Asteroid mutableAsteroid1;
+	
+	private World mutableWorld4;
+	private Ship mutableShip2;
+	private Ship mutableShip3;
+	
+	private World mutableWorld5;
+	private Ship mutableShip4;
+	private Ship mutableShip5;
+	
+	
+	private World terminatedWorld;
+	
 	private Collidable terminatedCollidable;
 
 	@BeforeClass
@@ -45,37 +63,49 @@ public class WorldTest {
 		collidable1 = new Ship();
 		collidable2 = new Ship();
 		collidable3 = new Ship();
-		collidable4 = new Ship();
 		world1.addAsCollidable(collidable1);
 		world1.addAsCollidable(collidable2);
 		world1.addAsCollidable(collidable3);
+		
+		collidable4 = new Ship();
 	}
 	
 	@Before
 	public void setUp() throws Exception {
+		mutableWorld1 = new World();
 		mutableCollidable1 = new Ship();
 		mutableCollidable2 = new Ship();
+		mutableWorld1.addAsCollidable(mutableCollidable1);
+		mutableWorld1.addAsCollidable(mutableCollidable2);
+		
+		mutableWorld2 = new World();
 		mutableCollidable3 = new Ship();
+		mutableWorld2.addAsCollidable(mutableCollidable3);
+		
+		mutableWorld3 = new World();
+		mutableShip1 = new Ship();
+		mutableAsteroid1 = new Asteroid();
+		mutableWorld3.addAsCollidable(mutableShip1);
+		mutableWorld3.addAsCollidable(mutableAsteroid1);
+		mutableShip1.fireBullet();
+		
+		mutableWorld4 = new World(1000,1000);
+		mutableShip2 = new Ship(new Vector(100,500), new Vector(-10,0), 10, 10, 0);
+		mutableShip3 = new Ship(new Vector(200,700), new Vector(-10,0), 10, 10, 0);
+		mutableWorld4.addAsCollidable(mutableShip2);
+		mutableWorld4.addAsCollidable(mutableShip3);
+		
+		mutableWorld5 = new World(1000,1000);
+		mutableShip4 = new Ship(new Vector(250,250), new Vector(10,0), 10,10,0);
+		mutableShip5 = new Ship(new Vector(370,250), new Vector(-10,0), 10,10,0);
+		mutableWorld5.addAsCollidable(mutableShip4);
+		mutableWorld5.addAsCollidable(mutableShip5);
+		
 		mutableCollidable4 = new Ship();
 		terminatedCollidable = new Ship();
 		terminatedCollidable.terminate();
-		
-		mutableWorld1 = new World();
-		mutableWorld2 = new World();
 		terminatedWorld = new World();
 		terminatedWorld.terminate();
-		
-		mutableWorld1.addAsCollidable(mutableCollidable1);
-		mutableWorld1.addAsCollidable(mutableCollidable2);
-		mutableWorld2.addAsCollidable(mutableCollidable3);
-		
-		
-		mutableWorld3 = new World();
-		mutableCollidable5 = new Ship();
-		mutableCollidable6 = new Asteroid();
-		mutableWorld2.addAsCollidable(mutableCollidable5);
-		mutableWorld2.addAsCollidable(mutableCollidable6);
-		mutableCollidable5.fireBullet();
 		
 	}	
 	
@@ -89,10 +119,29 @@ public class WorldTest {
 	@Test
 	public void testTerminate() {
 		mutableWorld1.terminate();
-		assertEquals(mutableWorld1.getNbCollidables(),0);  //TODO: werkt niet, concurrentModificationException? 
-		// http://www.coderanch.com/t/233932/threads/java/deal-Concurrent-Modification-Exception
-		// of java docs
-		
+		assertEquals(mutableWorld1.getNbCollidables(),0);
+	}
+	
+	// maxDimension
+
+	@Test
+	public void testIsValidMaxDimension_NaNCase() {
+		assertFalse(World.isValidMaxDimension(Double.NaN));
+	}
+	
+	@Test
+	public void testIsValidMaxDimension_NegativeCase() {
+		assertFalse(World.isValidMaxDimension(-1));
+	}
+	
+	@Test
+	public void testIsValidMaxDimension_ZeroCase() {
+		assertFalse(World.isValidMaxDimension(0));
+	}
+	
+	@Test
+	public void testIsValidMaxDimension_LegalCase() {
+		assertTrue(World.isValidMaxDimension(75));
 	}
 	
 	// width
@@ -109,10 +158,20 @@ public class WorldTest {
 	
 	@Test
 	public void testSetMaxWidth() {
-		fail("Not yet implemented");
+		
+	}
+
+	@Test
+	public void testSetMaxWidth_IllegalCases() {
+		World.setMaxHeight(-1);
+		assertEquals(World.getMaxWidth(), Double.MAX_VALUE, Util.EPSILON);
 	}
 	
-	// isValidWidth
+	@Test
+	public void testSetMaxWidth_LegalCase() {
+		World.setMaxWidth(755);
+		assertEquals(World.getMaxWidth(),755, Util.EPSILON);
+	}
 
 	@Test
 	public void testIsValidWidth_NaNCase() {
@@ -121,7 +180,7 @@ public class WorldTest {
 	
 	@Test
 	public void testIsValidWidth_MaxCase() {
-		assertTrue(World.isValidWidth(Double.MAX_VALUE));
+		assertTrue(World.isValidWidth(World.getMaxWidth()));
 	}
 	
 	@Test
@@ -132,13 +191,6 @@ public class WorldTest {
 	@Test
 	public void testIsValidWidth_NegativeCase() {
 		assertFalse(World.isValidWidth(-1));
-	}
-	
-	// maxDimension
-
-	@Test
-	public void testIsValidMaxDimension() {
-		fail("Not yet implemented");
 	}
 	
 	// height
@@ -154,11 +206,16 @@ public class WorldTest {
 	}
 
 	@Test
-	public void testSetMaxHeight() {
-		fail("Not yet implemented");
+	public void testSetMaxHeight_LegalCase() {
+		World.setMaxHeight(755);
+		assertEquals(World.getMaxHeight(),755, Util.EPSILON);
 	}
 	
-	// isValidHeight
+	@Test
+	public void testSetMaxHeight_IllegalCases() {
+		World.setMaxHeight(-1);
+		assertEquals(World.getMaxHeight(), Double.MAX_VALUE, Util.EPSILON);
+	}
 
 	@Test
 	public void testIsValidHeight_NaNCase() {
@@ -167,7 +224,7 @@ public class WorldTest {
 	
 	@Test
 	public void testIsValidHeight_MaxCase() {
-		assertTrue(World.isValidHeight(Double.MAX_VALUE));
+		assertTrue(World.isValidHeight(World.getMaxHeight()));
 	}
 	
 	@Test
@@ -289,9 +346,10 @@ public class WorldTest {
 	
 	@Test
 	public void testHasProperCollidables() {
-//		for(Collidable collidable : world1.getAllCollidables()) {
-//		}
-		//TODO: implement
+		for(Collidable collidable : world1.getAllCollidables()) {
+			assertTrue(collidable.getWorld().equals(world1));
+			assertTrue(world1.hasAsCollidable(collidable));
+		}
 	}
 	
 	// addAsCollidable
@@ -344,15 +402,28 @@ public class WorldTest {
 		mutableWorld1.removeAsCollidable(mutableCollidable4);
 	}
 	
-	// evolve TODO: testen
+	// getNextCollision
 	
 	@Test
-	public void testEvolve() {
-		fail("Not yet implemented");
+	public void testGetNextCollision() {
+		Collision next = mutableWorld4.getNextCollision();
+		Collision check = new Collision(mutableShip2, null, 9);
+		assertTrue(next.equals(check));
 	}
 	
-	// resolveCollision TODO: testen
+	// evolve
 	
-	// 
-
+	@Test
+	public void testEvolve_CollisionCase() {
+		mutableWorld5.evolve(6);
+		assertTrue(mutableShip4.getTimeToCollision(mutableShip5) == Double.POSITIVE_INFINITY);
+	}
+	
+	@Test
+	public void testEvolve_NonCollisionCase() {
+		double old = mutableShip5.getTimeToCollision(mutableShip4);
+		mutableWorld5.evolve(2);
+		assertTrue(mutableShip5.getTimeToCollision(mutableShip4) < old);
+		
+	}
 }

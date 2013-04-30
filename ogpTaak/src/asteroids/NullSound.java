@@ -1,6 +1,5 @@
 package asteroids;
 
-
 /**
  * Sound manager that ignores all requests.
  */

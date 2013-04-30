@@ -1,6 +1,5 @@
 package gameObjects;
 
-import asteroids.CollisionListener;
 import asteroids.Util;
 import be.kuleuven.cs.som.annotate.*;
 
@@ -328,8 +327,8 @@ public class World {
 	 * Check whether this world has the given collidable as one of the
 	 * collidables attached to it.
 	 * 
-	 * @param collidable
-	 *            The collidable to check.
+	 * @param 	collidable
+	 *          The collidable to check.
 	 */
 	@Basic
 	@Raw
@@ -545,10 +544,7 @@ public class World {
 			}
 		}
 		if (time == Double.POSITIVE_INFINITY
-				|| Util.fuzzyLessThanOrEqualTo(time, 0.0)) // Tweede voorwaarde
-															// mag niet weg, dan
-															// werken bullets
-															// niet meer!!
+				|| Util.fuzzyLessThanOrEqualTo(time, 0.0))
 			return null;
 		Collision nextCollision = new Collision(first, second, time);
 		return nextCollision;

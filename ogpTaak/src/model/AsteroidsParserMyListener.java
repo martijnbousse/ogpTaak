@@ -1,4 +1,4 @@
-package asteroids.model.programs.parsing;
+package model;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,7 +10,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import asteroids.model.programs.parsing.ProgramFactory.ForeachType;
+import model.ProgramFactory.ForeachType;
 
 // ------------------------------------------------------------------------
 // This class implement a recursive AST inspector that generates a Program.

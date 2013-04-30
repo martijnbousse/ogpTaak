@@ -15,7 +15,6 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-
 /**
  * Sound manager that reads a text file to determine which sound files to load.
  */

@@ -26,7 +26,7 @@ import javax.swing.Timer;
 import model.IFacade;
 
 @SuppressWarnings("serial")
-public class WorldView<World, Ship, Asteroid, Bullet> extends JPanel implements KeyListener, ActionListener, CollisionListener {
+public class WorldView<World, Ship, Asteroid, Bullet, Program> extends JPanel implements KeyListener, ActionListener, CollisionListener {
 
   private static final int LEFT_P1 = KeyEvent.VK_LEFT;
   private static final int RIGHT_P1 = KeyEvent.VK_RIGHT;
@@ -39,10 +39,11 @@ public class WorldView<World, Ship, Asteroid, Bullet> extends JPanel implements 
 
   private static final int TIMER_DELAY = 1000 / 30;
 
-  private Asteroids<World, Ship, Asteroid, Bullet> game;
-  private IFacade<World, Ship, Asteroid, Bullet> facade;
+  private Asteroids<World, Ship, Asteroid, Bullet, Program> game;
+  private IFacade<World, Ship, Asteroid, Bullet, Program> facade;
   private World world;
   private Ship player1, player2;
+  private boolean player2IsAI;
   private double player1_angle, player2_angle;
   private boolean player1_fire, player2_fire;
   private Timer timer;
@@ -52,12 +53,13 @@ public class WorldView<World, Ship, Asteroid, Bullet> extends JPanel implements 
   private Map<Object, Visualization<?>> visualizations = new HashMap<Object, Visualization<?>>();
   private Set<Explosion> explosions = new HashSet<Explosion>();
 
-  public WorldView(Asteroids<World, Ship, Asteroid, Bullet> game, World world, Ship player1, Ship player2) {
+  public WorldView(Asteroids<World, Ship, Asteroid, Bullet, Program> game, World world, Ship player1, Ship player2, boolean player2IsAI) {
     this.game = game;
     this.facade = game.getFacade();
     this.world = world;
     this.player1 = player1;
     this.player2 = player2;
+    this.player2IsAI = player2IsAI;
     this.timer = new Timer(TIMER_DELAY, this);
     setBackground(Color.BLACK);
     ClassLoader loader = WorldView.class.getClassLoader();
@@ -156,19 +158,19 @@ public class WorldView<World, Ship, Asteroid, Bullet> extends JPanel implements 
       player1_fire = true;
       break;
     case THRUSTER_P2:
-      if (player2 != null)
+      if (player2 != null && ! player2IsAI)
         facade.setThrusterActive(player2, true);
       break;
     case LEFT_P2:
-      if (player2 != null)
+      if (player2 != null && ! player2IsAI)
         player2_angle = Math.PI / 20;
       break;
     case RIGHT_P2:
-      if (player2 != null)
+      if (player2 != null && ! player2IsAI)
         player2_angle = -Math.PI / 20;
       break;
     case FIRE_P2:
-      if (player2 != null)
+      if (player2 != null && ! player2IsAI)
         player2_fire = true;
       break;
     }
@@ -187,15 +189,15 @@ public class WorldView<World, Ship, Asteroid, Bullet> extends JPanel implements 
       player1_angle = 0;
       break;
     case THRUSTER_P2:
-      if (player2 != null)
+      if (player2 != null && ! player2IsAI)
         facade.setThrusterActive(player2, false);
       break;
     case LEFT_P2:
-      if (player2 != null)
+      if (player2 != null && ! player2IsAI)
         player2_angle = 0;
       break;
     case RIGHT_P2:
-      if (player2 != null)
+      if (player2 != null && ! player2IsAI)
         player2_angle = 0;
       break;
     }
@@ -222,7 +224,7 @@ public class WorldView<World, Ship, Asteroid, Bullet> extends JPanel implements 
       facade.fireBullet(player2);
       game.getSound().play("torpedo");
     }
-		facade.evolve(world, millisSinceLastEvolve / 1000., this);
+    facade.evolve(world, millisSinceLastEvolve / 1000., this);
     Iterator<Explosion> iter = explosions.iterator();
     while (iter.hasNext()) {
       boolean done = iter.next().evolve(millisSinceLastEvolve / 1000.);
@@ -333,7 +335,7 @@ public class WorldView<World, Ship, Asteroid, Bullet> extends JPanel implements 
   
   public class AsteroidVisualization extends Visualization<Asteroid> {
    
-    public AsteroidVisualization(IFacade<World, Ship, Asteroid, Bullet> facade,  Asteroid asteroid, Image image) {
+    public AsteroidVisualization(IFacade<World, Ship, Asteroid, Bullet, Program> facade,  Asteroid asteroid, Image image) {
       super(Color.WHITE, asteroid, image);
     }
     

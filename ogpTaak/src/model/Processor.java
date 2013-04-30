@@ -1,4 +1,4 @@
-package asteroids.model.programs.parsing;
+package model;
 
 import java.io.IOException;
 

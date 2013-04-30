@@ -1,6 +1,5 @@
 package asteroids;
 
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -15,14 +14,14 @@ import java.awt.geom.Rectangle2D;
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
-public class AsteroidsMenu<World, Ship, Asteroid, Bullet> extends JPanel implements KeyListener {
+public class AsteroidsMenu<World, Ship, Asteroid, Bullet, Program> extends JPanel implements KeyListener {
   
-  private String[] menu_options = { "Player vs Asteroids", "Player vs Player", "Exit" };
+  private String[] menu_options = { "Player vs Asteroids", "Player vs Player", "Player vs AI", "Exit" };
   private int selectedIndex = 0;
-  private final Asteroids<World, Ship, Asteroid, Bullet> game;
+  private final Asteroids<World, Ship, Asteroid, Bullet, Program> game;
   private Image background;
   
-  public AsteroidsMenu(Asteroids<World, Ship, Asteroid, Bullet> game) {
+  public AsteroidsMenu(Asteroids<World, Ship, Asteroid, Bullet, Program> game) {
     this.game = game;
     addKeyListener(this);
     setBackground(Color.BLACK);
@@ -96,9 +95,12 @@ public class AsteroidsMenu<World, Ship, Asteroid, Bullet> extends JPanel impleme
         game.startSinglePlayerGame();
         break;
       case 1:
-        game.startMultiPlayerGame();
+        game.startMultiPlayerGame(false);
         break;
       case 2:
+        game.startMultiPlayerGame(true);
+        break;
+      case 3:
         System.exit(0);
       }
       break;

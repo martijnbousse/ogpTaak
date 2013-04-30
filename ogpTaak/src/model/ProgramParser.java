@@ -1,4 +1,4 @@
-package asteroids.model.programs.parsing;
+package model;
 
 import java.util.ArrayList;
 import java.util.BitSet;

@@ -7,6 +7,9 @@
 
 package gameObjects;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import support.Vector;
 import exceptions.InvalidPositionException;
 import asteroids.Util;
@@ -283,10 +286,12 @@ public class Ship extends Collidable implements IShip{
 			Vector initialPosition = getPosition().add( new Vector((getRadius()+3)*Math.cos(getDirection()),(getRadius()+3)*Math.sin(getDirection())));
 			Vector initialVelocity = (new Vector(Math.cos(getDirection()),Math.sin(getDirection()))).scale(250);
 			try {
-				Bullet bullet = new Bullet(initialPosition,initialVelocity,3,this);
+				Bullet bullet = new Bullet(initialPosition,initialVelocity,3);
+				this.addAsBullet(bullet);
 				getWorld().addAsCollidable(bullet);
 			} catch (InvalidPositionException e) {
 				//dont fire
+				//TODO catch illegalargument van addAsBullet
 			}
 		}
 	}
@@ -298,8 +303,132 @@ public class Ship extends Collidable implements IShip{
 	 * 			| result == (getWorld() != null) && !isTerminated()
 	 */
 	public boolean canFireBullets() {
-		return ((getWorld() != null) && !isTerminated());
+		return bullets.size() < 3;
 	}
+	
+	
+	
+	/**
+	 * Check whether this ship has the given bullet as one of the
+	 * bullets attached to it.
+	 * 
+	 * @param 	bullet
+	 *          The bullet to check.
+	 */
+	@Basic
+	@Raw
+	public boolean hasAsBullet(Bullet bullet) {
+		return this.bullets.contains(bullet);
+	}
+
+	/**
+	 * Checks whether this ship can have the given bullet as one of its
+	 * bullets.
+	 * 
+	 * @param 	bullet
+	 *          The bullet to check.
+	 * @return 	False if the given bullet is not effective 
+	 * 			| if (bullet == null) 
+	 * 			| 	then result == false 
+	 * 			False if this ship has no world attached to it.
+	 * 			| if (getWorld() == null)
+	 * 			| 	then result == false
+	 * 			Otherwise, true if and only if this ship and the bullet are not yet terminated
+	 *         	| else result == 
+	 *         	|	!((this.isTerminated()) || bullet.isTerminated())
+	 */
+	@Raw
+	public boolean canHaveAsBullet(Bullet bullet) {
+		return (bullet != null) 
+				&& (getWorld() != null)
+				&& !((this.isTerminated()) || (bullet.isTerminated()));
+	}
+
+	/**
+	 * Check whether this ship has proper bullets attached to it.
+	 * 
+	 * @return True if and only if this ship can have each of its bullets
+	 *         as a bullet attached to it, and if each of these bullets
+	 *         references this ship as their ship. 
+	 *         | for each bullet in bullets: 
+	 *         | 	then  result == canHaveAsBullet(bullet) 
+	 *         | 		&& (bullet.getWorld() == this))
+	 */
+	@Raw
+	public boolean hasProperBullets() {
+		for (Bullet bullet : this.bullets) {
+			if (!canHaveAsBullet(bullet))
+				return false;
+			if (bullet.getSource() != this)
+				return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Add the given bullet to the set of bullets attached to this ship.
+	 * 
+	 * @param 	bullet
+	 *          The bullet to be added.
+	 * @post 	This ship has the given bullet as one of its bullets. 
+	 * 			| (new this).hasAsBullet(bullet)
+	 * @post 	The given bullet references this ship as the ship to which it is attached 
+	 * 			| (new ship).getSource() == (new this)
+	 * @throws 	IllegalArgumentException
+	 *         	This ship cannot have the given bullet as one of its bullets. 
+	 *         	| !canHaveAsBullet(bullet)
+	 * @throws 	IllegalArgumentException
+	 * 			The given bullet is already attached to some ship. 
+	 * 			| bullet.getSource() != null 
+	 * 			| 	&& bullet != null
+	 */
+	public void addAsBullet(Bullet bullet)
+			throws IllegalArgumentException {
+		if (!canHaveAsBullet(bullet))
+			throw new IllegalArgumentException();
+		if (bullet.getSource() != null)
+			throw new IllegalArgumentException();
+		this.bullets.add(bullet);
+		bullet.setSource(this);
+	}
+
+	/**
+	 * Remove the given bullet from the set of bullets attached to this
+	 * ship
+	 * 
+	 * @param bullet
+	 *            The bullet to be removed.
+	 * @post 	This ship does not have the given bullet as one of its
+	 *       	bullets. 
+	 *       	| ! (new this).hasAsBullet(bullet)
+	 * @post 	If this ship has the given bullet as one of its bullets,
+	 *       	the given bullet is no longer attached to any ship. 
+	 *       	| if (hasAsBullet(bullet)) 
+	 *       	| 	then (new bullet).getSource() ==null
+	 */
+	public void removeAsBullet(Bullet bullet) {
+		if (hasAsBullet(bullet))
+			this.bullets.remove(bullet);
+		bullet.setSource(null);
+	}
+	
+	
+	
+	/**
+	 * Set collecting references to bullets attached to this ship.
+	 * 
+	 * @Invar 	The set of bullets is effective. 
+	 * 			| bullets != null
+	 * @Invar 	Each element in the set of bullets references a bullet
+	 *       	that is an acceptable bullet for this ship. 
+	 *       	| for each bullet in bullets: 
+	 *        	| 	canHaveAsBullet(bullet)
+	 * @Invar 	Each bullet in the set of bullets references this ship as
+	 *        	the ship to which it is attached. 
+	 *        	| for each bullet in bullets: 
+	 *        	| 	(bullet.getSource() == this)
+	 */
+	private final Set<Bullet> bullets = new HashSet<Bullet>();
 	
 	
 	
@@ -351,9 +480,9 @@ public class Ship extends Collidable implements IShip{
 	 * 			|	then terminate()
 	 */
 	public void collidesWith(Bullet bullet) {
-		bullet.terminate();
 		if (!bullet.getSource().equals(this))
 			terminate();
+		bullet.terminate();
 	}
 	
 	/**

@@ -365,7 +365,7 @@ public abstract class Collidable {
 	 * @return	True if and only if this collidable can have its world as the world to which it is attached,
 	 * 			and if that world is either not effective or has this collidable as one of its collidables.
 	 * 			| result == ( canHaveAsWorld(getWorld()) 
-	 * 						&& ( (getWorld() == null) || getWorld.hasAsCollidable(this))) 
+	 * 						&& ( (getWorld() == null) || getWorld().hasAsCollidable(this))) 
 	 */
 	@Raw
 	public boolean hasProperWorld() {

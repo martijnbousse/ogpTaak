@@ -3,3 +3,4 @@ blip.wav
 torpedo.wav
 explosion.wav
 game-theme.wav
+load-error.wav

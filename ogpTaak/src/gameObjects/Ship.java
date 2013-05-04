@@ -10,6 +10,8 @@ package gameObjects;
 import java.util.HashSet;
 import java.util.Set;
 
+import model.Program;
+
 import support.Vector;
 import exceptions.InvalidPositionException;
 import asteroids.Util;
@@ -430,7 +432,15 @@ public class Ship extends Collidable implements IShip{
 	 */
 	private final Set<Bullet> bullets = new HashSet<Bullet>();
 	
+	public Program getProgram() {
+		return this.program;
+	}
 	
+	public void setProgram(Program program)	{
+			this.program = program;
+	}
+
+	private Program program;
 	
 	/**
 	 * This ship collides with the given collidable.

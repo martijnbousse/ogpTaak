@@ -1,318 +1,295 @@
 package model;
 
+import gameObjects.*;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Random;
 import java.util.Set;
 
+import support.Vector;
+
 import asteroids.CollisionListener;
+import asteroids.Util;
 
-public class Facade implements IFacade {
+public class Facade implements IFacade<World, Ship, Asteroid, Bullet, Program> {
 
 	@Override
-	public Object createWorld(double width, double height) {
-		// TODO Auto-generated method stub
-		return null;
+	public World createWorld(double width, double height) {
+		return new World(width,height);
 	}
 
 	@Override
-	public double getWorldWidth(Object world) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getWorldWidth(World world) {
+		return world.getWidth();
 	}
 
 	@Override
-	public double getWorldHeight(Object world) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getWorldHeight(World world) {
+		return world.getHeight();
 	}
 
 	@Override
-	public Set getShips(Object world) {
-		// TODO Auto-generated method stub
-		return null;
+	public Set<Ship> getShips(World world) {
+		return world.getAllShips();
 	}
 
 	@Override
-	public Set getAsteroids(Object world) {
-		// TODO Auto-generated method stub
-		return null;
+	public Set<Asteroid> getAsteroids(World world) {
+		return world.getAllAsteroids();
 	}
 
 	@Override
-	public Set getBullets(Object world) {
-		// TODO Auto-generated method stub
-		return null;
+	public Set<Bullet> getBullets(World world) {
+		return world.getAllBullets();
 	}
 
 	@Override
-	public void addShip(Object world, Object ship) {
-		// TODO Auto-generated method stub
-		
+	public void addShip(World world, Ship ship) {
+		world.addAsCollidable(ship);
 	}
 
 	@Override
-	public void addAsteroid(Object world, Object asteroid) {
-		// TODO Auto-generated method stub
-		
+	public void addAsteroid(World world, Asteroid asteroid) {
+		world.addAsCollidable(asteroid);
 	}
 
 	@Override
-	public void removeShip(Object world, Object ship) {
-		// TODO Auto-generated method stub
-		
+	public void removeShip(World world, Ship ship) {
+		world.removeAsCollidable(ship);
 	}
 
 	@Override
-	public void removeAsteroid(Object world, Object asteroid) {
-		// TODO Auto-generated method stub
-		
+	public void removeAsteroid(World world, Asteroid asteroid) {
+		world.removeAsCollidable(asteroid);
 	}
 
 	@Override
-	public void evolve(Object world, double dt,
+	public void evolve(World world, double dt,
 			CollisionListener collisionListener) {
-		// TODO Auto-generated method stub
-		
+		world.evolve(dt);
 	}
 
 	@Override
-	public Object createShip(double x, double y, double xVelocity,
-			double yVelocity, double radius, double direction, double mass) {
-		// TODO Auto-generated method stub
-		return null;
+	public Ship createShip(double x, double y, double xVelocity,
+			double yVelocity, double radius, double direction, double mass) throws ModelException {
+		while(!Util.fuzzyLessThanOrEqualTo(0.0, direction)){
+			direction = direction+ Math.PI*2;
+		}
+		while(!Util.fuzzyLessThanOrEqualTo(direction, Math.PI*2)){
+			direction = direction-Math.PI*2;
+		}
+		
+		try{
+			return new Ship(new Vector(x,y), new Vector(xVelocity, yVelocity), radius,mass, direction);
+		} catch (IllegalArgumentException exc){
+			throw new ModelException(exc);
+		}
 	}
 
 	@Override
 	public boolean isShip(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+		return o instanceof Ship;
 	}
 
 	@Override
-	public double getShipX(Object ship) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getShipX(Ship ship) {
+		return ship.getPosition().getXComponent();
 	}
 
 	@Override
-	public double getShipY(Object ship) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getShipY(Ship ship) {
+		return ship.getPosition().getYComponent();
 	}
 
 	@Override
-	public double getShipXVelocity(Object ship) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getShipXVelocity(Ship ship) {
+		return ship.getVelocity().getXComponent();
 	}
 
 	@Override
-	public double getShipYVelocity(Object ship) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getShipYVelocity(Ship ship) {
+		return ship.getVelocity().getYComponent();
 	}
 
 	@Override
-	public double getShipRadius(Object ship) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getShipRadius(Ship ship) {
+		return ship.getRadius();
 	}
 
 	@Override
-	public double getShipDirection(Object ship) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getShipDirection(Ship ship) {
+		return ship.getDirection();
 	}
 
 	@Override
-	public double getShipMass(Object ship) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getShipMass(Ship ship) {
+		return ship.getMass();
 	}
 
 	@Override
-	public Object getShipWorld(Object ship) {
-		// TODO Auto-generated method stub
-		return null;
+	public World getShipWorld(Ship ship) {
+		return ship.getWorld();
 	}
 
 	@Override
-	public boolean isShipThrusterActive(Object ship) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean isShipThrusterActive(Ship ship) {
+		return ship.isThrusterEnabled();
 	}
 
 	@Override
-	public void setThrusterActive(Object ship, boolean active) {
-		// TODO Auto-generated method stub
-		
+	public void setThrusterActive(Ship ship, boolean active) {
+		ship.setThrusterEnabled(active);
 	}
 
 	@Override
-	public void turn(Object ship, double angle) {
-		// TODO Auto-generated method stub
-		
+	public void turn(Ship ship, double angle) {
+		if(!Util.fuzzyLessThanOrEqualTo(0.0, ship.getDirection()+angle)){
+			angle+=Math.PI*2;
+		}
+		else if(!Util.fuzzyLessThanOrEqualTo(ship.getDirection()+angle, Math.PI*2)){
+			angle = angle-Math.PI*2;
+		}
+		ship.turn(angle);
 	}
 
 	@Override
-	public void fireBullet(Object ship) {
-		// TODO Auto-generated method stub
-		
+	public void fireBullet(Ship ship) {
+		ship.fireBullet();
 	}
 
 	@Override
-	public Object createAsteroid(double x, double y, double xVelocity,
+	public Asteroid createAsteroid(double x, double y, double xVelocity,
 			double yVelocity, double radius) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Asteroid(new Vector(x, y), new Vector(xVelocity, yVelocity), radius);
 	}
 
 	@Override
-	public Object createAsteroid(double x, double y, double xVelocity,
+	public Asteroid createAsteroid(double x, double y, double xVelocity,
 			double yVelocity, double radius, Random random) {
-		// TODO Auto-generated method stub
-		return null;
+		return createAsteroid(x,y,xVelocity,yVelocity,radius);
 	}
 
 	@Override
 	public boolean isAsteroid(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+		return o instanceof Asteroid;
 	}
 
 	@Override
-	public double getAsteroidX(Object asteroid) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getAsteroidX(Asteroid asteroid) {
+		return asteroid.getPosition().getXComponent();
 	}
 
 	@Override
-	public double getAsteroidY(Object asteroid) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getAsteroidY(Asteroid asteroid) {
+		return asteroid.getPosition().getYComponent();
 	}
 
 	@Override
-	public double getAsteroidXVelocity(Object asteroid) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getAsteroidXVelocity(Asteroid asteroid) {
+		return asteroid.getVelocity().getXComponent();
 	}
 
 	@Override
-	public double getAsteroidYVelocity(Object asteroid) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getAsteroidYVelocity(Asteroid asteroid) {
+		return asteroid.getVelocity().getYComponent();
 	}
 
 	@Override
-	public double getAsteroidRadius(Object asteroid) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getAsteroidRadius(Asteroid asteroid) {
+		return asteroid.getRadius();
 	}
 
 	@Override
-	public double getAsteroidMass(Object asteroid) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getAsteroidMass(Asteroid asteroid) {
+		return asteroid.getMass();
 	}
 
 	@Override
-	public Object getAsteroidWorld(Object asteroid) {
-		// TODO Auto-generated method stub
-		return null;
+	public World getAsteroidWorld(Asteroid asteroid) {
+		return asteroid.getWorld();
 	}
 
 	@Override
 	public boolean isBullets(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+		return o instanceof Bullet;
 	}
 
 	@Override
-	public double getBulletX(Object bullet) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getBulletX(Bullet bullet) {
+		return bullet.getPosition().getXComponent();
 	}
 
 	@Override
-	public double getBulletY(Object bullet) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getBulletY(Bullet bullet) {
+		return bullet.getPosition().getYComponent();
 	}
 
 	@Override
-	public double getBulletXVelocity(Object bullet) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getBulletXVelocity(Bullet bullet) {
+		return bullet.getVelocity().getXComponent();
 	}
 
 	@Override
-	public double getBulletYVelocity(Object bullet) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getBulletYVelocity(Bullet bullet) {
+		return bullet.getVelocity().getYComponent();
 	}
 
 	@Override
-	public double getBulletRadius(Object bullet) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getBulletRadius(Bullet bullet) {
+		return bullet.getRadius();
 	}
 
 	@Override
-	public double getBulletMass(Object bullet) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getBulletMass(Bullet bullet) {
+		return bullet.getMass();
 	}
 
 	@Override
-	public Object getBulletWorld(Object bullet) {
-		// TODO Auto-generated method stub
-		return null;
+	public World getBulletWorld(Bullet bullet) {
+		return bullet.getWorld();
 	}
 
 	@Override
-	public Object getBulletSource(Object bullet) {
+	public Ship getBulletSource(Bullet bullet) {
+		return bullet.getSource();
+	}
+
+	@Override
+	public model.IFacade.ParseOutcome<Program> parseProgram(String text) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ParseOutcome parseProgram(String text) {
+	public model.IFacade.ParseOutcome<Program> loadProgramFromStream(
+			InputStream stream) throws IOException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ParseOutcome loadProgramFromStream(InputStream stream)
+	public model.IFacade.ParseOutcome<Program> loadProgramFromUrl(URL url)
 			throws IOException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ParseOutcome loadProgramFromUrl(URL url) throws IOException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public boolean isTypeCheckingSupported() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public TypeCheckOutcome typeCheckProgram(Object program) {
+	public model.IFacade.TypeCheckOutcome typeCheckProgram(Program program) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void setShipProgram(Object ship, Object program) {
-		// TODO Auto-generated method stub
-		
+	public void setShipProgram(Ship ship, Program program) {
+		ship.setProgram(program);
 	}
 
 }

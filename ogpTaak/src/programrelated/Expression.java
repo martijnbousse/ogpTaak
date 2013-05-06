@@ -1,5 +1,5 @@
 package programrelated;
 
-public class Expression {
-
+public abstract class Expression {
+	public abstract Type evaluate();
 }

@@ -8,12 +8,12 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Expression createDoubleLiteral(int line, int column, double d) {
-		return new DoubleLiteral(d);
+		return new DoubleLiteral(new DoubleType(d));
 	}
 
 	@Override
 	public Expression createBooleanLiteral(int line, int column, boolean b) {
-		return new BooleanLiteral(b);
+		return new BooleanLiteral(new BooleanType(b));
 	}
 
 	@Override
@@ -36,7 +36,6 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Expression createNull(int line, int column) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -120,26 +119,22 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Expression createAdd(int line, int column, Expression e1, Expression e2) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Addition(e1, e2);
 	}
 
 	@Override
 	public Expression createSubtraction(int line, int column, Expression e1, Expression e2) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Subtraction(e1, e2);
 	}
 
 	@Override
 	public Expression createMul(int line, int column, Expression e1, Expression e2) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Multiplication(e1, e2);
 	}
 
 	@Override
 	public Expression createDivision(int line, int column, Expression e1, Expression e2) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Division(e1, e2);
 	}
 
 	@Override
@@ -235,19 +230,16 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Type createDoubleType() {
-		// TODO Auto-generated method stub
-		return null;
+		return new DoubleType();
 	}
 
 	@Override
 	public Type createBooleanType() {
-		// TODO Auto-generated method stub
-		return null;
+		return new BooleanType();
 	}
 
 	@Override
 	public Type createEntityType() {
-		// TODO Auto-generated method stub
-		return null;
+		return new EntityType();
 	}
 }

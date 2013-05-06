@@ -1,13 +1,9 @@
 package programrelated;
 
-public class BooleanLiteral extends Expression {
-	public BooleanLiteral(boolean value) {
-		this.value = value;
+public class BooleanLiteral extends LiteralExpression {
+
+	public BooleanLiteral(BooleanType value) {
+		super(value);
 	}
-	
-	public boolean getValue() {
-		return this.value;
-	}
-	
-	private boolean value;
+
 }

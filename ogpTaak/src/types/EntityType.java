@@ -1,4 +1,4 @@
-package programrelated;
+package types;
 
 import gameObjects.Collidable;
 

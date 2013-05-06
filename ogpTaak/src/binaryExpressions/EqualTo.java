@@ -1,6 +1,11 @@
-package programrelated;
+package binaryExpressions;
 
-public class EqualTo extends LogicalExpression {
+import programrelated.Expression;
+import types.BooleanType;
+import types.DoubleType;
+import types.Type;
+
+public class EqualTo extends ComparatingExpression {
 
 	public EqualTo(Expression first, Expression second) {
 		super(first, second);

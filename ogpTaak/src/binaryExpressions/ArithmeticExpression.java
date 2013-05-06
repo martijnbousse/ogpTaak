@@ -1,4 +1,7 @@
-package programrelated;
+package binaryExpressions;
+
+import programrelated.Expression;
+import types.DoubleType;
 
 public abstract class ArithmeticExpression extends BinaryExpression {
 

@@ -1,4 +1,7 @@
-package programrelated;
+package binaryExpressions;
+
+import programrelated.Expression;
+import types.Type;
 
 public abstract class LiteralExpression extends Expression {
 	public LiteralExpression(Type value) {

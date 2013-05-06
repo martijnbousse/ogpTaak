@@ -1,4 +1,8 @@
-package programrelated;
+package binaryExpressions;
+
+import programrelated.Expression;
+import types.BooleanType;
+import types.Type;
 
 public class Conjunction extends LogicalExpression {
 

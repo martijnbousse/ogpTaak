@@ -1,6 +1,11 @@
-package programrelated;
+package binaryExpressions;
 
-public class LessThan extends LogicalExpression {
+import programrelated.Expression;
+import types.BooleanType;
+import types.DoubleType;
+import types.Type;
+
+public class LessThan extends ComparatingExpression {
 	public LessThan(Expression first, Expression second) {
 		super(first, second);
 	}

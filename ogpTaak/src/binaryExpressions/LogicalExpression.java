@@ -1,4 +1,7 @@
-package programrelated;
+package binaryExpressions;
+
+import programrelated.Expression;
+import types.BooleanType;
 
 public abstract class LogicalExpression extends BinaryExpression {
 

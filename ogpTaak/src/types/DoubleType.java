@@ -1,4 +1,5 @@
-package programrelated;
+package types;
+
 
 public class DoubleType extends Type {
 	public DoubleType() {

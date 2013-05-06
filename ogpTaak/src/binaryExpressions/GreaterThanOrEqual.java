@@ -1,6 +1,11 @@
-package programrelated;
+package binaryExpressions;
 
-public class GreaterThanOrEqual extends LogicalExpression {
+import programrelated.Expression;
+import types.BooleanType;
+import types.DoubleType;
+import types.Type;
+
+public class GreaterThanOrEqual extends ComparatingExpression {
 
 	public GreaterThanOrEqual(Expression first, Expression second) {
 		super(first, second);

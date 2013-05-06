@@ -1,6 +1,11 @@
-package programrelated;
+package binaryExpressions;
 
-public class DifferentFrom extends LogicalExpression {
+import programrelated.Expression;
+import types.BooleanType;
+import types.DoubleType;
+import types.Type;
+
+public class DifferentFrom extends ComparatingExpression {
 
 	public DifferentFrom(Expression first, Expression second) {
 		super(first, second);

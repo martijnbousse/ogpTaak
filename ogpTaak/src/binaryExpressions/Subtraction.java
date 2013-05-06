@@ -1,8 +1,11 @@
-package programrelated;
+package binaryExpressions;
 
-public class Multiplication extends ArithmeticExpression {
+import programrelated.Expression;
+import types.DoubleType;
+import types.Type;
 
-	public Multiplication(Expression first, Expression second) {
+public class Subtraction extends ArithmeticExpression {
+	public Subtraction(Expression first, Expression second) {
 		super(first, second);
 	}
 
@@ -13,7 +16,7 @@ public class Multiplication extends ArithmeticExpression {
 		double firstTerm = ((DoubleType) first).getValue();
 		double secondTerm = ((DoubleType) second).getValue();
 		
-		return new DoubleType(firstTerm * secondTerm);
+		return new DoubleType(firstTerm - secondTerm);
+		
 	}
-
 }

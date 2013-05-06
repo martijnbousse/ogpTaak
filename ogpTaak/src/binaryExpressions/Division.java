@@ -1,8 +1,12 @@
-package programrelated;
+package binaryExpressions;
 
-public class Addition extends ArithmeticExpression {
+import programrelated.Expression;
+import types.DoubleType;
+import types.Type;
 
-	public Addition(Expression first, Expression second) {
+public class Division extends ArithmeticExpression {
+	
+	public Division(Expression first, Expression second) {
 		super(first, second);
 	}
 
@@ -13,8 +17,7 @@ public class Addition extends ArithmeticExpression {
 		double firstTerm = ((DoubleType) first).getValue();
 		double secondTerm = ((DoubleType) second).getValue();
 		
-		return new DoubleType(firstTerm+secondTerm);
-		
+		return new DoubleType(firstTerm / secondTerm);
 	}
 
 }

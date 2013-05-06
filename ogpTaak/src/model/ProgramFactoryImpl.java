@@ -2,7 +2,32 @@ package model;
 
 import java.util.List;
 
+import binaryExpressions.Addition;
+import binaryExpressions.Conjunction;
+import binaryExpressions.DifferentFrom;
+import binaryExpressions.Disjunction;
+import binaryExpressions.Division;
+import binaryExpressions.EqualTo;
+import binaryExpressions.GreaterThan;
+import binaryExpressions.GreaterThanOrEqual;
+import binaryExpressions.LessThan;
+import binaryExpressions.LessThanOrEqual;
+import binaryExpressions.Multiplication;
+import binaryExpressions.Negation;
+import binaryExpressions.Subtraction;
+
 import programrelated.*;
+import singleArgumentedExpressions.Cosinus;
+import singleArgumentedExpressions.GetXPosition;
+import singleArgumentedExpressions.GetXVelocity;
+import singleArgumentedExpressions.GetYPosition;
+import singleArgumentedExpressions.GetYVelocity;
+import singleArgumentedExpressions.Sinus;
+import singleArgumentedExpressions.SquareRoot;
+import types.BooleanType;
+import types.DoubleType;
+import types.EntityType;
+import types.Type;
 
 public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement, Type> {
 
@@ -18,20 +43,17 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Expression createAnd(int line, int column, Expression e1, Expression e2) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Conjunction(e1, e2);
 	}
 
 	@Override
 	public Expression createOr(int line, int column, Expression e1, Expression e2) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Disjunction(e1, e2);
 	}
 
 	@Override
 	public Expression createNot(int line, int column, Expression e) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Negation(e);
 	}
 
 	@Override
@@ -47,26 +69,22 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Expression createGetX(int line, int column, Expression e) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GetXPosition(e);
 	}
 
 	@Override
 	public Expression createGetY(int line, int column, Expression e) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GetYPosition(e);
 	}
 
 	@Override
 	public Expression createGetVX(int line, int column, Expression e) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GetXVelocity(e);
 	}
 
 	@Override
 	public Expression createGetVY(int line, int column, Expression e) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GetYVelocity(e);
 	}
 
 	@Override
@@ -83,38 +101,32 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Expression createLessThan(int line, int column, Expression e1, Expression e2) {
-		// TODO Auto-generated method stub
-		return null;
+		return new LessThan(e1, e2);
 	}
 
 	@Override
 	public Expression createGreaterThan(int line, int column, Expression e1, Expression e2) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GreaterThan(e1, e2);
 	}
 
 	@Override
 	public Expression createLessThanOrEqualTo(int line, int column, Expression e1, Expression e2) {
-		// TODO Auto-generated method stub
-		return null;
+		return new LessThanOrEqual(e1, e2);
 	}
 
 	@Override
 	public Expression createGreaterThanOrEqualTo(int line, int column, Expression e1, Expression e2) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GreaterThanOrEqual(e1, e2);
 	}
 
 	@Override
 	public Expression createEquality(int line, int column, Expression e1, Expression e2) {
-		// TODO Auto-generated method stub
-		return null;
+		return new EqualTo(e1, e2);
 	}
 
 	@Override
 	public Expression createInequality(int line, int column, Expression e1, Expression e2) {
-		// TODO Auto-generated method stub
-		return null;
+		return new DifferentFrom(e1, e2);
 	}
 
 	@Override
@@ -139,8 +151,7 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Expression createSqrt(int line, int column, Expression e) {
-		// TODO Auto-generated method stub
-		return null;
+		return new SquareRoot(e);
 	}
 
 	@Override
@@ -151,14 +162,12 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Expression createSin(int line, int column, Expression e) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Sinus(e);
 	}
 
 	@Override
 	public Expression createCos(int line, int column, Expression e) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Cosinus(e);
 	}
 
 	@Override

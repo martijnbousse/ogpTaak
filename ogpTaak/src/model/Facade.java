@@ -5,10 +5,17 @@ import gameObjects.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import org.antlr.v4.runtime.RecognitionException;
+
+import programrelated.Expression;
+import programrelated.Statement;
+
 import support.Vector;
+import types.Type;
 
 import asteroids.CollisionListener;
 import asteroids.Util;
@@ -82,7 +89,7 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet, Program> {
 		}
 		
 		try{
-			return new Ship(new Vector(x,y), new Vector(xVelocity, yVelocity), radius,mass, direction);
+			return new Ship(new Vector(x,y), new Vector(xVelocity, yVelocity), radius,mass, direction, null);
 		} catch (IllegalArgumentException exc){
 			throw new ModelException(exc);
 		}
@@ -258,8 +265,20 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet, Program> {
 
 	@Override
 	public model.IFacade.ParseOutcome<Program> parseProgram(String text) {
-		// TODO Auto-generated method stub
-		return null;
+		ProgramFactoryImpl factory = new ProgramFactoryImpl();
+		ProgramParser<Expression, Statement, Type> parser = new ProgramParser<>(factory);
+		try {
+			parser.parse(text);
+			List<String> errors = parser.getErrors();
+			if (!errors.isEmpty()) {
+				return ParseOutcome.failure(errors.get(0));
+			} else {
+				return ParseOutcome.success(new Program(parser.getGlobals(),
+						parser.getStatement()));
+			}
+		} catch (RecognitionException e) {
+			return ParseOutcome.failure(e.getMessage());
+		}
 	}
 
 	@Override

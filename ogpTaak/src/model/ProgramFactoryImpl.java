@@ -18,6 +18,8 @@ import binaryExpressions.Subtraction;
 
 import programrelated.*;
 import singleArgumentedExpressions.Cosinus;
+import singleArgumentedExpressions.GetDirection;
+import singleArgumentedExpressions.GetRadius;
 import singleArgumentedExpressions.GetXPosition;
 import singleArgumentedExpressions.GetXVelocity;
 import singleArgumentedExpressions.GetYPosition;
@@ -89,8 +91,7 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Expression createGetRadius(int line, int column, Expression e) {
-		// TODO Auto-generated method stub
-		return null;
+		return new GetRadius(e);
 	}
 
 	@Override
@@ -156,7 +157,6 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Expression createGetDirection(int line, int column) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

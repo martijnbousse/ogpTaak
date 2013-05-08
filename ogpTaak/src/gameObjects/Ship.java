@@ -57,12 +57,13 @@ public class Ship extends Collidable implements IShip{
 	 * 			| (new this).getMass() == mass
 	 */
 	@Raw
-	public Ship(Vector position, Vector velocity, double radius, double mass, double direction) throws IllegalArgumentException {
+	public Ship(Vector position, Vector velocity, double radius, double mass, double direction, Program program) throws IllegalArgumentException {
 		super(position,velocity, radius);
 		setDirection(direction);
 		if (!isValidMass(mass))
 			throw new IllegalArgumentException();
 		this.mass = mass;
+		setProgram(program);
 	}
 
 	/**
@@ -74,7 +75,7 @@ public class Ship extends Collidable implements IShip{
 	 */
 	@Raw
 	public Ship() {
-		this(new Vector(10, 10), new Vector(0, 0), 10, 10, 1);
+		this(new Vector(10, 10), new Vector(0, 0), 10, 10, 1,null);
 	}
 	
 	/**
@@ -438,6 +439,10 @@ public class Ship extends Collidable implements IShip{
 	
 	public void setProgram(Program program)	{
 			this.program = program;
+	}
+	
+	public void executeProgram() {
+		this.program.getStatement().execute(program.getGlobals(), this);
 	}
 
 	private Program program;

@@ -51,14 +51,14 @@ public class CollidableTest {
 		world2 = new World();
 		world3 = new World(100,100);
 		
-		collidable1 = new Ship(new Vector(100,50), new Vector(5,10), 30, 1000, Math.PI/2);
+		collidable1 = new Ship(new Vector(100,50), new Vector(5,10), 30, 1000, Math.PI/2,null);
 		world1.addAsCollidable(collidable1);
 		
-		collidable2 = new Ship(new Vector(110,50), new Vector(5,10), 30, 1000, Math.PI/2);
-		collidable3 = new Ship(new Vector(200,250), new Vector(-5,-10), 30, 1000, Math.PI/2);
-		collidable4 = new Ship(new Vector(400,50), new Vector(50,10), 30, 1000, Math.PI/2);
-		collidable5 = new Ship(new Vector(400,650), new Vector(5,10), 30, 1000, Math.PI/2);
-		collidable6 = new Ship(new Vector(Double.MAX_VALUE,Double.MAX_VALUE), new Vector(5,10), 30, 1000, Math.PI/2);
+		collidable2 = new Ship(new Vector(110,50), new Vector(5,10), 30, 1000, Math.PI/2,null);
+		collidable3 = new Ship(new Vector(200,250), new Vector(-5,-10), 30, 1000, Math.PI/2,null);
+		collidable4 = new Ship(new Vector(400,50), new Vector(50,10), 30, 1000, Math.PI/2,null);
+		collidable5 = new Ship(new Vector(400,650), new Vector(5,10), 30, 1000, Math.PI/2,null);
+		collidable6 = new Ship(new Vector(Double.MAX_VALUE,Double.MAX_VALUE), new Vector(5,10), 30, 1000, Math.PI/2,null);
 		
 		terminatedCollidable = new Ship();
 		terminatedCollidable.terminate();
@@ -70,17 +70,17 @@ public class CollidableTest {
 	@Before
 	public void setUp() throws Exception {
 		mutableWorld1 = new World();
-		mutableCollidable1 = new Ship(new Vector(100,100), new Vector(1,1), 50, 800, Math.PI/2);
-		mutableCollidable2 = new Ship(new Vector(Double.MAX_VALUE-50,Double.MAX_VALUE-50), new Vector(1,1), 50, 800, Math.PI/2);
+		mutableCollidable1 = new Ship(new Vector(100,100), new Vector(1,1), 50, 800, Math.PI/2,null);
+		mutableCollidable2 = new Ship(new Vector(Double.MAX_VALUE-50,Double.MAX_VALUE-50), new Vector(1,1), 50, 800, Math.PI/2,null);
 		mutableWorld1.addAsCollidable(mutableCollidable1);
 		mutableWorld1.addAsCollidable(mutableCollidable2);
-		mutableCollidable3 = new Ship(new Vector(200,200), new Vector(-1,-1), 50, 800, Math.PI/2);
+		mutableCollidable3 = new Ship(new Vector(200,200), new Vector(-1,-1), 50, 800, Math.PI/2,null);
 		
-		mutableCollidable7 = new Ship(new Vector(20,50), new Vector(-1,1), 10, 1000,0);
-		mutableCollidable8 = new Ship(new Vector(80,50), new Vector(1,1), 10, 1000,0);
-		mutableCollidable9 = new Ship(new Vector(50,20), new Vector(1,-1), 10, 1000,0);
-		mutableCollidable10 = new Ship(new Vector(50,80), new Vector(1,1), 10, 1000,0);
-		mutableCollidable11 = new Ship(new Vector(50,50), new Vector(0,0), 10, 1000,0);
+		mutableCollidable7 = new Ship(new Vector(20,50), new Vector(-1,1), 10, 1000,0,null);
+		mutableCollidable8 = new Ship(new Vector(80,50), new Vector(1,1), 10, 1000,0,null);
+		mutableCollidable9 = new Ship(new Vector(50,20), new Vector(1,-1), 10, 1000,0,null);
+		mutableCollidable10 = new Ship(new Vector(50,80), new Vector(1,1), 10, 1000,0,null);
+		mutableCollidable11 = new Ship(new Vector(50,50), new Vector(0,0), 10, 1000,0,null);
 		world3.addAsCollidable(mutableCollidable7);
 		world3.addAsCollidable(mutableCollidable8);
 		world3.addAsCollidable(mutableCollidable9);

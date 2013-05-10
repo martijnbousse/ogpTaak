@@ -26,8 +26,9 @@ import be.kuleuven.cs.som.annotate.*;
  * 			| isValidMass(getMass())
  * @invar 	The thruster amount of each ship must be a valid thruster amount
  * 			| isValidThrusterAmount(getThrusterAmount())
- * 
- *    //TODO: invarianten
+ * @invar 	...
+ * 			| ...
+ *    //TODO: invarianten, eventueel program.. isValidProgram
  * 
  * @version 2.0
  * @author Martijn Boussé, Wout Vekemans
@@ -48,10 +49,8 @@ public class Ship extends Collidable implements IShip{
 	 * 			The mass for this new ship.
 	 * @param 	direction
 	 * 			The direction for this new ship.
-	 * 
 	 * @param 	program
 	 * 			The program for this new ship.
-	 * 
 	 * @effect	This new ship is initialized as a collidable with the given position, 
 	 * 			the given velocity, the given radius and the given mass.
 	 * 			| super(position, velocity, radius, mass)
@@ -61,10 +60,8 @@ public class Ship extends Collidable implements IShip{
 	 * 			| (new this).getDirection() == direction
 	 * @post	The new mass of this new ship is equal to the given mass.
 	 * 			| (new this).getMass() == mass
-	 * 
-	 * @post 	... //TODO: een ship is default niet geassocieerd met een program
-	 * 			| ... 
-	 * 
+	 * @effect 	The program for this new ship is set to the given program. //TODO: een ship is default niet geassocieerd met een program .. isvalidprogram -> eventueel ook null
+	 * 			| setProgram(program)
 	 */
 	@Raw
 	public Ship(Vector position, Vector velocity, double radius, double mass, double direction, Program program) throws IllegalArgumentException {
@@ -292,8 +289,8 @@ public class Ship extends Collidable implements IShip{
 	 * @throws	IllegalStateException
 	 * 			This ship is terminated
 	 * 			| isTerminated()
-	 */
-	
+	 */	
+	//TODO: documentatie updaten
 	public void fireBullet() throws IllegalStateException {
 		if (canFireBullets()) {
 			Vector initialPosition = getPosition().add( new Vector((getRadius()+3)*Math.cos(getDirection()),(getRadius()+3)*Math.sin(getDirection())));
@@ -328,8 +325,7 @@ public class Ship extends Collidable implements IShip{
 	 * @param 	bullet
 	 *          The bullet to check.
 	 */
-	@Basic
-	@Raw
+	@Basic @Raw
 	public boolean hasAsBullet(Bullet bullet) {
 		return this.bullets.contains(bullet);
 	}

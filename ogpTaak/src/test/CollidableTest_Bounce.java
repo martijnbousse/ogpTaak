@@ -62,11 +62,11 @@ public class CollidableTest_Bounce {
 	@Before
 	public void setUp() throws Exception {
 		mutableWorld1 = new World();
-		mutableCollidable1 = new Ship(new Vector(100,100), new Vector(1,0), 50, 1000, 0);
-		mutableCollidable2 = new Ship(new Vector(200,100), new Vector(-1,0), 50, 1000, 0);
-		mutableCollidable3 = new Ship(new Vector(100,300), new Vector(1,0), 50, 1000, 0);
-		mutableCollidable4 = new Ship(new Vector(300,300), new Vector(-1,0), 50, 1000, 0);
-		mutableCollidable5 = new Ship(new Vector(300,325), new Vector(1,0), 50, 1000, 0);
+		mutableCollidable1 = new Ship(new Vector(100,100), new Vector(1,0), 50, 1000, 0,null);
+		mutableCollidable2 = new Ship(new Vector(200,100), new Vector(-1,0), 50, 1000, 0,null);
+		mutableCollidable3 = new Ship(new Vector(100,300), new Vector(1,0), 50, 1000, 0,null);
+		mutableCollidable4 = new Ship(new Vector(300,300), new Vector(-1,0), 50, 1000, 0,null);
+		mutableCollidable5 = new Ship(new Vector(300,325), new Vector(1,0), 50, 1000, 0,null);
 		mutableWorld1.addAsCollidable(mutableCollidable1);
 		mutableWorld1.addAsCollidable(mutableCollidable2);
 		mutableWorld1.addAsCollidable(mutableCollidable3);
@@ -74,25 +74,25 @@ public class CollidableTest_Bounce {
 		mutableWorld1.addAsCollidable(mutableCollidable5);
 		
 		mutableWorld2 = new World();
-		mutableCollidable6 = new Ship(new Vector(100,100), new Vector(1,0), 50, 1000, 0);
-		mutableCollidable7 = new Ship(new Vector(200,100), new Vector(-1,0), 50, 1000, 0);
+		mutableCollidable6 = new Ship(new Vector(100,100), new Vector(1,0), 50, 1000, 0,null);
+		mutableCollidable7 = new Ship(new Vector(200,100), new Vector(-1,0), 50, 1000, 0,null);
 		mutableWorld2.addAsCollidable(mutableCollidable6);
 		mutableWorld2.addAsCollidable(mutableCollidable7);
 		
 		mutableWorld3 = new World(200,200);
-		mutableCollidable8 = new Ship(new Vector(10,100), new Vector(-1,0), 10, 1000, 0); 	// left boundary
-		mutableCollidable9 = new Ship(new Vector(100,190), new Vector(0,1), 10, 1000, 0); 	// upper boundary
-		mutableCollidable10 = new Ship(new Vector(190,100), new Vector(1,0), 10, 1000, 0); 	// right boundary
-		mutableCollidable11 = new Ship(new Vector(100,10), new Vector(0,-1), 10, 1000, 0); 	// lower boundary
-		mutableCollidable12 = new Ship(new Vector(100,100), new Vector(1,1), 10, 1000, 0); // middle of world
+		mutableCollidable8 = new Ship(new Vector(10,100), new Vector(-1,0), 10, 1000, 0,null); 	// left boundary
+		mutableCollidable9 = new Ship(new Vector(100,190), new Vector(0,1), 10, 1000, 0,null); 	// upper boundary
+		mutableCollidable10 = new Ship(new Vector(190,100), new Vector(1,0), 10, 1000, 0,null); 	// right boundary
+		mutableCollidable11 = new Ship(new Vector(100,10), new Vector(0,-1), 10, 1000, 0,null); 	// lower boundary
+		mutableCollidable12 = new Ship(new Vector(100,100), new Vector(1,1), 10, 1000, 0,null); // middle of world
 		mutableWorld3.addAsCollidable(mutableCollidable8);
 		mutableWorld3.addAsCollidable(mutableCollidable9);
 		mutableWorld3.addAsCollidable(mutableCollidable10);
 		mutableWorld3.addAsCollidable(mutableCollidable11);
 		mutableWorld3.addAsCollidable(mutableCollidable12);
 		
-		mutableCollidable13 = new Ship(new Vector(100,100), new Vector(1,0), 50, 1000, 0);
-		mutableCollidable14 = new Ship(new Vector(200,100), new Vector(-1,0), 50, 1000, 0);
+		mutableCollidable13 = new Ship(new Vector(100,100), new Vector(1,0), 50, 1000, 0,null);
+		mutableCollidable14 = new Ship(new Vector(200,100), new Vector(-1,0), 50, 1000, 0,null);
 		
 		terminatedCollidable1 = new Ship();
 		terminatedCollidable1.terminate();

@@ -228,6 +228,9 @@ public class ShipTest {
 		assertTrue(ship1.canFireBullets());
 	}
 	
+	// TODO: fireBullets moet anders getest worden .. aparte test klasse met:
+	// (bidirectionele relatie testen) addasbullet, removeasbullet, hasproperbullet, canhaveasbullet allemaal apart checken
+	
 	@Test
 	public void testCanFireBullets_NoWorldAttachedCase() {
 		assertFalse(ship2.canFireBullets());

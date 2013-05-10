@@ -90,14 +90,14 @@ public class WorldTest {
 		mutableShip1.fireBullet();
 		
 		mutableWorld4 = new World(1000,1000);
-		mutableShip2 = new Ship(new Vector(100,500), new Vector(-10,0), 10, 10, 0);
-		mutableShip3 = new Ship(new Vector(200,700), new Vector(-10,0), 10, 10, 0);
+		mutableShip2 = new Ship(new Vector(100,500), new Vector(-10,0), 10, 10, 0,null);
+		mutableShip3 = new Ship(new Vector(200,700), new Vector(-10,0), 10, 10, 0,null);
 		mutableWorld4.addAsCollidable(mutableShip2);
 		mutableWorld4.addAsCollidable(mutableShip3);
 		
 		mutableWorld5 = new World(1000,1000);
-		mutableShip4 = new Ship(new Vector(250,250), new Vector(10,0), 10,10,0);
-		mutableShip5 = new Ship(new Vector(370,250), new Vector(-10,0), 10,10,0);
+		mutableShip4 = new Ship(new Vector(250,250), new Vector(10,0), 10,10,0,null);
+		mutableShip5 = new Ship(new Vector(370,250), new Vector(-10,0), 10,10,0,null);
 		mutableWorld5.addAsCollidable(mutableShip4);
 		mutableWorld5.addAsCollidable(mutableShip5);
 		
@@ -410,6 +410,8 @@ public class WorldTest {
 		Collision check = new Collision(mutableShip2, null, 9);
 		assertTrue(next.equals(check));
 	}
+	
+	// TODO: getnextcollisionwithother and getnextcollisionwithboundary
 	
 	// evolve
 	

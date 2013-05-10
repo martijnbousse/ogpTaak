@@ -27,6 +27,7 @@ import be.kuleuven.cs.som.annotate.*;
  * @author Martijn Boussé, Wout Vekemans
  * 
  */
+//TODO: documentatie van complexe methoden aanpassen + testen
 public abstract class Collidable {
 	/**
 	 * Initialize this new collidable with given position, given velocity, given radius and given mass
@@ -437,6 +438,7 @@ public abstract class Collidable {
 	 * 			The given collidable is terminated.
 	 * 			| other.isTerminated()
 	 */
+	//TODO: Testen aanpassen aan deze documentatie, nu enkel exceptions en één legal case getest
 	public double getDistanceBetween(Collidable other) throws IllegalArgumentException, IllegalStateException {
 		if (isTerminated())
 			throw new IllegalStateException("This collidable is terminated!");

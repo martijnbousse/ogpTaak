@@ -555,6 +555,9 @@ public class World {
 //		return nextCollision;
 //	}
 	
+	/**
+	 *  //TODO: doc
+	 */
 	public Collision getNextCollisionWithBoundary() {
 		ArrayList<Collidable> collidables = new ArrayList<Collidable>(getAllCollidables());
 		Collidable first = null;
@@ -570,6 +573,9 @@ public class World {
 		return new Collision(first,null,time);
 	}
 	
+	/**
+	 *  //TODO: doc
+	 */
 	public Collision getNextCollisionWithOther() {
 		ArrayList<Collidable> collidables = new ArrayList<Collidable>(getAllCollidables());
 		Collidable first = null;
@@ -594,6 +600,9 @@ public class World {
 		return new Collision(first,second,time);
 	}
 	
+	/**
+	 *  //TODO: doc
+	 */
 	public Collision getNextCollision() {
 		Collision nextWithBoundary = getNextCollisionWithBoundary();
 		Collision nextWithOther = getNextCollisionWithOther();

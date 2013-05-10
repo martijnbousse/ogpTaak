@@ -513,43 +513,102 @@ public class World {
 	 *         Util.fuzzyLessThanOrEqualTo(result.getTime(),
 	 *         collidable.getTimeToCollisionWithBoundary())
 	 */
-	public Collision getNextCollision() {
+//	public Collision getNextCollision() {
+//		Collidable first = null;
+//		Collidable second = null;
+//		ArrayList<Collidable> collidables = new ArrayList<Collidable>(getAllCollidables());
+//
+//		double time = Double.MAX_VALUE; 
+//		for (int i = 0; i < getNbCollidables(); i++) { 
+//			double collisionWithBoundary = collidables.get(i).getTimeToCollisionWithBoundary();
+//			
+//			System.out.println(i);
+//			System.out.println("collisionWithBoundary " + collisionWithBoundary); // wordt soms infinity???
+//			
+//			for (int j = i + 1; j < getNbCollidables(); j++) {
+//				if (!collidables.get(i).overlap(collidables.get(j))) {
+//					double collisionWithOther = collidables.get(i).getTimeToCollision(collidables.get(j));
+//					double firstCollisionTime = Math.min(collisionWithBoundary,collisionWithOther);
+//					
+//					
+//					
+//					System.out.println("collisionWithOther " + collisionWithOther); // correct
+//					
+//					
+//					if (!Util.fuzzyLessThanOrEqualTo(time, firstCollisionTime)
+//							&& Util.fuzzyLessThanOrEqualTo(0,firstCollisionTime)) {
+//						time = firstCollisionTime;
+//						first = collidables.get(i);
+//						if (Util.fuzzyEquals(time, collisionWithBoundary)) {
+//							second = null;
+//						} else {
+//							second = collidables.get(j);
+//						}
+//					}
+//				}
+//			}
+//		}
+//		if (time == Double.POSITIVE_INFINITY
+//				|| Util.fuzzyLessThanOrEqualTo(time, 0.0))
+//			return null;
+//		Collision nextCollision = new Collision(first, second, time);
+//		return nextCollision;
+//	}
+	
+	public Collision getNextCollisionWithBoundary() {
+		ArrayList<Collidable> collidables = new ArrayList<Collidable>(getAllCollidables());
 		Collidable first = null;
-		Collidable second = null;
-		ArrayList<Collidable> collidables = new ArrayList<Collidable>(
-				getAllCollidables());
-
 		double time = Double.MAX_VALUE;
-		for (int i = 0; i < getNbCollidables(); i++) {
-			double collisionWithBoundary = collidables.get(i)
-					.getTimeToCollisionWithBoundary();
-			for (int j = i + 1; j < getNbCollidables(); j++) {
-				if (!collidables.get(i).overlap(collidables.get(j))) {
-					double collisionWithOther = collidables.get(i)
-							.getTimeToCollision(collidables.get(j));
-					double firstCollisionTime = Math.min(collisionWithBoundary,
-							collisionWithOther);
-					if (!Util.fuzzyLessThanOrEqualTo(time, firstCollisionTime)
-							&& Util.fuzzyLessThanOrEqualTo(0,
-									firstCollisionTime)) {
-						time = firstCollisionTime;
-						first = collidables.get(i);
-						if (Util.fuzzyEquals(time, collisionWithBoundary)) {
-							second = null;
-						} else {
-							second = collidables.get(j);
-						}
-					}
-				}
+		
+		for (int i = 0; i < getNbCollidables(); i++) { 
+			double collisionWithBoundary = collidables.get(i).getTimeToCollisionWithBoundary();
+			if(!Util.fuzzyLessThanOrEqualTo(time,collisionWithBoundary)) {
+				time = collisionWithBoundary;
+				first = collidables.get(i);
 			}
 		}
-		if (time == Double.POSITIVE_INFINITY
-				|| Util.fuzzyLessThanOrEqualTo(time, 0.0))
-			return null;
-		Collision nextCollision = new Collision(first, second, time);
-		return nextCollision;
+		return new Collision(first,null,time);
 	}
-
+	
+	public Collision getNextCollisionWithOther() {
+		ArrayList<Collidable> collidables = new ArrayList<Collidable>(getAllCollidables());
+		Collidable first = null;
+		Collidable second = null;
+		double time = Double.MAX_VALUE;
+		
+		for (int i = 0; i < getNbCollidables(); i++) { 
+			for (int j = i + 1; j < getNbCollidables(); j++) { 
+				if (!collidables.get(i).overlap(collidables.get(j))) {
+					double collisionWithOther = collidables.get(i).getTimeToCollision(collidables.get(j));
+					if(!Util.fuzzyLessThanOrEqualTo(time,collisionWithOther) && Util.fuzzyLessThanOrEqualTo(0,collisionWithOther)) {
+						time = collisionWithOther;
+						first = collidables.get(i);
+						second = collidables.get(j);
+					}
+				}	
+			}			
+		}
+		if (time == Double.MAX_VALUE || Util.fuzzyLessThanOrEqualTo(time, 0.0)) {
+			return null;
+		}
+		return new Collision(first,second,time);
+	}
+	
+	public Collision getNextCollision() {
+		Collision nextWithBoundary = getNextCollisionWithBoundary();
+		Collision nextWithOther = getNextCollisionWithOther();
+		
+		if (nextWithBoundary == null && nextWithOther == null)
+			return null;
+		if (nextWithBoundary == null)
+			return nextWithOther;
+		if (nextWithOther == null)
+			return nextWithBoundary;
+		if (Util.fuzzyLessThanOrEqualTo(nextWithBoundary.getTime(),nextWithOther.getTime()))
+			return nextWithBoundary;
+		return nextWithOther;
+	}
+	
 	/**
 	 * Return a textual representation of this world.
 	 * 

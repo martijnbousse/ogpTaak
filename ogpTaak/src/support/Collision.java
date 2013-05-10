@@ -80,8 +80,8 @@ public class Collision {
 	 * 			| result == first != null && !first.isTerminated() && 
 	 *				((second == null ) || (!second.isTerminated())) 
 	 */
-	public boolean isValidCollidables(Collidable first, Collidable second) {
-		return first != null && !first.isTerminated() && 
+	public static boolean isValidCollidables(Collidable first, Collidable second) {	
+		return ( first != null && !first.isTerminated() ) && 
 				( second == null || (!second.isTerminated()) ) ;
 	}
 	

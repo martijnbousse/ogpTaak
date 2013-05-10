@@ -27,6 +27,8 @@ import be.kuleuven.cs.som.annotate.*;
  * @invar 	The thruster amount of each ship must be a valid thruster amount
  * 			| isValidThrusterAmount(getThrusterAmount())
  * 
+ *    //TODO: invarianten
+ * 
  * @version 2.0
  * @author Martijn Boussé, Wout Vekemans
  *
@@ -46,6 +48,10 @@ public class Ship extends Collidable implements IShip{
 	 * 			The mass for this new ship.
 	 * @param 	direction
 	 * 			The direction for this new ship.
+	 * 
+	 * @param 	program
+	 * 			The program for this new ship.
+	 * 
 	 * @effect	This new ship is initialized as a collidable with the given position, 
 	 * 			the given velocity, the given radius and the given mass.
 	 * 			| super(position, velocity, radius, mass)
@@ -55,6 +61,10 @@ public class Ship extends Collidable implements IShip{
 	 * 			| (new this).getDirection() == direction
 	 * @post	The new mass of this new ship is equal to the given mass.
 	 * 			| (new this).getMass() == mass
+	 * 
+	 * @post 	... //TODO: een ship is default niet geassocieerd met een program
+	 * 			| ... 
+	 * 
 	 */
 	@Raw
 	public Ship(Vector position, Vector velocity, double radius, double mass, double direction, Program program) throws IllegalArgumentException {
@@ -433,16 +443,34 @@ public class Ship extends Collidable implements IShip{
 	 */
 	private final Set<Bullet> bullets = new HashSet<Bullet>();
 	
+	/**
+	 * Returns the program of this ship.
+	 */
+	@Basic
 	public Program getProgram() {
 		return this.program;
 	}
 	
+	/**
+	 * Set the program of this ship to the given program.
+	 * 
+	 * @param 	program
+	 * 			The new program for this ship.
+	 * @pre		... 
+	 * 			| ...
+	 * @post 	The new program of this ship is equal to the given program.
+	 * 			| (new this).getProgram() == program
+	 */
+	@Raw
 	public void setProgram(Program program)	{
 			this.program = program;
 	}
 	
+	/**
+	 * Executes the program of this ship.
+	 */
 	public void executeProgram() {
-		this.program.getStatement().execute(program.getGlobals(), this);
+		getProgram().getStatement().execute(program.getGlobals(), this);
 	}
 
 	private Program program;

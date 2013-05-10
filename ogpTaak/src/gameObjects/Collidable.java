@@ -556,7 +556,6 @@ public abstract class Collidable {
 		return Double.POSITIVE_INFINITY;
 	}
 
-
 	/**
 	 * Calculates the time to collision with a horizontal boundary of this collidables world.
 	 * @effect	| if result != Double.POSITIVE.INFINITY
@@ -574,8 +573,7 @@ public abstract class Collidable {
 		}
 		return Double.POSITIVE_INFINITY;
 	}
-
-
+	
 	/**
 	 * Return a boolean reflecting whether this collidable can bounce of the boundary.
 	 * 

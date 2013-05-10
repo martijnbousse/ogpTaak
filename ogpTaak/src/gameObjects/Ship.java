@@ -425,8 +425,6 @@ public class Ship extends Collidable implements IShip{
 		bullet.setSource(null);
 	}
 	
-	
-	
 	/**
 	 * Set collecting references to bullets attached to this ship.
 	 * 
@@ -456,15 +454,34 @@ public class Ship extends Collidable implements IShip{
 	 * 
 	 * @param 	program
 	 * 			The new program for this ship.
-	 * @pre		... 
-	 * 			| ...
 	 * @post 	The new program of this ship is equal to the given program.
 	 * 			| (new this).getProgram() == program
+	 * @throws 	IllegalProgramException
+	 * 			The given program is not a valid program for any ship.
+	 * 			| !isValidProgram() //TODO: zie verder ...
 	 */
 	@Raw
 	public void setProgram(Program program)	{
+			// isValidProgram
 			this.program = program;
 	}
+	
+	/**
+	 * Check whether the given program is a valid program for any ship.
+	 * 	
+	 * @param 	program
+	 * 			The program to check.
+	 * @return	True if and only if the given program is ...
+	 * 			| ... 
+	 */
+	public static boolean isValidProgram(Program program){
+		return true; //TODO: Hebben we dit nodig? Ik zie voorlopig nog geen reden voor geen goed programma (standaard construct bij unidirectioneel)
+	}
+	
+	/**
+	 * Variable referencing the program of this ship.
+	 */
+	private Program program;
 	
 	/**
 	 * Executes the program of this ship.
@@ -473,8 +490,6 @@ public class Ship extends Collidable implements IShip{
 		getProgram().getStatement().execute(program.getGlobals(), this);
 	}
 
-	private Program program;
-	
 	/**
 	 * This ship collides with the given collidable.
 	 * 

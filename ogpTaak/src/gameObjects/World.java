@@ -502,17 +502,17 @@ public class World {
 		}
 	}
 
-	/**
-	 * Returns the first collision that will happen in this world.
-	 * 
-	 * @effect For each collidable in collidables, the time to collision with
-	 *         another collidable or with the boundary is smaller than the time
-	 *         of the result. | for each collidable in collidables |
-	 *         Util.fuzzyLessThanOrEqualTo(result.getTime(),
-	 *         result.getFirst().getTimeToCollision(collidable)) |
-	 *         Util.fuzzyLessThanOrEqualTo(result.getTime(),
-	 *         collidable.getTimeToCollisionWithBoundary())
-	 */
+//	/**
+//	 * Returns the first collision that will happen in this world.
+//	 * 
+//	 * @effect For each collidable in collidables, the time to collision with
+//	 *         another collidable or with the boundary is smaller than the time
+//	 *         of the result. | for each collidable in collidables |
+//	 *         Util.fuzzyLessThanOrEqualTo(result.getTime(),
+//	 *         result.getFirst().getTimeToCollision(collidable)) |
+//	 *         Util.fuzzyLessThanOrEqualTo(result.getTime(),
+//	 *         collidable.getTimeToCollisionWithBoundary())
+//	 */
 //	public Collision getNextCollision() {
 //		Collidable first = null;
 //		Collidable second = null;
@@ -556,7 +556,12 @@ public class World {
 //	}
 	
 	/**
-	 *  //TODO: doc
+	 *  Returns the first collision of a collidable with a boundary of this world.
+	 *  
+	 *  @effect For each collidable in collidables, the time to collision with the boundary is smaller than the time of the result.
+	 *  		| result == next
+	 *  		| 	such that for each collidable in collidables
+	 *  		|   	Util.fuzzyLessThanOrEqualTo(next.getTime(),collidable.getTimeToCollisionWithBoundary())
 	 */
 	public Collision getNextCollisionWithBoundary() {
 		ArrayList<Collidable> collidables = new ArrayList<Collidable>(getAllCollidables());
@@ -574,7 +579,15 @@ public class World {
 	}
 	
 	/**
-	 *  //TODO: doc
+	 *  Returns the first collision of two collidables that will happen in this world.
+	 *  
+	 *  @effect For each collidable in collidables, the time to collision with another collidable is smaller than the time of the result.
+	 *  		| result == next
+	 *  		| 	such that for each collidable in collidables
+	 *  		| 		Util.fuzzyLessThanOrEqualTo(next.getTime(),next.getFirst().getTimeToCollision(collidable)) 
+	 *  		If the time has not changed or the time is a negative value, the result is null. \\TODO: goed zo??
+	 *  		| result == null
+	 *  		|	if (time == Double.MAX_VALUE || Util.fuzzyLessThanOrEqualTo(time, 0.0))
 	 */
 	public Collision getNextCollisionWithOther() {
 		ArrayList<Collidable> collidables = new ArrayList<Collidable>(getAllCollidables());
@@ -601,7 +614,21 @@ public class World {
 	}
 	
 	/**
-	 *  //TODO: doc
+	 *  Returns the first collision that will happen in this world.
+	 *  
+	 *  @effect If there is no collision with another collidable nor with the boundary return null.
+	 *  		| if (getNextCollisionWithBoundary() == null) && (getNextCollisionWithOther() == null)
+	 *  		| 	then result == null
+	 *  		If there is no collision with the boundary, return the collision with another collidable.
+	 *  		| if (getNextCollisionWithBoundary() == null)
+	 *  		| 	then result == getNextCollisionWithOther(); 
+	 *  		If there is no collision with another collidable, return the collision with the boundary.
+	 *  		| if (getNextCollisionWithOther() == null)
+	 *  		| 	then result == getNextCollisionWithBoundary()
+	 *  		If there is a collision with the boundary and with another collidable, return the first collision.
+	 *  		| if (Util.fuzzyLessThanOrEqualTo(getNextCollisionWithBoundary().getTime(),getNextCollisionWithOther().getTime()))
+	 *  		|	then result ==  getNextCollisionWithBoundary()
+	 *  		| else getNextCollisionWithOther()
 	 */
 	public Collision getNextCollision() {
 		Collision nextWithBoundary = getNextCollisionWithBoundary();

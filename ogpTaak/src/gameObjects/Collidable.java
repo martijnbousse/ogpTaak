@@ -584,6 +584,8 @@ public abstract class Collidable {
 	 * 			| result == ( !((getWorld() == null) && hasProperWorld())
 	 *			|			&& (Util.fuzzyEquals(getTimeToCollisionWithBoundary(),0.0)))
 	 */
+	// REMINDER: hasProperWorld() also calls the complementary checker canHaveAsCollidable() from the bidirectional association.
+	//           Hence, terminated collidables are also included in the if construct.	
 	public boolean canBounceOfBoundary() {
 		return ( !((getWorld() == null) && hasProperWorld())
 				&& (Util.fuzzyEquals(getTimeToCollisionWithBoundary(),0.0)));

@@ -483,6 +483,7 @@ public class Ship extends Collidable implements IShip{
 	 * @effect	The given collidable collides with this ship.
 	 * 			| collidable.collidesWith(this)
 	 */
+	@Override
 	public void collide(Collidable collidable) {
 		collidable.collidesWith(this);
 	}
@@ -495,6 +496,7 @@ public class Ship extends Collidable implements IShip{
 	 * @effect 	This ship bounces with the given ship.
 	 * 			| bounce(ship)
 	 */
+	@Override
 	public void collidesWith(Ship ship) {
 		bounce(ship);
 	}
@@ -507,6 +509,7 @@ public class Ship extends Collidable implements IShip{
 	 * @effect	This ship is terminated.
 	 * 			| terminate()
 	 */
+	@Override
 	public void collidesWith(Asteroid asteroid) {
 		terminate();
 	}
@@ -522,6 +525,7 @@ public class Ship extends Collidable implements IShip{
 	 * 			| if (!bullet.getSource().equals(this))7
 	 * 			|	then terminate()
 	 */
+	@Override
 	public void collidesWith(Bullet bullet) {
 		if (!bullet.getSource().equals(this))
 			terminate();

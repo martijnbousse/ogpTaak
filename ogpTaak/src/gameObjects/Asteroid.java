@@ -137,6 +137,7 @@ public class Asteroid extends Collidable{
 	 * @effect	The given collidable collides with this asteroid.
 	 * 			| collidable.collidesWith(this)
 	 */
+	@Override
 	public void collide(Collidable collidable) {
 		collidable.collidesWith(this);
 	}
@@ -149,6 +150,7 @@ public class Asteroid extends Collidable{
 	 * @effect 	The given ship collides with this asteroid.
 	 * 			| ship.collidesWith(this)
 	 */
+	@Override
 	public void collidesWith(Ship ship) {
 		ship.collidesWith(this);
 	}
@@ -161,6 +163,7 @@ public class Asteroid extends Collidable{
 	 * @effect 	This asteroid bounces with the given asteroid.
 	 * 			| bounce(asteroid)
 	 */
+	@Override
 	public void collidesWith(Asteroid asteroid) {
 		bounce(asteroid);
 	}
@@ -174,6 +177,7 @@ public class Asteroid extends Collidable{
 	 * 			| this.terminate()
 	 * 			| bullet.terminate()
 	 */
+	@Override
 	public void collidesWith(Bullet bullet) {
 		this.terminate();
 		bullet.terminate();

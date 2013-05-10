@@ -34,6 +34,9 @@ public class Bullet extends Collidable {
 		super(position, velocity, radius);
 	}
 	
+	/**
+	 *  Terminate this bullet as an instance of collidable. In addition, remove the bullet from its source. //TODO: ok zo?
+	 */
 	@Override
 	public void terminate() {
 		getSource().removeAsBullet(this);
@@ -173,6 +176,7 @@ public class Bullet extends Collidable {
 	 * @effect	The given collidable collides with this bullet.
 	 * 			| collidable.collidesWith(this)
 	 */
+	@Override
 	public void collide(Collidable collidable) {
 		collidable.collidesWith(this);
 	}
@@ -185,6 +189,7 @@ public class Bullet extends Collidable {
 	 * @effect	The given ship collides with this bullet.
 	 * 			| ship.collidesWith(this)
 	 */
+	@Override
 	public void collidesWith(Ship ship) {
 		ship.collidesWith(this);
 	}
@@ -197,6 +202,7 @@ public class Bullet extends Collidable {
 	 * @effect	The given asteroid collides with this bullet.
 	 * 			| asteroid.collidesWith(this)
 	 */
+	@Override
 	public void collidesWith(Asteroid asteroid) {
 		asteroid.collidesWith(this);
 	}
@@ -210,6 +216,7 @@ public class Bullet extends Collidable {
 	 * 			| this.terminate()
 	 * 			| bullet.terminate()
 	 */
+	@Override
 	public void collidesWith(Bullet bullet) {
 		this.terminate();
 		bullet.terminate();

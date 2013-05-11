@@ -7,9 +7,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import support.Collision;
 import support.Vector;
-
 
 import asteroids.*;
 
@@ -19,7 +17,7 @@ import asteroids.*;
  * REMINDER : resolveCollision won't be tested here, because it only uses other methods, tested elsewhere
  * 
  * @author 	Martijn Boussé, Wout Vekemans
- * @version	1.0
+ * @version	2.0
  *
  */
 public class WorldTest {
@@ -47,10 +45,6 @@ public class WorldTest {
 	private World mutableWorld4;
 	private Ship mutableShip2;
 	private Ship mutableShip3;
-	
-	private World mutableWorld5;
-	private Ship mutableShip4;
-	private Ship mutableShip5;
 	
 	
 	private World terminatedWorld;
@@ -90,16 +84,10 @@ public class WorldTest {
 		mutableShip1.fireBullet();
 		
 		mutableWorld4 = new World(1000,1000);
-		mutableShip2 = new Ship(new Vector(100,500), new Vector(-10,0), 10, 10, 0,null);
-		mutableShip3 = new Ship(new Vector(200,700), new Vector(-10,0), 10, 10, 0,null);
+		mutableShip2 = new Ship(new Vector(250,250), new Vector(10,0), 10,10,0,null);
+		mutableShip3 = new Ship(new Vector(370,250), new Vector(-10,0), 10,10,0,null);
 		mutableWorld4.addAsCollidable(mutableShip2);
 		mutableWorld4.addAsCollidable(mutableShip3);
-		
-		mutableWorld5 = new World(1000,1000);
-		mutableShip4 = new Ship(new Vector(250,250), new Vector(10,0), 10,10,0,null);
-		mutableShip5 = new Ship(new Vector(370,250), new Vector(-10,0), 10,10,0,null);
-		mutableWorld5.addAsCollidable(mutableShip4);
-		mutableWorld5.addAsCollidable(mutableShip5);
 		
 		mutableCollidable4 = new Ship();
 		terminatedCollidable = new Ship();
@@ -402,30 +390,19 @@ public class WorldTest {
 		mutableWorld1.removeAsCollidable(mutableCollidable4);
 	}
 	
-	// getNextCollision
-	
-	@Test
-	public void testGetNextCollision() {
-		Collision next = mutableWorld4.getNextCollision();
-		Collision check = new Collision(mutableShip2, null, 9);
-		assertTrue(next.equals(check));
-	}
-	
-	// TODO: getnextcollisionwithother and getnextcollisionwithboundary
-	
 	// evolve
 	
 	@Test
 	public void testEvolve_CollisionCase() {
-		mutableWorld5.evolve(6);
-		assertTrue(mutableShip4.getTimeToCollision(mutableShip5) == Double.POSITIVE_INFINITY);
+		mutableWorld4.evolve(6);
+		assertTrue(mutableShip2.getTimeToCollision(mutableShip3) == Double.POSITIVE_INFINITY);
 	}
 	
 	@Test
 	public void testEvolve_NonCollisionCase() {
-		double old = mutableShip5.getTimeToCollision(mutableShip4);
-		mutableWorld5.evolve(2);
-		assertTrue(mutableShip5.getTimeToCollision(mutableShip4) < old);
+		double old = mutableShip3.getTimeToCollision(mutableShip2);
+		mutableWorld4.evolve(2);
+		assertTrue(mutableShip3.getTimeToCollision(mutableShip2) < old);
 		
 	}
 }

@@ -558,10 +558,14 @@ public class World {
 	/**
 	 *  Returns the first collision of a collidable with a boundary of this world.
 	 *  
-	 *  @effect For each collidable in collidables, the time to collision with the boundary is smaller than the time of the result.
+	 *  @effect For each collidable in collidables, the time to collision with the boundary
+	 *  		is bigger than or equal to the time of the result.
 	 *  		| result == next
 	 *  		| 	such that for each collidable in collidables
 	 *  		|   	Util.fuzzyLessThanOrEqualTo(next.getTime(),collidable.getTimeToCollisionWithBoundary())
+	 *  @effect If the time is equal to Double.MAX_VALUE, the result is null. \\TODO: ok? zie ook verder
+	 *  		| result == null
+	 *  		|	if (time == Double.MAX_VALUE)
 	 */
 	public Collision getNextCollisionWithBoundary() {
 		ArrayList<Collidable> collidables = new ArrayList<Collidable>(getAllCollidables());
@@ -575,17 +579,21 @@ public class World {
 				first = collidables.get(i);
 			}
 		}
+		if (time == Double.MAX_VALUE)
+			return null;
 		return new Collision(first,null,time);
 	}
 	
 	/**
 	 *  Returns the first collision of two collidables that will happen in this world.
 	 *  
-	 *  @effect For each collidable in collidables, the time to collision with another collidable is smaller than the time of the result.
+	 *  @effect For each collidable in collidables, the time to collision with another non-overlapping collidable 
+	 *  		is bigger than or equal to than the time of the result.
 	 *  		| result == next
-	 *  		| 	such that for each collidable in collidables
-	 *  		| 		Util.fuzzyLessThanOrEqualTo(next.getTime(),next.getFirst().getTimeToCollision(collidable)) 
-	 *  		If the time has not changed or the time is a negative value, the result is null. \\TODO: goed zo??
+	 *  		| 	such that for each i in 0..getNbCollidables()-1:   \\TODO: klopt dit wel .. ?
+	 *  		|		if !collidables.get(i).overlap(collidables.get(i+1))
+	 *  		|			then Util.fuzzyLessThanOrEqualTo(next.getTime(),collidables.get(i).getTimeToCollision(collidables.get(i+1));
+	 *  		If the time is equal to Double.MAX_VALUE or the time is a negative value, the result is null. \\TODO: goed zo?? laatste is wat vreemd
 	 *  		| result == null
 	 *  		|	if (time == Double.MAX_VALUE || Util.fuzzyLessThanOrEqualTo(time, 0.0))
 	 */
@@ -607,9 +615,8 @@ public class World {
 				}	
 			}			
 		}
-		if (time == Double.MAX_VALUE || Util.fuzzyLessThanOrEqualTo(time, 0.0)) {
+		if (time == Double.MAX_VALUE || Util.fuzzyLessThanOrEqualTo(time, 0.0)) //TODO: negatief nodig?
 			return null;
-		}
 		return new Collision(first,second,time);
 	}
 	
@@ -619,15 +626,15 @@ public class World {
 	 *  @effect If there is no collision with another collidable nor with the boundary return null.
 	 *  		| if (getNextCollisionWithBoundary() == null) && (getNextCollisionWithOther() == null)
 	 *  		| 	then result == null
-	 *  		If there is no collision with the boundary, return the collision with another collidable.
+	 *  @effect If there is no collision with the boundary, return the collision with another collidable.
 	 *  		| if (getNextCollisionWithBoundary() == null)
 	 *  		| 	then result == getNextCollisionWithOther(); 
-	 *  		If there is no collision with another collidable, return the collision with the boundary.
+	 *  @effect If there is no collision with another collidable, return the collision with the boundary.
 	 *  		| if (getNextCollisionWithOther() == null)
 	 *  		| 	then result == getNextCollisionWithBoundary()
-	 *  		If there is a collision with the boundary and with another collidable, return the first collision.
+	 *  @effect If there is a collision with the boundary and with another collidable, return the first collision.
 	 *  		| if (Util.fuzzyLessThanOrEqualTo(getNextCollisionWithBoundary().getTime(),getNextCollisionWithOther().getTime()))
-	 *  		|	then result ==  getNextCollisionWithBoundary()
+	 *  		|	then result == getNextCollisionWithBoundary()
 	 *  		| else getNextCollisionWithOther()
 	 */
 	public Collision getNextCollision() {
@@ -636,8 +643,8 @@ public class World {
 		
 		if (nextWithBoundary == null && nextWithOther == null)
 			return null;
-		if (nextWithBoundary == null)
-			return nextWithOther;
+//		if (nextWithBoundary == null) //TODO: niet nodig, enkel nextWithOther is mogelijks null, withbound enkel als alles stil staat
+//			return nextWithOther;
 		if (nextWithOther == null)
 			return nextWithBoundary;
 		if (Util.fuzzyLessThanOrEqualTo(nextWithBoundary.getTime(),nextWithOther.getTime()))

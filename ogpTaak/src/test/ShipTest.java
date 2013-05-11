@@ -23,7 +23,7 @@ import asteroids.Util;
  * 				They are only used do make a distinction between the dynamic type of the collidable.
  * 
  * @author 	Martijn Boussé, Wout Vekemans
- * @version	1.0
+ * @version	2.0
  *
  */
 public class ShipTest {

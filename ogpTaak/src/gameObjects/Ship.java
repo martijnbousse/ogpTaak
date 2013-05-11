@@ -28,9 +28,8 @@ import be.kuleuven.cs.som.annotate.*;
  * 			| isValidThrusterAmount(getThrusterAmount())
  * @invar 	...
  * 			| ...
- *    //TODO: invarianten, eventueel program.. isValidProgram
  * 
- * @version 2.0
+ * @version 3.0
  * @author Martijn Boussé, Wout Vekemans
  *
  */
@@ -60,7 +59,7 @@ public class Ship extends Collidable implements IShip{
 	 * 			| (new this).getDirection() == direction
 	 * @post	The new mass of this new ship is equal to the given mass.
 	 * 			| (new this).getMass() == mass
-	 * @effect 	The program for this new ship is set to the given program. //TODO: een ship is default niet geassocieerd met een program .. isvalidprogram -> eventueel ook null
+	 * @effect 	The program for this new ship is set to the given program. 
 	 * 			| setProgram(program)
 	 */
 	@Raw
@@ -283,13 +282,6 @@ public class Ship extends Collidable implements IShip{
 	
 	/**
 	 * This ship fires a bullet.
-	 * 
-	 * @effect 	A new bullet is added to the world of this ship with a new position, new velocity, new radius and this ship as its source.
-	 * 			| getWorld.addAsCollidable(bullet)
-	 * 
-	 * 
-	 *    //TODO: het bovenstaande is veel gemakkelijker om te testen .. en volgens mij is het wel een goeie doc.
-	 *    
 	 *    
 	 * @effect	If this ship can fire bullets, it fires a bullet with a new position, new velocity, new radius and this ship as its source.
 	 * 			| let
@@ -301,8 +293,6 @@ public class Ship extends Collidable implements IShip{
 	 *			|		then Bullet bullet = new Bullet(initialPosition,initialVelocity,3)
 	 *			|			 this.addAsBullet(bullet)
 	 *			|			 getWorld().addAsCollidable(bullet)	
-	 *
-	 *
 	 * @throws	IllegalStateException
 	 * 			This ship is terminated
 	 * 			| isTerminated()
@@ -316,8 +306,9 @@ public class Ship extends Collidable implements IShip{
 				this.addAsBullet(bullet);
 				getWorld().addAsCollidable(bullet);
 			} catch (InvalidPositionException e) {
-				//dont fire
-				//TODO catch illegalargument van addAsBullet
+				// do not fire
+			} catch (IllegalArgumentException e) {
+				// do not fire
 			}
 		}
 	}
@@ -419,8 +410,7 @@ public class Ship extends Collidable implements IShip{
 	 * 			| bullet.getSource() != null 
 	 * 			| 	&& bullet != null
 	 */
-	public void addAsBullet(Bullet bullet)
-			throws IllegalArgumentException {
+	public void addAsBullet(Bullet bullet) throws IllegalArgumentException {
 		if (!canHaveAsBullet(bullet))
 			throw new IllegalArgumentException();
 		if (bullet.getSource() != null)
@@ -486,7 +476,7 @@ public class Ship extends Collidable implements IShip{
 	 */
 	@Raw
 	public void setProgram(Program program)	{
-			// isValidProgram
+			// isValidProgram -> indien ja, ook @raw bij isvalidprogram
 			this.program = program;
 	}
 	
@@ -500,6 +490,7 @@ public class Ship extends Collidable implements IShip{
 	 */
 	public static boolean isValidProgram(Program program){
 		return true; //TODO: Hebben we dit nodig? Ik zie voorlopig nog geen reden voor geen goed programma (standaard construct bij unidirectioneel)
+					// vergeet niet de invariant toe te voegen indien ja
 	}
 	
 	/**

@@ -9,7 +9,7 @@ import be.kuleuven.cs.som.annotate.*;
  * @invar	The source of each bullet must be a valid source for a bullet.
  * 			| isValidSource(getSource())
  * 
- * @version	1.0
+ * @version	2.0
  * @author 	Martijn Boussé, Wout Vekemans
  *
  */
@@ -35,7 +35,7 @@ public class Bullet extends Collidable {
 	}
 	
 	/**
-	 *  Terminate this bullet as an instance of collidable. In addition, remove the bullet from its source. //TODO: ok zo?
+	 *  Terminate this bullet as an instance of collidable. In addition, remove the bullet from its source.
 	 */
 	@Override
 	public void terminate() {
@@ -66,7 +66,7 @@ public class Bullet extends Collidable {
 	 * @post	This bullet references the given ship as the ship to which it is attached.
 	 * 			| (new this).getSource() == ship
 	 */
-	@Raw //TODO: package visible gemaakt!
+	@Raw
 	void setSource(Ship ship) {
 		assert ( (ship == null) || ship.hasAsBullet(this) );
 		assert ( (ship != null) || (getSource() == null) || (!getSource().hasAsBullet(this)) );

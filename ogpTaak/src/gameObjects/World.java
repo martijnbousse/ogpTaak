@@ -357,6 +357,9 @@ public class World {
 				&& !((this.isTerminated()) || (collidable.isTerminated())) && collidable
 				.getRadius() < Math.min(getWidth() / 2, getHeight() / 2));
 	}
+	//TODO: deze checker zorgt er nu voor dat de collidable 'past' in de wereld, 
+	// maar houdt niet tegen dat een collidable buiten de wereld kan geplaatst worden!
+	// zie test op overlapWithBoundary ! 
 
 	/**
 	 * Check whether this world has proper collidables attached to it.
@@ -397,8 +400,7 @@ public class World {
 	 *             The given collidable is already attached to some world. |
 	 *             collidable.getWorld() != null | && collidable != null
 	 */
-	public void addAsCollidable(Collidable collidable)
-			throws IllegalArgumentException {
+	public void addAsCollidable(Collidable collidable) throws IllegalArgumentException {
 		if (!canHaveAsCollidable(collidable))
 			throw new IllegalArgumentException();
 		if (collidable.getWorld() != null)
@@ -503,68 +505,16 @@ public class World {
 			first.collide(second);
 		}
 	}
-
-//	/**
-//	 * Returns the first collision that will happen in this world.
-//	 * 
-//	 * @effect For each collidable in collidables, the time to collision with
-//	 *         another collidable or with the boundary is smaller than the time
-//	 *         of the result. | for each collidable in collidables |
-//	 *         Util.fuzzyLessThanOrEqualTo(result.getTime(),
-//	 *         result.getFirst().getTimeToCollision(collidable)) |
-//	 *         Util.fuzzyLessThanOrEqualTo(result.getTime(),
-//	 *         collidable.getTimeToCollisionWithBoundary())
-//	 */
-//	public Collision getNextCollision() {
-//		Collidable first = null;
-//		Collidable second = null;
-//		ArrayList<Collidable> collidables = new ArrayList<Collidable>(getAllCollidables());
-//
-//		double time = Double.MAX_VALUE; 
-//		for (int i = 0; i < getNbCollidables(); i++) { 
-//			double collisionWithBoundary = collidables.get(i).getTimeToCollisionWithBoundary();
-//			
-//			System.out.println(i);
-//			System.out.println("collisionWithBoundary " + collisionWithBoundary); // wordt soms infinity???
-//			
-//			for (int j = i + 1; j < getNbCollidables(); j++) {
-//				if (!collidables.get(i).overlap(collidables.get(j))) {
-//					double collisionWithOther = collidables.get(i).getTimeToCollision(collidables.get(j));
-//					double firstCollisionTime = Math.min(collisionWithBoundary,collisionWithOther);
-//					
-//					
-//					
-//					System.out.println("collisionWithOther " + collisionWithOther); // correct
-//					
-//					
-//					if (!Util.fuzzyLessThanOrEqualTo(time, firstCollisionTime)
-//							&& Util.fuzzyLessThanOrEqualTo(0,firstCollisionTime)) {
-//						time = firstCollisionTime;
-//						first = collidables.get(i);
-//						if (Util.fuzzyEquals(time, collisionWithBoundary)) {
-//							second = null;
-//						} else {
-//							second = collidables.get(j);
-//						}
-//					}
-//				}
-//			}
-//		}
-//		if (time == Double.POSITIVE_INFINITY
-//				|| Util.fuzzyLessThanOrEqualTo(time, 0.0))
-//			return null;
-//		Collision nextCollision = new Collision(first, second, time);
-//		return nextCollision;
-//	}
 	
 	/**
 	 *  Returns the first collision of a collidable with a boundary of this world.
 	 *  
-	 *  @effect For each collidable in collidables, the time to collision with the boundary
-	 *  		is bigger than or equal to the time of the result.
+	 *  @effect For each collidable in collidables which is not overlapping with a boundary,  the time 
+	 *  		to collision with the boundary is bigger than or equal to the time of the result.
 	 *  		| result == next
 	 *  		| 	such that for each collidable in collidables
-	 *  		|   	Util.fuzzyLessThanOrEqualTo(next.getTime(),collidable.getTimeToCollisionWithBoundary())
+	 *  		|		if !collidables.get(i).overlapWithBoundary()
+	 *  		|   		then Util.fuzzyLessThanOrEqualTo(next.getTime(),collidable.getTimeToCollisionWithBoundary())
 	 *  @effect If the time is equal to Double.MAX_VALUE, the result is null. \\TODO: ok? zie ook verder
 	 *  		| result == null
 	 *  		|	if (time == Double.MAX_VALUE)
@@ -575,10 +525,12 @@ public class World {
 		double time = Double.MAX_VALUE;
 		
 		for (int i = 0; i < getNbCollidables(); i++) { 
-			double collisionWithBoundary = collidables.get(i).getTimeToCollisionWithBoundary();
-			if(!Util.fuzzyLessThanOrEqualTo(time,collisionWithBoundary)) {
-				time = collisionWithBoundary;
-				first = collidables.get(i);
+			if (!collidables.get(i).overlapWithBoundary()) {
+				double collisionWithBoundary = collidables.get(i).getTimeToCollisionWithBoundary();
+				if(!Util.fuzzyLessThanOrEqualTo(time,collisionWithBoundary)) {
+					time = collisionWithBoundary;
+					first = collidables.get(i);
+				}
 			}
 		}
 		if (time == Double.MAX_VALUE)
@@ -645,8 +597,6 @@ public class World {
 		
 		if (nextWithBoundary == null && nextWithOther == null)
 			return null;
-//		if (nextWithBoundary == null) //TODO: niet nodig, enkel nextWithOther is mogelijks null, withbound enkel als alles stil staat
-//			return nextWithOther;
 		if (nextWithOther == null)
 			return nextWithBoundary;
 		if (Util.fuzzyLessThanOrEqualTo(nextWithBoundary.getTime(),nextWithOther.getTime()))

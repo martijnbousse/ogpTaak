@@ -7,7 +7,6 @@ import gameObjects.Ship;
 import gameObjects.World;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import asteroids.Util;

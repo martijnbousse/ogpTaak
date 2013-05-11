@@ -23,11 +23,11 @@ import be.kuleuven.cs.som.annotate.*;
  * @invar	Each collidable must have a proper world to which it is attached.
  * 			| hasProperWorld()
  * 
- * @version	1.0
+ * @version	2.0
  * @author Martijn Boussé, Wout Vekemans
  * 
  */
-//TODO: documentatie van complexe methoden aanpassen + testen
+//TODO: @raw nakijken
 public abstract class Collidable {
 	/**
 	 * Initialize this new collidable with given position, given velocity, given radius and given mass
@@ -405,6 +405,8 @@ public abstract class Collidable {
 	 * 			The given collidable is not effective.
 	 * 			| (other == null)
 	 */
+	//REMINDER: IllegalStateException and IllegalArgumentException regarding the terminated state of this collidable
+	//          and the given collidable are thrown via getDistanceBetween(other).
 	public boolean overlap(Collidable other) throws IllegalArgumentException, IllegalStateException {
 		if (other == null)
 			throw new IllegalArgumentException("Non effective collidable!");
@@ -412,7 +414,6 @@ public abstract class Collidable {
 			return true;
 		return (getDistanceBetween(other) < 0);
 	}
-
 
 	/**
 	 * Returns the distance between this collidable and the given collidable.
@@ -434,11 +435,10 @@ public abstract class Collidable {
 	 * @throws	IllegalStateException
 	 * 			This collidable is terminated.
 	 * 			| isTerminated()
-	 * @throws	IllegalStateException
+	 * @throws	IllegalArgumentException
 	 * 			The given collidable is terminated.
 	 * 			| other.isTerminated()
 	 */
-	//TODO: Testen aanpassen aan deze documentatie, nu enkel exceptions en één legal case getest
 	public double getDistanceBetween(Collidable other) throws IllegalArgumentException, IllegalStateException {
 		if (isTerminated())
 			throw new IllegalStateException("This collidable is terminated!");
@@ -457,18 +457,37 @@ public abstract class Collidable {
 	}
 	
 	/**
+	 * Returns a boolean reflecting whether this collidable and the given collidable overlap.
+	 * 
+	 * @effect	True if and only if the distance between this collidable and the boundary is negative 
+	 * 			| result == (getDistanceBetween(other) < 0)) 
+	 */
+	//REMINDER: IllegalStateException regarding the terminated state of this collidable
+	//          are thrown via getDistanceBetween(other).
+	public boolean overlapWithBoundary() throws IllegalStateException {
+		return (getDistanceToClosestBoundary() < 0);
+	}
+	
+	/**
 	 * Calculate the distance from this collidable to the closest boundary of its world.
 	 * 
-	 * @effect	| if getWorld() != null
-	 * 			|	then if this.move(getTimeToCollisionWithBoundary)
-	 * 			|		then result == Math.min(new.getPosition().getXComponent()-this.getPosition().getXComponent(), 
-	 * 			|								(new.getPosition().getYComponent()-this.getPosition().getYComponent())
+	 * @effect 	If the result is positive, this collidable and the boundary don't overlap
+	 * 			| if (result > 0.0)
+	 * 			| 	then this.overlapWithBoundary() == false
+	 * @effect 	If the result is negative, this collidable and the boundary overlap
+	 * 			| if (result < 0.0)
+	 * 			| 	then this.overlapWithBoundary() == true
 	 * @effect 	If this collidable has the null reference as its world, then the distance is infinity.
 	 * 			| if getWorld() == null
 	 * 			|	then result == Double.POSITIVE_INFINITY
+	 * @throws	IllegalStateException
+	 * 			This collidable is terminated.
+	 * 			| isTerminated()
 	 */
 	@Raw
-	public double getDistanceToClosestBoundary() {
+	public double getDistanceToClosestBoundary() throws IllegalStateException {
+		if (isTerminated())
+			throw new IllegalStateException("This collidable is terminated!");
 		if(getWorld() !=null) {
 			double minX = getPosition().getXComponent() - radius;
 			double maxX = getWorld().getWidth() -getPosition().getXComponent() - radius;
@@ -478,17 +497,27 @@ public abstract class Collidable {
 		}
 		return Double.POSITIVE_INFINITY;
 	}
-
-
+	
 	/**
 	 * Returns when this collidable, if ever, will collide with the given collidable.
 	 * 
 	 * @param 	other
 	 * 			The other collidable.
-	 * @effect	Returns the time until this collidable and the given collidable will collide, if ever.
 	 * @effect	True if and only if the collidables touch each other after moving the calculated time.
 	 *			| if this.move(result) && other.move(result)
 	 *			|	then this.getDistanceBetween(other) == 0
+	 *
+	 *  //TODO: welke van de twee documentaties? zie ook testen (heb mail gestuud hiervoor)
+	 *
+	 * @effect	If this collidable is equal to the given collidable the result is always zero.
+	 * 			| if (other == this)
+	 * 			|	then result == 0.0
+	 * @effect	If the result is positive, this collidable and the given collidable don't overlap
+	 * 			| if (result > 0.0)
+	 * 			|	then this.overlap(other) == false
+	 * @effect	If the result is negative, this collidable and the given collidable overlap
+	 * 			| if (result < 0.0)
+	 * 			|	then this.overlap(other) == true	
 	 * @throws 	IllegalArgumentException
 	 * 			The given collidable is not effective.
 	 * 			| (other == null)
@@ -527,11 +556,12 @@ public abstract class Collidable {
 	 * Returns when this collidable, if ever, will collide with the boundary.
 	 * 
 	 * @effect	If this collidable has an effective world and is not terminated, then if this collidable is moved 
-	 * 				over the result, then the distace to the closest boundary of its world is zero.
+	 * 			over the result, then the distace to the closest boundary of its world is zero.
 	 * 			| if getWorld() != null && !isTerminated()
 	 * 			| 	then this.move(result)
 	 * 			|		new.getDistanceToClosestBoundary == 0
 	 */
+	//TODO: doc?
 	public double getTimeToCollisionWithBoundary() {
 		if(getWorld() != null && !isTerminated()) {
 			return Math.min(getMinXCollision(), getMinYCollision());
@@ -542,10 +572,12 @@ public abstract class Collidable {
 
 	/**
 	 * Calculates the time to collision with a vertical boundary of this collidables world.
+	 * 
 	 * @effect	| if result != Double.POSITIVE.INFINITY
 	 * 			|	then this.move(result)
 	 * 			|		new.getDistanceToClosestBoundary == 0
 	 */
+	//TODO: doc?
 	private double getMinXCollision() {
 		if(!Util.fuzzyEquals(0, getVelocity().getXComponent())) {
 			double maximumXTime = (getWorld().getWidth() - getPosition().getXComponent() - getRadius())/getVelocity().getXComponent();
@@ -560,10 +592,12 @@ public abstract class Collidable {
 
 	/**
 	 * Calculates the time to collision with a horizontal boundary of this collidables world.
+	 * 
 	 * @effect	| if result != Double.POSITIVE.INFINITY
 	 * 			|	then this.move(result)
 	 * 			|		new.getDistanceToClosestBoundary == 0
 	 */
+	//TODO: doc?
 	private double getMinYCollision() {
 		if(!Util.fuzzyEquals(0, getVelocity().getYComponent())) {
 			double maximumYTime = (getWorld().getHeight() - getPosition().getYComponent() - getRadius())/getVelocity().getYComponent();
@@ -598,9 +632,9 @@ public abstract class Collidable {
 	 * This collidable bounces with the boundary of its world.
 	 * 
 	 * @effect	If the time to collision with a boundary of this collidable is equal to zero and this collidable 
-	 * 			is moved for a small time interval, then this collidable does not overlap with that boundary.
+	 * 			is moved for a small enough time interval, then this collidable does not overlap with that boundary.
 	 * 			| let
-	 * 			|	dt be a small time interval
+	 * 			|	dt be a small enough time interval
 	 * 			| in	
 	 * 			| 	if Util.fuzzyEquals(this.getTimeToCollisionWithBoundary(),0.0)
 	 * 			|		then move(dt)

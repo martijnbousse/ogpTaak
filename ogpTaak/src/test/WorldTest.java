@@ -29,6 +29,8 @@ public class WorldTest {
 	
 	private static Collidable collidable4;
 	
+	private static Collidable collidable5;
+	
 	private World mutableWorld1;
 	private Collidable mutableCollidable1;
 	private Collidable mutableCollidable2;
@@ -62,6 +64,9 @@ public class WorldTest {
 		world1.addAsCollidable(collidable3);
 		
 		collidable4 = new Ship();
+		
+		collidable5 = new Ship(new Vector(100,100), new Vector(0,0), 500, 10, 10, null);
+	
 	}
 	
 	@Before
@@ -229,7 +234,7 @@ public class WorldTest {
 
 	@Test
 	public void testGetAllCollidables_NullReference() {
-		assertEquals(false,world1.getAllCollidables().contains(null));
+		assertFalse(world1.getAllCollidables().contains(null));
 	}
 	
 	@Test
@@ -248,7 +253,7 @@ public class WorldTest {
 	
 	@Test
 	public void testGetAllShips_NullReference() {
-		assertEquals(false,mutableWorld3.getAllShips().contains(null));
+		assertFalse(mutableWorld3.getAllShips().contains(null));
 	}
 	
 	@Test
@@ -267,7 +272,7 @@ public class WorldTest {
 	
 	@Test
 	public void testGetAllAsteroids_NullReference() {
-		assertEquals(false,mutableWorld3.getAllAsteroids().contains(null));
+		assertFalse(mutableWorld3.getAllAsteroids().contains(null));
 	}
 	
 	@Test
@@ -286,7 +291,7 @@ public class WorldTest {
 	
 	@Test
 	public void testGetAllBullets_NullReference() {
-		assertEquals(false,mutableWorld3.getAllBullets().contains(null));
+		assertFalse(mutableWorld3.getAllBullets().contains(null));
 	}
 	
 	@Test
@@ -303,9 +308,24 @@ public class WorldTest {
 	
 	// canHaveAsCollidable
 	
+	@Test 
+	public void testCanHaveAsCollidable_LegalCase() {
+		assertTrue(world1.canHaveAsCollidable(collidable1));
+	}
+	
 	@Test
 	public void testCanHaveAsCollidable_NullCase() {
 		assertFalse(world1.canHaveAsCollidable(null));
+	}
+	
+	@Test
+	public void testCanHaveAsCollidable_TooBigCollidableCase() {
+		assertFalse(world1.canHaveAsCollidable(collidable5));
+	}
+	
+	@Test
+	public void testCanHaveAsCollidable_ThisIsTerminatedCase() {
+		assertFalse(terminatedWorld.canHaveAsCollidable(collidable1));
 	}
 	
 	@Test

@@ -1,6 +1,10 @@
 package test;
 
 import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+
+import gameObjects.Bullet;
 import gameObjects.Ship;
 import gameObjects.World;
 
@@ -9,7 +13,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import support.Vector;
-
 
 import asteroids.Util;
 
@@ -29,23 +32,46 @@ public class ShipTest {
 	private static Ship ship1;
 	private static Ship ship2;
 	private static Ship terminatedShip;
+	private static Bullet bullet1;
+	private static Bullet bullet2;
+	private static Bullet terminatedBullet;
 	
+	private World mutableWorld1;
 	private Ship mutableShip1;
+	private Bullet mutableBullet1;
+	
+	private Ship mutableShip2;
 	private Ship mutableTerminatedShip;
+	
+	
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		world1 = new World();
 		ship1 = new Ship();
-		ship2 = new Ship();
-		terminatedShip = new Ship();
 		world1.addAsCollidable(ship1);
+		bullet1 = new Bullet(new Vector(100,100), new Vector(10,10), 10);
+		ship1.addAsBullet(bullet1);
+		
+		ship2 = new Ship();
+		bullet2 = new Bullet(new Vector(100,100), new Vector(10,10), 10);
+		
+		terminatedShip = new Ship();
 		terminatedShip.terminate();
+
+		terminatedBullet = new Bullet(new Vector(100,100), new Vector(0,0),10);
+		ship1.addAsBullet(terminatedBullet);
+		terminatedBullet.terminate();
 	}
 
 	@Before
 	public void setUp() throws Exception {
+		mutableWorld1 = new World();
 		mutableShip1 = new Ship();
+		mutableWorld1.addAsCollidable(mutableShip1);
+		mutableBullet1 = new Bullet(new Vector(100,100), new Vector(0,0),10);
+		
+		mutableShip2 = new Ship();
 		mutableTerminatedShip = new Ship();
 		mutableTerminatedShip.terminate();
 	}
@@ -59,8 +85,8 @@ public class ShipTest {
 
 	@Test
 	public void testSetDirection_LegalCase() {
-		mutableShip1.setDirection(Math.PI);
-		assertEquals(mutableShip1.getDirection(),Math.PI,Util.EPSILON);
+		mutableShip2.setDirection(Math.PI);
+		assertEquals(mutableShip2.getDirection(),Math.PI,Util.EPSILON);
 	}
 	
 	@Test
@@ -97,7 +123,7 @@ public class ShipTest {
 	
 	@Test
 	public void testGetMass() {
-		assertEquals(mutableShip1.getMass(),10,Util.EPSILON);
+		assertEquals(mutableShip2.getMass(),10,Util.EPSILON);
 	}
 	
 	@Test
@@ -151,50 +177,50 @@ public class ShipTest {
 	
 	@Test
 	public void testGetAcceleration() {
-		assertEquals(mutableShip1.getAcceleration(), 1.1*Math.pow(10,21)/1000/10, Util.EPSILON);
+		assertEquals(mutableShip2.getAcceleration(), 1.1*Math.pow(10,21)/1000/10, Util.EPSILON);
 	}
 	
 	// enabling thruster
 	
 	@Test
 	public void testSetThrusterEnabled() {
-		mutableShip1.setThrusterEnabled(true);
-		assertTrue(mutableShip1.isThrusterEnabled());
+		mutableShip2.setThrusterEnabled(true);
+		assertTrue(mutableShip2.isThrusterEnabled());
 	}
 	
 	@Test
 	public void testIsThrusterEnabled() {
-		assertFalse(mutableShip1.isThrusterEnabled());
+		assertFalse(mutableShip2.isThrusterEnabled());
 	}
 	
 	// thrust
 	
 	@Test
 	public void testThrust_LegalCase() {
-		mutableShip1.setThrusterEnabled(true);
-		mutableShip1.thrust(1E-16);
-		assertTrue(mutableShip1.getVelocity().equals(new Vector(mutableShip1.getAcceleration()*Math.cos(1),mutableShip1.getAcceleration()*Math.sin(1)).scale(1E-16)));
+		mutableShip2.setThrusterEnabled(true);
+		mutableShip2.thrust(1E-16);
+		assertTrue(mutableShip2.getVelocity().equals(new Vector(mutableShip2.getAcceleration()*Math.cos(1),mutableShip2.getAcceleration()*Math.sin(1)).scale(1E-16)));
 	}
 	
 	@Test
 	public void testThrust_NaNCase() {
-		mutableShip1.setThrusterEnabled(true);
-		mutableShip1.thrust(Double.NaN);
-		assertTrue(mutableShip1.getVelocity().equals(new Vector(0.0,0.0)));
+		mutableShip2.setThrusterEnabled(true);
+		mutableShip2.thrust(Double.NaN);
+		assertTrue(mutableShip2.getVelocity().equals(new Vector(0.0,0.0)));
 	}
 	
 	@Test
 	public void testThrust_NegativeAmountCase() {
-		mutableShip1.setThrusterEnabled(true);
-		mutableShip1.thrust(-1.0);
-		assertTrue(mutableShip1.getVelocity().equals(new Vector(0.0,0.0)));
+		mutableShip2.setThrusterEnabled(true);
+		mutableShip2.thrust(-1.0);
+		assertTrue(mutableShip2.getVelocity().equals(new Vector(0.0,0.0)));
 	}
 	
 	@Test
 	public void testThrust_TooHighAmountCase() {
-		mutableShip1.setThrusterEnabled(true);
-		mutableShip1.thrust(4000000000000000000000000000000000.0);
-		assertTrue(mutableShip1.getVelocity().equals(new Vector(300000.0*Math.cos(1),300000.0*Math.sin(1))));
+		mutableShip2.setThrusterEnabled(true);
+		mutableShip2.thrust(4000000000000000000000000000000000.0);
+		assertTrue(mutableShip2.getVelocity().equals(new Vector(300000.0*Math.cos(1),300000.0*Math.sin(1))));
 	}
 	
 	@Test(expected = IllegalStateException.class)
@@ -207,8 +233,8 @@ public class ShipTest {
 	
 	@Test
 	public void testTurn_LegalCase() {
-		mutableShip1.turn(Math.PI);
-		assertEquals(mutableShip1.getDirection(),1+Math.PI,Util.EPSILON);
+		mutableShip2.turn(Math.PI);
+		assertEquals(mutableShip2.getDirection(),1+Math.PI,Util.EPSILON);
 	}
 	
 	@Test
@@ -220,32 +246,154 @@ public class ShipTest {
 	public void testCanAcceptForTurn_IllegalCase() {
 		assertFalse(ship1.canAcceptForTurn(10));
 	}
+	
+	// canHaveAsBullet
+	
+	@Test 
+	public void testCanHaveAsBullet_LegalCase() {
+		assertTrue(ship1.canHaveAsBullet(bullet1));
+	}
+	
+	@Test
+	public void testCanHaveAsBullet_NullCase() {
+		assertFalse(ship1.canHaveAsBullet(null));
+	}
+	
+	@Test 
+	public void testCanHaveAsBullet_ThisNotAttachedCase() {
+		assertFalse(ship2.canHaveAsBullet(bullet1));
+	}
+	
+	@Test
+	public void testCanHaveAsBullet_ThisIsTerminatedCase() {
+		assertFalse(terminatedShip.canHaveAsBullet(bullet1));
+	}
+	
+	@Test
+	public void testCanHaveAsBullet_OtherIsTerminatedCase() {
+		assertFalse(ship1.canHaveAsBullet(terminatedBullet));
+	}
+	
+	// getAllBullets
+	
+	@Test
+	public void testGetAllBullets_NullReference() {
+		assertFalse(world1.getAllBullets().contains(null));
+	}
+	
+	@Test
+	public void testGetAllBullets_WorldReference() {
+		
+		for(Bullet bullet : world1.getAllBullets()) {
+			assertEquals(world1.getAllBullets().contains(bullet),world1.hasAsCollidable(bullet));
+		}
+	}
+	
+	// hasAsBullet 
+	
+	@Test
+	public void testHasAsBullet_LegalCase() {
+		assertTrue(ship1.hasAsBullet(bullet1));
+	}
+	
+	@Test
+	public void testHasAsBullet_IllegalCase1() {
+		assertFalse(ship2.hasAsBullet(bullet1));
+	}
+	
+	@Test
+	public void testHasAsBullet_IllegalCase2() {
+		assertFalse(ship1.hasAsBullet(bullet2));
+	}
+	
+	@Test
+	public void testHasAsBullet_NullCase() {
+		assertFalse(ship1.hasAsBullet(null));
+	}
+	
+	// hasProperBullets
+	
+	@Test
+	public void testHasProperBullets() {
+		for(Bullet bullet : world1.getAllBullets()) {
+			assertTrue(bullet.getWorld().equals(ship1));
+			assertTrue(ship1.hasAsBullet(bullet1));
+		}
+	}
+	
+	// addAsBullet
+	
+	@Test
+	public void testAddAsBullet_LegalCase() {
+		mutableShip1.addAsBullet(mutableBullet1);
+		// associatie wordt consistent opgebouwd.
+		assertTrue(mutableShip1.hasAsBullet(mutableBullet1));
+		assertEquals(mutableBullet1.getSource(),mutableShip1);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testAddAsBullet_NullCase() {
+		mutableShip1.addAsBullet(null);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testAddAsBullet_ThisIsNotAttachedCase() {
+		mutableShip2.addAsBullet(mutableBullet1);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testAddAsBullet_ThisIsTerminatedCase() {
+		terminatedShip.addAsBullet(mutableBullet1);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testAddAsBullet_AlreadyAttachedCase() {
+		mutableShip1.addAsBullet(mutableBullet1);
+		mutableShip2.addAsBullet(mutableBullet1);
+	}
+	
+	// removeAsBullet
+	
+	@Test
+	public void testRemoveAsBullet_LegalCase() {
+		mutableShip1.addAsBullet(mutableBullet1);
+		mutableShip1.removeAsBullet(mutableBullet1);
+		// associatie wordt consistent afgebouwd.
+		assertFalse(mutableShip1.hasAsBullet(mutableBullet1));
+		assertEquals(mutableBullet1.getSource(),null);
+	}
+	
+	@Test
+	public void testRemoveAsBullet_NotInSetCase() {
+		mutableShip1.removeAsBullet(mutableBullet1);
+	}
 		
 	// canFireBullets
 	
 	@Test 
 	public void testCanFireBullets_LegalCase() {
-		assertTrue(ship1.canFireBullets());
+		assertTrue(mutableShip1.canFireBullets());
 	}
 	
-	// TODO: fireBullets moet anders getest worden .. aparte test klasse met:
-	// (bidirectionele relatie testen) addasbullet, removeasbullet, hasproperbullet, canhaveasbullet allemaal apart checken
-	
 	@Test
-	public void testCanFireBullets_NoWorldAttachedCase() {
-		assertFalse(ship2.canFireBullets());
-	}
-	@Test
-	public void testCanFireBullets_ThisIsTerminated() {
-		assertFalse(terminatedShip.canFireBullets());
+	public void testCanFireBullets_IllegalCase() {
+		mutableShip1.fireBullet();
+		mutableShip1.fireBullet();
+		mutableShip1.fireBullet();
+		assertFalse(mutableShip1.canFireBullets());
 	}
 	
 	// fireBullet
 	
 	@Test
-	public void testFireBullet_LegalCase() {
-		ship1.fireBullet();
-		assertEquals(ship1.getWorld().getNbBullets(),1);
+	public void testFireBullet() {
+		mutableShip1.fireBullet();
+		assertEquals(mutableShip1.getWorld().getNbBullets(),1);
+		ArrayList<Bullet> bullets = new ArrayList<Bullet>(mutableShip1.getAllBullets());
+		Bullet check = bullets.get(0);
+		assertEquals(check.getSource(),mutableShip1);
 	}
+
+
 
 }

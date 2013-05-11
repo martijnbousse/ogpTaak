@@ -66,8 +66,8 @@ public class Bullet extends Collidable {
 	 * @post	This bullet references the given ship as the ship to which it is attached.
 	 * 			| (new this).getSource() == ship
 	 */
-	@Raw
-	public void setSource(Ship ship) {
+	@Raw //TODO: package visible gemaakt!
+	void setSource(Ship ship) {
 		assert ( (ship == null) || ship.hasAsBullet(this) );
 		assert ( (ship != null) || (getSource() == null) || (!getSource().hasAsBullet(this)) );
 		this.source = ship;

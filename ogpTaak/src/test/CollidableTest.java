@@ -352,7 +352,7 @@ public class CollidableTest {
 	
 	@Test
 	public void testGetWorld() {
-		assertTrue(collidable1.getWorld() == world1);
+		assertEquals(collidable1.getWorld(),world1);
 	}
 		
 	// canHaveAsWorld 
@@ -374,6 +374,8 @@ public class CollidableTest {
 	}
 	//REMINDER: collidable1 can still have another world as its world, but the precondition of setWorld 
 	//			prohibits this if the collidable is already attached to another world.
+	
+	// hasProperWorld
 	
 	@Test
 	public void testHasProperWorld_LegalCase() {

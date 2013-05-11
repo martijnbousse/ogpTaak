@@ -340,14 +340,16 @@ public class World {
 	 * Checks whether this world can have the given collidable as one of its
 	 * collidables.
 	 * 
-	 * @param collidable
-	 *            The collidable to check.
-	 * @return False if the given collide is not effective | if (collidable ==
-	 *         null) | then result == false Otherwise, true if and only if this
-	 *         world and the collidable are not yet terminated and the
-	 *         collidable fits this world's dimensions. | else result == |
-	 *         !((this.isTerminated()) || collidable.isTerminated()) | &&
-	 *         collidable.getRadius() < Math.min(getWidth()/2, getHeight()/2)
+	 * @param 	collidable
+	 *        	The collidable to check.
+	 * @return 	False if the given collide is not effective
+	 *  	 	| if (collidable == null) 	
+	 *  		| 	then result == false 
+	 *  		Otherwise, true if and only if this world and the collidable are not yet terminated and the
+	 *         	collidable fits this world's dimensions. 
+	 *         	| else result == 
+	 *         	|	!((this.isTerminated()) || collidable.isTerminated()) 	
+	 *         	| 		&& collidable.getRadius() < Math.min(getWidth()/2, getHeight()/2)
 	 */
 	@Raw
 	public boolean canHaveAsCollidable(Collidable collidable) {

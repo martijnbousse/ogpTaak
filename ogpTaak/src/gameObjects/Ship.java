@@ -286,11 +286,27 @@ public class Ship extends Collidable implements IShip{
 	 * 
 	 * @effect 	A new bullet is added to the world of this ship with a new position, new velocity, new radius and this ship as its source.
 	 * 			| getWorld.addAsCollidable(bullet)
+	 * 
+	 * 
+	 *    //TODO: het bovenstaande is veel gemakkelijker om te testen .. en volgens mij is het wel een goeie doc.
+	 *    
+	 *    
+	 * @effect	If this ship can fire bullets, it fires a bullet with a new position, new velocity, new radius and this ship as its source.
+	 * 			| let
+	 * 			|	Vector initialPosition = getPosition().add(new Vector((getRadius()+3)*Math.cos(getDirection()),
+	 * 			|												(getRadius()+3)*Math.sin(getDirection())))
+	 *			|	Vector initialVelocity = (new Vector(Math.cos(getDirection()),Math.sin(getDirection()))).scale(250)
+	 *			| in 
+	 *			| 	if canFireBullets()
+	 *			|		then Bullet bullet = new Bullet(initialPosition,initialVelocity,3)
+	 *			|			 this.addAsBullet(bullet)
+	 *			|			 getWorld().addAsCollidable(bullet)	
+	 *
+	 *
 	 * @throws	IllegalStateException
 	 * 			This ship is terminated
 	 * 			| isTerminated()
 	 */	
-	//TODO: documentatie updaten
 	public void fireBullet() throws IllegalStateException {
 		if (canFireBullets()) {
 			Vector initialPosition = getPosition().add( new Vector((getRadius()+3)*Math.cos(getDirection()),(getRadius()+3)*Math.sin(getDirection())));
@@ -316,7 +332,19 @@ public class Ship extends Collidable implements IShip{
 		return bullets.size() < 3;
 	}
 	
-	
+	/**
+	 * Return a set collecting all bullets associated with this ship.
+	 * 
+	 * @return 	The resulting set does not contain a null reference. 
+	 * 			| !result.contains(null)
+	 * @return Each bullet in the resulting set is attached to this ship,
+	 *         and vice versa. 
+	 *         | for each bullet in bullets: 
+	 *         |	(result.contains(bullet) == this.hasAsBullet(bullet))
+	 */
+	public Set<Bullet> getAllBullets() {
+		return new HashSet<Bullet>(this.bullets);
+	}
 	
 	/**
 	 * Check whether this ship has the given bullet as one of the

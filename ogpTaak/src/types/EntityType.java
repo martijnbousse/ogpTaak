@@ -11,6 +11,7 @@ public class EntityType extends Type {
 		this.value = entity;
 	}
 	
+	@Override
 	public Collidable getValue() {
 		return this.value;
 	}

@@ -10,7 +10,8 @@ public class DoubleType extends Type {
 		this.value = value;
 	}
 	
-	public double getValue() {
+	@Override
+	public Double getValue() {
 		return this.value;
 	}
 	

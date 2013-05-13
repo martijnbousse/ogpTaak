@@ -2,7 +2,7 @@ package model;
 
 import java.util.Map;
 
-import programrelated.Statement;
+import statements.Statement;
 import types.Type;
 
 public class Program {

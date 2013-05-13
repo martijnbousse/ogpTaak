@@ -26,6 +26,7 @@ import singleArgumentedExpressions.GetYPosition;
 import singleArgumentedExpressions.GetYVelocity;
 import singleArgumentedExpressions.Sinus;
 import singleArgumentedExpressions.SquareRoot;
+import statements.Statement;
 import types.BooleanType;
 import types.DoubleType;
 import types.EntityType;
@@ -60,12 +61,13 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Expression createNull(int line, int column) {
-		return null;
+		return new Entity(null);
 	}
 
 	@Override
 	public Expression createSelf(int line, int column) {
 		// TODO Auto-generated method stub
+		//return new Entity();
 		return null;
 	}
 

@@ -22,7 +22,7 @@ public class AsteroidsParserParser extends Parser {
 		DO=32, FOREACH=33, ASSIGN=34, MUL=35, DIV=36, ADD=37, SUB=38, EQ=39, NEQ=40, 
 		LT=41, GT=42, LEQ=43, GEQ=44, AND=45, OR=46, NUMBER=47, FLOAT=48, INTEGER=49, 
 		SIGN=50, IDENTIFIER=51, LEFT_PAREN=52, RIGHT_PAREN=53, LEFT_BRACE=54, 
-		RIGHT_BRACE=55, SEMICOLON=56, COMMA=57, WHITESPACE=58, SINGLE_COMMENT=59, 
+		RIGHT_BRACE=55, SEMICOLON=56, COMMA=57,WHITESPACE=58, SINGLE_COMMENT=59, 
 		MOD=60;
 	public static final String[] tokenNames = {
 		"<INVALID>", "'self'", "'true'", "'false'", "'null'", "'bool'", "'double'", 

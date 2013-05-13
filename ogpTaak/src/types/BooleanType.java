@@ -10,7 +10,8 @@ public class BooleanType extends Type {
 		this.value = value;
 	}
 
-	public boolean getValue() {
+	@Override
+	public Boolean getValue() {
 		return this.value;
 	}
 	

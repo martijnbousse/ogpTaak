@@ -5,6 +5,8 @@ import be.kuleuven.cs.som.annotate.*;
 
 import java.util.*;
 
+import model.Program;
+
 import support.Collision;
 
 /**
@@ -479,6 +481,9 @@ public class World {
 					collidable.move(dt);
 					if(collidable instanceof Ship) {
 						((Ship) collidable).thrust(dt);
+					}
+					if(collidable instanceof Ship && ((Ship) collidable).getProgram() != null) {
+						((Ship) collidable).executeProgram();
 					}
 				}
 			}

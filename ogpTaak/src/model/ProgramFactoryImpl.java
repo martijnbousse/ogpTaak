@@ -26,11 +26,8 @@ import singleArgumentedExpressions.GetYPosition;
 import singleArgumentedExpressions.GetYVelocity;
 import singleArgumentedExpressions.Sinus;
 import singleArgumentedExpressions.SquareRoot;
-import statements.Statement;
-import types.BooleanType;
-import types.DoubleType;
-import types.EntityType;
-import types.Type;
+import statements.*;
+import types.*;
 
 public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement, Type> {
 
@@ -159,7 +156,9 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Expression createGetDirection(int line, int column) {
+		//TODO
 		return null;
+		
 	}
 
 	@Override
@@ -174,26 +173,22 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Statement createEnableThruster(int line, int column) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ThrustOn();
 	}
 
 	@Override
 	public Statement createDisableThruster(int line, int column) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ThrustOff();
 	}
 
 	@Override
 	public Statement createFire(int line, int column) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Fire();
 	}
 
 	@Override
 	public Statement createTurn(int line, int column, Expression angle) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Turn(angle);
 	}
 
 	@Override
@@ -204,14 +199,12 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Statement createIf(int line, int column, Expression condition, Statement then, Statement otherwise) {
-		// TODO Auto-generated method stub
-		return null;
+		return new IfElse(condition, then, otherwise);
 	}
 
 	@Override
 	public Statement createWhile(int line, int column, Expression condition, Statement body) {
-		// TODO Auto-generated method stub
-		return null;
+		return new While(condition, body);
 	}
 
 	@Override
@@ -223,20 +216,19 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Statement createSkip(int line, int column) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Skip();
 	}
 
 	@Override
 	public Statement createSequence(int line, int column, List<Statement> statements) {
-		// TODO Auto-generated method stub
+		if(!statements.isEmpty())
+			return statements.get(0);
 		return null;
 	}
 
 	@Override
 	public Statement createPrint(int line, int column, Expression e) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Print(e);
 	}
 
 	@Override

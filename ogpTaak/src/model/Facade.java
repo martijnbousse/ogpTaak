@@ -2,8 +2,10 @@ package model;
 
 import gameObjects.*;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
 import java.util.Random;
@@ -284,15 +286,22 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet, Program> {
 	@Override
 	public model.IFacade.ParseOutcome<Program> loadProgramFromStream(
 			InputStream stream) throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuilder inputStringBuilder = new StringBuilder();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream));
+		String line = bufferedReader.readLine();
+        while(line != null){
+            inputStringBuilder.append(line);inputStringBuilder.append('\n');
+            line = bufferedReader.readLine();
+        }
+        String fileText =  inputStringBuilder.toString();
+        System.out.println(fileText);
+        return parseProgram(fileText);
 	}
 
 	@Override
 	public model.IFacade.ParseOutcome<Program> loadProgramFromUrl(URL url)
 			throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		return loadProgramFromStream(url.openStream());
 	}
 
 	@Override

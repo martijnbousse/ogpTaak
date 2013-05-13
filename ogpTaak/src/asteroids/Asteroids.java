@@ -153,7 +153,7 @@ public class Asteroids<World, Ship, Asteroid, Bullet, Program> extends JFrame {
   }
 
   public static void main(final String[] args) {
-    boolean tryFullscreen = true;
+    boolean tryFullscreen = false;
     boolean enableSound = true;
     URL aiProgramUrl = Asteroids.class.getClassLoader().getResource("asteroids/resources/program.txt"); 
     for(int i = 0; i < args.length; i++) {

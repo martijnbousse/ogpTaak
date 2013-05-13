@@ -320,7 +320,7 @@ public class Ship extends Collidable implements IShip{
 	 * 			| result == (getWorld() != null) && !isTerminated()
 	 */
 	public boolean canFireBullets() {
-		return bullets.size() < 3;
+		return bullets.size() < 1000;
 	}
 	
 	/**
@@ -502,7 +502,7 @@ public class Ship extends Collidable implements IShip{
 	 * Executes the program of this ship.
 	 */
 	public void executeProgram() {
-		getProgram().getStatement().execute(program.getGlobals(), this);
+		getProgram().getStatement().execute(getProgram().getGlobals(), this);
 	}
 
 	/**

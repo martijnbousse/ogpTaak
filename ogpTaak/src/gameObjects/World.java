@@ -5,8 +5,6 @@ import be.kuleuven.cs.som.annotate.*;
 
 import java.util.*;
 
-import model.Program;
-
 import support.Collision;
 
 /**
@@ -459,21 +457,14 @@ public class World {
 	public void evolve(double dt) throws IllegalArgumentException{
 		if(!Util.fuzzyEquals(0.0, dt)) {
 			Collision next = null;
-			try{
-				next = getNextCollision();
-			} catch(Exception exc) {
-				//numeric error causing fail in calculation of next collision.
-				//do nothing
-			}
-			if (next != null 
-					&& Util.fuzzyLessThanOrEqualTo(0.0, next.getTime()) 
+			next = getNextCollision();
+			if (next != null
 					&& Util.fuzzyLessThanOrEqualTo(next.getTime(),dt)
 					 ) {
 				for(Collidable collidable : getAllCollidables()) {
 					collidable.move(next.getTime());
 				}
 				resolveCollision(next);
-				if (next.getSecond()!=null)
 				evolve(dt-next.getTime());
 			}
 			else {
@@ -482,11 +473,21 @@ public class World {
 					if(collidable instanceof Ship) {
 						((Ship) collidable).thrust(dt);
 					}
-					if(collidable instanceof Ship && ((Ship) collidable).getProgram() != null) {
-						((Ship) collidable).executeProgram();
-					}
+				}
+				executeAllPrograms(dt);
+			}
+		}
+	}
+
+	private void executeAllPrograms(double dt) {
+		double amount = dt/0.2;
+		while(amount > 0) {
+		for(Collidable collidable : getAllCollidables()) {
+				if(collidable instanceof Ship && ((Ship) collidable).getProgram() != null) {
+					((Ship) collidable).executeProgram();
 				}
 			}
+		amount--;
 		}
 	}
 

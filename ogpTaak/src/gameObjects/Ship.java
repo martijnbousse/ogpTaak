@@ -48,8 +48,6 @@ public class Ship extends Collidable implements IShip{
 	 * 			The mass for this new ship.
 	 * @param 	direction
 	 * 			The direction for this new ship.
-	 * @param 	program
-	 * 			The program for this new ship.
 	 * @effect	This new ship is initialized as a collidable with the given position, 
 	 * 			the given velocity, the given radius and the given mass.
 	 * 			| super(position, velocity, radius, mass)
@@ -63,13 +61,12 @@ public class Ship extends Collidable implements IShip{
 	 * 			| setProgram(program)
 	 */
 	@Raw
-	public Ship(Vector position, Vector velocity, double radius, double mass, double direction, Program program) throws IllegalArgumentException {
+	public Ship(Vector position, Vector velocity, double radius, double mass, double direction) throws IllegalArgumentException {
 		super(position,velocity, radius);
 		setDirection(direction);
 		if (!isValidMass(mass))
 			throw new IllegalArgumentException();
 		this.mass = mass;
-		setProgram(program);
 	}
 
 	/**
@@ -81,7 +78,14 @@ public class Ship extends Collidable implements IShip{
 	 */
 	@Raw
 	public Ship() {
-		this(new Vector(10, 10), new Vector(0, 0), 10, 10, 1,null);
+		this(new Vector(10, 10), new Vector(0, 0), 10, 10, 1);
+	}
+	
+	@Override
+	public void terminate() {
+		if(getProgram() != null) 
+			getProgram().terminate();
+		super.terminate();
 	}
 	
 	/**
@@ -320,7 +324,7 @@ public class Ship extends Collidable implements IShip{
 	 * 			| result == (getWorld() != null) && !isTerminated()
 	 */
 	public boolean canFireBullets() {
-		return bullets.size() < 1000;
+		return bullets.size() < 3;
 	}
 	
 	/**
@@ -468,29 +472,21 @@ public class Ship extends Collidable implements IShip{
 	 * 
 	 * @param 	program
 	 * 			The new program for this ship.
-	 * @post 	The new program of this ship is equal to the given program.
+	 * @pre		If the given program is effective, it must already reference this ship as its ship.
+	 * 			| if (program != null)
+	 * 			|	then program.getShip().equals(this)
+	 * @pre		If the given program is not effective and this ship references an effective program,
+	 * 			that program may not reference this ship as its ship.						
+	 * 			| if ((program == null) && (getProgram() != null))
+	 * 			| 	then !getProgram().getShip().equals(this)
+	 * @post	This ship references the given program as the program to which it is attached.
 	 * 			| (new this).getProgram() == program
-	 * @throws 	IllegalProgramException
-	 * 			The given program is not a valid program for any ship.
-	 * 			| !isValidProgram() //TODO: zie verder ...
 	 */
 	@Raw
 	public void setProgram(Program program)	{
-			// isValidProgram -> indien ja, ook @raw bij isvalidprogram
+			assert ( (program == null) || program.getShip().equals(this));
+			assert ( (program != null) || (getProgram() == null) || (getProgram().getShip() == null) );
 			this.program = program;
-	}
-	
-	/**
-	 * Check whether the given program is a valid program for any ship.
-	 * 	
-	 * @param 	program
-	 * 			The program to check.
-	 * @return	True if and only if the given program is ...
-	 * 			| ... 
-	 */
-	public static boolean isValidProgram(Program program){
-		return true; //TODO: Hebben we dit nodig? Ik zie voorlopig nog geen reden voor geen goed programma (standaard construct bij unidirectioneel)
-					// vergeet niet de invariant toe te voegen indien ja
 	}
 	
 	/**

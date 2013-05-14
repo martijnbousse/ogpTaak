@@ -156,9 +156,7 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Expression createGetDirection(int line, int column) {
-		//TODO
-		return null;
-		
+		return new GetDirection(createSelf(line, column));
 	}
 
 	@Override
@@ -193,8 +191,7 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Statement createAssignment(int line, int column, String variable, Expression rhs) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Assignment(variable, rhs);
 	}
 
 	@Override
@@ -221,8 +218,12 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Statement createSequence(int line, int column, List<Statement> statements) {
-		if(!statements.isEmpty())
-			return statements.get(0);
+		if(!statements.isEmpty()) {
+			if(statements.get(statements.size()-1) == null) {
+				statements.remove(statements.size()-1);
+			}
+			return new Sequence(statements);
+		}
 		return null;
 	}
 

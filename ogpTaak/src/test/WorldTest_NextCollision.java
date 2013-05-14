@@ -67,36 +67,36 @@ public class WorldTest_NextCollision {
 	public void setUp() throws Exception {
 	
 		world1 = new World(1000,1000);
-		collidable1 = new Ship(new Vector(100,100), new Vector(0,-10), 10, 10, 0, null);
-		collidable2 = new Ship(new Vector(500,500), new Vector(0,-10), 10, 10, 0, null);
-		collidable3 = new Ship(new Vector(100,700), new Vector(10,0), 10, 10, 0, null);
+		collidable1 = new Ship(new Vector(100,100), new Vector(0,-10), 10, 10, 0);
+		collidable2 = new Ship(new Vector(500,500), new Vector(0,-10), 10, 10, 0);
+		collidable3 = new Ship(new Vector(100,700), new Vector(10,0), 10, 10, 0);
 		world1.addAsCollidable(collidable1);
 		world1.addAsCollidable(collidable2);
 		world1.addAsCollidable(collidable3);
 		
 		world2 = new World(1000,1000);
-		collidable4 = new Ship(new Vector(100,100), new Vector(10,0), 10, 10, 0, null);
-		collidable5 = new Ship(new Vector(400,100), new Vector(-10,0), 10, 10, 0, null);
-		collidable6 = new Ship(new Vector(100,500), new Vector(10,0), 10, 10, 0, null);
-		collidable7 = new Ship(new Vector(900,500), new Vector(-10,0), 10, 10, 0, null);
+		collidable4 = new Ship(new Vector(100,100), new Vector(10,0), 10, 10, 0);
+		collidable5 = new Ship(new Vector(400,100), new Vector(-10,0), 10, 10, 0);
+		collidable6 = new Ship(new Vector(100,500), new Vector(10,0), 10, 10, 0);
+		collidable7 = new Ship(new Vector(900,500), new Vector(-10,0), 10, 10, 0);
 		world2.addAsCollidable(collidable4);
 		world2.addAsCollidable(collidable5);
 		world2.addAsCollidable(collidable6);
 		world2.addAsCollidable(collidable7);
 		
 		world3 = new World(1000,1000);
-		collidable8 = new Ship(new Vector(400,500), new Vector(10,0), 10, 10, 0, null);
-		collidable9 = new Ship(new Vector(600,500), new Vector(-10,0), 10, 10, 0, null);
-		collidable10 = new Ship(new Vector(400,400), new Vector(0,-10), 10, 10, 0, null);
-		collidable11 = new Ship(new Vector(400,600), new Vector(10,0), 10, 10, 0, null);
+		collidable8 = new Ship(new Vector(400,500), new Vector(10,0), 10, 10, 0);
+		collidable9 = new Ship(new Vector(600,500), new Vector(-10,0), 10, 10, 0);
+		collidable10 = new Ship(new Vector(400,400), new Vector(0,-10), 10, 10, 0);
+		collidable11 = new Ship(new Vector(400,600), new Vector(10,0), 10, 10, 0);
 		world3.addAsCollidable(collidable8);
 		world3.addAsCollidable(collidable9);
 		world3.addAsCollidable(collidable10);
 		world3.addAsCollidable(collidable11);
 		
 		world4 = new World(1000,1000);
-		collidable12 = new Ship(new Vector(100,100), new Vector(0,0), 10, 10, 0, null);
-		collidable13 = new Ship(new Vector(900,900), new Vector(0,0), 10, 10, 0, null);
+		collidable12 = new Ship(new Vector(100,100), new Vector(0,0), 10, 10, 0);
+		collidable13 = new Ship(new Vector(900,900), new Vector(0,0), 10, 10, 0);
 		world4.addAsCollidable(collidable12);
 		world4.addAsCollidable(collidable13);
 	}

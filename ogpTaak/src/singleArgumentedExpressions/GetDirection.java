@@ -1,5 +1,6 @@
 package singleArgumentedExpressions;
 
+import gameObjects.Ship;
 import programrelated.Expression;
 import types.DoubleType;
 import types.EntityType;
@@ -14,8 +15,8 @@ public class GetDirection extends EntityRelatedExpression {
 	@Override
 	public DoubleType evaluate() {
 		Type thisType = getArgument().evaluate();
-		double radius = ((EntityType) thisType).getValue().getRadius();
-		return new DoubleType(radius);
+		double direction = ((Ship)((EntityType) thisType).getValue()).getDirection();
+		return new DoubleType(direction);
 	}
 
 }

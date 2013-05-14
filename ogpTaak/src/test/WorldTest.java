@@ -65,7 +65,7 @@ public class WorldTest {
 		
 		collidable4 = new Ship();
 		
-		collidable5 = new Ship(new Vector(100,100), new Vector(0,0), 500, 10, 10, null);
+		collidable5 = new Ship(new Vector(100,100), new Vector(0,0), 500, 10, 10);
 	
 	}
 	
@@ -89,8 +89,8 @@ public class WorldTest {
 		mutableShip1.fireBullet();
 		
 		mutableWorld4 = new World(1000,1000);
-		mutableShip2 = new Ship(new Vector(250,250), new Vector(10,0), 10,10,0,null);
-		mutableShip3 = new Ship(new Vector(370,250), new Vector(-10,0), 10,10,0,null);
+		mutableShip2 = new Ship(new Vector(250,250), new Vector(10,0), 10,10,0);
+		mutableShip3 = new Ship(new Vector(370,250), new Vector(-10,0), 10,10,0);
 		mutableWorld4.addAsCollidable(mutableShip2);
 		mutableWorld4.addAsCollidable(mutableShip3);
 		

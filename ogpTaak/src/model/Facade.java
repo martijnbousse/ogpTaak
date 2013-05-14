@@ -91,7 +91,7 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet, Program> {
 		}
 		
 		try{
-			return new Ship(new Vector(x,y), new Vector(xVelocity, yVelocity), radius,mass, direction, null);
+			return new Ship(new Vector(x,y), new Vector(xVelocity, yVelocity), radius,mass, direction);
 		} catch (IllegalArgumentException exc){
 			throw new ModelException(exc);
 		}
@@ -317,7 +317,6 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet, Program> {
 
 	@Override
 	public void setShipProgram(Ship ship, Program program) {
-		ship.setProgram(program);
+		program.setShip(ship);
 	}
-
 }

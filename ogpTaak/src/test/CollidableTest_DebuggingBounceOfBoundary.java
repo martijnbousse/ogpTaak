@@ -34,7 +34,7 @@ public class CollidableTest_DebuggingBounceOfBoundary {
 	public void setUp() throws Exception {
 		world = new World();
 		asteroid = new Asteroid(new Vector(150,100), new Vector(0,-10), 10);
-		ship = new Ship(new Vector(1000,1000), new Vector(0,0), 10, 10, 0, null);
+		ship = new Ship(new Vector(1000,1000), new Vector(0,0), 10, 10, 0);
 		world.addAsCollidable(asteroid);
 		world.addAsCollidable(ship);
 	}

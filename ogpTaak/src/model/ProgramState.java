@@ -22,7 +22,11 @@ public class ProgramState {
 		return this.self;
 	}
 	
-	private final Ship self;
+	public void setShip(Ship ship) {
+		this.self = ship;
+	}
+	
+	private Ship self;
 	
 	@Basic
 	public Map<String,Type> getGlobals() {
@@ -34,5 +38,4 @@ public class ProgramState {
 	public void assign(String name, Type value) {
 		this.globals.put(name, value);
 	}
-	
 }

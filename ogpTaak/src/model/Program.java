@@ -14,8 +14,8 @@ import types.Type;
 public class Program {
 
 	public Program(Map<String, Type> globals, Statement statement) {
-		this.globals = globals;
 		this.statement = statement;
+		this.state = new ProgramState(null, globals);
 	}
 
 	public void terminate() {
@@ -30,8 +30,6 @@ public class Program {
 //	public Map<String, Type> getGlobals() {
 //		return this.globals;
 //	}
-
-	private Map<String, Type> globals;
 
 	public Statement getStatement() {
 		return this.statement;
@@ -70,14 +68,7 @@ public class Program {
 	public ProgramState getState() {
 		return this.state;
 	}
-
-	public void setNewState(Ship ship) {
-		ProgramState newState = new ProgramState(ship, globals);
-		this.state = newState;
-	}
 	
-	
-
 //	public boolean hasProperShip() {
 //		return canHaveAsShip(getShip()) && getShip().getProgram().equals(this);
 //	}

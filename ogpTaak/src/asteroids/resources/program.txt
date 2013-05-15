@@ -1,1 +1,3 @@
+thrust;
 turn -0.1;
+fire;

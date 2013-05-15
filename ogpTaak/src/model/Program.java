@@ -27,9 +27,9 @@ public class Program {
 		}
 	}
 
-	public Map<String, Type> getGlobals() {
-		return this.globals;
-	}
+//	public Map<String, Type> getGlobals() {
+//		return this.globals;
+//	}
 
 	private Map<String, Type> globals;
 
@@ -72,7 +72,7 @@ public class Program {
 	}
 
 	public void setNewState(Ship ship) {
-		ProgramState newState = new ProgramState(ship, getGlobals());
+		ProgramState newState = new ProgramState(ship, globals);
 		this.state = newState;
 	}
 	

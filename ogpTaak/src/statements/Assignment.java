@@ -1,15 +1,13 @@
 package statements;
 
-import gameObjects.Ship;
 
-import java.util.Map;
+import model.ProgramState;
 
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
 
 import programrelated.Expression;
 
-import types.Type;
 
 public class Assignment extends Statement {
 
@@ -23,8 +21,8 @@ public class Assignment extends Statement {
 	}
 
 	@Override
-	public void execute(Map<String, Type> globals, Ship ship) {
-		globals.put(this.getName(), this.getRHS().evaluate());
+	public void execute(ProgramState state) {
+		state.assign(this.getName(), this.getRHS().evaluate(state));
 	}
 
 	@Basic @Immutable
@@ -36,5 +34,4 @@ public class Assignment extends Statement {
 	public String getName() {
 		return this.name;
 	}
-
 }

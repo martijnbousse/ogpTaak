@@ -63,9 +63,7 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Expression createSelf(int line, int column) {
-		// TODO Auto-generated method stub
-		//return new Entity();
-		return null;
+		return new Self();
 	}
 
 	@Override
@@ -95,8 +93,7 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Expression createVariable(int line, int column, String name) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Variable(name);
 	}
 
 	@Override
@@ -156,7 +153,7 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Expression createGetDirection(int line, int column) {
-		return new GetDirection(createSelf(line, column));
+		return new GetDirection();
 	}
 
 	@Override

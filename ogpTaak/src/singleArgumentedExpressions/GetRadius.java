@@ -1,5 +1,6 @@
 package singleArgumentedExpressions;
 
+import model.ProgramState;
 import programrelated.Expression;
 import types.*;
 
@@ -10,8 +11,8 @@ public class GetRadius extends EntityRelatedExpression {
 	}
 
 	@Override
-	public DoubleType evaluate() {
-		Type thisType = getArgument().evaluate();
+	public DoubleType evaluate(ProgramState state) {
+		Type thisType = getArgument().evaluate(state);
 		double radius = ((EntityType) thisType).getValue().getRadius();
 		return new DoubleType(radius);
 	}

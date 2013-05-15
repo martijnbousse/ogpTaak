@@ -30,8 +30,9 @@ public class ProgramState {
 	}
 	
 	private final Map<String,Type> globals;
-	
-	
-	
 
+	public void assign(String name, Type value) {
+		this.globals.put(name, value);
+	}
+	
 }

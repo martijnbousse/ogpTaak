@@ -1,21 +1,21 @@
 package singleArgumentedExpressions;
 
+import model.ProgramState;
 import gameObjects.Ship;
 import programrelated.Expression;
 import types.DoubleType;
 import types.EntityType;
 import types.Type;
 
-public class GetDirection extends EntityRelatedExpression {
+public class GetDirection extends Expression {
 
-	public GetDirection(Expression argument) {
-		super(argument);
+	public GetDirection() {
+		super();
 	}
 
 	@Override
-	public DoubleType evaluate() {
-		Type thisType = getArgument().evaluate();
-		double direction = ((Ship)((EntityType) thisType).getValue()).getDirection();
+	public DoubleType evaluate(ProgramState state) {
+		double direction = state.getSelf().getDirection();
 		return new DoubleType(direction);
 	}
 

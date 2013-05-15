@@ -317,6 +317,7 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet, Program> {
 
 	@Override
 	public void setShipProgram(Ship ship, Program program) {
-		program.setShip(ship);
+		program.setNewState(ship);
+		ship.setProgram(program);
 	}
 }

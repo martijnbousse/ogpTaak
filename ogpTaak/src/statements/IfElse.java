@@ -1,12 +1,10 @@
 package statements;
 
-import gameObjects.Ship;
 
-import java.util.Map;
+import model.ProgramState;
 
 import programrelated.Expression;
 import types.BooleanType;
-import types.Type;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
 
@@ -40,12 +38,12 @@ public class IfElse extends Statement {
 	private final Statement elseBody;
 
 	@Override
-	public void execute(Map<String, Type> globals, Ship ship) {
-		boolean bool = ((BooleanType) getCondition().evaluate()).getValue();
+	public void execute(ProgramState state) {
+		boolean bool = ((BooleanType) getCondition().evaluate(state)).getValue();
 		if(bool) {
-			getIfBody().execute(globals, ship);
+			getIfBody().execute(state);
 		} else {
-			getElseBody().execute(globals, ship);
+			getElseBody().execute(state);
 		}
 	}
 }

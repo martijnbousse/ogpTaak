@@ -1,12 +1,10 @@
 package statements;
 
-import gameObjects.Ship;
 
-import java.util.Map;
+import model.ProgramState;
 
 import be.kuleuven.cs.som.annotate.*;
 import programrelated.Expression;
-import types.Type;
 
 public class Print extends Statement {
 	
@@ -22,7 +20,7 @@ public class Print extends Statement {
 	private final Expression expression;
 
 	@Override
-	public void execute(Map<String, Type> globals, Ship ship) {
-		System.out.println(getExpression().evaluate().getValue());
+	public void execute(ProgramState state) {
+		System.out.println(getExpression().evaluate(state).getValue());
 	}
 }

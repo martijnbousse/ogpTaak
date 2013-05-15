@@ -1,10 +1,8 @@
 package statements;
 
-import gameObjects.Ship;
 
-import java.util.Map;
+import model.ProgramState;
 
-import types.Type;
 
 public class ThrustOff extends Action {
 	
@@ -13,7 +11,7 @@ public class ThrustOff extends Action {
 	}
 
 	@Override
-	public void execute(Map<String, Type> globals, Ship ship) {
-		ship.setThrusterEnabled(false);
+	public void execute(ProgramState state) {
+		state.getSelf().setThrusterEnabled(false);
 	}
 }

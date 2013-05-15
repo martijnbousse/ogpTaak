@@ -1,10 +1,8 @@
 package statements;
 
-import gameObjects.Ship;
 
-import java.util.Map;
+import model.ProgramState;
 
-import types.Type;
 
 public class Fire extends Action {
 	
@@ -13,7 +11,7 @@ public class Fire extends Action {
 	}
 
 	@Override
-	public void execute(Map<String, Type> globals, Ship ship) {
-		ship.fireBullet();	
+	public void execute(ProgramState state) {
+		state.getSelf().fireBullet();	
 	}
 }

@@ -1,5 +1,6 @@
 package singleArgumentedExpressions;
 
+import model.ProgramState;
 import programrelated.Expression;
 import types.DoubleType;
 import types.EntityType;
@@ -12,8 +13,8 @@ public class GetYPosition extends EntityRelatedExpression {
 	}
 
 	@Override
-	public DoubleType evaluate() {
-		Type thisType = getArgument().evaluate();
+	public DoubleType evaluate(ProgramState state) {
+		Type thisType = getArgument().evaluate(state);
 		double position = ((EntityType) thisType).getValue().getPosition().getYComponent();
 		return new DoubleType(position);
 	}

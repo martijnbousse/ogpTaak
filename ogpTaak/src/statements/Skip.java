@@ -1,10 +1,8 @@
 package statements;
 
-import gameObjects.Ship;
 
-import java.util.Map;
+import model.ProgramState;
 
-import types.Type;
 
 public class Skip extends Action {
 	
@@ -13,7 +11,7 @@ public class Skip extends Action {
 	}
 
 	@Override
-	public void execute(Map<String, Type> globals, Ship ship) {
+	public void execute(ProgramState state) {
 		// do nothing
 	}
 

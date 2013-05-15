@@ -1,15 +1,13 @@
 package statements;
 
-import gameObjects.Ship;
 
-import java.util.Map;
+import model.ProgramState;
 
 import asteroids.Util;
 import be.kuleuven.cs.som.annotate.*;
 
 import programrelated.Expression;
 import types.DoubleType;
-import types.Type;
 
 public class Turn extends Action {
 	
@@ -26,14 +24,14 @@ public class Turn extends Action {
 	private final Expression e;
 
 	@Override
-	public void execute(Map<String, Type> globals, Ship ship) {
-		double angle = ((DoubleType) getExpression().evaluate()).getValue();   
-		while(!Util.fuzzyLessThanOrEqualTo(0.0, ship.getDirection()+angle)){
+	public void execute(ProgramState state) {
+		double angle = ((DoubleType) getExpression().evaluate(state)).getValue();   
+		while(!Util.fuzzyLessThanOrEqualTo(0.0, state.getSelf().getDirection()+angle)){
 			angle = angle + Math.PI*2;
 		}
-		while(!Util.fuzzyLessThanOrEqualTo(ship.getDirection()+angle, Math.PI*2)){
+		while(!Util.fuzzyLessThanOrEqualTo(state.getSelf().getDirection()+angle, Math.PI*2)){
 			angle = angle-Math.PI*2;
 		}
-		ship.turn(angle);
+		state.getSelf().turn(angle);
 	}
 }

@@ -1,14 +1,13 @@
 package statements;
 
-import gameObjects.Ship;
 
 import java.util.List;
-import java.util.Map;
+
+import model.ProgramState;
 
 import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
 
-import types.Type;
 
 public class Sequence extends Statement {
 	
@@ -25,9 +24,9 @@ public class Sequence extends Statement {
 	private final List<Statement> statements;
 
 	@Override
-	public void execute(Map<String, Type> globals, Ship ship) {
+	public void execute(ProgramState state) {
 		for(Statement statement : getStatements()) {
-			statement.execute(globals, ship);
+			statement.execute(state);
 		}
 	}
 }

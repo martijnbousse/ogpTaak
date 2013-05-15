@@ -1,5 +1,6 @@
 package programrelated;
 
+import model.ProgramState;
 import types.Type;
 
 public abstract class LiteralExpression extends Expression {
@@ -8,7 +9,7 @@ public abstract class LiteralExpression extends Expression {
 	}
 	
 	@Override
-	public Type evaluate() {
+	public Type evaluate(ProgramState state) {
 		return this.value;
 	}
 	

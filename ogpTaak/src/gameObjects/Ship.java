@@ -484,8 +484,8 @@ public class Ship extends Collidable implements IShip{
 	 */
 	@Raw
 	public void setProgram(Program program)	{
-			assert ( (program == null) || program.getShip().equals(this));
-			assert ( (program != null) || (getProgram() == null) || (getProgram().getShip() == null) );
+//			assert ( (program == null) || program.getShip().equals(this));
+//			assert ( (program != null) || (getProgram() == null) || (getProgram().getShip() == null) );
 			this.program = program;
 	}
 	
@@ -498,7 +498,7 @@ public class Ship extends Collidable implements IShip{
 	 * Executes the program of this ship.
 	 */
 	public void executeProgram() {
-		getProgram().getStatement().execute(getProgram().getGlobals(), this);
+		program.execute();
 	}
 
 	/**

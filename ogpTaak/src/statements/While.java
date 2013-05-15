@@ -1,8 +1,7 @@
 package statements;
 
-import gameObjects.Ship;
 
-import java.util.Map;
+import model.ProgramState;
 
 import be.kuleuven.cs.som.annotate.*;
 
@@ -33,10 +32,10 @@ public class While extends Statement {
 
 	
 	@Override
-	public void execute(Map<String, Type> globals, Ship ship) {
-		boolean bool = ((BooleanType) getCondition().evaluate()).getValue();
+	public void execute(ProgramState state) {
+		boolean bool = ((BooleanType) getCondition().evaluate(state)).getValue();
 		while(bool) {
-			getBody().execute(globals, ship);
+			getBody().execute(state);
 		}
 	}
 }

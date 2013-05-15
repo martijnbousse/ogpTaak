@@ -1,5 +1,6 @@
 package binaryExpressions;
 
+import model.ProgramState;
 import programrelated.Expression;
 import types.BooleanType;
 
@@ -9,5 +10,5 @@ public abstract class ComparatingExpression extends BinaryExpression {
 		super(first, second);
 	}
 	
-	public abstract BooleanType evaluate();
+	public abstract BooleanType evaluate(ProgramState state);
 }

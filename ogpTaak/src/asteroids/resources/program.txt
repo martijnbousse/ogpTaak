@@ -1,5 +1,1 @@
-double d;
-
-a := 0.1;
-d := a;
-turn d;
+turn -0.1;

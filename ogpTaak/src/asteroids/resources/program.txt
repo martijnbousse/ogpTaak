@@ -1,0 +1,5 @@
+double d;
+
+a := 0.1;
+d := a;
+turn d;

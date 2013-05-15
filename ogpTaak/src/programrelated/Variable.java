@@ -4,8 +4,6 @@ import be.kuleuven.cs.som.annotate.Basic;
 import model.ProgramState;
 import types.Type;
 
-//TODO: not finished
-
 public class Variable extends Expression {
 	
 	private String name;

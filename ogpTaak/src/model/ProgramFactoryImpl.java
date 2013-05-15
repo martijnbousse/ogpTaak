@@ -204,8 +204,7 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 	@Override
 	public Statement createForeach(int line, int column,
 			model.ProgramFactory.ForeachType type, String variableName, Statement body) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ForEach(type, variableName, body);
 	}
 
 	@Override

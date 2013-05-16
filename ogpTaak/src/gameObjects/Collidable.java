@@ -27,7 +27,9 @@ import be.kuleuven.cs.som.annotate.*;
  * @author Martijn Boussé, Wout Vekemans
  * 
  */
-//TODO: @raw nakijken
+//TODO: @raw nakijken overal!
+//TODO: invarianten nakijken overal, zeker bij programstate (als paused, zeker een nextstatement? ..)
+//TODO: ook bij program
 public abstract class Collidable {
 	/**
 	 * Initialize this new collidable with given position, given velocity, given radius and given mass

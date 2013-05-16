@@ -503,12 +503,6 @@ public abstract class Collidable {
 	 * 
 	 * @param 	other
 	 * 			The other collidable.
-	 * @effect	True if and only if the collidables touch each other after moving the calculated time.
-	 *			| if this.move(result) && other.move(result)
-	 *			|	then this.getDistanceBetween(other) == 0
-	 *
-	 *  //TODO: welke van de twee documentaties? zie ook testen (heb mail gestuud hiervoor)
-	 *
 	 * @effect	If this collidable is equal to the given collidable the result is always zero.
 	 * 			| if (other == this)
 	 * 			|	then result == 0.0

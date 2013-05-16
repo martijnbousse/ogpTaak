@@ -105,11 +105,6 @@ public class VectorTest {
 		vector22.scale(Double.NaN);
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
-	public void testScale_NegativeAmountCase() {
-		vector22.scale(-1);
-	}
-	
 	@Test(expected=TimesOverflowException.class)
 	public void testScale_TimesOverflowCase() {
 		vector22.scale(Double.MAX_VALUE);

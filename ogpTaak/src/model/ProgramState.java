@@ -7,6 +7,7 @@ import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
 
 import statements.Statement;
+import statements.While;
 import types.Type;
 
 import gameObjects.Ship;
@@ -48,6 +49,8 @@ public class ProgramState {
 
 	private Statement next;
 
+	private boolean isTerminated;
+
 	public void assign(String name, Type value) {
 		this.globals.put(name, value);
 	}
@@ -59,4 +62,40 @@ public class ProgramState {
 	public void setNextStatement(Statement next) {
 		this.next = next;
 	}
+	
+	public boolean isTerminated() { 
+		return this.isTerminated;
+	}
+
+	public void terminate() {
+		this.isTerminated = true;
+	}
+	
+	public void setLoop(While loop) {
+		this.loop = loop;
+	}
+	
+	public Statement getLoop() {
+		return this.loop;
+	}
+	
+	private Statement loop;
+	
+	
+	
+	public boolean isLooping() {
+		return this.isLooping;
+	}
+	
+	
+	public void setLooping(boolean flag) {
+		this.isLooping = flag;
+	}
+	
+	private boolean isLooping = false;
+
+	public void setNextStatementLoop() {
+		setNextStatement(getLoop());
+	}
+	
 }

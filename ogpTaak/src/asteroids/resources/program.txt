@@ -12,6 +12,7 @@ double ar;
 double distance;
 entity a;
 
+while(true) do {
   x := getx self;
   y := gety self;
   r := getradius self;
@@ -31,15 +32,9 @@ entity a;
       } 
     }
   }
-  o := getx self;
-  p := gety self;
-  q := cos((p-ay)/(o-ax));
-  r := sin((p-ay)/(o-ax));
-  z := q/r;
-  if((distanceToNearestAsteroid < 175) && (distanceToNearestAsteroid > 174) ) then {
-  z := ( z - 1.57 );
-  turn z;
-  fire;
+  if(nearestAsteroid != null) then {
+    print distanceToNearestAsteroid;
   }
-
-  
+  turn 0.2;
+  fire;
+}

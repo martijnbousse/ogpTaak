@@ -35,7 +35,7 @@ public class Sequence extends Statement {
 					state.setNextStatement(iter.next());
 				}
 			}
-			
+			//
 //			for(Statement statement : getStatements()) {
 //				statement.execute(state);
 //			}

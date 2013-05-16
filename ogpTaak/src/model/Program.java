@@ -5,18 +5,20 @@ import java.util.Map;
 import be.kuleuven.cs.som.annotate.Basic;
 
 import statements.Statement;
+import statements.While;
 import types.Type;
 
 public class Program {
 
 	public Program(Map<String, Type> globals, Statement statement) {
 		this.statement = statement;
-		this.state = new ProgramState(null, globals);
+		this.programState = new ProgramState(null, globals);
 	}
 
 	public void terminate() {
 		if (!isTerminated) {
 			this.isTerminated = true;
+			getState().terminate();
 		}
 	}
 
@@ -28,7 +30,7 @@ public class Program {
 
 	private boolean isTerminated;
 
-	private ProgramState state;
+	private ProgramState programState;
 
 
 	@Basic
@@ -38,17 +40,28 @@ public class Program {
 	}
 
 	public void execute() {
+		if(getState().isTerminated())
+			this.terminate();
 //		if(getState().isPaused())
 //			getState().setPaused(false);
 //			executeNext();
-		if(state.isPaused()) {
-			getState().setPaused(false);
-			Statement next = getState().getNext();
-			getState().setNextStatement(null);
-			if(next != null)
-				next.execute(getState());
-		}else{
-			getStatement().execute(getState());
+		if( !this.isTerminated()) {
+			if(programState.isPaused()) {
+				getState().setPaused(false);
+				Statement next = getState().getNext();
+				getState().setNextStatement(null);
+				if(next != null) {
+					next.execute(getState());
+				} else {
+					if(!getState().isLooping()) {
+						this.terminate();	
+					} else {
+						getState().setNextStatementLoop();
+					}
+				}
+			}else{
+				getStatement().execute(getState());
+			}
 		}
 //		if(getState().isPaused()) {
 //			getState().setPaused(false);
@@ -60,6 +73,6 @@ public class Program {
 //	}
 
 	public ProgramState getState() {
-		return this.state;
+		return this.programState;
 	}
 }

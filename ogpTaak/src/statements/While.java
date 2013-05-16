@@ -1,6 +1,8 @@
 package statements;
 
 
+import java.util.Iterator;
+
 import model.ProgramState;
 
 import be.kuleuven.cs.som.annotate.*;
@@ -31,8 +33,36 @@ public class While extends Statement {
 	
 	@Override
 	public void execute(ProgramState state) {
-		while((boolean) getCondition().evaluate(state).getValue()) {
-			getBody().execute(state);
+//		while((boolean) getCondition().evaluate(state).getValue() && !state.isPaused()) {
+//			Iterator<Statement> iter = ((Sequence) body).getStatements().iterator();
+//			while(iter.hasNext()) {
+//				if(!state.isPaused()) {
+//					iter.next().execute(state);
+//				} else {
+//					state.setNextStatement(iter.next());
+//				}
+//			}
+//		}
+		state.setLooping(true);
+		state.setLoop(this);
+		if((boolean) getCondition().evaluate(state).getValue() && !state.isPaused()) {
+//			if(!state.isPaused()){
+//				((Sequence) body).execute(state);
+				Iterator<Statement> iter = ((Sequence) body).getStatements().iterator();
+				while(iter.hasNext()) {
+					if(!state.isPaused()) {
+						iter.next().execute(state);
+					} else {
+						state.setNextStatement(iter.next());
+					}
+				}
+			} else {
+				state.setLooping(false);
+				state.setLoop(null);
+//			} else {
+//				state.setPaused(false);
+//			}
+		} 
 		}
 	}
-}
+

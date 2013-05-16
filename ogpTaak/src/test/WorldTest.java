@@ -65,8 +65,8 @@ public class WorldTest {
 		
 		collidable4 = new Ship();
 		
-		collidable5 = new Ship(new Vector(100,100), new Vector(0,0), 500, 10, 10);
-	
+			collidable5 = new Ship(new Vector(100,100), new Vector(0,0), 500, 10, 1);
+
 	}
 	
 	@Before

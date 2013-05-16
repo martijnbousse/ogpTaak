@@ -324,7 +324,7 @@ public class Ship extends Collidable implements IShip{
 	 * 			| result == (getWorld() != null) && !isTerminated()
 	 */
 	public boolean canFireBullets() {
-		return bullets.size() < 3;
+		return bullets.size() < 25;
 	}
 	
 	/**

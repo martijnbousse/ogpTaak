@@ -6,7 +6,7 @@ import types.DoubleType;
 
 public abstract class ArithmeticExpression extends SingleArgumentExpression {
 	
-	public ArithmeticExpression(Expression argument) {
+	protected ArithmeticExpression(Expression argument) {
 		super(argument);
 	}
 	

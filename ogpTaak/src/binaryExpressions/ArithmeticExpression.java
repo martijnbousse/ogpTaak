@@ -6,7 +6,7 @@ import types.DoubleType;
 
 public abstract class ArithmeticExpression extends BinaryExpression {
 
-	public ArithmeticExpression(Expression first, Expression second) {
+	protected ArithmeticExpression(Expression first, Expression second) {
 		super(first, second);
 	}
 	

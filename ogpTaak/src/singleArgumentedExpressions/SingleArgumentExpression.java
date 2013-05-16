@@ -3,7 +3,8 @@ package singleArgumentedExpressions;
 import programrelated.Expression;
 
 public abstract class SingleArgumentExpression extends Expression {
-	public SingleArgumentExpression(Expression argument) {
+	
+	protected SingleArgumentExpression(Expression argument) {
 		this.argument = argument;
 	}
 	

@@ -7,8 +7,6 @@ import be.kuleuven.cs.som.annotate.*;
 
 import programrelated.Expression;
 
-import types.*;
-
 public class While extends Statement {
 	
 	public While(Expression condition, Statement body) {

@@ -3,7 +3,8 @@ package binaryExpressions;
 import programrelated.Expression;
 
 public abstract class BinaryExpression extends Expression {
-	public BinaryExpression(Expression first, Expression second) {
+	
+	protected BinaryExpression(Expression first, Expression second) {
 		this.firstOperand = first;
 		this.secondOperand = second;
 	}

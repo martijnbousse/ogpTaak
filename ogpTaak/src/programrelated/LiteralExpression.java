@@ -4,7 +4,7 @@ import model.ProgramState;
 import types.Type;
 
 public abstract class LiteralExpression extends Expression {
-	public LiteralExpression(Type value) {
+	protected LiteralExpression(Type value) {
 		this.value = value;
 	}
 	

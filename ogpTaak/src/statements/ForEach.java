@@ -5,12 +5,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import gameObjects.Collidable;
-import gameObjects.World;
-import model.ProgramFactory;
 import model.ProgramState;
 import model.ProgramFactory.ForeachType;
 import types.EntityType;
-import types.Type;
 
 public class ForEach extends Statement {
 	

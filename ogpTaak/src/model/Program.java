@@ -1,9 +1,5 @@
 package model;
 
-//import gameObjects.Ship;
-
-import gameObjects.Ship;
-
 import java.util.Map;
 
 import be.kuleuven.cs.som.annotate.Basic;
@@ -20,16 +16,9 @@ public class Program {
 
 	public void terminate() {
 		if (!isTerminated) {
-//			Ship formerShip = getShip();
 			this.isTerminated = true;
-//			setShip(null);
-//			formerShip.setProgram(null);
 		}
 	}
-
-//	public Map<String, Type> getGlobals() {
-//		return this.globals;
-//	}
 
 	public Statement getStatement() {
 		return this.statement;
@@ -41,19 +30,6 @@ public class Program {
 
 	private ProgramState state;
 
-//	public void setShip(Ship ship) throws IllegalArgumentException {
-//		if (!canHaveAsShip(ship))
-//			throw new IllegalArgumentException();
-//		this.ship = ship;
-//		if(ship != null)
-//			ship.setProgram(this);
-//	}
-//
-//	public boolean canHaveAsShip(Ship ship) {
-//		if (isTerminated())
-//			return ship == null;
-//		return ship != null && !ship.isTerminated();
-//	}
 
 	@Basic
 	// TODO RAW
@@ -62,22 +38,20 @@ public class Program {
 	}
 
 	public void execute() {
+//		if(getState().isPaused())
+//			getState().setPaused(false);
+//			executeNext();
 		getStatement().execute(getState());
+//		if(getState().isPaused()) {
+//			getState().setPaused(false);
+//		}
 	}
+
+//	private void executeNext() {
+//		getStatement()
+//	}
 
 	public ProgramState getState() {
 		return this.state;
 	}
-	
-//	public boolean hasProperShip() {
-//		return canHaveAsShip(getShip()) && getShip().getProgram().equals(this);
-//	}
-//
-//	@Basic
-//	@Raw
-//	public Ship getShip() {
-//		return this.ship;
-//	}
-//
-//	private Ship ship;
 }

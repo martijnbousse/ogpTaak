@@ -33,6 +33,6 @@ public class Turn extends Action {
 			angle = angle-Math.PI*2;
 		}
 		state.getSelf().turn(angle);
+		super.execute(state);
 	}
-	
 }

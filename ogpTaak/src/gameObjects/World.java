@@ -484,7 +484,8 @@ public class World {
 		while(amount > 0) {
 		for(Collidable collidable : getAllCollidables()) {
 				if(collidable instanceof Ship && ((Ship) collidable).getProgram() != null) {
-					((Ship) collidable).executeProgram();
+//					if(((Ship) collidable).getProgram().getState().isPaused())
+						((Ship) collidable).executeProgram();
 				}
 			}
 		amount--;

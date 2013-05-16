@@ -13,5 +13,6 @@ public class ThrustOff extends Action {
 	@Override
 	public void execute(ProgramState state) {
 		state.getSelf().setThrusterEnabled(false);
+		super.execute(state);
 	}
 }

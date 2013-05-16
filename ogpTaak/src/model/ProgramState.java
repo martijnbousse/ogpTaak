@@ -26,6 +26,16 @@ public class ProgramState {
 		this.self = ship;
 	}
 	
+	public void setPaused(boolean flag) {
+		this.isPaused = flag;
+	}
+	
+	public boolean isPaused() {
+		return this.isPaused;
+	}
+	
+	private boolean isPaused;
+	
 	private Ship self;
 	
 	@Basic

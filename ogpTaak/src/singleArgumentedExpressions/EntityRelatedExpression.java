@@ -6,7 +6,7 @@ import types.DoubleType;
 
 public abstract class EntityRelatedExpression extends SingleArgumentExpression {
 
-	public EntityRelatedExpression(Expression argument) {
+	protected EntityRelatedExpression(Expression argument) {
 		super(argument);
 	}
 	

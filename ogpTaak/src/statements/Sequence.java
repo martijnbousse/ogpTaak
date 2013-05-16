@@ -1,6 +1,7 @@
 package statements;
 
 
+import java.util.Iterator;
 import java.util.List;
 
 import model.ProgramState;
@@ -25,23 +26,31 @@ public class Sequence extends Statement {
 
 	@Override
 	public void execute(ProgramState state) {
-		if(!state.isPaused()) {
-			for(Statement statement : getStatements()) {
-				statement.execute(state);
+//		if(!state.isPaused()) {
+		Iterator<Statement> iter = statements.iterator();
+			while(iter.hasNext()) {
+				if(!state.isPaused()) {
+					iter.next().execute(state);
+				} else {
+					state.setNextStatement(iter.next());
+				}
 			}
-		} else {
-			state.setPaused(false);
+			
+//			for(Statement statement : getStatements()) {
+//				statement.execute(state);
+//			}
+//		} else {
+//			state.setPaused(false);
 //			List<Statement> newStatements = getStatements();
 //			if(newStatements.size() != 1) {
 //				newStatements.remove(0);
 //				Sequence newSequence = new Sequence(newStatements );
 //				newSequence.execute(state);
 //			}
-		}
+//		}
 //			} else {
 //				state.setPaused(false);
 //			}
 //			}
-		
 	}
 }

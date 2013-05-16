@@ -41,7 +41,15 @@ public class Program {
 //		if(getState().isPaused())
 //			getState().setPaused(false);
 //			executeNext();
-		getStatement().execute(getState());
+		if(state.isPaused()) {
+			getState().setPaused(false);
+			Statement next = getState().getNext();
+			getState().setNextStatement(null);
+			if(next != null)
+				next.execute(getState());
+		}else{
+			getStatement().execute(getState());
+		}
 //		if(getState().isPaused()) {
 //			getState().setPaused(false);
 //		}

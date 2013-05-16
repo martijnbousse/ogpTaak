@@ -6,6 +6,7 @@ import java.util.Map;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
 
+import statements.Statement;
 import types.Type;
 
 import gameObjects.Ship;
@@ -34,7 +35,7 @@ public class ProgramState {
 		return this.isPaused;
 	}
 	
-	private boolean isPaused;
+	private boolean isPaused = false;
 	
 	private Ship self;
 	
@@ -45,7 +46,17 @@ public class ProgramState {
 	
 	private final Map<String,Type> globals;
 
+	private Statement next;
+
 	public void assign(String name, Type value) {
 		this.globals.put(name, value);
+	}
+
+	public Statement getNext() {
+		return this.next;
+	}
+	
+	public void setNextStatement(Statement next) {
+		this.next = next;
 	}
 }

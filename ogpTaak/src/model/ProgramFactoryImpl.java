@@ -58,7 +58,7 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Expression createNull(int line, int column) {
-		return new Entity(null);
+		return new Entity(new EntityType(null));
 	}
 
 	@Override

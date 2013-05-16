@@ -12,7 +12,7 @@ public class Skip extends Action {
 
 	@Override
 	public void execute(ProgramState state) {
-		// do nothing
+		//
 	}
 
 }

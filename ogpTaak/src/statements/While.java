@@ -33,8 +33,7 @@ public class While extends Statement {
 	
 	@Override
 	public void execute(ProgramState state) {
-		boolean bool = ((BooleanType) getCondition().evaluate(state)).getValue();
-		while(bool) {
+		while((boolean) getCondition().evaluate(state).getValue()) {
 			getBody().execute(state);
 		}
 	}

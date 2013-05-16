@@ -43,7 +43,9 @@ public class IfElse extends Statement {
 		if(bool) {
 			getIfBody().execute(state);
 		} else {
-			getElseBody().execute(state);
+			if(getElseBody() != null)
+				getElseBody().execute(state);
 		}
+		
 	}
 }

@@ -16,10 +16,12 @@ public class DifferentFrom extends ComparatingExpression {
 	public BooleanType evaluate(ProgramState state) {
 		Type first = getFirstOperand().evaluate(state);
 		Type second = getSecondOperand().evaluate(state);
-		double firstTerm = ((DoubleType) first).getValue();
-		double secondTerm = ((DoubleType) second).getValue();
+//		double firstTerm = ((DoubleType) first).getValue();
+//		double secondTerm = ((DoubleType) second).getValue();
 		
-		return new BooleanType(firstTerm != secondTerm);
+//		return new BooleanType(firstTerm != secondTerm);
+		
+		return new BooleanType(first.getValue() != second.getValue());
 	}
 
 }

@@ -12,6 +12,6 @@ public class Fire extends Action {
 
 	@Override
 	public void execute(ProgramState state) {
-		state.getSelf().fireBullet();	
+		state.getSelf().fireBullet();
 	}
 }

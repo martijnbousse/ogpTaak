@@ -1,5 +1,6 @@
 package types;
 
+import be.kuleuven.cs.som.annotate.Basic;
 import gameObjects.Collidable;
 
 public class EntityType extends Type {
@@ -11,7 +12,7 @@ public class EntityType extends Type {
 		this.value = entity;
 	}
 	
-	@Override
+	@Override @Basic
 	public Collidable getValue() {
 		return this.value;
 	}

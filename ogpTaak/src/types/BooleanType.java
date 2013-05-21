@@ -1,5 +1,7 @@
 package types;
 
+import be.kuleuven.cs.som.annotate.Basic;
+
 
 public class BooleanType extends Type {
 	public BooleanType() {
@@ -10,7 +12,7 @@ public class BooleanType extends Type {
 		this.value = value;
 	}
 
-	@Override
+	@Override @Basic
 	public Boolean getValue() {
 		return this.value;
 	}

@@ -1,10 +1,9 @@
 package statements;
 
-
+import expressions.Expression;
 import model.ProgramState;
 
 import be.kuleuven.cs.som.annotate.*;
-import programrelated.Expression;
 
 public class Print extends Statement {
 	
@@ -12,7 +11,7 @@ public class Print extends Statement {
 		this.expression = expression;
 	}
 	
-	@Raw @Immutable
+	@Immutable
 	public Expression getExpression() {
 		return this.expression;
 	}

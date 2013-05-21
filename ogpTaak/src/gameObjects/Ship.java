@@ -4,8 +4,9 @@
  * 
  * repository: https://github.com/martijnbousse/ogpTaak
  */
-
 package gameObjects;
+
+//TODO > FINISHED
 
 import java.util.HashSet;
 import java.util.Set;
@@ -26,10 +27,8 @@ import be.kuleuven.cs.som.annotate.*;
  * 			| isValidMass(getMass())
  * @invar 	The thruster amount of each ship must be a valid thruster amount
  * 			| isValidThrusterAmount(getThrusterAmount())
- * @invar 	...
- * 			| ...
  * 
- * @version 3.0
+ * @version 3.1
  * @author Martijn Boussé, Wout Vekemans
  *
  */
@@ -81,6 +80,9 @@ public class Ship extends Collidable implements IShip{
 		this(new Vector(10, 10), new Vector(0, 0), 10, 10, 1);
 	}
 	
+	/**
+	 * Terminate this ship. 
+	 */
 	@Override
 	public void terminate() {
 		if(getProgram() != null) 
@@ -198,8 +200,8 @@ public class Ship extends Collidable implements IShip{
 	 * 	
 	 * @param 	flag
 	 * 			The given flag.
-	 * @post	...
-	 * 			| ...
+	 * @post	The thruster of this ship is set to the given flag.
+	 * 			this.isThrusterEnabled() == flag
 	 */
 	public void setThrusterEnabled(boolean flag) {
 		this.isThrusterEnabled = flag;
@@ -208,7 +210,7 @@ public class Ship extends Collidable implements IShip{
 	/**
 	 * Variable registering whether or not the thruster of this ship is enabled.
 	 */
-	private boolean isThrusterEnabled;
+	private boolean isThrusterEnabled = false;
 	
 	/**
 	 * Return the acceleration of this ship according to Newton's third law.
@@ -228,7 +230,7 @@ public class Ship extends Collidable implements IShip{
 	 * @effect	If the given amount is a valid amount then the velocity of this ship is incremented with the amount in the direction which the ship is heading.
 	 * 			If this new velocity should exceed the speed limit of this ship then the velocity is scaled until the magnitude is equal to the speed limit.
 	 * 			| let
-	 * 			| 	newVelocity = velocity.add((new Vector(Math.cos(direction),Math.sin(direction)).scale(amount)))
+	 * 			| 	newVelocity = velocity.add((new Vector(Math.cos(getDirection()),Math.sin(getDirection())).scale(amount)))
 	 * 			| in
 	 * 			| 	if isValidThrustAmount(amount)
 	 * 			|		then
@@ -245,7 +247,7 @@ public class Ship extends Collidable implements IShip{
 			throw new IllegalStateException();
 		if(isThrusterEnabled() && isValidTime(dt)) {
 			double amount = dt*getAcceleration();
-			Vector newVelocity = this.getVelocity().add((new Vector(Math.cos(direction),Math.sin(direction)).scale(amount)));
+			Vector newVelocity = this.getVelocity().add((new Vector(Math.cos(getDirection()),Math.sin(getDirection())).scale(amount)));
 			if(Math.sqrt(newVelocity.dotProduct(newVelocity)) > this.getSpeedLimit())
 				setVelocity(newVelocity.scale((Double) (this.getSpeedLimit()/Math.sqrt(newVelocity.dotProduct(newVelocity)))));
 			else{
@@ -297,21 +299,23 @@ public class Ship extends Collidable implements IShip{
 	 *			|		then Bullet bullet = new Bullet(initialPosition,initialVelocity,3)
 	 *			|			 this.addAsBullet(bullet)
 	 *			|			 getWorld().addAsCollidable(bullet)	
-	 * @throws	IllegalStateException
-	 * 			This ship is terminated
-	 * 			| isTerminated()
 	 */	
-	public void fireBullet() throws IllegalStateException {
+	public void fireBullet() {
 		if (canFireBullets()) {
 			Vector initialPosition = getPosition().add( new Vector((getRadius()+3)*Math.cos(getDirection()),(getRadius()+3)*Math.sin(getDirection())));
 			Vector initialVelocity = (new Vector(Math.cos(getDirection()),Math.sin(getDirection()))).scale(250);
 			try {
 				Bullet bullet = new Bullet(initialPosition,initialVelocity,3);
-				this.addAsBullet(bullet);
-				getWorld().addAsCollidable(bullet);
+				if(!bullet.overlapWithBoundary()) {
+					
+					this.addAsBullet(bullet);
+					getWorld().addAsCollidable(bullet);
+				}
 			} catch (InvalidPositionException e) {
 				// do not fire
 			} catch (IllegalArgumentException e) {
+				// do not fire
+			} catch (IllegalStateException e) {
 				// do not fire
 			}
 		}
@@ -320,11 +324,12 @@ public class Ship extends Collidable implements IShip{
 	/**
 	 * Return a boolean reflecting whether this ship can fire bullets.
 	 * 
-	 * @effect	True if and only if this ship has a world to which it is attached and if it is not terminated.
-	 * 			| result == (getWorld() != null) && !isTerminated()
+	 * @effect	True if and only if this ship has a world to which it is attached and if it is not terminated
+	 * 			and the ship has not reached its bullet limit.
+	 * 			| result == (getWorld() != null) && !isTerminated() && bullets.size() < 3
 	 */
 	public boolean canFireBullets() {
-		return bullets.size() < 3;
+		return bullets.size() < 3 && getWorld() != null && !this.isTerminated();
 	}
 	
 	/**
@@ -472,20 +477,11 @@ public class Ship extends Collidable implements IShip{
 	 * 
 	 * @param 	program
 	 * 			The new program for this ship.
-	 * @pre		If the given program is effective, it must already reference this ship as its ship.
-	 * 			| if (program != null)
-	 * 			|	then program.getShip().equals(this)
-	 * @pre		If the given program is not effective and this ship references an effective program,
-	 * 			that program may not reference this ship as its ship.						
-	 * 			| if ((program == null) && (getProgram() != null))
-	 * 			| 	then !getProgram().getShip().equals(this)
 	 * @post	This ship references the given program as the program to which it is attached.
 	 * 			| (new this).getProgram() == program
 	 */
 	@Raw
 	public void setProgram(Program program)	{
-//			assert ( (program == null) || program.getShip().equals(this));
-//			assert ( (program != null) || (getProgram() == null) || (getProgram().getShip() == null) );
 			this.program = program;
 	}
 	
@@ -523,7 +519,7 @@ public class Ship extends Collidable implements IShip{
 	 * 			| bounce(ship)
 	 */
 	@Override
-	public void collidesWith(Ship ship) {
+	protected void collidesWith(Ship ship) {
 		bounce(ship);
 	}
 	
@@ -536,7 +532,7 @@ public class Ship extends Collidable implements IShip{
 	 * 			| terminate()
 	 */
 	@Override
-	public void collidesWith(Asteroid asteroid) {
+	protected void collidesWith(Asteroid asteroid) {
 		terminate();
 	}
 	
@@ -552,7 +548,7 @@ public class Ship extends Collidable implements IShip{
 	 * 			|	then terminate()
 	 */
 	@Override
-	public void collidesWith(Bullet bullet) {
+	protected void collidesWith(Bullet bullet) {
 		if (!bullet.getSource().equals(this))
 			terminate();
 		bullet.terminate();

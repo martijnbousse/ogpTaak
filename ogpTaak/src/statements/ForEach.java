@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import be.kuleuven.cs.som.annotate.Basic;
+
 import gameObjects.Collidable;
 import model.ProgramState;
 import model.ProgramFactory.ForeachType;
@@ -11,15 +13,32 @@ import types.EntityType;
 
 public class ForEach extends Statement {
 	
-	private ForeachType type;
-	private String varName;
-	private Statement body;
-
 	public ForEach(model.ProgramFactory.ForeachType type, String variableName, Statement body) {
 		this.type = type;
 		this.varName = variableName;
 		this.body = body;
 	}
+
+	@Basic
+	public ForeachType getType() {
+		return this.type;
+	}
+
+	private ForeachType type;
+	
+	@Basic
+	private String getVarName() {
+		return this.varName;
+	}
+
+	private String varName;
+	
+	@Basic
+	public Statement getBody() {
+		return this.body;
+	}
+
+	private Statement body;
 
 	@Override
 	public void execute(ProgramState state) {
@@ -45,17 +64,4 @@ public class ForEach extends Statement {
 			getBody().execute(state);
 		}
 	}
-
-	private String getVarName() {
-		return this.varName;
-	}
-	
-	public ForeachType getType() {
-		return this.type;
-	}
-	
-	public Statement getBody() {
-		return this.body;
-	}
-
 }

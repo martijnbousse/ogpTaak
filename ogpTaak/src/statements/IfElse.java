@@ -1,9 +1,9 @@
 package statements;
 
 
+import expressions.Expression;
 import model.ProgramState;
 
-import programrelated.Expression;
 import types.BooleanType;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;

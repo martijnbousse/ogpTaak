@@ -2,30 +2,10 @@ package model;
 
 import java.util.List;
 
-import binaryExpressions.Addition;
-import binaryExpressions.Conjunction;
-import binaryExpressions.DifferentFrom;
-import binaryExpressions.Disjunction;
-import binaryExpressions.Division;
-import binaryExpressions.EqualTo;
-import binaryExpressions.GreaterThan;
-import binaryExpressions.GreaterThanOrEqual;
-import binaryExpressions.LessThan;
-import binaryExpressions.LessThanOrEqual;
-import binaryExpressions.Multiplication;
-import binaryExpressions.Negation;
-import binaryExpressions.Subtraction;
-
-import programrelated.*;
-import singleArgumentedExpressions.Cosinus;
-import singleArgumentedExpressions.GetDirection;
-import singleArgumentedExpressions.GetRadius;
-import singleArgumentedExpressions.GetXPosition;
-import singleArgumentedExpressions.GetXVelocity;
-import singleArgumentedExpressions.GetYPosition;
-import singleArgumentedExpressions.GetYVelocity;
-import singleArgumentedExpressions.Sinus;
-import singleArgumentedExpressions.SquareRoot;
+import expressions.Expression;
+import expressions.singleArgumentedExpressions.*;
+import expressions.binaryExpressions.*;
+import expressions.literalExpressions.*;
 import statements.*;
 import types.*;
 
@@ -63,7 +43,7 @@ public class ProgramFactoryImpl implements ProgramFactory<Expression, Statement,
 
 	@Override
 	public Expression createSelf(int line, int column) {
-		return new Self();
+		return new Self(null);
 	}
 
 	@Override

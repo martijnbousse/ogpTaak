@@ -1,5 +1,7 @@
 package gameObjects;
 
+//TODO > FINISHED
+
 import support.Vector;
 import be.kuleuven.cs.som.annotate.*;
 
@@ -30,6 +32,7 @@ public class Bullet extends Collidable {
 	 * 			the given velocity, the given radius and the given mass.
 	 * 			| super(position, velocity, radius, mass)
 	 */
+	@Raw
 	public Bullet(Vector position, Vector velocity, double radius) throws IllegalArgumentException {
 		super(position, velocity, radius);
 	}
@@ -190,7 +193,7 @@ public class Bullet extends Collidable {
 	 * 			| ship.collidesWith(this)
 	 */
 	@Override
-	public void collidesWith(Ship ship) {
+	protected void collidesWith(Ship ship) {
 		ship.collidesWith(this);
 	}
 	
@@ -203,7 +206,7 @@ public class Bullet extends Collidable {
 	 * 			| asteroid.collidesWith(this)
 	 */
 	@Override
-	public void collidesWith(Asteroid asteroid) {
+	protected void collidesWith(Asteroid asteroid) {
 		asteroid.collidesWith(this);
 	}
 	
@@ -217,7 +220,7 @@ public class Bullet extends Collidable {
 	 * 			| bullet.terminate()
 	 */
 	@Override
-	public void collidesWith(Bullet bullet) {
+	protected void collidesWith(Bullet bullet) {
 		this.terminate();
 		bullet.terminate();
 	}

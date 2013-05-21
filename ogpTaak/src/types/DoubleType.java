@@ -1,5 +1,7 @@
 package types;
 
+import be.kuleuven.cs.som.annotate.Basic;
+
 
 public class DoubleType extends Type {
 	public DoubleType() {
@@ -10,7 +12,7 @@ public class DoubleType extends Type {
 		this.value = value;
 	}
 	
-	@Override
+	@Override @Basic
 	public Double getValue() {
 		return this.value;
 	}

@@ -1,8 +1,6 @@
 package statements;
 
-
 import model.ProgramState;
-
 
 public class ThrustOn extends Action {
 	

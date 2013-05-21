@@ -1,5 +1,7 @@
 package gameObjects;
 
+//TODO > FINISHED
+
 import support.Vector;
 import exceptions.InvalidPositionException;
 import exceptions.SumOverflowException;
@@ -23,13 +25,10 @@ import be.kuleuven.cs.som.annotate.*;
  * @invar	Each collidable must have a proper world to which it is attached.
  * 			| hasProperWorld()
  * 
- * @version	2.0
+ * @version	2.1
  * @author Martijn Boussé, Wout Vekemans
  * 
  */
-//TODO: @raw nakijken overal!
-//TODO: invarianten nakijken overal, zeker bij programstate (als paused, zeker een nextstatement? ..)
-//TODO: ook bij program
 public abstract class Collidable {
 	/**
 	 * Initialize this new collidable with given position, given velocity, given radius and given mass
@@ -157,7 +156,7 @@ public abstract class Collidable {
 	/**
 	 * Variable registering the position of this collidable.
 	 */
-	private Vector position;
+	private Vector position = null;
 	
 	/**
 	 * Returns the velocity of this collidable.
@@ -203,7 +202,7 @@ public abstract class Collidable {
 	/**
 	 * Variable registering the velocity of this collidable.
 	 */
-	private Vector velocity;
+	private Vector velocity = null;
 	
 	/**
 	 * Returns the speed limit of this collidable.
@@ -248,7 +247,7 @@ public abstract class Collidable {
 	/**
 	 * Variable registering the speed limit of this collidable.
 	 */
-	private double speedLimit;
+	private double speedLimit = 0;
 	
 	/**
 	 * Symbolic constant registering the speed of light.
@@ -258,7 +257,7 @@ public abstract class Collidable {
 	/**
 	 * Returns the minimum radius for all collidables.
 	 */
-	@Basic @Immutable @Raw
+	@Basic @Raw
 	public static double getMinRadius() {
 		return minRadius;
 	}
@@ -384,7 +383,7 @@ public abstract class Collidable {
 	 * @return	True if and only if the given world is not effective or if it can have this collidable as one of its collidables.
 	 * 			| result == ((world == null) || (world.canHaveAsCollidable(this)))
 	 */
-	// canHaveAsWorld calls the complementary checker in the bidirectional association.
+	//REMINDER: canHaveAsWorld calls the complementary checker in the bidirectional association.
 	@Raw
 	public boolean canHaveAsWorld(World world) { 
 		return ((world == null) || world.canHaveAsCollidable(this));
@@ -430,7 +429,7 @@ public abstract class Collidable {
 	 * 			|	then this.overlap(other) == false
 	 * @effect	If the result is negative, this collidable and the given collidable overlap
 	 * 			| if (result < 0.0)
-	 * 			|	then this.overlap(other) == true
+	 * 			|	then this.overlap(other) == true 
 	 * @throws 	IllegalArgumentException
 	 * 			The given collidable is not effective.
 	 * 			| (other == null)
@@ -465,7 +464,7 @@ public abstract class Collidable {
 	 * 			| result == (getDistanceBetween(other) < 0)) 
 	 */
 	//REMINDER: IllegalStateException regarding the terminated state of this collidable
-	//          are thrown via getDistanceBetween(other).
+	//          are thrown via getDistanceToClosestBoundary.
 	public boolean overlapWithBoundary() throws IllegalStateException {
 		return (getDistanceToClosestBoundary() < 0);
 	}
@@ -505,15 +504,22 @@ public abstract class Collidable {
 	 * 
 	 * @param 	other
 	 * 			The other collidable.
-	 * @effect	If this collidable is equal to the given collidable the result is always zero.
-	 * 			| if (other == this)
-	 * 			|	then result == 0.0
+	 * @return	If this collidable is equal to the given collidable the result is always infinity.
+	 * 			| if (other.equals(this))
+	 * 			|	then result == Double.POSITIVE_INFINITY
 	 * @effect	If the result is positive, this collidable and the given collidable don't overlap
 	 * 			| if (result > 0.0)
 	 * 			|	then this.overlap(other) == false
 	 * @effect	If the result is negative, this collidable and the given collidable overlap
 	 * 			| if (result < 0.0)
 	 * 			|	then this.overlap(other) == true	
+	 * @effect  If the resulting time is infinite, the distance between both
+	 *          ships would be different from zero for each finite time they would move.
+	 *        	| if (result == Double.POSITIVE_INFINITY) then
+	 *        	|   (for each time in 0.0..Double.POSITIVE_INFINITY:
+	 *        	|     if (! Double.isInfinite(time)) then
+	 *        	|		this.move(time) && other.move(time)
+	 *        	|       (! Util.fuzzyEquals(new.getDistanceBetween((new other)),0.0))
 	 * @throws 	IllegalArgumentException
 	 * 			The given collidable is not effective.
 	 * 			| (other == null)
@@ -557,7 +563,6 @@ public abstract class Collidable {
 	 * 			| 	then this.move(result)
 	 * 			|		new.getDistanceToClosestBoundary == 0
 	 */
-	//TODO: doc?
 	public double getTimeToCollisionWithBoundary() {
 		if(getWorld() != null && !isTerminated()) {
 			return Math.min(getMinXCollision(), getMinYCollision());
@@ -573,7 +578,6 @@ public abstract class Collidable {
 	 * 			|	then this.move(result)
 	 * 			|		new.getDistanceToClosestBoundary == 0
 	 */
-	//TODO: doc?
 	private double getMinXCollision() {
 		if(!Util.fuzzyEquals(0, getVelocity().getXComponent())) {
 			double maximumXTime = (getWorld().getWidth() - getPosition().getXComponent() - getRadius())/getVelocity().getXComponent();
@@ -593,7 +597,6 @@ public abstract class Collidable {
 	 * 			|	then this.move(result)
 	 * 			|		new.getDistanceToClosestBoundary == 0
 	 */
-	//TODO: doc?
 	private double getMinYCollision() {
 		if(!Util.fuzzyEquals(0, getVelocity().getYComponent())) {
 			double maximumYTime = (getWorld().getHeight() - getPosition().getYComponent() - getRadius())/getVelocity().getYComponent();
@@ -668,14 +671,14 @@ public abstract class Collidable {
 	 * 
 	 * @param 	other
 	 * 			The other collidable to check.
-	 * @return	True if and only if the world to which the other collidable is attached to is effective and is a proper world for the other 
+	 * @return	True if and only if the world to which the other collidable is attached, is effective and is a proper world for the other 
 	 * 			collidable, which also includes that the other collidable is not terminated and effective. And if the world to which this 
-	 * 			collidable is attached to is effective and is a proper world for this collidable, which also includes that this collidable
+	 * 			collidable is attached, is effective and is a proper world for this collidable, which also includes that this collidable
 	 * 			is not terminated and effective. And if the time to collision of this collidable with the other collidable is equal to zero.
 	 * 			| result == ( !((other.getWorld() == null) && other.hasProperWorld())  
-	 *						&& !((getWorld() == null) && hasProperWorld())
-	 *						&& ((this.getWorld() == other.getWorld())) )
-	 *						&& (Util.fuzzyEquals(getTimeToCollision(other),0.0));	
+	 *			|			&& !((getWorld() == null) && hasProperWorld())
+	 *			|			&& ((this.getWorld() == other.getWorld())) )
+	 *			|			&& (Util.fuzzyEquals(getTimeToCollision(other),0.0));
 	 */
 	//REMINDER: canBounce does not have to check if other is non-effective, because the method bounce has a restricted use. 
 	//          It can only be used for collidables in the list of collidables of a world, which can never be null. 
@@ -704,31 +707,31 @@ public abstract class Collidable {
 	//           Hence, terminated collidables are also included in the if construct.	
 	protected void bounce(Collidable other) {
 		if (canBounce(other)) {
-				try {
-					Vector deltaR = other.getPosition().subtract(this.getPosition());
-					Vector deltaV = other.getVelocity().subtract(this.getVelocity());
-					double sigma = this.getRadius()+other.getRadius();
+			try {
+				Vector deltaR = other.getPosition().subtract(this.getPosition());
+				Vector deltaV = other.getVelocity().subtract(this.getVelocity());
+				double sigma = this.getRadius()+other.getRadius();
+				
+				if(Util.fuzzyLessThanOrEqualTo(Math.abs(2*this.getMass()*other.getMass()*deltaR.dotProduct(deltaV)),Double.MAX_VALUE)
+						&& Util.fuzzyLessThanOrEqualTo(sigma*(this.getMass()+other.getMass()), Double.MAX_VALUE)) {
 					
-					if(Util.fuzzyLessThanOrEqualTo(Math.abs(2*this.getMass()*other.getMass()*deltaR.dotProduct(deltaV)),Double.MAX_VALUE)
-							&& Util.fuzzyLessThanOrEqualTo(sigma*(this.getMass()+other.getMass()), Double.MAX_VALUE)) {
-						
-						double J = 2*this.getMass()*other.getMass()*deltaR.dotProduct(deltaV)/(sigma*(this.getMass()+other.getMass()));
-						Vector Jvector = deltaR.scale(J/sigma);
-						
-						Vector newVelocityThis = this.getVelocity().add(Jvector.scale(1/this.getMass()));
-						Vector newVelocityOther = other.getVelocity().subtract(Jvector.scale(1/other.getMass()));
-						
-						this.setVelocity(newVelocityThis);
-						other.setVelocity(newVelocityOther);
-						
-					} else { 
-						throw new TimesOverflowException();
-					}
-				} catch(Exception e) {
-					// if the calculation fails at any moment, the two collidables stop moving (design choice)
-					this.setVelocity(new Vector(0,0));
-					other.setVelocity(new Vector(0,0));
+					double J = 2*this.getMass()*other.getMass()*deltaR.dotProduct(deltaV)/(sigma*(this.getMass()+other.getMass()));
+					Vector Jvector = deltaR.scale(J/sigma);
+					
+					Vector newVelocityThis = this.getVelocity().add(Jvector.scale(1/this.getMass()));
+					Vector newVelocityOther = other.getVelocity().subtract(Jvector.scale(1/other.getMass()));
+					
+					this.setVelocity(newVelocityThis);
+					other.setVelocity(newVelocityOther);
+					
+				} else { 
+					throw new TimesOverflowException();
 				}
+			} catch(Exception e) {
+				// if the calculation fails at any moment, the two collidables stop moving
+				this.setVelocity(new Vector(0,0));
+				other.setVelocity(new Vector(0,0));
+			}
 		}
 	}
 
@@ -794,7 +797,7 @@ public abstract class Collidable {
 	 * @param 	ship
 	 * 			The given ship.
 	 */
-	abstract void collidesWith(Ship ship);
+	protected abstract void collidesWith(Ship ship);
 	
 	/**
 	 * This collidable collides with the given asteroid.
@@ -802,7 +805,7 @@ public abstract class Collidable {
 	 * @param 	asteroid
 	 * 			The given asteroid.
 	 */
-	abstract void collidesWith(Asteroid asteroid);
+	protected abstract void collidesWith(Asteroid asteroid);
 	
 	/**
 	 * This collidable collides with the given bullet.
@@ -810,7 +813,7 @@ public abstract class Collidable {
 	 * @param 	bullet
 	 * 			The given bullet.
 	 */
-	abstract void collidesWith(Bullet bullet);
+	protected abstract void collidesWith(Bullet bullet);
 	
 	/**
 	 * Return a textual representation of this collidable.

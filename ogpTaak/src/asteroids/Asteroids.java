@@ -67,7 +67,8 @@ public class Asteroids<World, Ship, Asteroid, Bullet, Program> extends JFrame {
 
   public void startSinglePlayerGame() {
     World world = facade.createWorld(width, height);
-    Ship player = facade.createShip(width / 2., height / 2., 0, 0, 40, 0, 5E15);
+    Ship player = facade.createShip(width/2., height / 2., 0, 0, 40, 0, 5E15);
+
     facade.addShip(world, player);
     Asteroid asteroid1 = facade.createAsteroid(100, 100, 25, 50, 60);
     facade.addAsteroid(world, asteroid1);

@@ -1,5 +1,7 @@
 package gameObjects;
 
+// TODO: > FINISHED
+
 import asteroids.Util;
 import be.kuleuven.cs.som.annotate.*;
 
@@ -16,7 +18,7 @@ import support.Collision;
  * @Invar | isValidMaxDimension(getMaxHeight())
  * @Invar | hasProperCollidables()
  * 
- * @version 1.0
+ * @version 2.1
  * @author Wout Vekemans, Martijn Bousse
  * 
  */
@@ -25,16 +27,16 @@ public class World {
 	 * Initialize this new world with given width, height and no collidables
 	 * attached to it.
 	 * 
-	 * @param width
-	 *            The width for this new world.
-	 * @param height
-	 *            The height for this new world.
-	 * @post The new width of this new world is equal to the given width. | (new
-	 *       this).getWidth().equals(width)
-	 * @post The new height of this new world is equal to the given height. |
-	 *       (new this).getHeight().equals(height)
-	 * @post No collidables are attached to this new world. | (new
-	 *       this).getNbCollidables() == 0
+	 * @param 	width
+	 *       	The width for this new world.
+	 * @param 	height
+	 *         	The height for this new world.
+	 * @post 	The new width of this new world is equal to the given width. 
+	 * 			| (new this).getWidth().equals(width)
+	 * @post 	The new height of this new world is equal to the given height. 
+	 * 			| (new this).getHeight().equals(height)
+	 * @post 	No collidables are attached to this new world. 
+	 * 			| (new this).getNbCollidables() == 0
 	 */
 	@Raw
 	public World(double width, double height) {
@@ -53,8 +55,9 @@ public class World {
 	/**
 	 * Initialize this new world with all default values.
 	 * 
-	 * @effect This new world is initialized with width and height equal to
-	 *         Double.MAX_VALUE. | this(Double.MAX_VALUE,Double.MAX_VALUE)
+	 * @effect 	This new world is initialized with width and height equal to
+	 *         	Double.MAX_VALUE. 
+	 *         	| this(Double.MAX_VALUE,Double.MAX_VALUE)
 	 */
 	public World() {
 		this(Double.MAX_VALUE, Double.MAX_VALUE);
@@ -63,8 +66,7 @@ public class World {
 	/**
 	 * Check whether this world is terminated.
 	 */
-	@Basic
-	@Raw
+	@Basic @Raw
 	public boolean isTerminated() {
 		return this.isTerminated;
 	}
@@ -72,11 +74,13 @@ public class World {
 	/**
 	 * Terminate this world.
 	 * 
-	 * @post This World is terminated. | (new this).isTerminated()
-	 * @effect Each non-terminated collidable attached to this world is removed
-	 *         from this world. | for each collidable in getAllCollidables: | if
-	 *         (!collidable.isTerminated()) | then
-	 *         this.removeAsCollidable(collidable)
+	 * @post 	This world is terminated. 
+	 * 			| (new this).isTerminated()
+	 * @effect 	Each non-terminated collidable attached to this world is removed
+	 *         	from this world. 
+	 *         	| for each collidable in getAllCollidables: 
+	 *         	| 	if (!collidable.isTerminated()) 
+	 *         	| 		then this.removeAsCollidable(collidable)
 	 */
 	public void terminate() {
 		Iterator<Collidable> iter = getAllCollidables().iterator();
@@ -94,8 +98,7 @@ public class World {
 	/**
 	 * Return the width of this world.
 	 */
-	@Basic
-	@Immutable
+	@Basic @Immutable
 	public double getWidth() {
 		return this.width;
 	}
@@ -103,10 +106,10 @@ public class World {
 	/**
 	 * Check whether the given width is a valid width for any world.
 	 * 
-	 * @param width
-	 *            The width to check.
-	 * @return | result == !Double.isNaN(width) &&
-	 *         Util.fuzzyLessThanOrEqualTo(width, maxWidth) && 0 < width
+	 * @param 	width
+	 *         	The width to check.
+	 * @return 	| result == !Double.isNaN(width) &&
+	 *         	|	Util.fuzzyLessThanOrEqualTo(width, maxWidth) && 0 < width
 	 */
 	public static boolean isValidWidth(double width) {
 		return !Double.isNaN(width)
@@ -127,9 +130,9 @@ public class World {
 
 	/**
 	 * 
-	 * @param maxWidth
-	 *            The new maximum width for all worlds
-	 * @post (new World).maxWidth == maxWidth
+	 * @param	maxWidth
+	 *        	The new maximum width for all worlds
+	 * @post 	| (new World).maxWidth == maxWidth
 	 */
 	public static void setMaxWidth(double maxWidth) {
 		if (isValidMaxDimension(maxWidth))
@@ -147,8 +150,7 @@ public class World {
 	/**
 	 * Returns the height of this world.
 	 */
-	@Basic
-	@Immutable
+	@Basic @Immutable
 	public double getHeight() {
 		return this.height;
 	}
@@ -156,10 +158,11 @@ public class World {
 	/**
 	 * Check whether the given height is a valid height for any world.
 	 * 
-	 * @param height
-	 *            The height to check.
-	 * @return | result == !Double.isNaN(height) | &&
-	 *         Util.fuzzyLessThanOrEqualTo(width, maxHeight) | && 0 < height
+	 * @param 	height
+	 *        	The height to check.
+	 * @return 	| result == !Double.isNaN(height) 
+	 * 			| 	&& Util.fuzzyLessThanOrEqualTo(width, maxHeight) 
+	 * 			| 	&& 0 < height
 	 */
 	public static boolean isValidHeight(double height) {
 		return !Double.isNaN(height)
@@ -181,9 +184,9 @@ public class World {
 	/**
 	 * Set the maximum height for all worlds to the given height.
 	 * 
-	 * @param maxHeight
-	 *            The new maximum height for all worlds.
-	 * @post | (new World).maxHeight == maxHeight
+	 * @param	maxHeight
+	 *        	The new maximum height for all worlds.
+	 * @post 	| (new World).maxHeight == maxHeight
 	 */
 	public static void setMaxHeight(double maxHeight) {
 		if (isValidMaxDimension(maxHeight))
@@ -202,9 +205,10 @@ public class World {
 	 * Check whether the given maximum dimension is a valid maximum dimension
 	 * for any world.
 	 * 
-	 * @param maxDimension
-	 *            The maximum dimension to check.
-	 * @return | result == !Double.isNaN(maxDimension) | && (maxDimension > 0)
+	 * @param 	maxDimension
+	 *         	The maximum dimension to check.
+	 * @return 	| result == !Double.isNaN(maxDimension) 
+	 * 			| 	&& (maxDimension > 0)
 	 */
 	public static boolean isValidMaxDimension(double maxDimension) {
 		return !Double.isNaN(maxDimension) && (maxDimension > 0);
@@ -213,11 +217,12 @@ public class World {
 	/**
 	 * Return a set collecting all collidables associated with this world.
 	 * 
-	 * @return The resulting set does not contain a null reference. |
-	 *         !result.contains(null)
-	 * @return Each collidable in the resulting set is attached to this world,
-	 *         and vice versa. | for each collidable in collidables: |
-	 *         (result.contains(collidable) == this.hasAsCollidable(collidable))
+	 * @return 	The resulting set does not contain a null reference. 
+	 * 			|!result.contains(null)
+	 * @return 	Each collidable in the resulting set is attached to this world,
+	 *         	and vice versa. 
+	 *         	| for each collidable in collidables: 
+	 *         	| 	(result.contains(collidable) == this.hasAsCollidable(collidable))
 	 */
 	public Set<Collidable> getAllCollidables() {
 		return new HashSet<Collidable>(this.collidables);
@@ -226,8 +231,9 @@ public class World {
 	/**
 	 * Return the number of collidables that are attached to this world.
 	 * 
-	 * @return The number of collidables that are attached to this world. |
-	 *         card( {collidable in collidables | hasAsCollidable(collidable)})
+	 * @return 	The number of collidables that are attached to this world. 
+	 * 			| card( {collidable in collidables 
+	 * 			|	 hasAsCollidable(collidable)})
 	 */
 	public int getNbCollidables() {
 		return getAllCollidables().size();
@@ -236,11 +242,12 @@ public class World {
 	/**
 	 * Return a set collecting all ships associated with this world.
 	 * 
-	 * @return The resulting set does not contain a null reference. |
-	 *         !result.contains(null)
-	 * @return Each ship in the resulting set is attached to this world, and
-	 *         vice versa. | for each ship in ships: | (result.contains(ship) ==
-	 *         this.hasAsCollidable(ship))
+	 * @return 	The resulting set does not contain a null reference. 
+	 * 			| !result.contains(null)
+	 * @return 	Each ship in the resulting set is attached to this world, and
+	 *         	vice versa. 
+	 *         	| for each ship in ships: 
+	 *         	| 	(result.contains(ship) == this.hasAsCollidable(ship))
 	 */
 	public Set<Ship> getAllShips() {
 		Set<Ship> ships = new HashSet<Ship>();
@@ -256,8 +263,9 @@ public class World {
 	/**
 	 * Return the number of ships that are attached to this world.
 	 * 
-	 * @return The number of ships that are attached to this world. | card(
-	 *         {collidable in collidables | collidable instanceof Ship})
+	 * @return 	The number of ships that are attached to this world. 
+	 * 			| card( {collidable in collidables 
+	 * 			| 	collidable instanceof Ship})
 	 */
 	public int getNbShips() {
 		return getAllShips().size();
@@ -266,11 +274,12 @@ public class World {
 	/**
 	 * Return a set collecting all asteroids associated with this world.
 	 * 
-	 * @return The resulting set does not contain a null reference. |
-	 *         !result.contains(null)
-	 * @return Each asteroid in the resulting set is attached to this world, and
-	 *         vice versa. | for each asteroid in asteroids: |
-	 *         (result.contains(asteroid) == this.hasAsCollidable(asteroid))
+	 * @return 	The resulting set does not contain a null reference. 
+	 * 			| !result.contains(null)
+	 * @return 	Each asteroid in the resulting set is attached to this world, and
+	 *        	vice versa. 
+	 *        	| for each asteroid in asteroids: 
+	 *        	| 	(result.contains(asteroid) == this.hasAsCollidable(asteroid))
 	 */
 	public Set<Asteroid> getAllAsteroids() {
 		Set<Asteroid> asteroids = new HashSet<Asteroid>();
@@ -286,8 +295,9 @@ public class World {
 	/**
 	 * Return the number of asteroids that are attached to this world.
 	 * 
-	 * @return The number of asteroids that are attached to this world. | card(
-	 *         {collidable in collidables | collidable instanceof Asteroid})
+	 * @return 	The number of asteroids that are attached to this world. 
+	 * 			| card({collidable in collidables 
+	 * 			| 	collidable instanceof Asteroid})
 	 */
 	public int getNbAsteroids() {
 		return getAllAsteroids().size();
@@ -296,11 +306,12 @@ public class World {
 	/**
 	 * Return a set collecting all bullets associated with this world.
 	 * 
-	 * @return The resulting set does not contain a null reference. |
-	 *         !result.contains(null)
-	 * @return Each bullet in the resulting set is attached to this world, and
-	 *         vice versa. | for each bullet in bullets: |
-	 *         (result.contains(bullet) == this.hasAsCollidable(bullet))
+	 * @return 	The resulting set does not contain a null reference. 
+	 * 			|!result.contains(null)
+	 * @return 	Each bullet in the resulting set is attached to this world, and
+	 *         	vice versa. 
+	 *         	| for each bullet in bullets: 
+	 *         	|	(result.contains(bullet) == this.hasAsCollidable(bullet))
 	 */
 	public Set<Bullet> getAllBullets() {
 		Set<Bullet> bullets = new HashSet<Bullet>();
@@ -316,8 +327,9 @@ public class World {
 	/**
 	 * Return the number of bullets that are attached to this world.
 	 * 
-	 * @return The number of bullets that are attached to this world. | card(
-	 *         {collidable in collidables | collidable instanceof Bullet})
+	 * @return 	The number of bullets that are attached to this world. 
+	 * 			| card( {collidable in collidables 
+	 * 			| 	collidable instanceof Bullet})
 	 */
 	public int getNbBullets() {
 		return getAllBullets().size();
@@ -330,8 +342,7 @@ public class World {
 	 * @param 	collidable
 	 *          The collidable to check.
 	 */
-	@Basic
-	@Raw
+	@Basic @Raw
 	public boolean hasAsCollidable(Collidable collidable) {
 		return this.collidables.contains(collidable);
 	}
@@ -353,24 +364,27 @@ public class World {
 	 */
 	@Raw
 	public boolean canHaveAsCollidable(Collidable collidable) {
+//		for(Collidable entity : getAllCollidables()) {
+//			if(collidable.overlap(entity))
+//				return false;
+//		}
 		return ((collidable != null)
-				&& !((this.isTerminated()) || (collidable.isTerminated())) && collidable
-				.getRadius() < Math.min(getWidth() / 2, getHeight() / 2));
+				&& !((this.isTerminated()) || (collidable.isTerminated())) 
+				&& collidable.getRadius() < Math.min(getWidth() / 2, getHeight() / 2))
+				&& !collidable.overlapWithBoundary();
 	}
-	//TODO: deze checker zorgt er nu voor dat de collidable 'past' in de wereld, 
-	// maar houdt niet tegen dat een collidable buiten de wereld kan geplaatst worden!
-	// zie test op overlapWithBoundary ! 
 
 	/**
 	 * Check whether this world has proper collidables attached to it.
 	 * 
-	 * @return True if and only if this world can have each of its collidables
-	 *         as a collidable attached to it, and if each of these collidables
-	 *         references this world as their world. | result == | for each
-	 *         collidable in collidables: | ( if
-	 *         (this.hasAsCollidable(collidable)) | then
-	 *         canHaveAsCollidable(collidable) | && (collidable.getWorld() ==
-	 *         this))
+	 * @return 	True if and only if this world can have each of its collidables
+	 *         	as a collidable attached to it, and if each of these collidables
+	 *         	references this world as their world. 
+	 *         	| result == 
+	 *         	| 	for each collidable in collidables: 
+	 *         	| 	( if (this.hasAsCollidable(collidable)) 
+	 *         	| 	then canHaveAsCollidable(collidable) 
+	 *         	| 		&& (collidable.getWorld() == this))
 	 */
 	@Raw
 	public boolean hasProperCollidables() {
@@ -387,18 +401,21 @@ public class World {
 	 * Add the given collidable to the set of collidables attached to this
 	 * world.
 	 * 
-	 * @param collidable
-	 *            The collidable to be added.
-	 * @post This world has the given collidable as one of its collidables. |
-	 *       (new this).hasAsCollidable(collidable)
-	 * @post The given collidable references this world as the world to which it
-	 *       is attached | (new collidable).getWorld() == (new this)
-	 * @throws IllegalArgumentException
-	 *             This world cannot have the given collidable as one of its
-	 *             collidables. | !canHaveAsCollidable(collidable)
-	 * @throws IllegalArgumentException
-	 *             The given collidable is already attached to some world. |
-	 *             collidable.getWorld() != null | && collidable != null
+	 * @param 	collidable
+	 *         	The collidable to be added.
+	 * @post 	This world has the given collidable as one of its collidables. 
+	 * 			| (new this).hasAsCollidable(collidable)
+	 * @post 	The given collidable references this world as the world to which it
+	 *       	is attached 
+	 *       	| (new collidable).getWorld() == (new this)
+	 * @throws 	IllegalArgumentException
+	 *          This world cannot have the given collidable as one of its
+	 *         	collidables. 
+	 *         	| !canHaveAsCollidable(collidable)
+	 * @throws 	IllegalArgumentException
+	 *         	The given collidable is already attached to some world. 
+	 *         	| collidable.getWorld() != null 
+	 *         	| 	&& collidable != null
 	 */
 	public void addAsCollidable(Collidable collidable) throws IllegalArgumentException {
 		if (!canHaveAsCollidable(collidable))
@@ -413,14 +430,15 @@ public class World {
 	 * Remove the given collidable from the set of collidables attached to this
 	 * world.
 	 * 
-	 * @param collidable
-	 *            The collidable to be removed.
-	 * @post This world does not have the given collidable as one of its
-	 *       collidables. | ! (new this).hasAsCollidable(collidable)
-	 * @post If this world has the given collidable as one of its collidables,
-	 *       the given collidable is no longer attached to any world. | if
-	 *       (hasAsCollidable(collidable)) | then (new collidable).getWorld() ==
-	 *       null
+	 * @param 	collidable
+	 *          The collidable to be removed.
+	 * @post 	This world does not have the given collidable as one of its
+	 *       	collidables. 
+ 	 *       	| ! (new this).hasAsCollidable(collidable)
+	 * @post 	If this world has the given collidable as one of its collidables,
+	 *       	the given collidable is no longer attached to any world. 
+	 *       	| if (hasAsCollidable(collidable)) 
+	 *       	| 	then (new collidable).getWorld() == null
 	 */
 	public void removeAsCollidable(Collidable collidable) {
 		if (hasAsCollidable(collidable))
@@ -431,28 +449,39 @@ public class World {
 	/**
 	 * Set collecting references to collidables attached to this world.
 	 * 
-	 * @Invar The set of collidables is effective. | collidables != null
-	 * @Invar Each element in the set of collidables references a collidable
-	 *        that is an acceptable collidable for this world. | for each
-	 *        collidable in collidables: | canHaveAsCollidable(collidable)
-	 * @Invar Each collidable in the set of collidables references this world as
-	 *        the world to which it is attached. | for each collidable in
-	 *        collidables: | (collidable.getWorld() == this)
+	 * @Invar 	The set of collidables is effective. 
+	 * 		 	| collidables != null
+	 * @Invar 	Each element in the set of collidables references a collidable
+	 *        	that is an acceptable collidable for this world. 
+	 *        	| for each collidable in collidables: 
+	 *        	| 	canHaveAsCollidable(collidable)
+	 * @Invar 	Each collidable in the set of collidables references this world as
+	 *        	the world to which it is attached. 
+	 *        	| for each collidable in collidables: 	
+	 *        	| 	(collidable.getWorld() == this)
 	 */
 	private final Set<Collidable> collidables = new HashSet<Collidable>();
 
 	/**
 	 * Advances the time in this world.
 	 * 
-	 * @param dt
-	 *            The amount of time to advance
-	 * @param collisionListener
-	 * @effect | let | next = getNextCollision() | in | if next.getTime() > dt |
-	 *         then for each collidable in collidables | collidable.move(dt) |
-	 *         if(collidable instanceof Ship) | then (Ship)
-	 *         collidable.thrust(dt) | else | for each collidable in collidables
-	 *         | collidable.move(next.getTime()) | resolveCollision(next) |
-	 *         evolve(dt-next.getTime())
+	 * @param 	dt
+	 *          The amount of time to advance
+	 * @param 	collisionListener
+	 * @effect 	Evolve the world over the given time.
+	 * 			| let 
+	 * 			| 	next = getNextCollision() 
+	 * 			| in 
+	 * 			| 	if next != null && next.getTime() > dt 	
+	 * 			|		then for each collidable in collidables 
+	 * 			| 			collidable.move(dt) 
+	 * 			| 		resolveCollision(next) 	
+	 *         	| 		evolve(dt-next.getTime())
+	 * 			|	else 
+	 * 			| 		for each collidable in collidables
+	 *         	| 			collidable.move(next.getTime()) 
+	 *          |			if (collidable instanceof Ship) 
+	 * 			| 				then (Ship) collidable.thrust(dt) 
 	 */
 	public void evolve(double dt) throws IllegalArgumentException{
 		if(!Util.fuzzyEquals(0.0, dt)) {
@@ -479,17 +508,28 @@ public class World {
 		}
 	}
 
+	/**
+	 * Execute all programs associated with all ships associated with this world.
+	 * 
+	 * @param 	dt
+	 * 			The given time.
+	 * @effect  ...
+	 * 			| let 
+	 * 			| 	amount = dt / 0.2
+	 * 			| in
+	 * 			| 	while amount > 0
+	 * 			| 	if collidable instanceof Ship && ((Ship) collidable).getProgram() != null
+	 * 			| 		then ((Ship) collidable).executeProgram()
+	 */
 	private void executeAllPrograms(double dt) {
-		double amount = dt/0.2;
+		double amount = dt / 0.2;
 		while(amount > 0) {
 		for(Collidable collidable : getAllCollidables()) {
 				if(collidable instanceof Ship && ((Ship) collidable).getProgram() != null) {
-//					if(((Ship) collidable).getProgram().getState().isPaused())
 					try {
 						((Ship) collidable).executeProgram();
 					}catch(Exception e) {
 						((Ship) collidable).getProgram().terminate();
-						// Terminate het program bij uitvoer exceptions
 					}
 				}
 			}
@@ -500,13 +540,14 @@ public class World {
 	/**
 	 * Resolve the given collision.
 	 * 
-	 * @param next
-	 *            The given collision.
-	 * @effect If there is only one collidable involved with the collision, then
-	 *         this this collidable bounces of the boundary. | if
-	 *         (next.getSecond() == null) | then
-	 *         next.getFirst().bounceOfBoundary() Else the two collidables
-	 *         collide. | else next.getFirst().collides(next.getSecond())
+	 * @param 	next
+	 *          The given collision.
+	 * @effect 	If there is only one collidable involved with the collision, then
+	 *         	this this collidable bounces of the boundary. 
+	 *         	| if (next.getSecond() == null) 	
+	 *         	| 	then next.getFirst().bounceOfBoundary() 
+	 *         	Else the two collidables collide. 
+	 *         	| else next.getFirst().collides(next.getSecond())
 	 */
 	private void resolveCollision(Collision next) {
 		Collidable first = next.getFirst();
@@ -527,9 +568,9 @@ public class World {
 	 *  		| 	such that for each collidable in collidables
 	 *  		|		if !collidables.get(i).overlapWithBoundary()
 	 *  		|   		then Util.fuzzyLessThanOrEqualTo(next.getTime(),collidable.getTimeToCollisionWithBoundary())
-	 *  @effect If the time is equal to Double.MAX_VALUE, the result is null. \\TODO: ok? zie ook verder
-	 *  		| result == null
-	 *  		|	if (time == Double.MAX_VALUE)
+	 *  @effect If the time is equal to Double.MAX_VALUE, the result is null.
+	 *  		| if (time == Double.MAX_VALUE)
+	 *  		|	result == null
 	 */
 	public Collision getNextCollisionWithBoundary() {
 		ArrayList<Collidable> collidables = new ArrayList<Collidable>(getAllCollidables());
@@ -554,14 +595,15 @@ public class World {
 	 *  Returns the first collision of two collidables that will happen in this world.
 	 *  
 	 *  @effect For each collidable in collidables, the time to collision with another non-overlapping collidable 
-	 *  		is bigger than or equal to than the time of the result.
+	 *  		is bigger than or equal to the time of the result.
 	 *  		| result == next
-	 *  		| 	such that for each i in 0..getNbCollidables()-1:   \\TODO: klopt dit wel .. ?
-	 *  		|		if !collidables.get(i).overlap(collidables.get(i+1))
-	 *  		|			then Util.fuzzyLessThanOrEqualTo(next.getTime(),collidables.get(i).getTimeToCollision(collidables.get(i+1));
-	 *  		If the time is equal to Double.MAX_VALUE or the time is a negative value, the result is null. \\TODO: goed zo?? laatste is wat vreemd
-	 *  		| result == null
-	 *  		|	if (time == Double.MAX_VALUE || Util.fuzzyLessThanOrEqualTo(time, 0.0))
+	 *  		| 	such that for each i in 0..getNbCollidables()-1: 
+	 *  		| 		for each j in i+1..getNbCollidables()-1: 
+	 *  		|			if !collidables.get(i).overlap(collidables.get(j))
+	 *  		|				then Util.fuzzyLessThanOrEqualTo(next.getTime(),collidables.get(i).getTimeToCollision(collidables.get(j))
+	 *  		If the time is equal to Double.MAX_VALUE or the time is a negative value, the result is null.
+	 *  		| if (time == Double.MAX_VALUE || Util.fuzzyLessThanOrEqualTo(time, 0.0)) 
+	 *  		|	result == null
 	 */
 	public Collision getNextCollisionWithOther() {
 		ArrayList<Collidable> collidables = new ArrayList<Collidable>(getAllCollidables());
@@ -581,7 +623,7 @@ public class World {
 				}	
 			}			
 		}
-		if (time == Double.MAX_VALUE || Util.fuzzyLessThanOrEqualTo(time, 0.0)) //TODO: negatief nodig?
+		if (time == Double.MAX_VALUE)
 			return null;
 		return new Collision(first,second,time);
 	}
@@ -611,6 +653,8 @@ public class World {
 			return null;
 		if (nextWithOther == null)
 			return nextWithBoundary;
+		if (nextWithBoundary == null)
+			return nextWithOther;
 		if (Util.fuzzyLessThanOrEqualTo(nextWithBoundary.getTime(),nextWithOther.getTime()))
 			return nextWithBoundary;
 		return nextWithOther;
@@ -621,9 +665,10 @@ public class World {
 	 * 
 	 * @return A string consisting of the textual representation of the width
 	 *         and the height of this world, separated by a space and enclosed
-	 *         in square brackets. | result.equals( | "[" + "Width: " +
-	 *         getWidth().toString() | + " Height: " + getHeight().toString() +
-	 *         "]" )
+	 *         in square brackets. 	
+	 *         | result.equals( 	
+	 *         | 	"[" + "Width: " + getWidth().toString() 	
+	 *         | 		+ " Height: " + getHeight().toString() + "]" )
 	 */
 	@Override
 	public String toString() {

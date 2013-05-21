@@ -1,5 +1,8 @@
 package model;
 
+//TODO > FINISHED
+
+import expressions.Expression;
 import gameObjects.*;
 
 import java.io.BufferedReader;
@@ -13,7 +16,6 @@ import java.util.Set;
 
 import org.antlr.v4.runtime.RecognitionException;
 
-import programrelated.Expression;
 
 import statements.Statement;
 import support.Vector;
@@ -55,13 +57,21 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet, Program> {
 	}
 
 	@Override
-	public void addShip(World world, Ship ship) {
-		world.addAsCollidable(ship);
+	public void addShip(World world, Ship ship) throws ModelException {
+		try {
+			world.addAsCollidable(ship);
+		} catch (IllegalArgumentException e) {
+			throw new ModelException(e);
+		}
 	}
 
 	@Override
-	public void addAsteroid(World world, Asteroid asteroid) {
-		world.addAsCollidable(asteroid);
+	public void addAsteroid(World world, Asteroid asteroid) throws ModelException {
+		try {
+			world.addAsCollidable(asteroid);
+		} catch (IllegalArgumentException e) {
+			throw new ModelException(e);
+		}
 	}
 
 	@Override
@@ -76,8 +86,12 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet, Program> {
 
 	@Override
 	public void evolve(World world, double dt,
-			CollisionListener collisionListener) {
-		world.evolve(dt);
+			CollisionListener collisionListener) throws ModelException {
+		try {
+			world.evolve(dt);
+		} catch (IllegalArgumentException e) {
+			throw new ModelException(e);
+		}
 	}
 
 	@Override
@@ -170,13 +184,17 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet, Program> {
 
 	@Override
 	public Asteroid createAsteroid(double x, double y, double xVelocity,
-			double yVelocity, double radius) {
-		return new Asteroid(new Vector(x, y), new Vector(xVelocity, yVelocity), radius);
+			double yVelocity, double radius) throws ModelException {
+		try {
+			return new Asteroid(new Vector(x, y), new Vector(xVelocity, yVelocity), radius);
+		} catch (IllegalArgumentException e) {
+			throw new ModelException(e);
+		}
 	}
 
 	@Override
 	public Asteroid createAsteroid(double x, double y, double xVelocity,
-			double yVelocity, double radius, Random random) {
+			double yVelocity, double radius, Random random) throws ModelException {
 		return createAsteroid(x,y,xVelocity,yVelocity,radius);
 	}
 
@@ -285,23 +303,31 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet, Program> {
 
 	@Override
 	public model.IFacade.ParseOutcome<Program> loadProgramFromStream(
-			InputStream stream) throws IOException {
-		StringBuilder inputStringBuilder = new StringBuilder();
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream));
-		String line = bufferedReader.readLine();
-        while(line != null){
-            inputStringBuilder.append(line);inputStringBuilder.append('\n');
-            line = bufferedReader.readLine();
-        }
-        String fileText =  inputStringBuilder.toString();
-        System.out.println(fileText);
-        return parseProgram(fileText);
+			InputStream stream) throws ModelException {
+		try {
+			StringBuilder inputStringBuilder = new StringBuilder();
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream));
+			String line = bufferedReader.readLine();
+			while(line != null){
+			    inputStringBuilder.append(line);inputStringBuilder.append('\n');
+			    line = bufferedReader.readLine();
+			}
+			String fileText =  inputStringBuilder.toString();
+			System.out.println(fileText);
+			return parseProgram(fileText);
+		} catch (IOException e) {
+			throw new ModelException(e);
+		}
 	}
 
 	@Override
 	public model.IFacade.ParseOutcome<Program> loadProgramFromUrl(URL url)
-			throws IOException {
-		return loadProgramFromStream(url.openStream());
+			throws ModelException {
+		try {
+			return loadProgramFromStream(url.openStream());
+		} catch (IOException e) {
+			throw new ModelException(e);
+		}
 	}
 
 	@Override
@@ -311,7 +337,6 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet, Program> {
 
 	@Override
 	public model.IFacade.TypeCheckOutcome typeCheckProgram(Program program) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

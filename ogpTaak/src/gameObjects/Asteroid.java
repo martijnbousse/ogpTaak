@@ -1,5 +1,7 @@
 package gameObjects;
 
+//TODO > FINISHED
+
 import java.util.Random;
 
 import support.Vector;
@@ -31,7 +33,8 @@ public class Asteroid extends Collidable{
 	 * 			the given velocity, the given radius and the given mass.
 	 * 			| super(position, velocity, radius, mass)
 	 */
-	public Asteroid(Vector position, Vector velocity, double radius) {
+	@Raw
+	public Asteroid(Vector position, Vector velocity, double radius) throws IllegalArgumentException {
 		super(position, velocity,radius);
 	}
 	
@@ -151,7 +154,7 @@ public class Asteroid extends Collidable{
 	 * 			| ship.collidesWith(this)
 	 */
 	@Override
-	public void collidesWith(Ship ship) {
+	protected void collidesWith(Ship ship) {
 		ship.collidesWith(this);
 	}
 	
@@ -164,7 +167,7 @@ public class Asteroid extends Collidable{
 	 * 			| bounce(asteroid)
 	 */
 	@Override
-	public void collidesWith(Asteroid asteroid) {
+	protected void collidesWith(Asteroid asteroid) {
 		bounce(asteroid);
 	}
 	
@@ -178,7 +181,7 @@ public class Asteroid extends Collidable{
 	 * 			| bullet.terminate()
 	 */
 	@Override
-	public void collidesWith(Bullet bullet) {
+	protected void collidesWith(Bullet bullet) {
 		this.terminate();
 		bullet.terminate();
 	}

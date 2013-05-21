@@ -1,10 +1,11 @@
 package model;
 
+//TODO FINISHED
+
 import java.util.HashMap;
 import java.util.Map;
 
 import be.kuleuven.cs.som.annotate.Basic;
-import be.kuleuven.cs.som.annotate.Immutable;
 
 import statements.Statement;
 import statements.While;
@@ -19,50 +20,7 @@ public class ProgramState {
 		this.globals = globals;
 	}
 	
-	@Basic @Immutable
-	public Ship getSelf() {
-		return this.self;
-	}
-	
-	public void setShip(Ship ship) {
-		this.self = ship;
-	}
-	
-	public void setPaused(boolean flag) {
-		this.isPaused = flag;
-	}
-	
-	public boolean isPaused() {
-		return this.isPaused;
-	}
-	
-	private boolean isPaused = false;
-	
-	private Ship self;
-	
 	@Basic
-	public Map<String,Type> getGlobals() {
-		return new HashMap<String,Type>(globals);
-	}
-	
-	private final Map<String,Type> globals;
-
-	private Statement next;
-
-	private boolean isTerminated;
-
-	public void assign(String name, Type value) {
-		this.globals.put(name, value);
-	}
-
-	public Statement getNext() {
-		return this.next;
-	}
-	
-	public void setNextStatement(Statement next) {
-		this.next = next;
-	}
-	
 	public boolean isTerminated() { 
 		return this.isTerminated;
 	}
@@ -70,32 +28,86 @@ public class ProgramState {
 	public void terminate() {
 		this.isTerminated = true;
 	}
-	
-	public void setLoop(While loop) {
-		this.loop = loop;
+
+	private boolean isTerminated = false;
+
+	@Basic
+	public boolean isPaused() {
+		return this.isPaused;
+	}
+
+	public void setPaused(boolean flag) {
+		this.isPaused = flag;
 	}
 	
-	public Statement getLoop() {
-		return this.loop;
+	private boolean isPaused = false;
+	
+	@Basic
+	public boolean isStarted() {
+		return this.isStarted;
 	}
-	
-	private Statement loop;
-	
-	
-	
+
+	public void setStarted(boolean flag) {
+		this.isStarted = flag;
+	}
+
+	private boolean isStarted = false;
+
+	@Basic
 	public boolean isLooping() {
 		return this.isLooping;
 	}
-	
-	
+
 	public void setLooping(boolean flag) {
 		this.isLooping = flag;
 	}
-	
+
 	private boolean isLooping = false;
+
+	@Basic
+	public Statement getLoop() {
+		return this.loop;
+	}
+
+	public void setLoop(While loop) {
+		this.loop = loop;
+	}
+
+	private Statement loop;
+
+	public Map<String,Type> getGlobals() {
+		return new HashMap<String,Type>(globals);
+	}
+	
+	private final Map<String,Type> globals;
+
+	public void assign(String name, Type value) {
+		this.globals.put(name, value);
+	}
+
+	@Basic
+	public Ship getSelf() {
+		return this.self;
+	}
+
+	public void setShip(Ship ship) {
+		this.self = ship;
+	}
+
+	private Ship self;
+
+	@Basic
+	public Statement getNext() {
+		return this.next;
+	}
+
+	public void setNextStatement(Statement next) {
+		this.next = next;
+	}
 
 	public void setNextStatementLoop() {
 		setNextStatement(getLoop());
 	}
-	
+
+	private Statement next;
 }

@@ -1,11 +1,12 @@
 package model;
 
+//TODO > FINISHED
+
 import java.util.Map;
 
 import be.kuleuven.cs.som.annotate.Basic;
 
 import statements.Statement;
-import statements.While;
 import types.Type;
 
 public class Program {
@@ -15,64 +16,55 @@ public class Program {
 		this.programState = new ProgramState(null, globals);
 	}
 
-	public void terminate() {
-		if (!isTerminated) {
-			this.isTerminated = true;
-			getState().terminate();
-		}
+	@Basic
+	public boolean isTerminated() {
+		return this.isTerminated;
 	}
 
+	public void terminate() {
+		this.isTerminated = true;
+		getState().terminate();
+	}
+
+	private boolean isTerminated;
+
+
+	@Basic	
 	public Statement getStatement() {
 		return this.statement;
 	}
 
 	private Statement statement;
 
-	private boolean isTerminated;
+	@Basic
+	public ProgramState getState() {
+		return this.programState;
+	}
 
 	private ProgramState programState;
 
 
-	@Basic
-	// TODO RAW
-	public boolean isTerminated() {
-		return this.isTerminated;
-	}
-
 	public void execute() {
-		if(getState().isTerminated())
+		if(!getState().isStarted()) {
+			getState().setStarted(true);
+			getStatement().execute(getState());
+		}
+		else if(getState().isTerminated())
 			this.terminate();
-//		if(getState().isPaused())
-//			getState().setPaused(false);
-//			executeNext();
-		if( !this.isTerminated()) {
-			if(programState.isPaused()) {
-				getState().setPaused(false);
-				Statement next = getState().getNext();
-				getState().setNextStatement(null);
-				if(next != null) {
-					next.execute(getState());
+		else if(getState().isPaused()) {
+			getState().setPaused(false);
+			Statement next = getState().getNext();
+			getState().setNextStatement(null);
+			if(next != null) {
+				next.execute(getState());
+			} else {
+				if(!getState().isLooping()) {
+					this.terminate();	
 				} else {
-					if(!getState().isLooping()) {
-						this.terminate();	
-					} else {
-						getState().setNextStatementLoop();
-					}
+					getState().setNextStatementLoop();
+					getState().getLoop().execute(getState());
 				}
-			}else{
-				getStatement().execute(getState());
 			}
 		}
-//		if(getState().isPaused()) {
-//			getState().setPaused(false);
-//		}
-	}
-
-//	private void executeNext() {
-//		getStatement()
-//	}
-
-	public ProgramState getState() {
-		return this.programState;
 	}
 }

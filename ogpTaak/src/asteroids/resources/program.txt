@@ -1,2 +1,9 @@
-turn true;
+double d;
+bool b;
+d := 0.2;
+b := true;
+while(b) {
+turn d;
+d := d + 0.1;
 fire;
+}

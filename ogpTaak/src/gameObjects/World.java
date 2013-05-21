@@ -485,7 +485,12 @@ public class World {
 		for(Collidable collidable : getAllCollidables()) {
 				if(collidable instanceof Ship && ((Ship) collidable).getProgram() != null) {
 //					if(((Ship) collidable).getProgram().getState().isPaused())
-					((Ship) collidable).executeProgram();
+					try {
+						((Ship) collidable).executeProgram();
+					}catch(Exception e) {
+						((Ship) collidable).getProgram().terminate();
+						// Terminate het program bij uitvoer exceptions
+					}
 				}
 			}
 		amount--;

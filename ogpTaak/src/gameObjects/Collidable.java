@@ -401,7 +401,7 @@ public abstract class Collidable {
 	 * 			The other collidable.
 	 * @effect	True if and only if the distance between this collidable and the given collidable is negative 
 	 * 			or if the given collidable is equal to this collidable.
-	 * 			| result == (getDistanceBetween(other) < 0) || (other.equals(this))  
+	 * 			| result == (!Util.fuzzyLessThanOrEqualTo(0, getDistanceBetween(other)) || (other.equals(this))  
 	 * @throws 	IllegalArgumentException 
 	 * 			The given collidable is not effective.
 	 * 			| (other == null)
@@ -413,7 +413,7 @@ public abstract class Collidable {
 			throw new IllegalArgumentException("Non effective collidable!");
 		if (other.equals(this))
 			return true;
-		return (getDistanceBetween(other) < 0);
+		return (!Util.fuzzyLessThanOrEqualTo(0, getDistanceBetween(other)));
 	}
 
 	/**
@@ -461,7 +461,7 @@ public abstract class Collidable {
 	 * Returns a boolean reflecting whether this collidable and the given collidable overlap.
 	 * 
 	 * @effect	True if and only if the distance between this collidable and the boundary is negative 
-	 * 			| result == (getDistanceBetween(other) < 0)) 
+	 * 			| result == (getDistanceToClosestBoundary() < 0)) 
 	 */
 	//REMINDER: IllegalStateException regarding the terminated state of this collidable
 	//          are thrown via getDistanceToClosestBoundary.

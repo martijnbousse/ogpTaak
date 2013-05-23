@@ -1,4 +1,6 @@
-entity a;
-foreach(asteroid, a) do {
-fire;
+d :=0.1;
+i := 5;
+while(i>0) do {
+	turn d;
+	i := i - 1;
 }

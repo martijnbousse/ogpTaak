@@ -313,7 +313,6 @@ public class Facade implements IFacade<World, Ship, Asteroid, Bullet, Program> {
 			    line = bufferedReader.readLine();
 			}
 			String fileText =  inputStringBuilder.toString();
-			System.out.println(fileText);
 			return parseProgram(fileText);
 		} catch (IOException e) {
 			throw new ModelException(e);

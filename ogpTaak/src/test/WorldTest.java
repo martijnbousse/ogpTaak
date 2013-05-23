@@ -26,6 +26,9 @@ public class WorldTest {
 	private static Collidable collidable1;
 	private static Collidable collidable2;
 	private static Collidable collidable3;
+	private static Collidable collidable7;
+	private static Collidable collidable6;
+	private static Collidable collidable8;
 	
 	private static Collidable collidable4;
 	
@@ -57,15 +60,20 @@ public class WorldTest {
 	public static void setUpBeforeClass() throws Exception {
 		world1 = new World(1000,1000);
 		collidable1 = new Ship();
-		collidable2 = new Ship();
-		collidable3 = new Ship();
+		collidable2 = new Ship(new Vector(250, 250), new Vector(0,0), 10, 10, 1);
+		collidable3 = new Ship(new Vector(750, 750), new Vector(0,0), 10, 10, 1);
+		collidable6 = new Ship(new Vector(11, 11), new Vector(0,0), 10, 10, 1);
+		collidable7 = new Ship(new Vector(999,999), new Vector(0,0), 10, 10, 1);
+		collidable8 = new Ship(new Vector(333,666), new Vector(0,0), 10, 10, 1);
+
 		world1.addAsCollidable(collidable1);
+		
 		world1.addAsCollidable(collidable2);
 		world1.addAsCollidable(collidable3);
 		
 		collidable4 = new Ship();
 		
-			collidable5 = new Ship(new Vector(100,100), new Vector(0,0), 500, 10, 1);
+		collidable5 = new Ship(new Vector(100,100), new Vector(0,0), 500, 10, 1);
 
 	}
 	
@@ -73,7 +81,7 @@ public class WorldTest {
 	public void setUp() throws Exception {
 		mutableWorld1 = new World();
 		mutableCollidable1 = new Ship();
-		mutableCollidable2 = new Ship();
+		mutableCollidable2 = new Ship(new Vector(250, 250), new Vector(0,0), 10, 10, 1);
 		mutableWorld1.addAsCollidable(mutableCollidable1);
 		mutableWorld1.addAsCollidable(mutableCollidable2);
 		
@@ -83,7 +91,7 @@ public class WorldTest {
 		
 		mutableWorld3 = new World();
 		mutableShip1 = new Ship();
-		mutableAsteroid1 = new Asteroid();
+		mutableAsteroid1 = new Asteroid(new Vector(250, 250), new Vector(0,0), 10);
 		mutableWorld3.addAsCollidable(mutableShip1);
 		mutableWorld3.addAsCollidable(mutableAsteroid1);
 		mutableShip1.fireBullet();
@@ -94,7 +102,7 @@ public class WorldTest {
 		mutableWorld4.addAsCollidable(mutableShip2);
 		mutableWorld4.addAsCollidable(mutableShip3);
 		
-		mutableCollidable4 = new Ship();
+		mutableCollidable4 = new Ship(new Vector(500,50), new Vector(10,0), 10,10,0);
 		terminatedCollidable = new Ship();
 		terminatedCollidable.terminate();
 		terminatedWorld = new World();
@@ -310,7 +318,7 @@ public class WorldTest {
 	
 	@Test 
 	public void testCanHaveAsCollidable_LegalCase() {
-		assertTrue(world1.canHaveAsCollidable(collidable1));
+		assertTrue(world1.canHaveAsCollidable(collidable8));
 	}
 	
 	@Test
@@ -331,6 +339,16 @@ public class WorldTest {
 	@Test
 	public void testCanHaveAsCollidable_OtherIsTerminatedCase() {
 		assertFalse(world1.canHaveAsCollidable(terminatedCollidable));
+	}
+	
+	@Test
+	public void testCanHaveAsCollidable_OverlapWithOtherCase() {
+		assertFalse(world1.canHaveAsCollidable(collidable6));
+	}
+	
+	@Test
+	public void testCanHaveAsCollidable_OverlapWithBoundaryCase() {
+		assertFalse(world1.canHaveAsCollidable(collidable7));
 	}
 	
 	// hasAsCollidable

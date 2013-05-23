@@ -353,23 +353,28 @@ public class World {
 	 * 
 	 * @param 	collidable
 	 *        	The collidable to check.
-	 * @return 	False if the given collide is not effective
+	 * @return 	False if the given collidable is not effective
 	 *  	 	| if (collidable == null) 	
 	 *  		| 	then result == false 
+	 *  		False if the given collidable overlaps with any other collidable in this world.
+	 *  		| if for some entity in collidables (collidable.overlap(entity))
+	 *  		|	then result == false
 	 *  		Otherwise, true if and only if this world and the collidable are not yet terminated and the
-	 *         	collidable fits this world's dimensions. 
+	 *         	collidable fits this world's dimensions and does not overlap with the boundary of this world.
 	 *         	| else result == 
 	 *         	|	!((this.isTerminated()) || collidable.isTerminated()) 	
 	 *         	| 		&& collidable.getRadius() < Math.min(getWidth()/2, getHeight()/2)
+	 *         	|		&& !collidable.overlapWithBoundary()
 	 */
 	@Raw
 	public boolean canHaveAsCollidable(Collidable collidable) {
-//		for(Collidable entity : getAllCollidables()) {
-//			if(collidable.overlap(entity))
-//				return false;
-//		}
-		return ((collidable != null)
-				&& !((this.isTerminated()) || (collidable.isTerminated())) 
+		if(collidable == null)
+			return false;
+		for(Collidable entity : getAllCollidables()) {
+			if(collidable.overlap(entity))
+				return false;
+		}
+		return (!((this.isTerminated()) || (collidable.isTerminated())) 
 				&& collidable.getRadius() < Math.min(getWidth() / 2, getHeight() / 2))
 				&& !collidable.overlapWithBoundary();
 	}

@@ -2,7 +2,9 @@ package gameObjects;
 
 //TODO > FINISHED
 
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 import support.Vector;
 
@@ -49,18 +51,23 @@ public class Asteroid extends Collidable{
 	}
 	
 	/**
-	 * Terminate this asteroid as an instance of collidable. In addition, if this asteroid can spawn to smaller asteroids, it will spawn them.	
+	 * Terminate this asteroid as an instance of collidable. In addition, if this asteroid can spawn to smaller asteroids, it will spawn them.
 	 */
 	@Override
 	public void terminate() {
+		Set<Asteroid> children = new HashSet<Asteroid>();
 		if (canSpawn()) {	
-			spawn();
+			children= createChildren();
 		}
+		World oldWorld = getWorld();
 		super.terminate();
+		for(Asteroid asteroid : children) {
+			oldWorld.addAsCollidable(asteroid);
+		}
 	}
 	
 	/**
-	 * Check whether this asteroid can spawn to lesser asteroids.
+	 * Check whether this asteroid can spawn lesser asteroids.
 	 * 
 	 * @return	True if and only if this asteroid is located within a world and if its radius is larger than or equal to 30 km. 
 	 * 			| result == (getWorld() != null)
@@ -73,19 +80,20 @@ public class Asteroid extends Collidable{
 		}
 	
 	/**
-	 * This asteroids spawns two new smaller asteroids.
+	 * Return a list with the children of this asteroid.
 	 * 
-	 * @effect	Two new smaller asteroids are added to the world of this asteroid with a new position, new velocity and half the radius.
+	 * @return	Two new smaller asteroids are created and returned in the form of a set.
 	 * 			| let
 	 * 			|  	firstNewPosition = getPosition().subtract(new Vector(getRadius()/2,0))
 	 *			|	secondNewPosition = getPosition().add(new Vector(getRadius()/2,0))
 	 *			| 	firstNewVelocity = new Vector(newSpeed*Math.cos(randomDirection),newSpeed*Math.cos(randomDirection))
 	 *			|	secondNewVelocity = new Vector(newSpeed*Math.cos(randomDirection+Math.PI),newSpeed*Math.cos(randomDirection+Math.PI))
 	 *			| in
-	 * 			|	getWorld().addAsCollidable(new Asteroid(firstNewPosition,firstNewVelocity,getRadius()/2));
-	 * 			| 	getWorld().addAsCollidable(new Asteroid(secondNewPosition,secondNewVelocity,getRadius()/2))
+	 * 			|	result.contains(new Asteroid(firstNewPosition,firstNewVelocity,getRadius()/2))
+	 * 			| 	result.contains(new Asteroid(secondNewPosition,secondNewVelocity,getRadius()/2))
 	 */
-	public void spawn() {
+	public Set<Asteroid> createChildren() {
+		Set<Asteroid> children = new HashSet<Asteroid>();
 		Asteroid firstNewAsteroid = null;
 		Asteroid secondNewAsteroid = null;
 		try {
@@ -104,13 +112,14 @@ public class Asteroid extends Collidable{
 			// create asteroids
 			firstNewAsteroid = new Asteroid(firstNewPosition,firstNewVelocity,getRadius()/2);
 			secondNewAsteroid = new Asteroid(secondNewPosition,secondNewVelocity,getRadius()/2);
+			// add new asteroids
+			children.add(firstNewAsteroid);
+			children.add(secondNewAsteroid);
 		}
 		catch (Exception e) {
 			// spawn calculations have failed, do nothing.
 		}
-		// add new asteroids
-		getWorld().addAsCollidable(firstNewAsteroid);
-		getWorld().addAsCollidable(secondNewAsteroid);	
+		return children;
 	}
 	
 	/**
@@ -182,8 +191,8 @@ public class Asteroid extends Collidable{
 	 */
 	@Override
 	protected void collidesWith(Bullet bullet) {
-		this.terminate();
 		bullet.terminate();
+		this.terminate();
 	}
 	
 	/**

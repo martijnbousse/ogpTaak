@@ -1,7 +1,5 @@
 package model;
 
-//TODO FINISHED
-
 import java.util.HashMap;
 import java.util.Map;
 

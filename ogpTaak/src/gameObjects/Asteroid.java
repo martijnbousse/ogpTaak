@@ -1,7 +1,5 @@
 package gameObjects;
 
-//TODO > FINISHED
-
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -139,7 +137,7 @@ public class Asteroid extends Collidable{
 	/**
 	 * Variable registering the mass of this asteroid.
 	 */
-	public final double mass = (4/3)*Math.PI*Math.pow(getRadius(),3)*DENSITY;
+	private final double mass = (4/3)*Math.PI*Math.pow(getRadius(),3)*DENSITY;
 	
 	/**
 	 * This asteroid collides with the given collidable.

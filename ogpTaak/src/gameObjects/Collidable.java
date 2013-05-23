@@ -1,7 +1,5 @@
 package gameObjects;
 
-//TODO > FINISHED
-
 import support.Vector;
 import exceptions.InvalidPositionException;
 import exceptions.SumOverflowException;

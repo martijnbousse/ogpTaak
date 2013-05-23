@@ -6,8 +6,6 @@
  */
 package gameObjects;
 
-//TODO > FINISHED
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -307,9 +305,13 @@ public class Ship extends Collidable implements IShip{
 			try {
 				Bullet bullet = new Bullet(initialPosition,initialVelocity,3);
 				if(!bullet.overlapWithBoundary()) {
-					
 					this.addAsBullet(bullet);
 					getWorld().addAsCollidable(bullet);
+					Set<Collidable> allCollidables = getWorld().getAllCollidables();
+					for(Collidable collidable : allCollidables) {
+						if(bullet.overlap(collidable) && !collidable.equals(bullet))
+							collidable.collide(bullet);
+					}
 				}
 			} catch (InvalidPositionException e) {
 				// do not fire

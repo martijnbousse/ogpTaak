@@ -1,7 +1,5 @@
 package model;
 
-//TODO > FINISHED
-
 import expressions.Expression;
 import gameObjects.*;
 

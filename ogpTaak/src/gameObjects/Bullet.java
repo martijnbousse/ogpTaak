@@ -1,7 +1,5 @@
 package gameObjects;
 
-//TODO > FINISHED
-
 import support.Vector;
 import be.kuleuven.cs.som.annotate.*;
 
@@ -121,7 +119,7 @@ public class Bullet extends Collidable {
 	/**
 	 * Variable registering the mass of this bullet.
 	 */
-	public final double mass = (4/3)*Math.PI*Math.pow(getRadius(),3)*DENSITY; 
+	private final double mass = (4/3)*Math.PI*Math.pow(getRadius(),3)*DENSITY; 
 	
 	/**
 	 * Symbolic constant registering the density of all bullets.

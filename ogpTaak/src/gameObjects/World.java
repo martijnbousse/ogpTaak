@@ -1,7 +1,5 @@
 package gameObjects;
 
-// TODO: > FINISHED
-
 import asteroids.Util;
 import be.kuleuven.cs.som.annotate.*;
 

@@ -1,7 +1,5 @@
 package model;
 
-//TODO > FINISHED
-
 import java.util.Map;
 
 import be.kuleuven.cs.som.annotate.Basic;

@@ -53,6 +53,7 @@ import asteroids.CollisionListener;
  * implementation of this interface.</li>
  * <ul>
  */
+@SuppressWarnings("hiding")
 public interface IFacade<World, Ship, Asteroid, Bullet, Program> {
   
   /**

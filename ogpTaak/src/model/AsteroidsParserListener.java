@@ -1,7 +1,6 @@
 // Generated from AsteroidsParser.g4 by ANTLR 4.0
  package model; 
 import org.antlr.v4.runtime.tree.*;
-import org.antlr.v4.runtime.Token;
 
 public interface AsteroidsParserListener extends ParseTreeListener {
 	void enterForeach(AsteroidsParserParser.ForeachContext ctx);

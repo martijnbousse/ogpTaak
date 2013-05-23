@@ -1,0 +1,852 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.2" icons="true" automaticImage="JPEG" always-add-relationships="false" 
+  generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" language="java" name="expressions.Expression" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/Expression.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="4744" y="1766"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="model.Program" project="ogpTaak" file="/ogpTaak/src/model/Program.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="3117" y="307"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="expressions.singleArgumentedExpressions.GetXVelocity" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/singleArgumentedExpressions/GetXVelocity.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="4316" y="2634"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="expressions.singleArgumentedExpressions.SingleArgumentExpression" 
+    project="ogpTaak" file="/ogpTaak/src/expressions/singleArgumentedExpressions/SingleArgumentExpression.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="4358" y="2276"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="expressions.literalExpressions.BooleanLiteral" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/literalExpressions/BooleanLiteral.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="5814" y="2314"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="expressions.binaryExpressions.DifferentFrom" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/binaryExpressions/DifferentFrom.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="5475" y="3246"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="expressions.singleArgumentedExpressions.SquareRoot" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/singleArgumentedExpressions/SquareRoot.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="3599" y="2634"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="statements.Turn" project="ogpTaak" file="/ogpTaak/src/statements/Turn.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="2314" y="2154"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="expressions.binaryExpressions.GreaterThanOrEqual" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/binaryExpressions/GreaterThanOrEqual.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="5743" y="3246"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="statements.While" project="ogpTaak" file="/ogpTaak/src/statements/While.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="2971" y="1916"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" name="statements.Statement" project="ogpTaak" 
+    file="/ogpTaak/src/statements/Statement.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="3135" y="1611"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="12" language="java" name="expressions.binaryExpressions.LessThanOrEqual" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/binaryExpressions/LessThanOrEqual.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="6020" y="3246"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="13" language="java" name="expressions.binaryExpressions.ArithmeticExpression" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/binaryExpressions/ArithmeticExpression.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="4997" y="2847"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="14" language="java" name="expressions.singleArgumentedExpressions.GetRadius" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/singleArgumentedExpressions/GetRadius.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="4555" y="2634"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="15" language="java" name="expressions.singleArgumentedExpressions.ArithmeticExpression" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/singleArgumentedExpressions/ArithmeticExpression.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="3880" y="2403"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="16" language="java" name="expressions.singleArgumentedExpressions.GetXPosition" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/singleArgumentedExpressions/GetXPosition.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="4794" y="2634"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="17" language="java" name="expressions.literalExpressions.DoubleLiteral" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/literalExpressions/DoubleLiteral.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="6012" y="2314"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="18" language="java" name="statements.ThrustOn" project="ogpTaak" 
+    file="/ogpTaak/src/statements/ThrustOn.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="2515" y="2145"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="19" language="java" name="expressions.literalExpressions.Entity" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/literalExpressions/Entity.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="6196" y="2314"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="20" language="java" name="expressions.literalExpressions.LiteralExpression" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/literalExpressions/LiteralExpression.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="6371" y="1929"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="21" language="java" name="expressions.literalExpressions.Self" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/literalExpressions/Self.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="6387" y="2323"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="22" language="java" name="statements.IfElse" project="ogpTaak" file="/ogpTaak/src/statements/IfElse.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1940" y="1915"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="23" language="java" name="expressions.binaryExpressions.Addition" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/binaryExpressions/Addition.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="4442" y="3078"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="24" language="java" name="expressions.binaryExpressions.ComparatingExpression" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/binaryExpressions/ComparatingExpression.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="6111" y="2919"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="25" language="java" name="expressions.binaryExpressions.GreaterThan" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/binaryExpressions/GreaterThan.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="6279" y="3246"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="26" language="java" name="gameObjects.Ship" project="ogpTaak" file="/ogpTaak/src/gameObjects/Ship.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1310" y="688"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="27" language="java" name="expressions.binaryExpressions.Subtraction" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/binaryExpressions/Subtraction.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="4750" y="3074"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="28" language="java" name="expressions.binaryExpressions.Multiplication" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/binaryExpressions/Multiplication.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="5216" y="3082"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="29" language="java" name="expressions.binaryExpressions.LessThan" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/binaryExpressions/LessThan.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="6524" y="3246"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="30" language="java" name="expressions.binaryExpressions.Disjunction" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/binaryExpressions/Disjunction.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="6670" y="3050"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="31" language="java" name="statements.Print" project="ogpTaak" file="/ogpTaak/src/statements/Print.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="3174" y="1907"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="32" language="java" name="expressions.singleArgumentedExpressions.Sinus" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/singleArgumentedExpressions/Sinus.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="3838" y="2634"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="33" language="java" name="expressions.binaryExpressions.EqualTo" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/binaryExpressions/EqualTo.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="6769" y="3246"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="34" language="java" name="statements.Action" project="ogpTaak" file="/ogpTaak/src/statements/Action.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="2768" y="1898"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="35" language="java" name="statements.ForEach" project="ogpTaak" file="/ogpTaak/src/statements/ForEach.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="2189" y="1937"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="36" language="java" name="gameObjects.Asteroid" project="ogpTaak" 
+    file="/ogpTaak/src/gameObjects/Asteroid.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="456" y="858"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="37" language="java" name="statements.Fire" project="ogpTaak" file="/ogpTaak/src/statements/Fire.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="2716" y="2145"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="38" language="java" name="gameObjects.Bullet" project="ogpTaak" file="/ogpTaak/src/gameObjects/Bullet.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="840" y="867"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="39" language="java" name="gameObjects.World" project="ogpTaak" file="/ogpTaak/src/gameObjects/World.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="831" y="-945"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="40" language="java" name="expressions.binaryExpressions.Division" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/binaryExpressions/Division.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="4986" y="3078"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="41" language="java" name="expressions.singleArgumentedExpressions.EntityRelatedExpression" 
+    project="ogpTaak" file="/ogpTaak/src/expressions/singleArgumentedExpressions/EntityRelatedExpression.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="4838" y="2359"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="42" language="java" name="expressions.binaryExpressions.BinaryExpression" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/binaryExpressions/BinaryExpression.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="5789" y="2629"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="43" language="java" name="expressions.singleArgumentedExpressions.GetDirection" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/singleArgumentedExpressions/GetDirection.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="4844" y="2084"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="44" language="java" name="expressions.singleArgumentedExpressions.GetYPosition" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/singleArgumentedExpressions/GetYPosition.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="5033" y="2634"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="45" language="java" name="expressions.binaryExpressions.Conjunction" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/binaryExpressions/Conjunction.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="6915" y="3050"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="46" language="java" name="statements.Assignment" project="ogpTaak" 
+    file="/ogpTaak/src/statements/Assignment.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="3383" y="1925"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="47" language="java" name="expressions.singleArgumentedExpressions.Cosinus" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/singleArgumentedExpressions/Cosinus.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="4077" y="2634"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="48" language="java" name="statements.Sequence" project="ogpTaak" 
+    file="/ogpTaak/src/statements/Sequence.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="2430" y="1901"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="49" language="java" name="expressions.binaryExpressions.LogicalExpression" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/binaryExpressions/LogicalExpression.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="6944" y="2891"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="50" language="java" name="expressions.literalExpressions.Variable" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/literalExpressions/Variable.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="6593" y="2341"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="51" language="java" name="statements.Skip" project="ogpTaak" file="/ogpTaak/src/statements/Skip.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="2917" y="2145"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="52" language="java" name="statements.ThrustOff" project="ogpTaak" 
+    file="/ogpTaak/src/statements/ThrustOff.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="3118" y="2145"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="53" language="java" name="expressions.binaryExpressions.Negation" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/binaryExpressions/Negation.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="7160" y="3050"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="54" language="java" name="expressions.singleArgumentedExpressions.GetYVelocity" project="ogpTaak" 
+    file="/ogpTaak/src/expressions/singleArgumentedExpressions/GetYVelocity.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="5272" y="2634"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="55" language="java" name="gameObjects.Collidable" project="ogpTaak" 
+    file="/ogpTaak/src/gameObjects/Collidable.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="828" y="-6"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <association id="56">    
+    <end type="SOURCE" refId="26" navigable="false">      
+      <attribute id="57" name="bullets"/>      
+      <multiplicity id="58" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="38" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="59">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="41"/>  
+  </generalization>  
+  <association id="60">    
+    <end type="SOURCE" refId="35" navigable="false">      
+      <attribute id="61" name="body"/>      
+      <multiplicity id="62" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="63">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="15"/>  
+  </generalization>  
+  <association id="64">    
+    <end type="SOURCE" refId="55" navigable="false">      
+      <attribute id="65" name="world"/>      
+      <multiplicity id="66" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="39" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="67">    
+    <end type="SOURCE" refId="21"/>    
+    <end type="TARGET" refId="20"/>  
+  </generalization>  
+  <generalization id="68">    
+    <end type="SOURCE" refId="35"/>    
+    <end type="TARGET" refId="11"/>  
+  </generalization>  
+  <generalization id="69">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="24"/>  
+  </generalization>  
+  <generalization id="70">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="42"/>  
+  </generalization>  
+  <generalization id="71">    
+    <end type="SOURCE" refId="45"/>    
+    <end type="TARGET" refId="49"/>  
+  </generalization>  
+  <generalization id="72">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="24"/>  
+  </generalization>  
+  <generalization id="73">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="55"/>  
+  </generalization>  
+  <association id="74">    
+    <end type="SOURCE" refId="22" navigable="false">      
+      <attribute id="75" name="condition"/>      
+      <multiplicity id="76" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="77">    
+    <end type="SOURCE" refId="44"/>    
+    <end type="TARGET" refId="41"/>  
+  </generalization>  
+  <generalization id="78">    
+    <end type="SOURCE" refId="52"/>    
+    <end type="TARGET" refId="34"/>  
+  </generalization>  
+  <generalization id="79">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="13"/>  
+  </generalization>  
+  <association id="80">    
+    <end type="SOURCE" refId="31" navigable="false">      
+      <attribute id="81" name="expression"/>      
+      <multiplicity id="82" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="83">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="84" name="e"/>      
+      <multiplicity id="85" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="86">    
+    <end type="SOURCE" refId="31"/>    
+    <end type="TARGET" refId="11"/>  
+  </generalization>  
+  <generalization id="87">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="34"/>  
+  </generalization>  
+  <generalization id="88">    
+    <end type="SOURCE" refId="42"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <generalization id="89">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="4"/>  
+  </generalization>  
+  <generalization id="90">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <generalization id="91">    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="11"/>  
+  </generalization>  
+  <generalization id="92">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="20"/>  
+  </generalization>  
+  <generalization id="93">    
+    <end type="SOURCE" refId="40"/>    
+    <end type="TARGET" refId="13"/>  
+  </generalization>  
+  <generalization id="94">    
+    <end type="SOURCE" refId="50"/>    
+    <end type="TARGET" refId="20"/>  
+  </generalization>  
+  <generalization id="95">    
+    <end type="SOURCE" refId="51"/>    
+    <end type="TARGET" refId="34"/>  
+  </generalization>  
+  <association id="96">    
+    <end type="SOURCE" refId="42" navigable="false">      
+      <attribute id="97" name="firstOperand"/>      
+      <multiplicity id="98" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="99">    
+    <end type="SOURCE" refId="47"/>    
+    <end type="TARGET" refId="15"/>  
+  </generalization>  
+  <generalization id="100">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="41"/>  
+  </generalization>  
+  <generalization id="101">    
+    <end type="SOURCE" refId="46"/>    
+    <end type="TARGET" refId="11"/>  
+  </generalization>  
+  <generalization id="102">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="41"/>  
+  </generalization>  
+  <generalization id="103">    
+    <end type="SOURCE" refId="23"/>    
+    <end type="TARGET" refId="13"/>  
+  </generalization>  
+  <association id="104">    
+    <end type="SOURCE" refId="42" navigable="false">      
+      <attribute id="105" name="secondOperand"/>      
+      <multiplicity id="106" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="107">    
+    <end type="SOURCE" refId="39" navigable="false">      
+      <attribute id="108" name="collidables"/>      
+      <multiplicity id="109" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="55" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="110">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="11"/>  
+  </generalization>  
+  <association id="111">    
+    <end type="SOURCE" refId="48" navigable="false">      
+      <attribute id="112" name="statements"/>      
+      <multiplicity id="113" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="114">    
+    <end type="SOURCE" refId="34"/>    
+    <end type="TARGET" refId="11"/>  
+  </generalization>  
+  <generalization id="115">    
+    <end type="SOURCE" refId="36"/>    
+    <end type="TARGET" refId="55"/>  
+  </generalization>  
+  <generalization id="116">    
+    <end type="SOURCE" refId="37"/>    
+    <end type="TARGET" refId="34"/>  
+  </generalization>  
+  <generalization id="117">    
+    <end type="SOURCE" refId="41"/>    
+    <end type="TARGET" refId="4"/>  
+  </generalization>  
+  <generalization id="118">    
+    <end type="SOURCE" refId="33"/>    
+    <end type="TARGET" refId="24"/>  
+  </generalization>  
+  <generalization id="119">    
+    <end type="SOURCE" refId="30"/>    
+    <end type="TARGET" refId="49"/>  
+  </generalization>  
+  <association id="120">    
+    <end type="SOURCE" refId="38" navigable="false">      
+      <attribute id="121" name="source"/>      
+      <multiplicity id="122" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="26" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="123">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="42"/>  
+  </generalization>  
+  <generalization id="124">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="34"/>  
+  </generalization>  
+  <generalization id="125">    
+    <end type="SOURCE" refId="48"/>    
+    <end type="TARGET" refId="11"/>  
+  </generalization>  
+  <association id="126">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="127" name="condition"/>      
+      <multiplicity id="128" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="129">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="130" name="statement"/>      
+      <multiplicity id="131" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="132">    
+    <end type="SOURCE" refId="54"/>    
+    <end type="TARGET" refId="41"/>  
+  </generalization>  
+  <association id="133">    
+    <end type="SOURCE" refId="22" navigable="false">      
+      <attribute id="134" name="elseBody"/>      
+      <multiplicity id="135" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="136">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="137" name="body"/>      
+      <multiplicity id="138" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="139">    
+    <end type="SOURCE" refId="53"/>    
+    <end type="TARGET" refId="49"/>  
+  </generalization>  
+  <generalization id="140">    
+    <end type="SOURCE" refId="49"/>    
+    <end type="TARGET" refId="42"/>  
+  </generalization>  
+  <generalization id="141">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="24"/>  
+  </generalization>  
+  <generalization id="142">    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="20"/>  
+  </generalization>  
+  <generalization id="143">    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="24"/>  
+  </generalization>  
+  <generalization id="144">    
+    <end type="SOURCE" refId="32"/>    
+    <end type="TARGET" refId="15"/>  
+  </generalization>  
+  <generalization id="145">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="20"/>  
+  </generalization>  
+  <association id="146">    
+    <end type="SOURCE" refId="22" navigable="false">      
+      <attribute id="147" name="ifBody"/>      
+      <multiplicity id="148" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="149">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="150" name="argument"/>      
+      <multiplicity id="151" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="152">    
+    <end type="SOURCE" refId="27"/>    
+    <end type="TARGET" refId="13"/>  
+  </generalization>  
+  <generalization id="153">    
+    <end type="SOURCE" refId="25"/>    
+    <end type="TARGET" refId="24"/>  
+  </generalization>  
+  <generalization id="154">    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <generalization id="155">    
+    <end type="SOURCE" refId="38"/>    
+    <end type="TARGET" refId="55"/>  
+  </generalization>  
+  <association id="156">    
+    <end type="SOURCE" refId="46" navigable="false">      
+      <attribute id="157" name="rhs"/>      
+      <multiplicity id="158" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="159">    
+    <end type="SOURCE" refId="43"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

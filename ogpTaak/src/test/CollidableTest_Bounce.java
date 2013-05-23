@@ -66,7 +66,7 @@ public class CollidableTest_Bounce {
 		mutableCollidable2 = new Ship(new Vector(200,100), new Vector(-1,0), 50, 1000, 0);
 		mutableCollidable3 = new Ship(new Vector(100,300), new Vector(1,0), 50, 1000, 0);
 		mutableCollidable4 = new Ship(new Vector(300,300), new Vector(-1,0), 50, 1000, 0);
-		mutableCollidable5 = new Ship(new Vector(300,325), new Vector(1,0), 50, 1000, 0);
+		mutableCollidable5 = new Ship(new Vector(600,325), new Vector(1,0), 50, 1000, 0);
 		mutableWorld1.addAsCollidable(mutableCollidable1);
 		mutableWorld1.addAsCollidable(mutableCollidable2);
 		mutableWorld1.addAsCollidable(mutableCollidable3);

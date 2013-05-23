@@ -116,7 +116,6 @@ public class VectorTest {
 	public void testDotProduct_LegalCase() {
 		double result = vector22.dotProduct(vector1min4);
 		assertTrue(Util.fuzzyEquals(result,-6.0));
-		System.out.println(0.0-Double.MAX_VALUE);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)

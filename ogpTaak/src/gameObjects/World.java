@@ -359,6 +359,9 @@ public class World {
 	 *  		False if the given collidable overlaps with any other collidable in this world.
 	 *  		| if for some entity in collidables (collidable.overlap(entity))
 	 *  		|	then result == false
+	 *  		True if the given collidable already references this world as its world.
+	 *  		| if collidable.getWorld() == this
+	 *  		|	then result == true
 	 *  		Otherwise, true if and only if this world and the collidable are not yet terminated and the
 	 *         	collidable fits this world's dimensions and does not overlap with the boundary of this world.
 	 *         	| else result == 
@@ -370,12 +373,14 @@ public class World {
 	public boolean canHaveAsCollidable(Collidable collidable) {
 		if(collidable == null)
 			return false;
+		if(collidable.getWorld() == this)
+			return true;
 		for(Collidable entity : getAllCollidables()) {
 			if(collidable.overlap(entity))
 				return false;
 		}
-		return (!((this.isTerminated()) || (collidable.isTerminated())) 
-				&& collidable.getRadius() < Math.min(getWidth() / 2, getHeight() / 2))
+		return  !((this.isTerminated()) || (collidable.isTerminated()) 
+				&& Util.fuzzyLessThanOrEqualTo(collidable.getRadius(),Math.min(getWidth() / 2, getHeight() / 2)))
 				&& !collidable.overlapWithBoundary();
 	}
 

@@ -26,7 +26,6 @@ public class WorldTest {
 	private static Collidable collidable1;
 	private static Collidable collidable2;
 	private static Collidable collidable3;
-	private static Collidable collidable7;
 	private static Collidable collidable6;
 	private static Collidable collidable8;
 	
@@ -63,7 +62,6 @@ public class WorldTest {
 		collidable2 = new Ship(new Vector(250, 250), new Vector(0,0), 10, 10, 1);
 		collidable3 = new Ship(new Vector(750, 750), new Vector(0,0), 10, 10, 1);
 		collidable6 = new Ship(new Vector(11, 11), new Vector(0,0), 10, 10, 1);
-		collidable7 = new Ship(new Vector(999,999), new Vector(0,0), 10, 10, 1);
 		collidable8 = new Ship(new Vector(333,666), new Vector(0,0), 10, 10, 1);
 
 		world1.addAsCollidable(collidable1);
@@ -336,7 +334,7 @@ public class WorldTest {
 		assertFalse(terminatedWorld.canHaveAsCollidable(collidable1));
 	}
 	
-	@Test
+	@Test(expected=IllegalStateException.class)
 	public void testCanHaveAsCollidable_OtherIsTerminatedCase() {
 		assertFalse(world1.canHaveAsCollidable(terminatedCollidable));
 	}
@@ -344,11 +342,6 @@ public class WorldTest {
 	@Test
 	public void testCanHaveAsCollidable_OverlapWithOtherCase() {
 		assertFalse(world1.canHaveAsCollidable(collidable6));
-	}
-	
-	@Test
-	public void testCanHaveAsCollidable_OverlapWithBoundaryCase() {
-		assertFalse(world1.canHaveAsCollidable(collidable7));
 	}
 	
 	// hasAsCollidable
@@ -388,6 +381,11 @@ public class WorldTest {
 		assertEquals(mutableCollidable4.getWorld(),mutableWorld1);
 	}
 	
+//	@Test(expected=IllegalArgumentException.class)
+//	public void testAddAsCollidable_ThisCase() {
+//		mutableWorld1.addAsCollidable(mutableCollidable1);
+//	}
+	
 	@Test(expected=IllegalArgumentException.class)
 	public void testAddAsCollidable_AlreadyAttachedCase() {
 		mutableWorld1.addAsCollidable(mutableCollidable3);
@@ -403,7 +401,7 @@ public class WorldTest {
 		terminatedWorld.addAsCollidable(mutableCollidable4);
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=IllegalStateException.class)
 	public void testAddAsCollidable_TerminatedCollidableCase() {
 		mutableWorld1.addAsCollidable(terminatedCollidable);
 	}
